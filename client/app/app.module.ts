@@ -7,13 +7,15 @@ import {FooterComponent} from "./navigation/footer.component";
 
 import { routing } from "./app.routing";
 import {HomepageComponent} from "./navigation/homepage.component";
+import {AboutComponent} from "./static_pages/about.component";
 
 @NgModule({
     declarations: [
         AppComponent,
         NavbarComponent,
         FooterComponent,
-        HomepageComponent
+        HomepageComponent,
+        AboutComponent
     ],
     imports: [BrowserModule, routing],
     bootstrap: [AppComponent]
