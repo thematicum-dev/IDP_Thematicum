@@ -11,7 +11,10 @@
                         class="form-control col-xs-10"
                         [ngModel]="user?.name"
                         name="name"
-                        required>
+                        #name="ngModel"
+                        required
+                        minlength="4">
+                <div [hidden]="name.valid || name.pristine" class="alert alert-danger">Name is required and with 4 characters minimum</div>
             </div>
         </div>
 
@@ -24,7 +27,10 @@
                         class="form-control col-xs-10"
                         [ngModel]="user?.email"
                         name="email"
-                        required>
+                        #email="ngModel"
+                        required
+                        pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$">
+                <div [hidden]="email.valid || email.pristine" class="alert alert-danger">Email is required and with valid syntax</div>
             </div>
         </div>
 
@@ -37,19 +43,29 @@
                         class="form-control col-xs-10"
                         [ngModel]="user?.password"
                         name="password"
-                        required>
+                        #password="ngModel"
+                        required
+                        minlength="8">
+                <div [hidden]="password.valid || password.pristine" class="alert alert-danger">Password is required and with 8 characters minimum</div>
             </div>
         </div>
 
         <div class="form-group row">
             <label class="col-xs-2 col-form-label" for="personalRole">Personal Role</label>
             <div class="col-xs-10">
-                <select class="form-control" id="personalRole" [ngModel]="user?.personalRole" name="personalRole" required>
+                <select
+                        class="form-control"
+                        id="personalRole"
+                        [ngModel]="user?.personalRole"
+                        name="personalRole"
+                        #personalRole="ngModel"
+                        required>
                     <option *ngFor="let role of personalRoles" [ngValue]="role">{{ role }}</option>
                 </select>
+                <div [hidden]="personalRole.valid || personalRole.pristine" class="alert alert-danger">Personal Role is required</div>
             </div>
         </div>
 
-        <button class="btn btn-primary" type="submit">Sign up</button>
+        <button class="btn btn-primary" type="submit" [disabled]="!form.form.valid">Sign up</button>
     </form>
 </div>
