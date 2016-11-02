@@ -3,6 +3,14 @@ var router = express.Router();
 var User = require('../models/user');
 var bcrypt = require('bcryptjs');
 
+//test
+//http://localhost:3000/auth
+router.get('/', function(req, res, next) {
+    return res.json({
+        text: 'hello world'
+    })
+});
+
 //create a user
 router.post('/', function (req, res, next) {
     //encrypt password

@@ -8,6 +8,7 @@ import {FooterComponent} from "./navigation/footer.component";
 import { routing } from "./app.routing";
 import {HomepageComponent} from "./navigation/homepage.component";
 import {AboutComponent} from "./static_pages/about.component";
+import {SignupComponent} from "./auth/signup.component";
 
 @NgModule({
     declarations: [
@@ -15,7 +16,8 @@ import {AboutComponent} from "./static_pages/about.component";
         NavbarComponent,
         FooterComponent,
         HomepageComponent,
-        AboutComponent
+        AboutComponent,
+        SignupComponent
     ],
     imports: [BrowserModule, routing],
     bootstrap: [AppComponent]
