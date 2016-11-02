@@ -1,0 +1,13 @@
+/.idea/
+.idea/workspace.xml
+/db/
+
+/node_modules/
+/public/bower_components/
+**/*npm-debug.log.*
+*.js
+*.js.map
+
+!systemjs.config.js
+!typings/typings.d.ts
+!wallaby.js
