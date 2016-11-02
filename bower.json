@@ -1,0 +1,21 @@
+{
+  "name": "thematicum",
+  "description": "Interactive web application on thematic investing",
+  "main": "",
+  "authors": [
+    "TUM"
+  ],
+  "license": "MIT",
+  "homepage": "",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "public/components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "bootstrap": "^3.3.7"
+  }
+}
