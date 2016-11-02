@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
+import { FormsModule }   from '@angular/forms';
 
 import { AppComponent } from "./app.component";
 import {NavbarComponent} from "./navigation/navbar.component";
@@ -19,7 +20,7 @@ import {SignupComponent} from "./auth/signup.component";
         AboutComponent,
         SignupComponent
     ],
-    imports: [BrowserModule, routing],
+    imports: [BrowserModule, routing, FormsModule ],
     bootstrap: [AppComponent]
 })
 export class AppModule {
