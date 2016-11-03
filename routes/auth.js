@@ -2,6 +2,7 @@ var express = require('express');
 var router = express.Router();
 var User = require('../models/user');
 var bcrypt = require('bcryptjs');
+var jwt = require('jsonwebtoken');
 
 //test
 //http://localhost:3000/auth
@@ -41,6 +42,43 @@ router.post('/', function (req, res, next) {
             message: 'User created',
             obj: result
         });
+    });
+});
+
+//sign in
+router.post('/signin', function(req, res, next) {
+    User.findOne({email: req.body.email}, function(err, user) {
+        if (err) {
+            return res.status(500).json({
+                title: 'An error occurred',
+                error: err
+            });
+        }
+
+        if(!user) {
+            //unauthorized status code
+            //use generic, not specific, error message
+            return res.status(401).json({
+                title: 'Login failed',
+                error: { message: 'Invalid login credentials' }
+            });
+        }
+
+        //check password
+        if (!bcrypt.compareSync(req.body.password, user.password)) {
+            return res.status(401).json({
+                title: 'Login failed',
+                error: { message: 'Invalid login credentials' }
+            });
+        }
+
+        //valid login credentials (valid for 7200sec = 2hr)
+        var token = jwt.sign({user: user}, 'secret', {expiresIn: 7200});
+        res.status(200).json({
+            message: 'Successful login',
+            token: token,
+            userId: user._id
+        })
     });
 });
 
