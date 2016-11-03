@@ -77,7 +77,8 @@ router.post('/signin', function(req, res, next) {
         res.status(200).json({
             message: 'Successful login',
             token: token,
-            userId: user._id
+            userId: user._id,
+            username: user.name
         })
     });
 });

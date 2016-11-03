@@ -7,10 +7,10 @@ import {User} from "../models/user";
     templateUrl: 'navbar.component.html'
 })
 export class NavbarComponent {
-    loggedInUser: User;
+    loggedInUser: String;
 
     constructor(private authService: AuthService) {
-
+        this.loggedInUser = authService.getLoggedInUser();
     }
 
     isLoggedIn() {

@@ -17,19 +17,20 @@
                     <a routerLinkActive="active" [routerLink]="['/about']">About</a>
                 </li>
                 <li>
-                    <a routerLinkActive="active" [routerLink]="['/signup']">Sign Up</a>
+                    <a routerLinkActive="active" [routerLink]="['/signup']" *ngIf="!isLoggedIn()">Sign Up</a>
                 </li>
                 <li>
-                    <a routerLinkActive="active" [routerLink]="['/signin']">Sign In</a>
+                    <a routerLinkActive="active" [routerLink]="['/signin']" *ngIf="!isLoggedIn()">Sign In</a>
                 </li>
 
                 <li class="dropdown" *ngIf="isLoggedIn()">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">User<b class="caret"></b></a>
+                    <a class="dropdown-toggle" data-toggle="dropdown">{{loggedInUser}}<b class="caret"></b></a>
                     <ul class="dropdown-menu">
                         <li>
                             <a (click)="onLogoutClick()">Logout</a>
                         </li>
                     </ul>
+                </li>
             </ul>
         </div>
 

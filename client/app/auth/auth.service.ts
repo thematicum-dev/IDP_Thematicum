@@ -34,9 +34,9 @@ export class AuthService {
         return localStorage.getItem('token') !== null;
     }
 
-    getLoggedInUser(): User {
+    getLoggedInUser() {
         if (this.isLoggedIn()) {
-            return new User(null, null, null, null);
+            return localStorage.getItem('username');
         }
     }
 }
