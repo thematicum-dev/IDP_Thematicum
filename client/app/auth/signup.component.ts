@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import {User} from "../models/user";
 import {NgForm} from "@angular/forms";
 import {AuthService} from "./auth.service";
+import {Router} from "@angular/router";
 
 @Component({
     selector: 'app-signup',
@@ -17,14 +18,17 @@ export class SignupComponent {
         'Other'
     ];
 
-    constructor(private authService: AuthService) {}
+    constructor(private authService: AuthService, private router: Router) {}
 
     onSubmit(form: NgForm) {
         const user = new User(form.value.name, form.value.email, form.value.password, form.value.personalRole);
         this.authService.signup(user)
             .subscribe(
-                data => console.log(data),
+                data => {
+                    console.log(data);
+                    this.router.navigateByUrl('/signin');
+                },
                 error => console.log(error)
-            )
+            );
     }
 }
