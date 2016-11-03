@@ -25,4 +25,18 @@ export class AuthService {
             .map((response: Response) => response.json())
             .catch((error: Response) =>  Observable.throw(error.json()));
     }
+
+    logout() {
+        localStorage.clear();
+    }
+
+    isLoggedIn() {
+        return localStorage.getItem('token') !== null;
+    }
+
+    getLoggedInUser(): User {
+        if (this.isLoggedIn()) {
+            return new User(null, null, null, null);
+        }
+    }
 }

@@ -28,8 +28,7 @@
                         [ngModel]="user?.password"
                         name="password"
                         #password="ngModel"
-                        required
-                        minlength="8">
+                        required>
                 <div [hidden]="password.valid || password.pristine" class="alert alert-danger">Password is required and with 8 characters minimum</div>
             </div>
         </div>
