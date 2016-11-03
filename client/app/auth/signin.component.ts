@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
 import {User} from "../models/user";
 import {NgForm} from "@angular/forms";
+import {AuthService} from "./auth.service";
+import {Router} from "@angular/router";
 
 @Component({
     selector: 'app-signin',
@@ -9,6 +11,19 @@ import {NgForm} from "@angular/forms";
 export class SigninComponent {
     user: User;
 
+    constructor(private authService: AuthService, private router: Router) {}
+
     onSubmit(form: NgForm) {
+        const user = new User(null, form.value.email, form.value.password, null); //TODO: make some optional
+        this.authService.signin(user)
+            .subscribe(
+                data => {
+                    //store the token in the local storage
+                    localStorage.setItem('token', data.token);
+                    localStorage.setItem('userId', data.userId);
+                    this.router.navigateByUrl('/');
+                },
+                error => console.log(error)
+            );
     }
 }
