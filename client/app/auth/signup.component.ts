@@ -9,7 +9,6 @@ import {Router} from "@angular/router";
     templateUrl: 'signup.component.html'
 })
 export class SignupComponent {
-    user: User;
     personalRoles = [
         'Financial professional (buy side)',
         'Financial professional (sell side)',
@@ -18,10 +17,14 @@ export class SignupComponent {
         'Other'
     ];
 
+    selectedPersonalRole = this.personalRoles[0]; //default value
+
     constructor(private authService: AuthService, private router: Router) {}
 
     onSubmit(form: NgForm) {
+        //or selectedPersonalRole as last argument
         const user = new User(form.value.name, form.value.email, form.value.password, form.value.personalRole);
+
         this.authService.signup(user)
             .subscribe(
                 data => {
@@ -31,4 +34,5 @@ export class SignupComponent {
                 error => console.log(error)
             );
     }
+
 }
