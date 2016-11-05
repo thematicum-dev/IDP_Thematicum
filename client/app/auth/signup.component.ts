@@ -23,7 +23,7 @@ export class SignupComponent {
 
     onSubmit(form: NgForm) {
         //or selectedPersonalRole as last argument
-        const user = new User(form.value.name, form.value.email, form.value.password, form.value.personalRole);
+        const user = new User(form.value.email, form.value.password, form.value.name, form.value.personalRole);
 
         this.authService.signup(user)
             .subscribe(

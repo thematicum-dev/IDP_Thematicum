@@ -14,7 +14,7 @@ export class SigninComponent {
     constructor(private authService: AuthService, private router: Router) {}
 
     onSubmit(form: NgForm) {
-        const user = new User(null, form.value.email, form.value.password, null); //TODO: make some optional
+        const user = new User(form.value.email, form.value.password);
         this.authService.signin(user)
             .subscribe(
                 data => {
