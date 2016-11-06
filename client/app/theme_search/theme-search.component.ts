@@ -5,5 +5,5 @@ import { Component } from '@angular/core';
     templateUrl: 'theme-search.component.html'
 })
 export class ThemeSearchComponent {
-
+    searchTerm = "";
 }
