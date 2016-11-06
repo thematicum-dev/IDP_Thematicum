@@ -66,6 +66,21 @@
             </div>
         </div>
 
+        <div class="form-group row">
+            <label class="col-xs-2 col-form-label" for="accessCode">Access Code</label>
+            <div class="col-xs-10">
+                <input
+                        type="text"
+                        id="accessCode"
+                        class="form-control col-xs-10"
+                        name="accessCode"
+                        [(ngModel)]="registrationAccessCode"
+                        required
+                        #accessCode="ngModel">
+                <div [hidden]="accessCode.valid || accessCode.pristine" class="alert alert-danger">Access Code is required</div>
+            </div>
+        </div>
+
         <button class="btn btn-primary" type="submit" [disabled]="!form.form.valid">Sign up</button>
     </form>
 </div>

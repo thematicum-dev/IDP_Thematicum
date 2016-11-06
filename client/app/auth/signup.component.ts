@@ -3,12 +3,14 @@ import {User} from "../models/user";
 import {NgForm} from "@angular/forms";
 import {AuthService} from "./auth.service";
 import {Router} from "@angular/router";
+import {SignupModel} from "./signup-model";
 
 @Component({
     selector: 'app-signup',
     templateUrl: 'signup.component.html'
 })
 export class SignupComponent {
+    //TODO: fetch personal roles from backend
     personalRoles = [
         'Financial professional (buy side)',
         'Financial professional (sell side)',
@@ -18,14 +20,16 @@ export class SignupComponent {
     ];
 
     selectedPersonalRole = this.personalRoles[0]; //default value
+    registrationAccessCode: String = "";
 
     constructor(private authService: AuthService, private router: Router) {}
 
     onSubmit(form: NgForm) {
         //or selectedPersonalRole as last argument
         const user = new User(form.value.email, form.value.password, form.value.name, form.value.personalRole);
+        const signupModel = new SignupModel(user, form.value.accessCode);
 
-        this.authService.signup(user)
+        this.authService.signup(signupModel)
             .subscribe(
                 data => {
                     console.log(data);
