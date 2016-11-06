@@ -13,6 +13,7 @@ import {SignupComponent} from "./auth/signup.component";
 import {SigninComponent} from "./auth/signin.component";
 import {HttpModule} from "@angular/http";
 import {AuthService} from "./auth/auth.service";
+import {ThemeSearchComponent} from "./theme_search/theme-search.component";
 
 @NgModule({
     declarations: [
@@ -22,7 +23,8 @@ import {AuthService} from "./auth/auth.service";
         HomepageComponent,
         AboutComponent,
         SignupComponent,
-        SigninComponent
+        SigninComponent,
+        ThemeSearchComponent
     ],
     imports: [BrowserModule, routing, FormsModule, HttpModule],
     providers: [ AuthService ],
