@@ -14,6 +14,7 @@ import {SigninComponent} from "./auth/signin.component";
 import {HttpModule} from "@angular/http";
 import {AuthService} from "./auth/auth.service";
 import {ThemeSearchComponent} from "./theme_search/theme-search.component";
+import {ErrorComponent} from "./error-handling/error.component";
 
 @NgModule({
     declarations: [
@@ -24,6 +25,7 @@ import {ThemeSearchComponent} from "./theme_search/theme-search.component";
         AboutComponent,
         SignupComponent,
         SigninComponent,
+        ErrorComponent,
         ThemeSearchComponent
     ],
     imports: [BrowserModule, routing, FormsModule, HttpModule],

@@ -124,10 +124,15 @@ input.ng-invalid.ng-touched {
 */
 
 /* validation */
-.ng-invalid:not(form), .invalidAccessCode {
+.ng-invalid:not(form) {
   border-left: 5px solid #a94442; /* red */
 }
 
-.ng-valid:not(form) {
-  border-left: 5px solid #42A948; /* red */
+.error-message {
+  padding-top: 30px;
+  color: red;
+  font-size: medium;
 }
+/*.ng-valid:not(form) {*/
+  /*border-left: 5px solid #42A948; !* red *!*/
+/*}*/

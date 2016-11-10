@@ -21,6 +21,7 @@ export class SignupComponent {
 
     selectedPersonalRole = this.personalRoles[0]; //default value
     registrationAccessCode: String = "";
+    error: Error;
 
     constructor(private authService: AuthService, private router: Router) {}
 
@@ -29,14 +30,24 @@ export class SignupComponent {
         const user = new User(form.value.email, form.value.password, form.value.name, form.value.personalRole);
         const signupModel = new SignupModel(user, form.value.accessCode);
 
+        this.resetForm(form);
+
         this.authService.signup(signupModel)
             .subscribe(
                 data => {
                     console.log(data);
                     this.router.navigateByUrl('/signin');
                 },
-                error => console.log(error)
+                error =>  {
+                    console.log(error)
+                    this.error = error;
+                }
             );
+    }
+
+    resetForm(form: NgForm) {
+        form.reset();
+        this.selectedPersonalRole = this.personalRoles[0];
     }
 
 }
