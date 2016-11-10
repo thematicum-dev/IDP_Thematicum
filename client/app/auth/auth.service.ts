@@ -37,8 +37,6 @@ export class AuthService {
     }
 
     getLoggedInUser() {
-        if (this.isLoggedIn()) {
-            return localStorage.getItem('username');
-        }
+        return localStorage.getItem('username');
     }
 }

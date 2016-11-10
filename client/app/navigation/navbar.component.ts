@@ -6,13 +6,7 @@ import {User} from "../models/user";
     selector: 'app-navbar',
     templateUrl: 'navbar.component.html'
 })
-export class NavbarComponent implements OnInit {
-    loggedInUser: String;
-
-    ngOnInit(): void {
-        this.loggedInUser = this.authService.getLoggedInUser();
-    }
-
+export class NavbarComponent {
     constructor(private authService: AuthService) { }
 
     isLoggedIn() {
@@ -21,5 +15,9 @@ export class NavbarComponent implements OnInit {
 
     onLogoutClick() {
         this.authService.logout();
+    }
+
+    getLoggedInUser() {
+        return this.authService.getLoggedInUser();
     }
 }
