@@ -10,6 +10,7 @@ var appRoutes = require('./routes/app');
 var authRoutes = require('./routes/auth');
 var accessCodeRoutes = require('./routes/accessCodes');
 var investmentThemesRoutes = require('./routes/investmentThemes');
+var themeRoutes = require('./routes/themes');
 
 var app = express();
 mongoose.connect('localhost:27017/thematicum');
@@ -35,7 +36,7 @@ app.use(function (req, res, next) {
 
 app.use('/auth', authRoutes);
 app.use('/api/accesscodes', accessCodeRoutes);
-app.use('/api/themes', investmentThemesRoutes);
+app.use('/api/themes', themeRoutes);
 app.use('/', appRoutes);
 
 // catch 404 and forward to error handler

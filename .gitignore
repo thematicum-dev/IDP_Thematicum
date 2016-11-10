@@ -4,7 +4,7 @@
 
 /node_modules/
 /public/bower_components/
-npm-debug.log.*
+npm-debug.log
 client/*.js
 client/*.js.map
 
