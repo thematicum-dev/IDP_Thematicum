@@ -13,18 +13,14 @@ export class ThemeSearchComponent {
     constructor(private searchService: ThemeSearchService) {}
 
     onSubmit(form: NgForm) {
-        this.authService.signin(user)
+        this.searchService.searchThemes(this.searchTerm.trim())
             .subscribe(
                 data => {
                     //store the token in the local storage
-                    localStorage.setItem('token', data.token);
-                    localStorage.setItem('userId', data.userId);
-                    localStorage.setItem('username', data.username);
-                    this.router.navigateByUrl('/');
+                    console.log(data.obj);
                 },
                 error => {
                     console.log(error)
-                    this.error = error;
                 }
             );
     }
