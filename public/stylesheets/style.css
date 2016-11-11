@@ -136,3 +136,7 @@ input.ng-invalid.ng-touched {
 /*.ng-valid:not(form) {*/
   /*border-left: 5px solid #42A948; !* red *!*/
 /*}*/
+
+.borderless {
+  border: 0 none;
+}
