@@ -25,3 +25,8 @@
 
     </form>
 </div>
+
+<hr>
+<ul *ngIf="themes">
+    <li *ngFor="let theme of themes">{{ theme.name}}</li>
+</ul>

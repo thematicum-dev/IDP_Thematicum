@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import {ThemeSearchService} from "./theme-search.service";
 import {NgForm} from "@angular/forms";
+import {Theme} from "../models/theme";
 
 @Component({
     selector: 'app-theme-search',
@@ -9,6 +10,7 @@ import {NgForm} from "@angular/forms";
 })
 export class ThemeSearchComponent {
     searchTerm = "";
+    themes: Theme[] = [];
 
     constructor(private searchService: ThemeSearchService) {}
 
@@ -16,8 +18,10 @@ export class ThemeSearchComponent {
         this.searchService.searchThemes(this.searchTerm.trim())
             .subscribe(
                 data => {
-                    //store the token in the local storage
-                    console.log(data.obj);
+                    this.themes = [];
+                    for (var i = 0; i < data.length; i++) {
+                        this.themes.push(new Theme(data[i].name, data[i].description));
+                    }
                 },
                 error => {
                     console.log(error)
