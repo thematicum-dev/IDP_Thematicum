@@ -18,6 +18,9 @@ import { Component, ElementRef, OnInit } from '@angular/core';
     },
 })
 export class AutoCompleteComponent {
+    const KEY_ARROW_UP = 38;
+    const KEY_ARROW_DOWN = 40;
+    const KEY_ENTER = 13;
 
     query: string = '';
     filteredList: any[] = [];
@@ -55,59 +58,31 @@ export class AutoCompleteComponent {
 
     /** set filteredList to the items containing the query */
     filterQuery() {
-        this.filteredList = this.items.filter((el: any) => {
-            return el.name.toLowerCase().indexOf(this.query.toLowerCase()) > -1;
-        });
+        this.filteredList = this.query !== '' ?
+            this.items.filter((el: any) => {
+                return el.name.toLowerCase().indexOf(this.query.toLowerCase()) > -1;
+            }) :
+            [];
     }
 
     /** input keyup event handler */
     filter(event: any) {
-        if (this.query !== '') {
-            this.filterQuery();
-        } else {
-            this.filteredList = [];
-        }
-
         //set 'selected' to false for all items in the filteredList
         for (let i = 0; i < this.filteredList.length; i++) {
             this.filteredList[i].selected = false;
         }
-
-        //if there is a selected item
-        //compare the this item's id to the id of every item in the filteredList
-        //if ids agree, update the 'pos' to the position of the selected item in the filteredList
-        if (this.selectedItem) {
-            this.filteredList.map((i) => {
-                if (i.id == this.selectedItem.id) {
-                    this.pos = this.filteredList.indexOf(i);
-                }
-            })
-            this.selectedItem = null; //why?
-        }
-
-        // Arrow-key Down
-        if (event.keyCode == 40) {
-            //if this is not the last element on the list, increment 'pos'
-            if (this.pos + 1 != this.filteredList.length)
-                this.pos++;
-        }
-
-        // Arrow-key Up
-        if (event.keyCode == 38) {
-            //if this is not the first element on the list
-            if (this.pos > 0)
-                this.pos--;
-        }
-
-        //if there exists an item in filteredList at 'pos' index
-        if (this.filteredList[this.pos] !== undefined)
-            this.filteredList[this.pos].selected = true;
-
-        //enter key => select element (if it's contained in the filteredList)
-        if (event.keyCode == 13) {
-            if (this.filteredList[this.pos] !== undefined) {
-                this.select(this.filteredList[this.pos]);
-            }
+        switch(event.keyCode) {
+            case this.KEY_ARROW_UP:
+                this.handleKeyArrowUp();
+                break;
+            case this.KEY_ARROW_DOWN:
+                this.handleKeyArrowDown();
+                break;
+            case this.KEY_ENTER:
+                this.handleKeyEnter();
+                break;
+            default:
+                this.filterQuery();
         }
 
         //Not convinced
@@ -121,11 +96,41 @@ export class AutoCompleteComponent {
         // }
     }
 
+    handleKeyArrowUp() {
+        console.log(this.pos);
+        if (this.pos > 0)
+            this.pos--;
+        this.setSelected(this.pos);
+    }
+
+    handleKeyArrowDown() {
+        console.log(this.pos);
+        if (this.pos + 1 != this.filteredList.length)
+            this.pos++;
+        this.setSelected(this.pos);
+    }
+
+    handleKeyEnter() {
+        if (this.filteredList[this.pos] !== undefined) {
+            this.select(this.filteredList[this.pos]);
+            this.setSelected(this.pos);
+        }
+    }
+
+    setSelected(position) {
+        console.log(this.filteredList[this.pos])
+        if (this.filteredList[this.pos] !== undefined)
+            this.filteredList[this.pos].selected = true;
+
+        console.log(this.filteredList[this.pos])
+    }
+
     select(item: any) {
         this.selectedItem = item;
         this.selectedItem.selected = true;
         this.query = item.name;
         // this.query = '';
+        this.pos = -1;
         this.filteredList = [];
     }
 
