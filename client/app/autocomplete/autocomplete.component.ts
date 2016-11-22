@@ -65,9 +65,10 @@ export class AutoCompleteComponent {
     /** input keyup event handler */
     filter(event: any) {
         //set 'selected' to false for all items in the filteredList
-        for (let i = 0; i < this.filteredList.length; i++) {
-            this.filteredList[i].selected = false;
+        for (let item of this.filteredList) {
+            item.selected = false;
         }
+
         switch(event.keyCode) {
             case this.KEY_ARROW_UP:
                 this.handleKeyArrowUp();
