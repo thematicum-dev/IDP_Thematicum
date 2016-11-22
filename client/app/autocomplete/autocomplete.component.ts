@@ -1,11 +1,13 @@
 import { Component, ElementRef, OnInit } from '@angular/core';
+import {AutocompleteList} from "./autocomplete-list";
+import {items} from "./dummy-data";
 
 @Component({
     selector: 'autocomplete',
     template: `
     <input #input type="text" class="form-control input-list" [(ngModel)]="query" (keyup)="filter($event)">
-    <ul id="list-group" class="list-group group-list" *ngIf="filteredList.length > 0">
-        <li *ngFor="let item of filteredList" [class.active]="item.selected" [id]="item.selected" class="list-group-item item-list" (click)="select(item)">
+    <ul id="list-group" class="list-group group-list" *ngIf="autocompleteList.filteredList.length > 0">
+        <li *ngFor="let item of autocompleteList.filteredList" [class.active]="item.selected" [id]="item.selected" class="list-group-item item-list" (click)="select(item)">
           {{ item.name }}
         </li>
     </ul>
@@ -22,52 +24,25 @@ export class AutoCompleteComponent {
     const KEY_ENTER = 13;
 
     query: string = '';
-    filteredList: any[] = [];
+    autocompleteList: AutocompleteList = new AutocompleteList(items);
+
     pos: number = -1;
     allowUserEnteredValues: boolean = false;
 
     selectedItems: any[] = []; //allow multiple item selection
-    items: any[] = [
-        { id: 1, name: 'Darth Vader' },
-        { id: 2, name: 'Kylo Ren' },
-        { id: 3, name: 'Rey' },
-        { id: 4, name: 'Ahsoka Tano' },
 
-        { id: 5, name: 'Snoke' },
-        { id: 6, name: 'Yoda' },
-        { id: 7, name: 'Han Solo' },
-        { id: 8, name: 'Luke Skywalker' },
-        { id: 9, name: 'Obi-Wan Kenobi' },
-        { id: 10, name: 'Darth Maul' },
-        { id: 11, name: 'Chewbacca' },
-        { id: 12, name: 'Boba Fett' },
-        { id: 13, name: 'Darth Sidious' },
-        { id: 14, name: 'Jabba the Hutt' },
-        { id: 15, name: 'Qui-Gon Jinn' },
-        { id: 16, name: 'Finn' },
-        { id: 17, name: 'General Hux' },
-        { id: 18, name: 'Poe Dameron' },
-        { id: 19, name: 'Mace Windu'},
-        { id: 20, name: 'Jar Jar Binks'}
-    ];
 
     constructor(private elementRef: ElementRef) {}
 
     /** set filteredList to the items containing the query */
     filterQuery() {
-        this.filteredList = this.query !== '' ?
-            this.items.filter((el: any) => {
-                return el.name.toLowerCase().indexOf(this.query.toLowerCase()) > -1;
-            }) :
-            [];
+        this.autocompleteList.filterList(this.query);
     }
 
     /** input keyup event handler */
     filter(event: any) {
         //set 'selected' to false for all items in the filteredList
-        for (let item of this.filteredList) {
-            item.selected = false;
-        }
+        this.autocompleteList.deselectAll();
 
         switch(event.keyCode) {
             case this.KEY_ARROW_UP:
@@ -98,29 +73,22 @@ export class AutoCompleteComponent {
         console.log(this.pos);
         if (this.pos > 0)
             this.pos--;
-        this.setSelected(this.pos);
+        this.autocompleteList.selectItem(this.pos);
     }
 
     handleKeyArrowDown() {
         console.log(this.pos);
-        if (this.pos + 1 != this.filteredList.length)
+        if (this.pos + 1 != this.autocompleteList.filteredList.length)
             this.pos++;
-        this.setSelected(this.pos);
+        this.autocompleteList.selectItem(this.pos);
     }
 
     handleKeyEnter() {
-        if (this.filteredList[this.pos] !== undefined) {
-            this.select(this.filteredList[this.pos]);
-            this.setSelected(this.pos);
+        if (this.autocompleteList.filteredList[this.pos] !== undefined) {
+            //TODO: refactor select
+            this.select(this.autocompleteList.filteredList[this.pos]);
+            this.autocompleteList.selectItem(this.pos);
         }
-    }
-
-    setSelected(position) {
-        console.log(this.filteredList[this.pos])
-        if (this.filteredList[this.pos] !== undefined)
-            this.filteredList[this.pos].selected = true;
-
-        console.log(this.filteredList[this.pos])
     }
 
     select(item: any) {
@@ -128,7 +96,7 @@ export class AutoCompleteComponent {
         this.query = item.name;
         // this.query = '';
         this.pos = -1;
-        this.filteredList = [];
+        this.autocompleteList.emptyList();
     }
 
     handleKeyDown(event: any) {
@@ -143,7 +111,7 @@ export class AutoCompleteComponent {
         if (!this.elementRef.nativeElement.contains(event.target)) {
             //if the click occurs in an element (event.target) contained in elementRef, then empty filtered list
             this.query = '';
-            this.filteredList = [];
+            this.autocompleteList.emptyList();
         }
     }
 }

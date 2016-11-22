@@ -2,6 +2,6 @@ export class AutocompleteItem {
     constructor(
         public id: string,
         public name: string,
-        public selected: boolean
+        public selected: boolean = false
     ) {}
 }
