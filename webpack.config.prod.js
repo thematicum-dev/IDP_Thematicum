@@ -4,7 +4,7 @@ var commonConfig = require('./webpack.config.common.js');
 
 module.exports = webpackMerge.smart(commonConfig, {
     entry: {
-        'app': './assets/app/main.aot.ts'
+        'app': './client/app/main.aot.ts'
     },
 
     output: {
