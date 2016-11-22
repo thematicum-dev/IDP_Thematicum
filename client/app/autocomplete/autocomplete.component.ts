@@ -9,8 +9,7 @@ import { Component, ElementRef, OnInit } from '@angular/core';
           {{ item.name }}
         </li>
     </ul>
-    <p *ngIf="selectedItem">Selected: {{ selectedItem | json }}</p>
-    <p>Test</p>
+    <p *ngIf="selectedItems">Selected: {{ selectedItems | json }}</p>
   `,
     host: {
         '(document:click)': 'handleClick($event)',
@@ -24,16 +23,16 @@ export class AutoCompleteComponent {
 
     query: string = '';
     filteredList: any[] = [];
-    elementRef: ElementRef;
     pos: number = -1;
+    allowUserEnteredValues: boolean = false;
 
-    selectedItem: any;
-    item: any; //TODO: delete variable
+    selectedItems: any[] = []; //allow multiple item selection
     items: any[] = [
         { id: 1, name: 'Darth Vader' },
         { id: 2, name: 'Kylo Ren' },
         { id: 3, name: 'Rey' },
         { id: 4, name: 'Ahsoka Tano' },
+
         { id: 5, name: 'Snoke' },
         { id: 6, name: 'Yoda' },
         { id: 7, name: 'Han Solo' },
@@ -52,9 +51,7 @@ export class AutoCompleteComponent {
         { id: 20, name: 'Jar Jar Binks'}
     ];
 
-    constructor(private el: ElementRef) {
-        this.elementRef = el;
-    }
+    constructor(private elementRef: ElementRef) {}
 
     /** set filteredList to the items containing the query */
     filterQuery() {
@@ -126,8 +123,7 @@ export class AutoCompleteComponent {
     }
 
     select(item: any) {
-        this.selectedItem = item;
-        this.selectedItem.selected = true;
+        this.selectedItems.push(item);
         this.query = item.name;
         // this.query = '';
         this.pos = -1;
@@ -152,6 +148,7 @@ export class AutoCompleteComponent {
             clickedComponent = clickedComponent.parentNode;
         } while (clickedComponent);
         if (!inside) {
+            this.query = '';
             this.filteredList = [];
         }
     }
