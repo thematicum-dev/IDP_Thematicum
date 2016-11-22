@@ -139,15 +139,8 @@ export class AutoCompleteComponent {
 
     /** Handle outside click to close suggestions**/
     handleClick(event: any) {
-        let clickedComponent = event.target;
-        let inside = false;
-        do {
-            if (clickedComponent === this.elementRef.nativeElement) {
-                inside = true;
-            }
-            clickedComponent = clickedComponent.parentNode;
-        } while (clickedComponent);
-        if (!inside) {
+        if (!this.elementRef.nativeElement.contains(event.target)) {
+            //if the click occurs in an element (event.target) contained in elementRef, then empty filtered list
             this.query = '';
             this.filteredList = [];
         }
