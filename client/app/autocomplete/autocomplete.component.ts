@@ -4,17 +4,8 @@ import {items} from "./dummy-data";
 import {isNullOrUndefined} from "util";
 
 @Component({
-    selector: 'autocomplete',
-    template: `
-    <p *ngIf="error" style="color:red">{{error}}</p>
-    <input #input type="text" class="form-control input-list" [(ngModel)]="autocompleteList.query" (keyup)="filter($event)">
-    <ul id="list-group" class="list-group group-list" *ngIf="autocompleteList.filteredList.length > 0">
-        <li *ngFor="let item of autocompleteList.filteredList" [class.active]="item.selected" [id]="item.selected" class="list-group-item item-list" (click)="addSelectedItem(item)">
-          {{ item.name }}
-        </li>
-    </ul>
-    <p *ngIf="selectedItems">Selected: {{ selectedItems | json }}</p>
-  `,
+    selector: 'app-autocomplete',
+    templateUrl: 'autocomplete.component.html',
     host: {
         '(document:click)': 'handleClick($event)',
         '(keydown)': 'handleKeyDown($event)'
@@ -58,15 +49,12 @@ export class AutoCompleteComponent {
                 this.filterQuery();
         }
 
-        // Not convinced
-        // Handle scroll position of item
-        // let listGroup = document.getElementById('list-group');
-        // let listItem = document.getElementById('true');
-        // if (listItem) {
-        //     //listGroup.scrollTop = (listItem.offsetTop - 200);
-        //     console.log(listGroup.offsetHeight);
-        //     console.log(listItem.offsetTop);
-        // }
+        // Handle scroll position of item (Not convinced)
+        let listGroup = document.getElementById('list-group');
+        let listItem = document.getElementById('true');
+        if (listItem) {
+            listGroup.scrollTop = (listItem.offsetTop - 200);
+        }
     }
 
     handleKeyArrowUp() {
