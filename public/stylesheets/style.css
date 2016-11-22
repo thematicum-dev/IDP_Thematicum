@@ -182,3 +182,8 @@ input.ng-invalid.ng-touched {
   border-top-left-radius: 0;
   border-top-right-radius: 0;
 }
+
+.btn-tag {
+  border-radius: 16px;
+  margin: 5px 5px 5px 0px;
+}
