@@ -3,15 +3,16 @@ import {isNullOrUndefined} from "util";
 
 export class AutocompleteList {
     filteredList: AutocompleteItem[] = [];
+    query: string = '';
 
     constructor(
-        public list: AutocompleteItem[]
+        private list: AutocompleteItem[]
     ) {}
 
-    filterList(query: string) {
-        this.filteredList =  query !== '' ?
+    filterList() {
+        this.filteredList =  this.query !== '' ?
             this.list.filter((el: any) => {
-                return el.name.toLowerCase().indexOf(query.toLowerCase()) > -1;
+                return el.name.toLowerCase().indexOf(this.query.toLowerCase()) > -1;
             }) :
             [];
     }
@@ -48,8 +49,10 @@ export class AutocompleteList {
     }
 
     selectItem(position) {
-        if (this.filteredList[position])
+        if (this.filteredList[position]) {
             this.filteredList[position].selected = true;
+            this.query = this.filteredList[position].name;
+        }
     }
 
     emptyList() {

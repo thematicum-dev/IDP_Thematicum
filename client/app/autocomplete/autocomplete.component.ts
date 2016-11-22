@@ -7,7 +7,7 @@ import {isNullOrUndefined} from "util";
     selector: 'autocomplete',
     template: `
     <p *ngIf="error" style="color:red">{{error}}</p>
-    <input #input type="text" class="form-control input-list" [(ngModel)]="query" (keyup)="filter($event)">
+    <input #input type="text" class="form-control input-list" [(ngModel)]="autocompleteList.query" (keyup)="filter($event)">
     <ul id="list-group" class="list-group group-list" *ngIf="autocompleteList.filteredList.length > 0">
         <li *ngFor="let item of autocompleteList.filteredList" [class.active]="item.selected" [id]="item.selected" class="list-group-item item-list" (click)="addSelectedItem(item)">
           {{ item.name }}
@@ -25,7 +25,6 @@ export class AutoCompleteComponent {
     const KEY_ARROW_DOWN = 40;
     const KEY_ENTER = 13;
 
-    query: string = '';
     autocompleteList: AutocompleteList = new AutocompleteList(items);
     selectedItems: any[] = []; //allow multiple item selection
     position: number = -1;
@@ -36,7 +35,7 @@ export class AutoCompleteComponent {
 
     /** set filteredList to the items containing the query */
     filterQuery() {
-        this.autocompleteList.filterList(this.query);
+        this.autocompleteList.filterList();
     }
 
     /** input keyup event handler */
@@ -80,25 +79,24 @@ export class AutoCompleteComponent {
         if (this.position + 1 != this.autocompleteList.filteredList.length)
             this.position++;
         this.autocompleteList.selectItem(this.position);
+
     }
 
     handleKeyEnter() {
-        if (!this.allowUserEnteredValues) {
-            //can only add items provided from the list
-            let itemToAdd = this.autocompleteList.getItemAt(this.position);
-            if (itemToAdd) {
-                this.autocompleteList.selectItem(this.position);
-                this.addSelectedItem(itemToAdd);
-            }
-        } else {
-            this.addSelectedItem({name: this.query});
-        }
+        let itemToAdd = this.autocompleteList.getItemAt(this.position);
 
+        if (itemToAdd) {
+            this.autocompleteList.selectItem(this.position);
+            this.addSelectedItem(itemToAdd);
+        } else if (this.allowUserEnteredValues) {
+            this.addSelectedItem({name: this.autocompleteList.query});
+        }
     }
 
     addSelectedItem(item: any) {
+        //search by name (assume unique name)
         let existingItem = this.selectedItems.find(el => {
-            return el.id == item.id
+            return el.name == item.name
         });
 
         //do not add an item if it was already selected
@@ -126,7 +124,7 @@ export class AutoCompleteComponent {
     }
 
     cleanup() {
-        this.query = '';
+        this.autocompleteList.query = '';
         this.position = -1;
         this.autocompleteList.deselectAll();
         this.autocompleteList.emptyList();

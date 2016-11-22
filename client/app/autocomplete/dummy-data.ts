@@ -5,7 +5,6 @@ export let items = [
     new AutocompleteItem('3', 'United States'),
     new AutocompleteItem('4', 'Indonesia'),
     new AutocompleteItem('5', 'Brazil'),
-    new AutocompleteItem('6', 'Brazil'),
     new AutocompleteItem('7', 'Nigeria'),
     new AutocompleteItem('8', 'Bangladesh'),
     new AutocompleteItem('9', 'Russia'),
