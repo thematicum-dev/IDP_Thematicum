@@ -4,9 +4,6 @@ import { Component, ElementRef, OnInit } from '@angular/core';
     selector: 'autocomplete',
     template: `
     <input #input type="text" class="form-control input-list" [(ngModel)]="query" (keyup)="filter($event)">
-    <button class="button-list" (click)="showAll(input)">
-      <i class="fa fa-sort-desc" aria-hidden="true"></i>
-    </button>
     <ul id="list-group" class="list-group group-list" *ngIf="filteredList.length > 0">
         <li *ngFor="let item of filteredList" [class.active]="item.selected" [id]="item.selected" class="list-group-item item-list" (click)="select(item)">
           {{ item.name }}
@@ -26,7 +23,7 @@ export class AutoCompleteComponent {
     filteredList: any[] = [];
     elementRef: ElementRef;
     pos: number = -1;
-    opened: boolean = false;
+
     selectedItem: any;
     item: any;
     items: any[] = [
@@ -65,27 +62,9 @@ export class AutoCompleteComponent {
     filter(event: any) {
 
         if (this.query !== '') {
-            if (this.opened) {
-
-                if ((event.keyCode >= 48 && event.keyCode <= 57) ||
-                    (event.keyCode >= 65 && event.keyCode <= 90) ||
-                    (event.keyCode == 8)) {
-
-                    this.pos = 0;
-                    this.filterQuery();
-
-                } else if (event.keyCode != 38 && event.keyCode != 40 && event.keyCode != 13) {
-                    this.filteredList = this.items;
-                }
-            } else {
-                this.filterQuery();
-            }
+            this.filterQuery();
         } else {
-            if (this.opened) {
-                this.filteredList = this.items;
-            } else {
-                this.filteredList = [];
-            }
+            this.filteredList = [];
         }
 
         for (let i = 0; i < this.filteredList.length; i++) {
@@ -139,23 +118,6 @@ export class AutoCompleteComponent {
         this.filteredList = [];
     }
 
-    showAll(input: any) {
-        input.select();
-
-        if (this.filteredList.length > 0) {
-            this.opened = false;
-            this.filteredList = [];
-        } else {
-            this.opened = true;
-            this.filteredList = this.items;
-        }
-        if (this.query === '') {
-            this.clearAll();
-        }
-
-        this.clearSelects();
-    }
-
     handleKeyDown(event: any) {
         // Prevent default actions of arrows
         if (event.keyCode == 40 || event.keyCode == 38) {
@@ -192,8 +154,6 @@ export class AutoCompleteComponent {
         } while (clickedComponent);
         if (!inside) {
             this.filteredList = [];
-            this.opened = false;
         }
     }
-
 }
