@@ -13,6 +13,7 @@ import { Component, ElementRef, OnInit } from '@angular/core';
         </li>
     </ul>
     <p *ngIf="selectedItem">Selected: {{ selectedItem | json }}</p>
+    <p>Test</p>
   `,
     host: {
         '(document:click)': 'handleClick($event)',
