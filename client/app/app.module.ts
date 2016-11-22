@@ -15,6 +15,7 @@ import {HttpModule} from "@angular/http";
 import {AuthService} from "./auth/auth.service";
 import {ThemeSearchComponent} from "./theme_search/theme-search.component";
 import {ErrorComponent} from "./error-handling/error.component";
+import {AutoCompleteComponent} from "./autocomplete/autocomplete.component";
 
 @NgModule({
     declarations: [
@@ -26,7 +27,8 @@ import {ErrorComponent} from "./error-handling/error.component";
         SignupComponent,
         SigninComponent,
         ErrorComponent,
-        ThemeSearchComponent
+        ThemeSearchComponent,
+        AutoCompleteComponent
     ],
     imports: [BrowserModule, routing, FormsModule, HttpModule],
     providers: [ AuthService ],

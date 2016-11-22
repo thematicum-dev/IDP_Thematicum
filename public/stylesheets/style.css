@@ -140,3 +140,45 @@ input.ng-invalid.ng-touched {
 .borderless {
   border: 0 none;
 }
+
+
+/*for autocomplete*/
+.input-list {
+  width:95%;
+  float: left;
+  border-top-right-radius: 0px;
+  border-bottom-right-radius: 0px;
+}
+
+.button-list {
+  float:left;
+  height: 34px;
+  width: 5%;
+}
+
+.button-list i {
+  margin-top: -5px;
+}
+
+.group-list {
+  max-height: 411px;
+  overflow: auto;
+  float: left;
+  width: 95%;
+  border-bottom: 1px solid #ddd;
+  border-bottom-left-radius: 4px;
+  border-bottom-right-radius: 4px;
+}
+
+.item-list {
+  cursor: pointer;
+}
+
+.item-list:hover {
+  background: #f5f5f5;
+}
+
+.item-list:first-child {
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+}

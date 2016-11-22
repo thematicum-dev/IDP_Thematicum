@@ -2,11 +2,13 @@ import { Component } from '@angular/core';
 import {ThemeSearchService} from "./theme-search.service";
 import {NgForm} from "@angular/forms";
 import {Theme} from "../models/theme";
+import {AutoCompleteComponent} from "../autocomplete/autocomplete.component";
 
 @Component({
     selector: 'app-theme-search',
     templateUrl: 'theme-search.component.html',
     providers: [ThemeSearchService],
+    directives: [ AutoCompleteComponent ]
 })
 export class ThemeSearchComponent {
     searchTerm = "";
