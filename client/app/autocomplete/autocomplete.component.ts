@@ -1,10 +1,12 @@
 import { Component, ElementRef, OnInit } from '@angular/core';
 import {AutocompleteList} from "./autocomplete-list";
 import {items} from "./dummy-data";
+import {isNullOrUndefined} from "util";
 
 @Component({
     selector: 'autocomplete',
     template: `
+    <p *ngIf="error" style="color:red">{{error}}</p>
     <input #input type="text" class="form-control input-list" [(ngModel)]="query" (keyup)="filter($event)">
     <ul id="list-group" class="list-group group-list" *ngIf="autocompleteList.filteredList.length > 0">
         <li *ngFor="let item of autocompleteList.filteredList" [class.active]="item.selected" [id]="item.selected" class="list-group-item item-list" (click)="addSelectedItem(item)">
@@ -28,6 +30,7 @@ export class AutoCompleteComponent {
     selectedItems: any[] = []; //allow multiple item selection
     position: number = -1;
     allowUserEnteredValues: boolean = false;
+    error: string = '';
 
     constructor(private elementRef: ElementRef) {}
 
@@ -40,6 +43,7 @@ export class AutoCompleteComponent {
     filter(event: any) {
         //set 'selected' to false for all items in the filteredList
         this.autocompleteList.deselectAll();
+        this.error = '';
 
         switch(event.keyCode) {
             case this.KEY_ARROW_UP:
@@ -87,8 +91,17 @@ export class AutoCompleteComponent {
     }
 
     addSelectedItem(item: any) {
-        this.selectedItems.push(item);
-        this.cleanup();
+        let existingItem = this.selectedItems.find(el => {
+            return el.id == item.id
+        });
+
+        //do not add an item if it was already selected
+        if(!existingItem) {
+            this.selectedItems.push(item);
+            this.cleanup();
+        } else {
+            this.error = 'This item has already been selected. Please choose another one';
+        }
     }
 
     handleKeyDown(event: any) {

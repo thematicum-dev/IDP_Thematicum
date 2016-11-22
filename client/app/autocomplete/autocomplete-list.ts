@@ -28,7 +28,7 @@ export class AutocompleteList {
 
     getItem(id: string) {
         return this.filteredList.find(item => {
-            item.id == id
+            return item.id == id
         });
     }
 
