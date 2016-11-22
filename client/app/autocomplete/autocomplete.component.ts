@@ -53,69 +53,79 @@ export class AutoCompleteComponent {
         this.elementRef = el;
     }
 
+    /** set filteredList to the items containing the query */
     filterQuery() {
-        //set filteredList to the items containing the query
         this.filteredList = this.items.filter((el: any) => {
             return el.name.toLowerCase().indexOf(this.query.toLowerCase()) > -1;
         });
     }
 
+    /** input keyup event handler */
     filter(event: any) {
-        //input keyup event handler
         if (this.query !== '') {
             this.filterQuery();
         } else {
             this.filteredList = [];
         }
 
+        //set 'selected' to false for all items in the filteredList
         for (let i = 0; i < this.filteredList.length; i++) {
             this.filteredList[i].selected = false;
         }
 
+        //if there is a selected item
+        //compare the this item's id to the id of every item in the filteredList
+        //if ids agree, update the 'pos' to the position of the selected item in the filteredList
         if (this.selectedItem) {
             this.filteredList.map((i) => {
                 if (i.id == this.selectedItem.id) {
                     this.pos = this.filteredList.indexOf(i);
                 }
             })
-            this.selectedItem = null;
+            this.selectedItem = null; //why?
         }
 
         // Arrow-key Down
         if (event.keyCode == 40) {
+            //if this is not the last element on the list, increment 'pos'
             if (this.pos + 1 != this.filteredList.length)
                 this.pos++;
         }
 
         // Arrow-key Up
         if (event.keyCode == 38) {
+            //if this is not the first element on the list
             if (this.pos > 0)
                 this.pos--;
         }
 
+        //if there exists an item in filteredList at 'pos' index
         if (this.filteredList[this.pos] !== undefined)
             this.filteredList[this.pos].selected = true;
 
-        //enter
+        //enter key => select element (if it's contained in the filteredList)
         if (event.keyCode == 13) {
             if (this.filteredList[this.pos] !== undefined) {
                 this.select(this.filteredList[this.pos]);
             }
         }
 
+        //Not convinced
         // Handle scroll position of item
-        let listGroup = document.getElementById('list-group');
-        let listItem = document.getElementById('true');
-        if (listItem) {
-            listGroup.scrollTop = (listItem.offsetTop - 200);
-        }
-
+        // let listGroup = document.getElementById('list-group');
+        // let listItem = document.getElementById('true');
+        // if (listItem) {
+        //     //listGroup.scrollTop = (listItem.offsetTop - 200);
+        //     console.log(listGroup.offsetHeight);
+        //     console.log(listItem.offsetTop);
+        // }
     }
 
     select(item: any) {
         this.selectedItem = item;
         this.selectedItem.selected = true;
         this.query = item.name;
+        // this.query = '';
         this.filteredList = [];
     }
 
