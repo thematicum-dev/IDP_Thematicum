@@ -37,6 +37,10 @@ export class AutocompleteList {
         return isNullOrUndefined(item) ? -1 : this.filteredList.indexOf(item);
     }
 
+    getItemAt(position: number) {
+        if(this.filteredList) return this.filteredList[position];
+    }
+
     deselectAll() {
         for (let item of this.filteredList) {
             item.selected = false;

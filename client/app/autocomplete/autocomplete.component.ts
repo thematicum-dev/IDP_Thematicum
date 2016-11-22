@@ -7,7 +7,7 @@ import {items} from "./dummy-data";
     template: `
     <input #input type="text" class="form-control input-list" [(ngModel)]="query" (keyup)="filter($event)">
     <ul id="list-group" class="list-group group-list" *ngIf="autocompleteList.filteredList.length > 0">
-        <li *ngFor="let item of autocompleteList.filteredList" [class.active]="item.selected" [id]="item.selected" class="list-group-item item-list" (click)="select(item)">
+        <li *ngFor="let item of autocompleteList.filteredList" [class.active]="item.selected" [id]="item.selected" class="list-group-item item-list" (click)="addSelectedItem(item)">
           {{ item.name }}
         </li>
     </ul>
@@ -25,12 +25,9 @@ export class AutoCompleteComponent {
 
     query: string = '';
     autocompleteList: AutocompleteList = new AutocompleteList(items);
-
-    pos: number = -1;
-    allowUserEnteredValues: boolean = false;
-
     selectedItems: any[] = []; //allow multiple item selection
-
+    position: number = -1;
+    allowUserEnteredValues: boolean = false;
 
     constructor(private elementRef: ElementRef) {}
 
@@ -58,7 +55,7 @@ export class AutoCompleteComponent {
                 this.filterQuery();
         }
 
-        //Not convinced
+        // Not convinced
         // Handle scroll position of item
         // let listGroup = document.getElementById('list-group');
         // let listItem = document.getElementById('true');
@@ -70,48 +67,49 @@ export class AutoCompleteComponent {
     }
 
     handleKeyArrowUp() {
-        console.log(this.pos);
-        if (this.pos > 0)
-            this.pos--;
-        this.autocompleteList.selectItem(this.pos);
+        if (this.position > 0)
+            this.position--;
+        this.autocompleteList.selectItem(this.position);
     }
 
     handleKeyArrowDown() {
-        console.log(this.pos);
-        if (this.pos + 1 != this.autocompleteList.filteredList.length)
-            this.pos++;
-        this.autocompleteList.selectItem(this.pos);
+        if (this.position + 1 != this.autocompleteList.filteredList.length)
+            this.position++;
+        this.autocompleteList.selectItem(this.position);
     }
 
     handleKeyEnter() {
-        if (this.autocompleteList.filteredList[this.pos] !== undefined) {
-            //TODO: refactor select
-            this.select(this.autocompleteList.filteredList[this.pos]);
-            this.autocompleteList.selectItem(this.pos);
+        let itemToAdd = this.autocompleteList.getItemAt(this.position);
+        if (itemToAdd) {
+            this.autocompleteList.selectItem(this.position);
+            this.addSelectedItem(itemToAdd);
         }
     }
 
-    select(item: any) {
+    addSelectedItem(item: any) {
         this.selectedItems.push(item);
-        this.query = item.name;
-        // this.query = '';
-        this.pos = -1;
-        this.autocompleteList.emptyList();
+        this.cleanup();
     }
 
     handleKeyDown(event: any) {
-        // Prevent default actions of arrows
-        if (event.keyCode == 40 || event.keyCode == 38) {
+        // Prevent default actions of arrow keys
+        if (event.keyCode == this.KEY_ARROW_DOWN || event.keyCode == this.KEY_ARROW_UP) {
             event.preventDefault();
         }
     }
 
-    /** Handle outside click to close suggestions**/
+    /** Handle outside click to close autocomplete list **/
     handleClick(event: any) {
         if (!this.elementRef.nativeElement.contains(event.target)) {
             //if the click occurs in an element (event.target) contained in elementRef, then empty filtered list
-            this.query = '';
-            this.autocompleteList.emptyList();
+            this.cleanup();
         }
+    }
+
+    cleanup() {
+        this.query = '';
+        this.position = -1;
+        this.autocompleteList.deselectAll();
+        this.autocompleteList.emptyList();
     }
 }
