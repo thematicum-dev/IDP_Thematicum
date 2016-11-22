@@ -13,6 +13,7 @@ import {AutoCompleteComponent} from "../autocomplete/autocomplete.component";
 export class ThemeSearchComponent {
     searchTerm = "";
     themes: Theme[] = [];
+    testValue = "test value";
 
     constructor(private searchService: ThemeSearchService) {}
 

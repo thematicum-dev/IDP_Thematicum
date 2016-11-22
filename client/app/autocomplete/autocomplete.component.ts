@@ -1,7 +1,7 @@
 import { Component, ElementRef, OnInit } from '@angular/core';
 import {AutocompleteList} from "./autocomplete-list";
 import {items} from "./dummy-data";
-import {isNullOrUndefined} from "util";
+import {Input} from "@angular/core/src/metadata/directives";
 
 @Component({
     selector: 'app-autocomplete',
@@ -9,7 +9,7 @@ import {isNullOrUndefined} from "util";
     host: {
         '(document:click)': 'handleClick($event)',
         '(keydown)': 'handleKeyDown($event)'
-    },
+    }
 })
 export class AutoCompleteComponent {
     const KEY_ARROW_UP = 38;
@@ -19,8 +19,12 @@ export class AutoCompleteComponent {
     autocompleteList: AutocompleteList = new AutocompleteList(items);
     selectedItems: any[] = []; //allow multiple item selection
     position: number = -1;
-    allowUserEnteredValues: boolean = true;
+
     error: string = '';
+    @Input() test: string = 'default value';
+    @Input('allowCustomValues') allowUserEnteredValues: boolean = true;
+    @Input() allowEnterKey: boolean = true;
+    @Input() dataSource: any;
 
     constructor(private elementRef: ElementRef) {}
 
@@ -50,11 +54,11 @@ export class AutoCompleteComponent {
         }
 
         // Handle scroll position of item (Not convinced)
-        let listGroup = document.getElementById('list-group');
-        let listItem = document.getElementById('true');
-        if (listItem) {
-            listGroup.scrollTop = (listItem.offsetTop - 200);
-        }
+        // let listGroup = document.getElementById('list-group');
+        // let listItem = document.getElementById('true');
+        // if (listItem) {
+        //     listGroup.scrollTop = (listItem.offsetTop - 200);
+        // }
     }
 
     handleKeyArrowUp() {
