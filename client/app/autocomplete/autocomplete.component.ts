@@ -25,7 +25,7 @@ export class AutoCompleteComponent {
     pos: number = -1;
 
     selectedItem: any;
-    item: any;
+    item: any; //TODO: delete variable
     items: any[] = [
         { id: 1, name: 'Darth Vader' },
         { id: 2, name: 'Kylo Ren' },
@@ -54,13 +54,14 @@ export class AutoCompleteComponent {
     }
 
     filterQuery() {
+        //set filteredList to the items containing the query
         this.filteredList = this.items.filter((el: any) => {
             return el.name.toLowerCase().indexOf(this.query.toLowerCase()) > -1;
         });
     }
 
     filter(event: any) {
-
+        //input keyup event handler
         if (this.query !== '') {
             this.filterQuery();
         } else {
@@ -122,23 +123,6 @@ export class AutoCompleteComponent {
         // Prevent default actions of arrows
         if (event.keyCode == 40 || event.keyCode == 38) {
             event.preventDefault();
-        }
-    }
-
-    clearAll() {
-        if (this.filteredList) {
-            for (let i = 0; i < this.filteredList.length; i++)
-                this.filteredList[i].selected = false;
-        }
-    }
-
-    /** Remove selected from all items of the list **/
-    clearSelects() {
-        if (this.selectedItem) {
-            for (let i = 0; i < this.filteredList.length; i++) {
-                if (this.filteredList[i].id != this.selectedItem.id)
-                    this.filteredList[i].selected = false;
-            }
         }
     }
 
