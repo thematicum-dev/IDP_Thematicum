@@ -29,7 +29,7 @@ export class AutoCompleteComponent {
     autocompleteList: AutocompleteList = new AutocompleteList(items);
     selectedItems: any[] = []; //allow multiple item selection
     position: number = -1;
-    allowUserEnteredValues: boolean = false;
+    allowUserEnteredValues: boolean = true;
     error: string = '';
 
     constructor(private elementRef: ElementRef) {}
@@ -83,11 +83,17 @@ export class AutoCompleteComponent {
     }
 
     handleKeyEnter() {
-        let itemToAdd = this.autocompleteList.getItemAt(this.position);
-        if (itemToAdd) {
-            this.autocompleteList.selectItem(this.position);
-            this.addSelectedItem(itemToAdd);
+        if (!this.allowUserEnteredValues) {
+            //can only add items provided from the list
+            let itemToAdd = this.autocompleteList.getItemAt(this.position);
+            if (itemToAdd) {
+                this.autocompleteList.selectItem(this.position);
+                this.addSelectedItem(itemToAdd);
+            }
+        } else {
+            this.addSelectedItem({name: this.query});
         }
+
     }
 
     addSelectedItem(item: any) {
