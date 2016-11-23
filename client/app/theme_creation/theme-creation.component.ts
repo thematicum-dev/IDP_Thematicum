@@ -6,4 +6,5 @@ import { Component } from '@angular/core';
 })
 export class ThemeCreationComponent {
     selectedTags: string[] = ['Albania', 'Germany'];
+    testValue = "test value directive";
 }

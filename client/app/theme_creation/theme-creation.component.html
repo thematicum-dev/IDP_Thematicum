@@ -1,9 +1,54 @@
-<p>Theme Creation</p>
-<div class="form-group row">
+<div class="well">
+    <fieldset class="form-group">
+        <legend>Create new Theme</legend>
+    </fieldset>
 
-        <button class="btn btn-default btn-tag" *ngFor="let tag of selectedTags" type="button">
-            {{tag}} <span class="badge">X</span>
-        </button>
+    <form (ngSubmit)="onSubmit(form)" #form="ngForm">
+        <div class="form-group row">
+            <label class="col-xs-2 col-form-label col-xs-offset-1" for="themeName">Theme name</label>
+            <div class="col-xs-8">
+                <input
+                        type="tex"
+                        id="themeName"
+                        class="form-control"
+                        [ngModel]=""
+                        name="themeName"
+                        #themeName="ngModel"
+                        >
+            </div>
+        </div>
 
+        <div class="form-group row">
+            <label class="col-xs-2 col-form-label col-xs-offset-1">Tags</label>
+            <div class="col-xs-8">
+                <app-autocomplete [test]="testValue" [allowCustomValues]="" [allowEnterKey]="" [dataSource]=""></app-autocomplete>
+            </div>
+        </div>
 
+        <div class="form-group row col-xs-offset-3">
+            <button class="btn btn-default btn-tag" *ngFor="let tag of selectedTags" type="button">
+                {{tag}} <span class="badge">X</span>
+            </button>
+        </div>
+
+        <div class="form-group row">
+            <label class="col-xs-2 col-form-label col-xs-offset-1" for="description">Description</label>
+            <div class="col-xs-8">
+                <textarea
+                        id="description"
+                        class="form-control"
+                        [ngModel]=""
+                        name="description"
+                        #description="ngModel"
+                        rows="7"></textarea>
+        </div>
+        </div>
+
+        <div class="form-group row col-xs-offset-3">
+            <button class="btn btn-primary" type="submit" [disabled]="!form.form.valid">Save</button>
+        </div>
+
+    </form>
 </div>
+
+

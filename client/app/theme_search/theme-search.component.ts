@@ -7,13 +7,11 @@ import {AutoCompleteComponent} from "../autocomplete/autocomplete.component";
 @Component({
     selector: 'app-theme-search',
     templateUrl: 'theme-search.component.html',
-    providers: [ThemeSearchService],
-    directives: [ AutoCompleteComponent ]
+    providers: [ThemeSearchService]
 })
 export class ThemeSearchComponent {
     searchTerm = "";
     themes: Theme[] = [];
-    testValue = "test value";
 
     constructor(private searchService: ThemeSearchService) {}
 

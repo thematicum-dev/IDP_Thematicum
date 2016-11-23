@@ -102,7 +102,7 @@ export class AutoCompleteComponent {
 
     handleKeyDown(event: any) {
         // Prevent default actions of arrow keys
-        if (event.keyCode == this.KEY_ARROW_DOWN || event.keyCode == this.KEY_ARROW_UP) {
+        if (event.keyCode == this.KEY_ARROW_DOWN || event.keyCode == this.KEY_ARROW_UP || event.keyCode == this.KEY_ENTER) {
             event.preventDefault();
         }
     }
