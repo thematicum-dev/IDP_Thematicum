@@ -21,10 +21,10 @@ export class AutoCompleteComponent {
     position: number = -1;
 
     error: string = '';
-    @Input() test: string = 'default value';
     @Input('allowCustomValues') allowUserEnteredValues: boolean = true;
     @Input() allowEnterKey: boolean = true;
     @Input() dataSource: any;
+    @Input() placeholderTerm: string = '';
 
     constructor(private elementRef: ElementRef) {}
 
