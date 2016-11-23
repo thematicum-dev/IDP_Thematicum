@@ -5,8 +5,8 @@
 
     <form (ngSubmit)="onSubmit(form)" #form="ngForm">
         <div class="form-group row">
-            <label class="col-xs-2 col-form-label col-xs-offset-1" for="themeName">Theme name</label>
-            <div class="col-xs-8">
+            <label class="col-xs-2 col-form-label" for="themeName">Theme name</label>
+            <div class="col-xs-10">
                 <input
                         type="tex"
                         id="themeName"
@@ -19,21 +19,21 @@
         </div>
 
         <div class="form-group row">
-            <label class="col-xs-2 col-form-label col-xs-offset-1">Tags</label>
-            <div class="col-xs-8">
+            <label class="col-xs-2 col-form-label">Tags</label>
+            <div class="col-xs-10">
                 <app-autocomplete [test]="testValue" [allowCustomValues]="" [allowEnterKey]="" [dataSource]=""></app-autocomplete>
             </div>
         </div>
 
-        <div class="form-group row col-xs-offset-3">
+        <div class="form-group row col-xs-offset-2">
             <button class="btn btn-default btn-tag" *ngFor="let tag of selectedTags" type="button">
                 {{tag}} <span class="badge">X</span>
             </button>
         </div>
 
         <div class="form-group row">
-            <label class="col-xs-2 col-form-label col-xs-offset-1" for="description">Description</label>
-            <div class="col-xs-8">
+            <label class="col-xs-2 col-form-label" for="description">Description</label>
+            <div class="col-xs-10">
                 <textarea
                         id="description"
                         class="form-control"
@@ -45,63 +45,49 @@
         </div>
 
         <div class="form-group row">
-            <label class="col-xs-2 col-form-label col-xs-offset-1">Expected time horizon</label>
+            <label class="col-xs-2 col-form-label">Expected time horizon</label>
 
-            <div class="col-lg-3">
-                <button class="btn btn-default btn-block">Short term (1 - 6 months)</button>
+            <div class="col-xs-10">
+                <div class="btn-group btn-group-justified" role="group" aria-label="">
+                    <a class="btn btn-default" role="button">Short term (1 - 6 months)</a>
+                    <a class="btn btn-default" role="button">Medium term (0.5 - 3 years)</a>
+                    <a class="btn btn-default" role="button">Long term (> 3 years)</a>
+                </div>
             </div>
-            <div class="col-lg-3">
-                <button class="btn btn-default btn-block">Medium term (0.5 - 3 years)</button>
-            </div>
-            <div class="col-lg-3">
-                <button class="btn btn-default btn-block">Long term (> 3 years)</button>
-            </div>
-
         </div>
 
 
         <div class="form-group row">
-            <label class="col-xs-2 col-form-label col-xs-offset-1">Current theme maturity</label>
-            <div class="col-lg-3">
-                <button class="btn btn-default btn-block">upcoming</button>
+            <label class="col-xs-2 col-form-label">Current theme maturity</label>
+
+            <div class="col-xs-10">
+                <div class="btn-group btn-group-justified" role="group" aria-label="">
+                    <a class="btn btn-default" role="button">upcoming</a>
+                    <a class="btn btn-default" role="button">nascent</a>
+                    <a class="btn btn-default" role="button">accelerating</a>
+                    <a class="btn btn-default" role="button">mature</a>
+                    <a class="btn btn-default" role="button">declining</a>
+                </div>
             </div>
-            <div class="col-lg-3">
-                <button class="btn btn-default btn-block">nascent</button>
-            </div>
-            <div class="col-lg-3">
-                <button class="btn btn-default btn-block">accelerating</button>
-            </div>
-            <div class="col-lg-3">
-                <button class="btn btn-default btn-block">mature</button>
-            </div>
-            <div class="col-lg-3">
-                <button class="btn btn-default btn-block">declining</button>
-            </div>
+
         </div>
 
         <div class="form-group row">
-            <label class="col-xs-2 col-form-label col-xs-offset-1">Theme category</label>
-            <div class="col-lg-3">
-                <button class="btn btn-default btn-block">Economic</button>
-            </div>
-            <div class="col-lg-3">
-                <button class="btn btn-default btn-block">Technologic</button>
-            </div>
-            <div class="col-lg-3">
-                <button class="btn btn-default btn-block">Environmental</button>
-            </div>
-            <div class="col-lg-3">
-                <button class="btn btn-default btn-block">Political</button>
-            </div>
-            <div class="col-lg-3">
-                <button class="btn btn-default btn-block">Regulatory</button>
-            </div>
-            <div class="col-lg-3">
-                <button class="btn btn-default btn-block">Sociologic</button>
+            <label class="col-xs-2 col-form-label">Theme category</label>
+
+            <div class="col-xs-10">
+                <div class="btn-group btn-group-justified" role="group" aria-label="">
+                    <a class="btn btn-default" role="button">Economic</a>
+                    <a class="btn btn-default" role="button">Technologic</a>
+                    <a class="btn btn-default" role="button">Environmental</a>
+                    <a class="btn btn-default" role="button">Political</a>
+                    <a class="btn btn-default" role="button">Regulatory</a>
+                    <a class="btn btn-default" role="button">Sociologic</a>
+                </div>
             </div>
         </div>
 
-        <div class="form-group row col-xs-offset-3">
+        <div class="text-right">
             <button class="btn btn-primary" type="submit" [disabled]="!form.form.valid">Save</button>
         </div>
 

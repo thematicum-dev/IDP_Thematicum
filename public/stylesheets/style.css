@@ -187,3 +187,7 @@ input.ng-invalid.ng-touched {
   border-radius: 16px;
   margin: 5px 5px 5px 0px;
 }
+
+textarea {
+  resize: none;
+}
