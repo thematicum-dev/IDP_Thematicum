@@ -1,4 +1,7 @@
-import {Component, ElementRef, OnInit, EventEmitter} from '@angular/core';
+import {
+    Component, ElementRef, OnInit, EventEmitter, OnChanges, SimpleChanges, SimpleChange,
+    DoCheck
+} from '@angular/core';
 import {AutocompleteList} from "./autocomplete-list";
 import {items} from "./dummy-data";
 import {Input, Output} from "@angular/core/src/metadata/directives";
@@ -124,5 +127,21 @@ export class AutoCompleteComponent {
         this.position = -1;
         this.autocompleteList.deselectAll();
         this.autocompleteList.emptyList();
+    }
+
+    deselectItem(index: number) {
+        // console.log('before deselect')
+        // console.log(JSON.stringify(this.selectedItems));
+        this.removeItemAt(index);
+        // console.log('after deselect')
+        // console.log(JSON.stringify(this.selectedItems));
+    }
+
+    removeItemAt(index: number) {
+        if (index >= 0 && index < this.selectedItems.length) {
+            this.selectedItems.splice(index, 1);
+        } else {
+            alert('wtf')
+        }
     }
 }

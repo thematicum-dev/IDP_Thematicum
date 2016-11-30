@@ -7,10 +7,22 @@ import {AutoCompleteComponent} from "../autocomplete/autocomplete.component";
     directives: [AutoCompleteComponent]
 })
 export class ThemeCreationComponent {
-    selectedTags: string[] = ['Tag 1', 'Tag 2'];
+    selectedTags: string[] = [];
     tagsPlaceholder = 'Keyword';
 
     onNotifySelectedItem(tag: any) {
-        alert(tag.name)
+        this.selectedTags.push(tag.name)
+    }
+
+    // onTagClick() {
+    //     alert('tag click')
+    // }
+
+    onTagDeselect(index: number) {
+        if (index >= 0 && index < this.selectedTags.length) {
+            this.selectedTags.splice(index, 1);
+        } else {
+            alert('wtf')
+        }
     }
 }
