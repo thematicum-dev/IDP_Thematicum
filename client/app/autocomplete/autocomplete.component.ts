@@ -1,7 +1,7 @@
-import { Component, ElementRef, OnInit } from '@angular/core';
+import {Component, ElementRef, OnInit, EventEmitter} from '@angular/core';
 import {AutocompleteList} from "./autocomplete-list";
 import {items} from "./dummy-data";
-import {Input} from "@angular/core/src/metadata/directives";
+import {Input, Output} from "@angular/core/src/metadata/directives";
 
 @Component({
     selector: 'app-autocomplete',
@@ -25,6 +25,7 @@ export class AutoCompleteComponent {
     @Input() allowEnterKey: boolean = true;
     @Input() dataSource: any;
     @Input() placeholderTerm: string = '';
+    @Output() notifySelectedItem: EventEmitter<any> = new EventEmitter<any>();
 
     constructor(private elementRef: ElementRef) {}
 
@@ -94,6 +95,9 @@ export class AutoCompleteComponent {
         //do not add an item if it was already selected
         if(!existingItem) {
             this.selectedItems.push(item);
+            //emit event
+            this.notifySelectedItem.emit(item);
+
             this.cleanup();
         } else {
             this.error = 'This item has already been selected. Please choose another one';

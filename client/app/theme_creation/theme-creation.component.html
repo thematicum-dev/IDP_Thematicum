@@ -22,7 +22,7 @@
         <div class="form-group row">
             <label class="col-xs-2 col-form-label">Tags</label>
             <div class="col-xs-10">
-                <app-autocomplete [placeholderTerm]="tagsPlaceholder" [allowCustomValues]="" [allowEnterKey]="" [dataSource]=""></app-autocomplete>
+                <app-autocomplete [placeholderTerm]="tagsPlaceholder" [allowCustomValues]="" [allowEnterKey]="" [dataSource]="" (notifySelectedItem)='onNotifySelectedItem($event)'></app-autocomplete>
             </div>
         </div>
 
