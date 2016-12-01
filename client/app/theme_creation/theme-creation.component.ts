@@ -9,20 +9,32 @@ import {AutoCompleteComponent} from "../autocomplete/autocomplete.component";
 export class ThemeCreationComponent {
     selectedTags: string[] = [];
     tagsPlaceholder = 'Keyword';
+    error: string = '';
 
     onNotifySelectedItem(tag: any) {
-        this.selectedTags.push(tag.name)
+        //search by name (assume unique name)
+        let existingItem = this.selectedTags.find(el => {
+            return el.name == tag.name
+        });
+
+        //do not add an item if it was already selected
+        if(!existingItem) {
+            this.selectedTags.push(tag.name);
+            console.log(JSON.stringify(this.selectedTags));
+        } else {
+            this.error = 'This item has already been selected. Please choose another one';
+        }
     }
 
-    // onTagClick() {
-    //     alert('tag click')
-    // }
-
     onTagDeselect(index: number) {
+        console.log('index to remove: ' + (index >= 0 && index < this.selectedTags.length));
         if (index >= 0 && index < this.selectedTags.length) {
             this.selectedTags.splice(index, 1);
-        } else {
-            alert('wtf')
+            console.log(JSON.stringify(this.selectedTags));
         }
+    }
+
+    onClearErrorStr() {
+        this.error = '';
     }
 }

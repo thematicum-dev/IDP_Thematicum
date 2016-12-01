@@ -1,8 +1,6 @@
-<p *ngIf="error" style="color:red">{{error}}</p>
 <input #input type="text" [placeholder]="placeholderTerm" class="form-control input-list" [(ngModel)]="autocompleteList.query" (keyup)="filter($event)">
 <ul id="list-group" class="list-group group-list" *ngIf="autocompleteList.filteredList.length > 0">
     <li *ngFor="let item of autocompleteList.filteredList" [class.active]="item.selected" [id]="item.selected" class="list-group-item item-list" (click)="addSelectedItem(item)">
         {{ item.name }}
     </li>
 </ul>
-<p *ngIf="selectedItems">Selected: {{ selectedItems | json }}</p>

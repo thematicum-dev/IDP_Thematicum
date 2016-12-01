@@ -20,15 +20,14 @@ export class AutoCompleteComponent {
     const KEY_ENTER = 13;
 
     autocompleteList: AutocompleteList = new AutocompleteList(items);
-    selectedItems: any[] = []; //allow multiple item selection
     position: number = -1;
 
-    error: string = '';
     @Input('allowCustomValues') allowUserEnteredValues: boolean = true;
     @Input() allowEnterKey: boolean = true;
     @Input() dataSource: any;
     @Input() placeholderTerm: string = '';
     @Output() notifySelectedItem: EventEmitter<any> = new EventEmitter<any>();
+    @Output() clearErrorStr: EventEmitter = new EventEmitter();
 
     constructor(private elementRef: ElementRef) {}
 
@@ -41,7 +40,7 @@ export class AutoCompleteComponent {
     filter(event: any) {
         //set 'selected' to false for all items in the filteredList
         this.autocompleteList.deselectAll();
-        this.error = '';
+        this.clearErrorStr.emit(); //clear error string
 
         switch(event.keyCode) {
             case this.KEY_ARROW_UP:
@@ -61,6 +60,7 @@ export class AutoCompleteComponent {
         // let listGroup = document.getElementById('list-group');
         // let listItem = document.getElementById('true');
         // if (listItem) {
+        //     //listGroup.scrollTop = (411 - listItem.offsetTop);
         //     listGroup.scrollTop = (listItem.offsetTop - 200);
         // }
     }
@@ -90,21 +90,10 @@ export class AutoCompleteComponent {
     }
 
     addSelectedItem(item: any) {
-        //search by name (assume unique name)
-        let existingItem = this.selectedItems.find(el => {
-            return el.name == item.name
-        });
+        //emit event
+        this.notifySelectedItem.emit(item);
 
-        //do not add an item if it was already selected
-        if(!existingItem) {
-            this.selectedItems.push(item);
-            //emit event
-            this.notifySelectedItem.emit(item);
-
-            this.cleanup();
-        } else {
-            this.error = 'This item has already been selected. Please choose another one';
-        }
+        this.cleanup();
     }
 
     handleKeyDown(event: any) {
@@ -127,21 +116,5 @@ export class AutoCompleteComponent {
         this.position = -1;
         this.autocompleteList.deselectAll();
         this.autocompleteList.emptyList();
-    }
-
-    deselectItem(index: number) {
-        // console.log('before deselect')
-        // console.log(JSON.stringify(this.selectedItems));
-        this.removeItemAt(index);
-        // console.log('after deselect')
-        // console.log(JSON.stringify(this.selectedItems));
-    }
-
-    removeItemAt(index: number) {
-        if (index >= 0 && index < this.selectedItems.length) {
-            this.selectedItems.splice(index, 1);
-        } else {
-            alert('wtf')
-        }
     }
 }
