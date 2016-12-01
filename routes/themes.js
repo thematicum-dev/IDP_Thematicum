@@ -4,6 +4,7 @@ var jwt = require('jsonwebtoken');
 var Theme = require('../models/theme');
 var UserThemeInput = require('../models/userThemeInput');
 var ThemePropertyInput = require('../models/themePropertyInput');
+var User = require('../models/user');
 var constants = require('../models/constants');
 
 //middleware - protected routes from now on
@@ -74,15 +75,19 @@ router.get('/:query', function (req, res, next) {
 router.post('/', function (req, res, next) {
     //create new Theme
     var theme = new Theme({
-        name: req.body.name,
-        tags: req.body.tags,
-        description: req.body.description
+        name: req.body.theme.name,
+        tags: req.body.theme.tags,
+        description: req.body.theme.description
     });
+
+    console.log(req.body.theme.name + ", " + req.body.theme.tags + ", " + req.body.theme.description)
+    console.log('At node:')
+    console.log(theme)
 
     theme.save(function(err, result) {
         if (err) {
             return res.status(500).json({
-                title: 'An error occurred',
+                title: 'An error occurred at saving theme',
                 error: err
             });
         }
@@ -105,15 +110,15 @@ router.post('/', function (req, res, next) {
                 themePropertyInputs: [
                     {
                         property: constants.THEME_PROPERTY_TIME_HORIZON,
-                        valueChosen: request.body.timeHorizon
+                        valueChosen: req.body.timeHorizon
                     },
                     {
                         property: constants.THEME_PROPERTY_MATURITY,
-                        valueChosen: request.body.timeHorizon
+                        valueChosen: req.body.maturity
                     },
                     {
                         property: constants.THEME_PROPERTY_CATEGORY,
-                        valueChosen: request.body.categories
+                        valueChosen: req.body.categories
                     },
                 ],
                 stocksAllocationInputs: []

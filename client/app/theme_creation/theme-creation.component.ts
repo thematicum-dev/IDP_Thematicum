@@ -4,6 +4,7 @@ import {ThemeCreationModel} from "../models/themeCreationModel";
 import {timeHorizonValues, maturityValues, categoryValues} from "./themeProperties";
 import {Theme} from "../models/theme";
 import {NgForm} from "@angular/forms";
+import {ThemeCreationService} from "./theme-creation.service";
 
 @Component({
     selector: 'app-theme-create',
@@ -11,7 +12,8 @@ import {NgForm} from "@angular/forms";
     styles: [`.btn-default.active, .btn-default:active {
         background-color: #d9edf7
     }`],
-    directives: [AutoCompleteComponent]
+    directives: [AutoCompleteComponent],
+    providers: [ThemeCreationService]
 })
 export class ThemeCreationComponent {
     selectedTags: string[] = [];
@@ -22,8 +24,7 @@ export class ThemeCreationComponent {
     maturityValues = maturityValues;
     categoryValues = categoryValues;
 
-
-    constructor() {
+    constructor(private themeCreationService: ThemeCreationService) {
         let theme = new Theme();
         theme.tags = this.selectedTags;
         this.themeCreation = new ThemeCreationModel(theme);
@@ -58,12 +59,16 @@ export class ThemeCreationComponent {
 
     onSubmit(form: NgForm) {
         //call service to save theme
-        //name, descr., tags
-        //theme_id, user_id, timeHorizon, maturity, categories
-        console.log(this.themeCreation);
-        console.log(form.value.timeHorizon);
-        console.log(form.value.categories);
-        console.log(categoryValues)
+        this.themeCreationService.createTheme(this.themeCreation)
+            .subscribe(
+                data => {
+                    console.log(data);
+                },
+                error =>  {
+                    console.log(error)
+                    this.error = error;
+                }
+            );
     }
 
     selectTimeHorizon(timeHorizon: number) {
@@ -75,7 +80,6 @@ export class ThemeCreationComponent {
     }
 
     toggleCheckedCategory(category: number) {
-        //toggle checked property
         categoryValues[category-1].checked = !categoryValues[category-1].checked;
     }
 }

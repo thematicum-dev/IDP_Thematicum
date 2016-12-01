@@ -3,14 +3,14 @@ import {Injectable} from "@angular/core";
 import {Http, Headers, Response} from "@angular/http";
 import 'rxjs/Rx';
 import {Observable} from "rxjs";
-import {Theme} from "../models/theme";
+import {ThemeCreationModel} from "../models/themeCreationModel";
 
 @Injectable()
 export class ThemeCreationService {
     constructor(private http: Http) {}
 
-    createTheme(theme: Theme) {
-        const body = JSON.stringify(theme);
+    createTheme(themeCreationModel: ThemeCreationModel) {
+        const body = JSON.stringify(themeCreationModel);
         const token = localStorage.getItem('token')
             ? '?token=' + localStorage.getItem('token')
             : '';
