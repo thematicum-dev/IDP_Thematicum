@@ -58,9 +58,7 @@
             <div class="col-xs-10">
                 <div class="btn-group btn-group-justified" data-toggle="buttons">
                     <label class="btn btn-default" *ngFor="let timeHorizon of timeHorizonValues" (click)="selectTimeHorizon(timeHorizon.value)">
-                        <input type="radio" id="timeHorizon" name="timeHorizon"
-                               [checked]="timeHorizon.checked" [value]="timeHorizon.value"
-                               [(ngModel)]="timeHorizon.value">{{timeHorizon.description}}
+                        <input type="radio" id="timeHorizon" name="timeHorizon" [value]="timeHorizon.value">{{timeHorizon.description}}
                     </label>
                 </div>
             </div>
@@ -72,8 +70,8 @@
 
             <div class="col-xs-10">
                 <div class="btn-group btn-group-justified" data-toggle="buttons">
-                    <label class="btn btn-default" *ngFor="let maturity of maturityValues">
-                        <input type="radio" id="maturity" name="maturity" [value]="maturity.value" [ngModel]="themeCreation?.maturity" (ngModelChange)="themeCreation.maturity=$event">{{maturity.description}}
+                    <label class="btn btn-default" *ngFor="let maturity of maturityValues" (click)="selectMaturity(maturity.value)">
+                        <input type="radio" id="maturity" name="maturity" [value]="maturity.value" >{{maturity.description}}
                     </label>
                 </div>
             </div>
@@ -84,10 +82,8 @@
 
             <div class="col-xs-10">
                 <div class="btn-group btn-group-justified" data-toggle="buttons">
-                    <label class="btn btn-default" *ngFor="let category of categoryValues" (click)="selectCategory(category.value, categories.checked)">
-                        <input type="checkbox" id="categories" name="categories"
-                               [checked]="category.checked" [value]="category.value"
-                               #categories [ngModel]="themeCreation?.categories" (ngModelChange)="themeCreation.categories=$event">{{category.description}}
+                    <label class="btn btn-default" *ngFor="let category of categoryValues" (click)="toggleCheckedCategory(category.value)">
+                        <input type="checkbox" id="categories" name="categories" [value]="category.value">{{category.description}}
                     </label>
                 </div>
             </div>

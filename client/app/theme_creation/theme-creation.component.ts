@@ -27,8 +27,6 @@ export class ThemeCreationComponent {
         let theme = new Theme();
         theme.tags = this.selectedTags;
         this.themeCreation = new ThemeCreationModel(theme);
-        this.themeCreation.timeHorizon = -1;
-        this.themeCreation.categories = [];
     }
 
     onNotifySelectedItem(tag: any) {
@@ -59,21 +57,25 @@ export class ThemeCreationComponent {
     }
 
     onSubmit(form: NgForm) {
+        //call service to save theme
+        //name, descr., tags
+        //theme_id, user_id, timeHorizon, maturity, categories
         console.log(this.themeCreation);
         console.log(form.value.timeHorizon);
+        console.log(form.value.categories);
+        console.log(categoryValues)
     }
 
     selectTimeHorizon(timeHorizon: number) {
         this.themeCreation.timeHorizon = timeHorizon;
     }
 
-    selectCategory(category: number, checked: boolean) {
-        console.log(checked)
-        categoryValues[category-1].checked = !checked;
-        if (checked) {
-            this.themeCreation.categories.push(category);
-        } else {
-            alert('not checked')
-        }
+    selectMaturity(maturity: number) {
+        this.themeCreation.maturity = maturity;
+    }
+
+    toggleCheckedCategory(category: number) {
+        //toggle checked property
+        categoryValues[category-1].checked = !categoryValues[category-1].checked;
     }
 }
