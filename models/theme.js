@@ -10,9 +10,9 @@ var schema = new Schema({
         unique: true,
         minlength: 4
     },
-    tagsAndRelatedThemes: {
+    tags: [{
         type: String
-    },
+    }],
     description: {
         type: String,
         required: true,

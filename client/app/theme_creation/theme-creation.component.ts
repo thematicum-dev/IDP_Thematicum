@@ -1,15 +1,24 @@
 import { Component } from '@angular/core';
 import {AutoCompleteComponent} from "../autocomplete/autocomplete.component";
+import {ThemeCreationModel} from "../models/themeCreationModel";
+import {timeHorizonValues, maturityValues, categoryValues} from "./themeProperties";
 
 @Component({
     selector: 'app-theme-create',
     templateUrl: 'theme-creation.component.html',
+    styles: [`.btn-default.active, .btn-default:active {
+        background-color: #d9edf7
+    }`],
     directives: [AutoCompleteComponent]
 })
 export class ThemeCreationComponent {
     selectedTags: string[] = [];
     tagsPlaceholder = 'Keyword';
     error: string = '';
+    themeCreation: ThemeCreationModel;
+    timeHorizonValues = timeHorizonValues;
+    maturityValues = maturityValues;
+    categoryValues = categoryValues;
 
     onNotifySelectedItem(tag: any) {
         //search by name (assume unique name)

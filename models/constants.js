@@ -2,6 +2,10 @@ const THEME_PROPERTY_TIME_HORIZON = "timeHorizon";
 const THEME_PROPERTY_MATURITY = "maturity";
 const THEME_PROPERTY_CATEGORY = "categories";
 
+const TIME_HORIZON_VALUES = [
+    { description: 'Short term (1 - 6 months)', value: 1 },
+    { }
+]
 const TIME_HORIZON_SHORT = 1;
 const TIME_HORIZON_MEDIUM = 2;
 const TIME_HORIZON_LONG = 3;

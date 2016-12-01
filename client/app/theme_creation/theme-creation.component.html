@@ -12,7 +12,7 @@
                         placeholder="Investment theme"
                         id="themeName"
                         class="form-control"
-                        [ngModel]=""
+                        [ngModel]="themeCreation?.theme?.name"
                         name="themeName"
                         #themeName="ngModel"
                         >
@@ -41,7 +41,7 @@
                         placeholder="Please enter a description (min 140 characters, maximum 500 characters)"
                         class="form-control"
                         [ngModel]=""
-                        name="description"
+                        name="themeCreation?.theme?.description"
                         #description="ngModel"
                         rows="7"></textarea>
         </div>
@@ -51,10 +51,10 @@
             <label class="col-xs-2 col-form-label">Expected time horizon</label>
 
             <div class="col-xs-10">
-                <div class="btn-group btn-group-justified" role="group" aria-label="">
-                    <a class="btn btn-default" role="button">Short term (1 - 6 months)</a>
-                    <a class="btn btn-default" role="button">Medium term (0.5 - 3 years)</a>
-                    <a class="btn btn-default" role="button">Long term (> 3 years)</a>
+                <div class="btn-group btn-group-justified" data-toggle="buttons">
+                    <label class="btn btn-default" *ngFor="let timeHorizon of timeHorizonValues">
+                        <input type="radio" value="timeHorizon.value">{{timeHorizon.description}}
+                    </label>
                 </div>
             </div>
         </div>
@@ -64,28 +64,22 @@
             <label class="col-xs-2 col-form-label">Current theme maturity</label>
 
             <div class="col-xs-10">
-                <div class="btn-group btn-group-justified" role="group" aria-label="">
-                    <a class="btn btn-default" role="button">upcoming</a>
-                    <a class="btn btn-default" role="button">nascent</a>
-                    <a class="btn btn-default" role="button">accelerating</a>
-                    <a class="btn btn-default" role="button">mature</a>
-                    <a class="btn btn-default" role="button">declining</a>
+                <div class="btn-group btn-group-justified" data-toggle="buttons">
+                    <label class="btn btn-default" *ngFor="let maturity of maturityValues">
+                        <input type="radio" value="maturity.value">{{maturity.description}}
+                    </label>
                 </div>
             </div>
-
         </div>
 
         <div class="form-group row">
             <label class="col-xs-2 col-form-label">Theme category</label>
 
             <div class="col-xs-10">
-                <div class="btn-group btn-group-justified" role="group" aria-label="">
-                    <a class="btn btn-default" role="button">Economic</a>
-                    <a class="btn btn-default" role="button">Technologic</a>
-                    <a class="btn btn-default" role="button">Environmental</a>
-                    <a class="btn btn-default" role="button">Political</a>
-                    <a class="btn btn-default" role="button">Regulatory</a>
-                    <a class="btn btn-default" role="button">Sociologic</a>
+                <div class="btn-group btn-group-justified" data-toggle="buttons">
+                    <label class="btn btn-default" *ngFor="let category of categoryValues">
+                        <input type="checkbox" value="category.value">{{category.description}}
+                    </label>
                 </div>
             </div>
         </div>

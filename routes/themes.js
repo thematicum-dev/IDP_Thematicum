@@ -1,6 +1,25 @@
 var express = require('express');
 var router = express.Router();
+var jwt = require('jsonwebtoken');
 var Theme = require('../models/theme');
+var UserThemeInput = require('../models/userThemeInput');
+var ThemePropertyInput = require('../models/themePropertyInput');
+var constants = require('../models/constants');
+
+//middleware - protected routes from now on
+router.use('/', function(req, res, next) {
+    jwt.verify(req.query.token, 'secret', function(err, decoded) {
+        if(err) {
+            //invalid token
+            return res.status(401).json({
+                title: 'Not Authenticated',
+                error: err
+            });
+        }
+
+        next();
+    });
+});
 
 router.get('/', function(req, res, next) {
     Theme.find(function(err, results) {
@@ -56,11 +75,8 @@ router.post('/', function (req, res, next) {
     //create new Theme
     var theme = new Theme({
         name: req.body.name,
-        tagsAndRelatedThemes: req.body.tagsAndRelatedThemes,
-        description: req.body.description,
-        timeHorizon: req.body.timeHorizon,
-        maturity: req.body.maturity,
-        categories: req.body.categories
+        tags: req.body.tags,
+        description: req.body.description
     });
 
     theme.save(function(err, result) {
@@ -71,9 +87,52 @@ router.post('/', function (req, res, next) {
             });
         }
 
-        res.status(201).json({
-            message: 'Theme created',
-            obj: result
+        //create user interaction
+        var decoded = jwt.decode(req.query.token);
+        //find user
+        User.findById(decoded.user._id, function(err, user) {
+            if (err) {
+                return res.status(500).json({
+                    title: 'An error occurred',
+                    error: err
+                });
+            }
+
+            //save user interaction
+            var userInput = new UserThemeInput({
+                user: user,
+                theme: result,
+                themePropertyInputs: [
+                    {
+                        property: constants.THEME_PROPERTY_TIME_HORIZON,
+                        valueChosen: request.body.timeHorizon
+                    },
+                    {
+                        property: constants.THEME_PROPERTY_MATURITY,
+                        valueChosen: request.body.timeHorizon
+                    },
+                    {
+                        property: constants.THEME_PROPERTY_CATEGORY,
+                        valueChosen: request.body.categories
+                    },
+                ],
+                stocksAllocationInputs: []
+            });
+
+            userInput.save(function(err, userInput) {
+                if (err) {
+                    return res.status(500).json({
+                        title: 'An error occurred',
+                        error: err
+                    });
+                }
+
+                //TODO: which object to return?
+                res.status(201).json({
+                    message: 'Theme created',
+                    obj: result
+                });
+            });
         });
     });
 });
