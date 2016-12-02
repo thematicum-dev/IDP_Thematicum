@@ -22,10 +22,10 @@ export class AutoCompleteComponent {
     autocompleteList: AutocompleteList = new AutocompleteList(items);
     position: number = -1;
 
-    @Input('allowCustomValues') allowUserEnteredValues: boolean = true;
-    @Input() allowEnterKey: boolean = true;
+    @Input('allowCustomValues') allowUserEnteredValues: boolean;
+    @Input() allowEnterKey: boolean;
     @Input() dataSource: any;
-    @Input() placeholderTerm: string = '';
+    @Input() placeholderTerm: string;
     @Output() notifySelectedItem: EventEmitter<any> = new EventEmitter<any>();
     @Output() clearErrorStr: EventEmitter = new EventEmitter();
 
@@ -79,6 +79,10 @@ export class AutoCompleteComponent {
     }
 
     handleKeyEnter() {
+        if (!this.allowEnterKey) {
+            return;
+        }
+
         let itemToAdd = this.autocompleteList.getItemAt(this.position);
 
         if (itemToAdd) {

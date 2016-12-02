@@ -18,6 +18,8 @@ import {ThemeCreationService} from "./theme-creation.service";
 export class ThemeCreationComponent {
     selectedTags: string[] = [];
     tagsPlaceholder = 'Keyword';
+    allowCustomValues: boolean = true;
+    allowEnterKey: boolean = true;
     error: string = '';
     themeCreation: ThemeCreationModel;
     timeHorizonValues = timeHorizonValues;
