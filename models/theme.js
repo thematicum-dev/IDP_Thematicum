@@ -22,6 +22,9 @@ var schema = new Schema({
         unique: true,
         minlength: 4,
         maxlength: 500
+    },
+    creator: {
+        type: Schema.Types.ObjectId, ref: 'User'
     }}, { timestamps: true }) ;
 
 schema.index({ name: 'text' });

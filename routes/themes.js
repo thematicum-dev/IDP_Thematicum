@@ -105,37 +105,33 @@ router.get('/:query', function (req, res, next) {
 });
 
 router.post('/', function (req, res, next) {
-    //create new Theme
-    var theme = new Theme({
-        name: req.body.theme.name,
-        tags: req.body.theme.tags,
-        description: req.body.theme.description
-    });
-
-    console.log(req.body.theme.name + ", " + req.body.theme.tags + ", " + req.body.theme.description)
-    console.log('At node:')
-    console.log(theme)
-
-    theme.save(function(err, result) {
+    //get authenticated user
+    var decoded = jwt.decode(req.query.token);
+    User.findById(decoded.user._id, function(err, user) {
         if (err) {
             return res.status(500).json({
-                title: 'An error occurred at saving theme',
+                title: 'An error occurred',
                 error: err
             });
         }
 
-        //create user interaction
-        var decoded = jwt.decode(req.query.token);
-        //find user
-        User.findById(decoded.user._id, function(err, user) {
+        //save new Theme
+        var theme = new Theme({
+            name: req.body.theme.name,
+            tags: req.body.theme.tags,
+            description: req.body.theme.description,
+            creator: user
+        });
+
+        theme.save(function(err, result) {
             if (err) {
                 return res.status(500).json({
-                    title: 'An error occurred',
+                    title: 'An error occurred at saving theme',
                     error: err
                 });
             }
 
-            //save user interaction
+            //save new UserThemeInput
             var userInput = new UserThemeInput({
                 user: user,
                 theme: result,
@@ -167,7 +163,7 @@ router.post('/', function (req, res, next) {
                 //TODO: which object to return?
                 res.status(201).json({
                     message: 'Theme created',
-                    obj: result
+                    obj: [ result, userInput ]
                 });
             });
         });
