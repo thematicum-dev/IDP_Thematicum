@@ -59,6 +59,8 @@ export class ThemeCreationComponent {
 
     onSubmit(form: NgForm) {
         //call service to save theme
+        this.setCheckedCategories();
+
         this.themeCreationService.createTheme(this.themeCreation)
             .subscribe(
                 data => {
@@ -81,5 +83,14 @@ export class ThemeCreationComponent {
 
     toggleCheckedCategory(category: number) {
         categoryValues[category-1].checked = !categoryValues[category-1].checked;
+    }
+
+    setCheckedCategories() {
+        this.themeCreation.categories = categoryValues.filter(category => {
+            return category.checked;
+            })
+            .map(category => {
+                return category.value
+            });
     }
 }
