@@ -5,6 +5,7 @@ import {SignupComponent} from "./auth/signup.component";
 import {SigninComponent} from "./auth/signin.component";
 import {ThemeSearchComponent} from "./theme_search/theme-search.component";
 import {ThemeCreationComponent} from "./theme_creation/theme-creation.component";
+import {ThemeDetailsComponent} from "./theme_details/theme-details.component";
 
 const APP_ROUTES: Routes = [
     { path: '', redirectTo: '/home', pathMatch: 'full' },
@@ -13,7 +14,8 @@ const APP_ROUTES: Routes = [
     { path: 'signup', component: SignupComponent },
     { path: 'signin', component: SigninComponent },
     { path: 'search', component: ThemeSearchComponent },
-    { path: 'theme/create', component: ThemeCreationComponent}
+    { path: 'theme/create', component: ThemeCreationComponent },
+    { path: 'theme/details', component: ThemeDetailsComponent }
 ];
 
 export const routing = RouterModule.forRoot(APP_ROUTES);

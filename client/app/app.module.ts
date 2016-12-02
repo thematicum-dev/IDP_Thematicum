@@ -17,6 +17,7 @@ import {ThemeSearchComponent} from "./theme_search/theme-search.component";
 import {ErrorComponent} from "./error-handling/error.component";
 import {AutoCompleteComponent} from "./autocomplete/autocomplete.component";
 import {ThemeCreationComponent} from "./theme_creation/theme-creation.component";
+import {ThemeDetailsComponent} from "./theme_details/theme-details.component";
 
 @NgModule({
     declarations: [
@@ -30,7 +31,8 @@ import {ThemeCreationComponent} from "./theme_creation/theme-creation.component"
         ErrorComponent,
         ThemeSearchComponent,
         AutoCompleteComponent,
-        ThemeCreationComponent
+        ThemeCreationComponent,
+        ThemeDetailsComponent
     ],
     imports: [BrowserModule, routing, FormsModule, HttpModule],
     providers: [ AuthService ],
