@@ -27,7 +27,8 @@
                 <app-autocomplete [placeholderTerm]="tagsPlaceholder" [allowCustomValues]="allowCustomValues" [allowEnterKey]="allowEnterKey"
                                   [dataSource]="tagList"
                                   (notifySelectedItem)='onNotifySelectedItem($event)'
-                                  (clearErrorStr)="onClearErrorStr()">
+                                  (clearErrorStr)="onClearErrorStr()"
+                                  (onChange)="save($event)">
                 </app-autocomplete>
             </div>
         </div>

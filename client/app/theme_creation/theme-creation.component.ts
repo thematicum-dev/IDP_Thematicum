@@ -8,6 +8,7 @@ import {ThemeCreationService} from "./theme-creation.service";
 import {AutocompleteList} from "../autocomplete/autocomplete-list";
 import {ThemeTagsService} from "./theme-tags.service";
 import {AutocompleteItem} from "../autocomplete/autocomplete-item";
+import {Observable} from "rxjs";
 
 @Component({
     selector: 'app-theme-create',
@@ -37,9 +38,9 @@ export class ThemeCreationComponent implements OnInit {
                     this.tagList.push(new AutocompleteItem(tag, tag + ' alias'));
                 }
 
-                this.autocompleteTagList = new AutocompleteList();
-                this.autocompleteTagList.list = this.tagList;
-                console.log(this.autocompleteTagList)
+                //this.autocompleteTagList = new AutocompleteList();
+               // this.autocompleteTagList.list = this.tagList;
+                //console.log(this.autocompleteTagList)
             },
             error => {
                 console.log(error)

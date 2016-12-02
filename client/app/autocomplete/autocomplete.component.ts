@@ -18,7 +18,7 @@ import {ThemeTagsService} from "../theme_creation/theme-tags.service";
     },
     providers: [ThemeTagsService]
 })
-export class AutoCompleteComponent {
+export class AutoCompleteComponent implements OnChanges {
     const KEY_ARROW_UP = 38;
     const KEY_ARROW_DOWN = 40;
     const KEY_ENTER = 13;
@@ -28,37 +28,61 @@ export class AutoCompleteComponent {
 
     @Input('allowCustomValues') allowUserEnteredValues: boolean;
     @Input() allowEnterKey: boolean;
-    @Input() dataSource: any[];
+    @Input() dataSource: AutocompleteItem[];
     autocompleteList: AutocompleteList; //items as argument
     @Input() placeholderTerm: string;
     @Output() notifySelectedItem: EventEmitter<any> = new EventEmitter<any>();
     @Output() clearErrorStr: EventEmitter = new EventEmitter();
+    @Output() onChange:EventEmitter<AutocompleteItem[]> = new EventEmitter();
+    changedDataSource: AutocompleteItem[];
 
     constructor(private elementRef: ElementRef, private themeTagService: ThemeTagsService) {
         console.log('at autocomplete')
         console.log(this.dataSource)
-        this.autocompleteList = new AutocompleteList(); //items as argument
+
         //this.autocompleteList.list = items;
     }
 
     ngOnInit(): void {
-        this.themeTagService.getAutocompleteList().subscribe(data => {
-            var tagList: AutocompleteItem[] = [];
-            for (let tag of data) {
-                    tagList.push(new AutocompleteItem(tag, tag + ' alias'));
-                }
+        // this.themeTagService.getAutocompleteList().subscribe(data => {
+        //     var tagList: AutocompleteItem[] = [];
+        //     for (let tag of data) {
+        //             tagList.push(new AutocompleteItem(tag, tag + ' alias'));
+        //         }
+        //
+        //         this.autocompleteList = new AutocompleteList();
+        //         this.autocompleteList.list = this.tagList;
+        //         console.log(this.autocompleteTagList)
+        //     },
+        //     error => {
+        //         console.log(error)
+        //     });
+    }
 
-                this.autocompleteList = new AutocompleteList();
-                this.autocompleteList.list = tagList;
-            },
-            error => {
-                console.log(error)
-            });
+    ngOnChanges(changes: SimpleChanges): void {
+        var autocompleteItemsChange:AutocompleteItem[] = changes.dataSource.currentValue;
+        if (autocompleteItemsChange) {
+            this.changedDataSource = [];
+            for (let change in autocompleteItemsChange) {
+                this.changedDataSource.push(new AutocompleteItem(change.name, change.alias))
+            }
+        }
+
+        console.log('on changes')
+        this.dataSource = autocompleteItemsChange;
+        this.autocompleteList = new AutocompleteList(); //items as argument
+        this.autocompleteList.list = this.dataSource;
+        console.log(this.dataSource)
+    }
+
+    onSave():void {
+        this.onChange.emit(this.changedDataSource);
     }
 
 
     /** set filteredList to the items containing the query */
     filterQuery() {
+        console.log('at filter')
         this.autocompleteList.filterList();
     }
 
