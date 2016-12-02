@@ -8,27 +8,21 @@ var schema = new Schema({
         type: String,
         required: true,
         unique: true,
-        minlength: 4
+        minlength: 4,
+        maxlength: 32
     },
     tags: [{
-        type: String
+        type: String,
+        minlength: 3,
+        maxlength: 16
     }],
     description: {
         type: String,
         required: true,
         unique: true,
-        minlength: 4
-    },
-    timeHorizon: {
-        type: String
-    },
-    maturity: {
-        type: String
-    },
-    categories: {
-        type: String
-    }
-});
+        minlength: 4,
+        maxlength: 500
+    }}, { timestamps: true }) ;
 
 schema.index({ name: 'text' });
 schema.plugin(mongooseUniqueValidator);
