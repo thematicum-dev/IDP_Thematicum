@@ -1,10 +1,13 @@
-import { Component } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {AutoCompleteComponent} from "../autocomplete/autocomplete.component";
 import {ThemeCreationModel} from "../models/themeCreationModel";
 import {timeHorizonValues, maturityValues, categoryValues} from "./themeProperties";
 import {Theme} from "../models/theme";
 import {NgForm} from "@angular/forms";
 import {ThemeCreationService} from "./theme-creation.service";
+import {AutocompleteList} from "../autocomplete/autocomplete-list";
+import {ThemeTagsService} from "./theme-tags.service";
+import {AutocompleteItem} from "../autocomplete/autocomplete-item";
 
 @Component({
     selector: 'app-theme-create',
@@ -13,9 +16,9 @@ import {ThemeCreationService} from "./theme-creation.service";
         background-color: #d9edf7
     }`],
     directives: [AutoCompleteComponent],
-    providers: [ThemeCreationService]
+    providers: [ThemeCreationService, ThemeTagsService]
 })
-export class ThemeCreationComponent {
+export class ThemeCreationComponent implements OnInit {
     selectedTags: string[] = [];
     tagsPlaceholder = 'Keyword';
     allowCustomValues: boolean = true;
@@ -25,8 +28,25 @@ export class ThemeCreationComponent {
     timeHorizonValues = timeHorizonValues;
     maturityValues = maturityValues;
     categoryValues = categoryValues;
+    autocompleteTagList: AutocompleteList;
+    tagList: AutocompleteItem[] = [];
 
-    constructor(private themeCreationService: ThemeCreationService) {
+    ngOnInit(): void {
+        this.themeTagService.getAutocompleteList().subscribe(data => {
+                for (let tag of data) {
+                    this.tagList.push(new AutocompleteItem(tag, tag + ' alias'));
+                }
+
+                this.autocompleteTagList = new AutocompleteList();
+                this.autocompleteTagList.list = this.tagList;
+                console.log(this.autocompleteTagList)
+            },
+            error => {
+                console.log(error)
+            });
+    }
+
+    constructor(private themeCreationService: ThemeCreationService, private themeTagService: ThemeTagsService) {
         let theme = new Theme();
         theme.tags = this.selectedTags;
         this.themeCreation = new ThemeCreationModel(theme);

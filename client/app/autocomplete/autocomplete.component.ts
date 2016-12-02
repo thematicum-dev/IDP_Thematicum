@@ -5,6 +5,9 @@ import {
 import {AutocompleteList} from "./autocomplete-list";
 import {items} from "./dummy-data";
 import {Input, Output} from "@angular/core/src/metadata/directives";
+import {AutocompleteDatasourceInterface} from "./autocomplete-datasource-interface";
+import {AutocompleteItem} from "./autocomplete-item";
+import {ThemeTagsService} from "../theme_creation/theme-tags.service";
 
 @Component({
     selector: 'app-autocomplete',
@@ -12,24 +15,47 @@ import {Input, Output} from "@angular/core/src/metadata/directives";
     host: {
         '(document:click)': 'handleClick($event)',
         '(keydown)': 'handleKeyDown($event)'
-    }
+    },
+    providers: [ThemeTagsService]
 })
 export class AutoCompleteComponent {
     const KEY_ARROW_UP = 38;
     const KEY_ARROW_DOWN = 40;
     const KEY_ENTER = 13;
 
-    autocompleteList: AutocompleteList = new AutocompleteList(items);
+
     position: number = -1;
 
     @Input('allowCustomValues') allowUserEnteredValues: boolean;
     @Input() allowEnterKey: boolean;
-    @Input() dataSource: any;
+    @Input() dataSource: any[];
+    autocompleteList: AutocompleteList; //items as argument
     @Input() placeholderTerm: string;
     @Output() notifySelectedItem: EventEmitter<any> = new EventEmitter<any>();
     @Output() clearErrorStr: EventEmitter = new EventEmitter();
 
-    constructor(private elementRef: ElementRef) {}
+    constructor(private elementRef: ElementRef, private themeTagService: ThemeTagsService) {
+        console.log('at autocomplete')
+        console.log(this.dataSource)
+        this.autocompleteList = new AutocompleteList(); //items as argument
+        //this.autocompleteList.list = items;
+    }
+
+    ngOnInit(): void {
+        this.themeTagService.getAutocompleteList().subscribe(data => {
+            var tagList: AutocompleteItem[] = [];
+            for (let tag of data) {
+                    tagList.push(new AutocompleteItem(tag, tag + ' alias'));
+                }
+
+                this.autocompleteList = new AutocompleteList();
+                this.autocompleteList.list = tagList;
+            },
+            error => {
+                console.log(error)
+            });
+    }
+
 
     /** set filteredList to the items containing the query */
     filterQuery() {

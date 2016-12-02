@@ -1,7 +1,8 @@
 export class AutocompleteItem {
     constructor(
-        public id: string,
         public name: string,
+        public alias?: string,
+        public id?: string,
         public selected: boolean = false
     ) {}
 }
