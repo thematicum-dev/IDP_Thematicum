@@ -8,9 +8,6 @@ export class AutocompleteList {
     list: AutocompleteItem[]
 
     filterList() {
-        console.log('at filterList')
-        console.log(this.list)
-        console.log(this.query)
         this.filteredList =  this.query !== '' ?
             this.list.filter((el: any) => {
                 return el.name.toLowerCase().indexOf(this.query.toLowerCase()) > -1;

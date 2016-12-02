@@ -27,8 +27,7 @@
                 <app-autocomplete [placeholderTerm]="tagsPlaceholder" [allowCustomValues]="allowCustomValues" [allowEnterKey]="allowEnterKey"
                                   [dataSource]="tagList"
                                   (notifySelectedItem)='onNotifySelectedItem($event)'
-                                  (clearErrorStr)="onClearErrorStr()"
-                                  (onChange)="save($event)">
+                                  (clearErrorStr)="onClearErrorStr()">
                 </app-autocomplete>
             </div>
         </div>
@@ -99,6 +98,4 @@
 
     <p>{{themeCreation | json}}</p>
 </div>
-
-<p>here goes {{autocompleteTagList | json}}</p>
 

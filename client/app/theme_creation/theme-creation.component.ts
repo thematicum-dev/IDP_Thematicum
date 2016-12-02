@@ -29,18 +29,13 @@ export class ThemeCreationComponent implements OnInit {
     timeHorizonValues = timeHorizonValues;
     maturityValues = maturityValues;
     categoryValues = categoryValues;
-    autocompleteTagList: AutocompleteList;
     tagList: AutocompleteItem[] = [];
 
     ngOnInit(): void {
         this.themeTagService.getAutocompleteList().subscribe(data => {
                 for (let tag of data) {
-                    this.tagList.push(new AutocompleteItem(tag, tag + ' alias'));
+                    this.tagList.push(new AutocompleteItem(tag));
                 }
-
-                //this.autocompleteTagList = new AutocompleteList();
-               // this.autocompleteTagList.list = this.tagList;
-                //console.log(this.autocompleteTagList)
             },
             error => {
                 console.log(error)
@@ -62,17 +57,14 @@ export class ThemeCreationComponent implements OnInit {
         //do not add an item if it was already selected
         if(!existingItem) {
             this.selectedTags.push(tag.name);
-            console.log(JSON.stringify(this.selectedTags));
         } else {
             this.error = 'This item has already been selected. Please choose another one';
         }
     }
 
     onTagDeselect(index: number) {
-        console.log('index to remove: ' + (index >= 0 && index < this.selectedTags.length));
         if (index >= 0 && index < this.selectedTags.length) {
             this.selectedTags.splice(index, 1);
-            console.log(JSON.stringify(this.selectedTags));
         }
     }
 
