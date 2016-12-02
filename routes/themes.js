@@ -6,6 +6,38 @@ var UserThemeInput = require('../models/userThemeInput');
 var ThemePropertyInput = require('../models/themePropertyInput');
 var User = require('../models/user');
 var constants = require('../models/constants');
+var _ = require('underscore');
+
+router.get('/tags', function(req, res, next) {
+    //retrieve only tags from themes
+    Theme.find({tags: { $ne: null }}, {'tags': 1, '_id': 0}, function(err, results) {
+        if (err) {
+            return res.status(500).json({
+                title: 'An error occurred',
+                error: err
+            });
+        }
+
+        if (!results) {
+            return res.status(500).json({
+                title: 'No tags found',
+                error: {message: 'Could not find any tags'}
+            });
+        } else {
+            var tags = new Set();
+            _.each(results, function(themeTags) {
+                _.each(themeTags.tags, function(tag) {
+                    tags.add(tag)
+                });
+            });
+
+            return res.status(200).json({
+                message: 'Theme tags retrieved',
+                obj: Array.from(tags)
+            });
+        }
+    });
+});
 
 //middleware - protected routes from now on
 router.use('/', function(req, res, next) {

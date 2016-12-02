@@ -33,7 +33,7 @@ export class ThemeCreationComponent {
     onNotifySelectedItem(tag: any) {
         //search by name (assume unique name)
         let existingItem = this.selectedTags.find(el => {
-            return el.name == tag.name
+            return el == tag.name
         });
 
         //do not add an item if it was already selected
