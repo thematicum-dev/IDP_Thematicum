@@ -56,26 +56,49 @@ router.use('/', function(req, res, next) {
 
 router.get('/:id', function(req, res, next) {
     if(req.params.id) {
-        Theme.findById(req.params.id, function(err, theme) {
-            if (err) {
-                return res.status(500).json({
-                    title: 'An error occurred at finding theme by id',
-                    error: err
-                });
-            }
+        Theme
+            .findById(req.params.id)
+            .populate('creator')
+            .exec(function (err, theme) {
+                if (err) {
+                    return res.status(500).json({
+                        title: 'An error occurred at finding theme by id',
+                        error: err
+                    });
+                }
 
-            if (!theme) {
-                return res.status(500).json({
-                    title: 'No investment theme found',
-                    error: {message: 'Could not find any investment theme for the given id'}
-                });
-            }
+                if (!theme) {
+                    return res.status(500).json({
+                        title: 'No investment theme found',
+                        error: {message: 'Could not find any investment theme for the given id'}
+                    });
+                }
 
-            return res.status(200).json({
-                message: 'Investment theme retrieved',
-                obj: theme
+                return res.status(200).json({
+                    message: 'Investment theme retrieved',
+                    obj: theme
+                });
             });
-        });
+        // Theme.findById(req.params.id, function(err, theme) {
+        //     if (err) {
+        //         return res.status(500).json({
+        //             title: 'An error occurred at finding theme by id',
+        //             error: err
+        //         });
+        //     }
+        //
+        //     if (!theme) {
+        //         return res.status(500).json({
+        //             title: 'No investment theme found',
+        //             error: {message: 'Could not find any investment theme for the given id'}
+        //         });
+        //     }
+        //
+        //     return res.status(200).json({
+        //         message: 'Investment theme retrieved',
+        //         obj: theme
+        //     });
+        // });
     }
 });
 
