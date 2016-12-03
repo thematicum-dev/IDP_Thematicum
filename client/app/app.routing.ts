@@ -15,7 +15,7 @@ const APP_ROUTES: Routes = [
     { path: 'signin', component: SigninComponent },
     { path: 'search', component: ThemeSearchComponent },
     { path: 'theme/create', component: ThemeCreationComponent },
-    { path: 'theme/details', component: ThemeDetailsComponent }
+    { path: 'theme/:id', component: ThemeDetailsComponent }
 ];
 
 export const routing = RouterModule.forRoot(APP_ROUTES);

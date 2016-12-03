@@ -54,54 +54,79 @@ router.use('/', function(req, res, next) {
     });
 });
 
-router.get('/', function(req, res, next) {
-    Theme.find(function(err, results) {
-        if (err) {
-            return res.status(500).json({
-                title: 'An error occurred',
-                error: err
-            });
-        }
-
-        if (!results) {
-            return res.status(500).json({
-                title: 'No investment themes found',
-                error: {message: 'Could not find any investment theme'}
-            });
-        }
-
-        return res.status(200).json({
-            message: 'Investment themes retrieved',
-            obj: results
-        });
-    });
-});
-
-router.get('/:query', function (req, res, next) {
-    Theme.find(
-        {$text: {$search: req.params.query}},
-        {score: {$meta: 'textScore'}})
-        .sort({score: {$meta: "textScore"}})
-        .exec(function (err, results) {
+router.get('/:id', function(req, res, next) {
+    if(req.params.id) {
+        Theme.findById(req.params.id, function(err, theme) {
             if (err) {
                 return res.status(500).json({
-                    title: 'An error occurred',
+                    title: 'An error occurred at finding theme by id',
                     error: err
                 });
             }
 
-            if (!results) {
+            if (!theme) {
+                return res.status(500).json({
+                    title: 'No investment theme found',
+                    error: {message: 'Could not find any investment theme for the given id'}
+                });
+            }
+
+            return res.status(200).json({
+                message: 'Investment theme retrieved',
+                obj: theme
+            });
+        });
+    }
+});
+
+router.get('/', function(req, res, nex) {
+    if(req.query.searchQuery) {
+        Theme.find(
+            {$text: {$search: req.query.searchQuery}},
+            {score: {$meta: 'textScore'}})
+            .sort({score: {$meta: "textScore"}})
+            .exec(function (err, results) {
+                if (err) {
+                    return res.status(500).json({
+                        title: 'An error occurred at theme text search',
+                        error: err
+                    });
+                }
+
+                if (!results) {
+                    return res.status(500).json({
+                        title: 'No investment themes found',
+                        error: {message: 'Could not find any investment theme'}
+                    });
+                }
+
+                return res.status(200).json({
+                    message: 'Investment themes retrieved',
+                    obj: results
+                });
+            });
+    } else {
+        Theme.find(function (err, allThemes) {
+            if (err) {
+                return res.status(500).json({
+                    title: 'An error occurred at getting all themes',
+                    error: err
+                });
+            }
+
+            if (!allThemes) {
                 return res.status(500).json({
                     title: 'No investment themes found',
                     error: {message: 'Could not find any investment theme'}
                 });
             }
 
-            res.status(200).json({
+            return res.status(200).json({
                 message: 'Investment themes retrieved',
-                obj: results
+                obj: allThemes
             });
         });
+    }
 });
 
 router.post('/', function (req, res, next) {
