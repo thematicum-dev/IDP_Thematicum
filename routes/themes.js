@@ -3,7 +3,6 @@ var router = express.Router();
 var jwt = require('jsonwebtoken');
 var Theme = require('../models/theme');
 var UserThemeInput = require('../models/userThemeInput');
-var ThemePropertyInput = require('../models/themePropertyInput');
 var User = require('../models/user');
 var constants = require('../models/constants');
 var _ = require('underscore');
@@ -38,6 +37,37 @@ router.get('/tags', function(req, res, next) {
         }
     });
 });
+
+router.get('/details/:id', function(req, res, next) {
+    UserThemeInput.find({theme: req.params.id}, function(err, results) {
+        if (err) {
+            return res.status(500).json({
+                title: 'An error occurred',
+                error: err
+            });
+        }
+
+        if (!results) {
+            return res.status(500).json({
+                title: 'No investment theme found',
+                error: {message: 'Could not find any investment theme for the given id'}
+            });
+        }
+
+        //TODO: further work, figure out aggregation function
+        x = _.map(results, function(userInput) {
+            return userInput.themePropertyInputs
+        });
+
+        console.log(results);
+        return res.status(200).json({
+            message: 'User inputs retrieved',
+            obj: x
+        });
+
+    });
+});
+
 
 //middleware - protected routes from now on
 router.use('/', function(req, res, next) {
@@ -79,26 +109,6 @@ router.get('/:id', function(req, res, next) {
                     obj: theme
                 });
             });
-        // Theme.findById(req.params.id, function(err, theme) {
-        //     if (err) {
-        //         return res.status(500).json({
-        //             title: 'An error occurred at finding theme by id',
-        //             error: err
-        //         });
-        //     }
-        //
-        //     if (!theme) {
-        //         return res.status(500).json({
-        //             title: 'No investment theme found',
-        //             error: {message: 'Could not find any investment theme for the given id'}
-        //         });
-        //     }
-        //
-        //     return res.status(200).json({
-        //         message: 'Investment theme retrieved',
-        //         obj: theme
-        //     });
-        // });
     }
 });
 
