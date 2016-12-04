@@ -62,24 +62,27 @@ router.get('/details/:id', function(req, res, next) {
             .groupBy('property')
             .value();
 
-        votesDistribution = _.chain(groupedByProperties.timeHorizon)
-            .map(function(prop) {
-                return prop.valueChosen
-            })
-            .flatten()
-            .countBy()
-            .value();
 
-        sum = _.reduce(votesDistribution, function(memo, num){ return memo + num; }, 0); //sum up votes
+        timeHorizonData = userInputAggregation.aggregateThemeProperty(groupedByProperties.timeHorizon, "timeHorizon");
 
-        aggregationData = _.map(votesDistribution, function(val, key) {
-            val = { value: key, count: val, percentage: userInputAggregation.roundUp(100*val/sum, 10) }
-            return val;
-        });
+        // votesDistribution = _.chain(groupedByProperties.timeHorizon)
+        //     .map(function(prop) {
+        //         return prop.valueChosen
+        //     })
+        //     .flatten()
+        //     .countBy()
+        //     .value();
+        //
+        // sum = _.reduce(votesDistribution, function(memo, num){ return memo + num; }, 0); //sum up votes
+        //
+        // aggregationData = _.map(votesDistribution, function(val, key) {
+        //     val = { value: key, count: val, percentage: userInputAggregation.roundUp(100*val/sum, 10) }
+        //     return val;
+        // });
 
         return res.status(200).json({
             message: 'User inputs retrieved',
-            obj: aggregationData
+            obj: timeHorizonData
         });
 
     });
