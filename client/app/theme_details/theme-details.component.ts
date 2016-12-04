@@ -10,7 +10,16 @@ import {timeHorizonValues, maturityValues, categoryValues} from "../theme_creati
     templateUrl: 'theme-details.component.html',
     styles: [`h3 {
         margin-top: 0;
-    }`],
+    }
+    .justified-label-group {
+        border: 0 none;
+        cursor: default;
+        
+    }
+    label.justified-label-group:hover {
+        background-color: white;
+    }
+`],
     providers: [ThemeSearchService]
 })
 export class ThemeDetailsComponent implements OnInit, OnChanges {
@@ -27,9 +36,9 @@ export class ThemeDetailsComponent implements OnInit, OnChanges {
     ngOnInit(): void {
         this.route.params
             .switchMap((params: Params) => this.searchService.getThemeById(params['id']))
-            .subscribe((theme: Theme) => {
-                this.theme = theme;
-                this.creationDate = new Date(theme.createdAt);
+            .subscribe((theme: any) => {
+                this.theme = theme.theme;
+                this.creationDate = new Date(theme.theme.createdAt);
                 console.log(this.theme);
             });
 
