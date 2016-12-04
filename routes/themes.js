@@ -70,8 +70,23 @@ router.get('/details/:id', function(req, res, next) {
             // });
 
             //var sum = _.reduce(userInput.themePropertyInputs[0].valueChosen[0], function(memo, num){ return memo + num; }, 0);
-            return userInput.themePropertyInputs[0];
+
+            //THIS WORKED
+            //return userInput.themePropertyInputs[0];
+            return userInput.themePropertyInputs
             });
+        z = _.flatten(x)
+
+        console.log(z)
+        another = _.groupBy(z, 'property')
+        console.log('another')
+        console.log(another)
+
+        //for timeHorizon
+        timeHorizons = another.timeHorizon
+        maturities = another.maturity
+        categories = another.categories
+       // another2 = _.groupBy(another, 'valueChosen')
 
         // y = _.chain(lyrics)
         //     .map(function(line) { return line.words.split(' '); })
@@ -119,7 +134,7 @@ router.get('/details/:id', function(req, res, next) {
 
         return res.status(200).json({
             message: 'User inputs retrieved',
-            obj: _.groupBy(x, 'valueChosen')
+            obj: _.groupBy(another.timeHorizon, 'valueChosen')
         });
 
     });
