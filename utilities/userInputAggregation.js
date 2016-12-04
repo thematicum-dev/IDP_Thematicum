@@ -1,28 +1,28 @@
 var _ = require('underscore');
 
 module.exports = {
-    aggregateThemeProperty: aggregateThemeProperty
+    getThemePropertyData: getThemePropertyData
 }
 
 function roundUp(num, precision) {
     return Math.ceil(num * precision) / precision
 }
 
-function groupThemePropertyData(userThemeInputs) {
+function getThemePropertyData(userThemeInputs) {
     groupedByProperties = _.chain(userThemeInputs)
         .map(function(userInput) { return userInput.themePropertyInputs; })
         .flatten()
         .groupBy('property')
         .value();
 
-    timeHorizonData = aggregateThemeProperty(groupedByProperties.timeHorizon, "timeHorizon");
-    maturityData = userInputAggregation.aggregateThemeProperty(groupedByProperties.maturity, "maturity");
-    categoriesData = userInputAggregation.aggregateThemeProperty(groupedByProperties.categories, "categories");
+    timeHorizonData = aggregateThemeProperty(groupedByProperties.timeHorizon);
+    maturityData = aggregateThemeProperty(groupedByProperties.maturity);
+    categoriesData = aggregateThemeProperty(groupedByProperties.categories);
 
-    return [ timeHorizonData, maturityData, categoriesData ];
+    return { "timeHorizon": timeHorizonData, "maturity": maturityData, "categories": categoriesData };
 }
 
-function aggregateThemeProperty(propertyInput, propertyName) {
+function aggregateThemeProperty(propertyInput) {
     votesDistribution = _.chain(propertyInput)
         .map(function(prop) {
             return prop.valueChosen
@@ -38,5 +38,5 @@ function aggregateThemeProperty(propertyInput, propertyName) {
         return val;
     });
 
-    return { [propertyName]: aggregationData}
+    return aggregationData;
 }
