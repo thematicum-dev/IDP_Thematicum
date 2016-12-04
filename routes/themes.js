@@ -56,7 +56,7 @@ router.get('/details/:id', function(req, res, next) {
         }
 
         themePropertyData = userInputAggregation.getThemePropertyData(results);
-        
+
         return res.status(200).json({
             message: 'User inputs retrieved',
             obj: themePropertyData
@@ -64,7 +64,6 @@ router.get('/details/:id', function(req, res, next) {
 
     });
 });
-
 
 //middleware - protected routes from now on
 router.use('/', function(req, res, next) {
@@ -101,9 +100,29 @@ router.get('/:id', function(req, res, next) {
                     });
                 }
 
-                return res.status(200).json({
-                    message: 'Investment theme retrieved',
-                    obj: theme
+                //get theme properties
+                UserThemeInput.find({theme: theme._id}, function(err, results) {
+                    if (err) {
+                        return res.status(500).json({
+                            title: 'An error occurred',
+                            error: err
+                        });
+                    }
+
+                    if (!results) {
+                        return res.status(500).json({
+                            title: 'No theme properties found',
+                            error: {message: 'Could not find any user input for the given theme'}
+                        });
+                    }
+
+                    themePropertyData = userInputAggregation.getThemePropertyData(results);
+
+                    return res.status(200).json({
+                        message: 'Theme properties retrieved',
+                        obj: { theme: theme, properties: themePropertyData }
+                    });
+
                 });
             });
     }
