@@ -6,6 +6,7 @@ var UserThemeInput = require('../models/userThemeInput');
 var User = require('../models/user');
 var constants = require('../models/constants');
 var _ = require('underscore');
+var userInputAggregation = require('../utilities/userInputAggregation');
 
 router.get('/tags', function(req, res, next) {
     //retrieve only tags from themes
@@ -81,6 +82,25 @@ router.get('/details/:id', function(req, res, next) {
 
         sum = _.reduce(x, function(memo, num){ return memo + num; }, 0); //IT WORKS!!!
 
+        x = _.map(x, function(val, key) {
+            val = { value: key, count: val, percentage: userInputAggregation.roundUp(100*val/sum, 10) }
+            console.log(val)
+            return val;
+        })
+
+        // x = _.map(x, function(key) {
+        //     key = { count: key, percentage: key/sum }
+        //     console.log(key)
+        //     return key;
+        // })
+
+
+
+
+
+        //need to return
+        toReturn = { values: x, total: sum}
+
 
 
 
@@ -105,10 +125,10 @@ router.get('/details/:id', function(req, res, next) {
         //     return counts;
         // }, {})
 
-        console.log(z)
+        //console.log(z)
         another = _.groupBy(z, 'property')
-        console.log('another')
-        console.log(another)
+        //console.log('another')
+        //console.log(another)
 
         //for timeHorizon
         timeHorizons = another.timeHorizon
@@ -129,7 +149,7 @@ router.get('/details/:id', function(req, res, next) {
         //_.groupBy(aggCatFlattened, 'value')
         return res.status(200).json({
             message: 'User inputs retrieved',
-            obj: sum
+            obj: x
         });
 
     });
