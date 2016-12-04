@@ -59,23 +59,51 @@ router.get('/details/:id', function(req, res, next) {
         //[0] for timeHorizon
         //[1] for maturity
         //[2] for categories
-        x = _.map(results, function(userInput) {
-            //return _.groupBy(userInput.themePropertyInputs[0], 'valueChosen');
-            //call groupBy on this
-            //take 1st value of value chosen (because single-select for timeHorizon)
-            //think of 'count' as the iterator
+        z = _.flatten(_.map(results, function(userInput) {
+                return userInput.themePropertyInputs
+            }));
 
-            // _.countBy(userInput.themePropertyInputs[0].valueChosen[0], function(num) {
-            //     return num;
-            // });
+        //z = _.flatten(x)
 
-            //var sum = _.reduce(userInput.themePropertyInputs[0].valueChosen[0], function(memo, num){ return memo + num; }, 0);
+        test = _.chain(results)
+            .map(function(userInput) { return userInput.themePropertyInputs; })
+            .flatten()
+            .groupBy('property')
+            .value();
 
-            //THIS WORKED
-            //return userInput.themePropertyInputs[0];
-            return userInput.themePropertyInputs
-            });
-        z = _.flatten(x)
+        x = _.chain(test.categories)
+            .map(function(prop) {
+                return prop.valueChosen
+            })
+            .flatten()
+            .countBy()
+            .value();
+
+        sum = _.reduce(x, function(memo, num){ return memo + num; }, 0); //IT WORKS!!!
+
+
+
+
+        count = _.countBy([1, 2, 3, 4, 5, 1, 2, 4], function(num) {
+            return num;
+        });
+        //this returns:
+        //"1": 2,
+        //"2": 2,
+        //"3": 1 and so on
+
+        /*
+        returns {
+            "timeHorizon": [], //x items
+            "maturity": [], //y items
+            "categories": [] //z items
+        }
+         */
+
+        // .reduce(function(counts, word) {
+        //     counts[word] = (counts[word] || 0) + 1;
+        //     return counts;
+        // }, {})
 
         console.log(z)
         another = _.groupBy(z, 'property')
@@ -86,51 +114,8 @@ router.get('/details/:id', function(req, res, next) {
         timeHorizons = another.timeHorizon
         maturities = another.maturity
         categories = another.categories
-       // another2 = _.groupBy(another, 'valueChosen')
 
-        // y = _.chain(lyrics)
-        //     .map(function(line) { return line.words.split(' '); })
-        //     .flatten()
-        //     .reduce(function(counts, word) {
-        //         counts[word] = (counts[word] || 0) + 1;
-        //         return counts;
-        //     }, {})
-        //     .value();
-
-        var count = _.reduce(x, function(memo, num){ return memo + 1; }, 0);
-
-
-
-        y = _.chain(results)
-            .map(function(userInput) { return results.themePropertyInputs })
-            .flatten()
-            .reduce(function(a, b) {})
-            .value();
-            // .flatten()
-            // .reduce(function(counts, word) {
-            //     counts[word] = (counts[word] || 0) + 1;
-            //     return counts;
-            // }, {})
-            // .value();
-
-        console.log(x);
-
-
-        //FOR TESTING PURPOSES
-        test = [{
-            timeHorizon: 1
-        }, {
-            timeHorizon: 1
-        }, {
-            timeHorizon: 2
-        }, {
-            timeHorizon: 2
-        }, {
-            timeHorizon: 2
-        }];
-
-        //THIS WORKS AND IS AWESOME
-        var groupedBy = _.groupBy(test, 'timeHorizon');
+        //var count = _.reduce(x, function(memo, num){ return memo + 1; }, 0);
 
         //need to return: _.groupBy(another.timeHorizon, 'valueChosen')
         aggCat = _.map(another.categories, function(cat) {
@@ -141,9 +126,10 @@ router.get('/details/:id', function(req, res, next) {
             return { value: x, count: 1}
         });
 
+        //_.groupBy(aggCatFlattened, 'value')
         return res.status(200).json({
             message: 'User inputs retrieved',
-            obj: _.groupBy(aggCatFlattened, 'value')
+            obj: sum
         });
 
     });
