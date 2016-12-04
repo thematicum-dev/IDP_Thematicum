@@ -8,6 +8,20 @@ function roundUp(num, precision) {
     return Math.ceil(num * precision) / precision
 }
 
+function groupThemePropertyData(userThemeInputs) {
+    groupedByProperties = _.chain(userThemeInputs)
+        .map(function(userInput) { return userInput.themePropertyInputs; })
+        .flatten()
+        .groupBy('property')
+        .value();
+
+    timeHorizonData = aggregateThemeProperty(groupedByProperties.timeHorizon, "timeHorizon");
+    maturityData = userInputAggregation.aggregateThemeProperty(groupedByProperties.maturity, "maturity");
+    categoriesData = userInputAggregation.aggregateThemeProperty(groupedByProperties.categories, "categories");
+
+    return [ timeHorizonData, maturityData, categoriesData ];
+}
+
 function aggregateThemeProperty(propertyInput, propertyName) {
     votesDistribution = _.chain(propertyInput)
         .map(function(prop) {
@@ -24,5 +38,5 @@ function aggregateThemeProperty(propertyInput, propertyName) {
         return val;
     });
 
-    return { property: propertyName, aggregationData: aggregationData}
+    return { [propertyName]: aggregationData}
 }
