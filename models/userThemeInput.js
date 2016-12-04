@@ -9,7 +9,7 @@ var schema = new Schema({
     theme: { type: Schema.Types.ObjectId, ref: 'Theme' },
     themePropertyInputs: [{
         property: { type: String, enum: [constants.THEME_PROPERTY_TIME_HORIZON, constants.THEME_PROPERTY_MATURITY, constants.THEME_PROPERTY_CATEGORY]},
-        valueChosen: [{type: String}]
+        valueChosen: [{type: Number}]
         }],
     stocksAllocationInputs: []
 });

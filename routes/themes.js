@@ -64,16 +64,62 @@ router.get('/details/:id', function(req, res, next) {
             //call groupBy on this
             //take 1st value of value chosen (because single-select for timeHorizon)
             //think of 'count' as the iterator
-            return _.groupBy(userInput.themePropertyInputs[0].valueChosen[0], function(value) {
-                return value;
-            });
-            //return userInput.themePropertyInputs[0].valueChosen[0];
-        });
 
-        console.log(results);
+            // _.countBy(userInput.themePropertyInputs[0].valueChosen[0], function(num) {
+            //     return num;
+            // });
+
+            //var sum = _.reduce(userInput.themePropertyInputs[0].valueChosen[0], function(memo, num){ return memo + num; }, 0);
+            return userInput.themePropertyInputs[0];
+            });
+
+        // y = _.chain(lyrics)
+        //     .map(function(line) { return line.words.split(' '); })
+        //     .flatten()
+        //     .reduce(function(counts, word) {
+        //         counts[word] = (counts[word] || 0) + 1;
+        //         return counts;
+        //     }, {})
+        //     .value();
+
+        var count = _.reduce(x, function(memo, num){ return memo + 1; }, 0);
+
+
+
+        y = _.chain(results)
+            .map(function(userInput) { return results.themePropertyInputs })
+            .flatten()
+            .reduce(function(a, b) {})
+            .value();
+            // .flatten()
+            // .reduce(function(counts, word) {
+            //     counts[word] = (counts[word] || 0) + 1;
+            //     return counts;
+            // }, {})
+            // .value();
+
+        console.log(x);
+
+
+        //FOR TESTING PURPOSES
+        test = [{
+            timeHorizon: 1
+        }, {
+            timeHorizon: 1
+        }, {
+            timeHorizon: 2
+        }, {
+            timeHorizon: 2
+        }, {
+            timeHorizon: 2
+        }];
+
+        //THIS WORKS AND IS AWESOME
+        var groupedBy = _.groupBy(test, 'timeHorizon');
+
         return res.status(200).json({
             message: 'User inputs retrieved',
-            obj: x
+            obj: _.groupBy(x, 'valueChosen')
         });
 
     });
