@@ -55,24 +55,14 @@ router.get('/details/:id', function(req, res, next) {
             });
         }
 
-        //TODO: further work, figure out aggregation function
-        //userInput.themePropertyInputs returns everyting
-        //[0] for timeHorizon
-        //[1] for maturity
-        //[2] for categories
-        z = _.flatten(_.map(results, function(userInput) {
-                return userInput.themePropertyInputs
-            }));
-
-        //z = _.flatten(x)
-
-        test = _.chain(results)
+        //TODO: refactor into separate file
+        groupedByProperties = _.chain(results)
             .map(function(userInput) { return userInput.themePropertyInputs; })
             .flatten()
             .groupBy('property')
             .value();
 
-        x = _.chain(test.categories)
+        votesDistribution = _.chain(groupedByProperties.timeHorizon)
             .map(function(prop) {
                 return prop.valueChosen
             })
@@ -80,76 +70,16 @@ router.get('/details/:id', function(req, res, next) {
             .countBy()
             .value();
 
-        sum = _.reduce(x, function(memo, num){ return memo + num; }, 0); //IT WORKS!!!
+        sum = _.reduce(votesDistribution, function(memo, num){ return memo + num; }, 0); //sum up votes
 
-        x = _.map(x, function(val, key) {
+        aggregationData = _.map(votesDistribution, function(val, key) {
             val = { value: key, count: val, percentage: userInputAggregation.roundUp(100*val/sum, 10) }
-            console.log(val)
             return val;
-        })
-
-        // x = _.map(x, function(key) {
-        //     key = { count: key, percentage: key/sum }
-        //     console.log(key)
-        //     return key;
-        // })
-
-
-
-
-
-        //need to return
-        toReturn = { values: x, total: sum}
-
-
-
-
-        count = _.countBy([1, 2, 3, 4, 5, 1, 2, 4], function(num) {
-            return num;
-        });
-        //this returns:
-        //"1": 2,
-        //"2": 2,
-        //"3": 1 and so on
-
-        /*
-        returns {
-            "timeHorizon": [], //x items
-            "maturity": [], //y items
-            "categories": [] //z items
-        }
-         */
-
-        // .reduce(function(counts, word) {
-        //     counts[word] = (counts[word] || 0) + 1;
-        //     return counts;
-        // }, {})
-
-        //console.log(z)
-        another = _.groupBy(z, 'property')
-        //console.log('another')
-        //console.log(another)
-
-        //for timeHorizon
-        timeHorizons = another.timeHorizon
-        maturities = another.maturity
-        categories = another.categories
-
-        //var count = _.reduce(x, function(memo, num){ return memo + 1; }, 0);
-
-        //need to return: _.groupBy(another.timeHorizon, 'valueChosen')
-        aggCat = _.map(another.categories, function(cat) {
-            return cat.valueChosen;
-        })
-
-        aggCatFlattened = _.flatten(aggCat).map(function(x) {
-            return { value: x, count: 1}
         });
 
-        //_.groupBy(aggCatFlattened, 'value')
         return res.status(200).json({
             message: 'User inputs retrieved',
-            obj: x
+            obj: aggregationData
         });
 
     });

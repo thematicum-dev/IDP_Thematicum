@@ -1,5 +1,11 @@
 module.exports = {
-    roundUp: function(num, precision) {
-        return Math.ceil(num * precision) / precision
-    }
+    roundUp: roundUp
+}
+
+function roundUp(num, precision) {
+    return Math.ceil(num * precision) / precision
+}
+
+function aggregateThemeProperty() {
+
 }
