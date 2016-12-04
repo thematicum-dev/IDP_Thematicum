@@ -132,9 +132,18 @@ router.get('/details/:id', function(req, res, next) {
         //THIS WORKS AND IS AWESOME
         var groupedBy = _.groupBy(test, 'timeHorizon');
 
+        //need to return: _.groupBy(another.timeHorizon, 'valueChosen')
+        aggCat = _.map(another.categories, function(cat) {
+            return cat.valueChosen;
+        })
+
+        aggCatFlattened = _.flatten(aggCat).map(function(x) {
+            return { value: x, count: 1}
+        });
+
         return res.status(200).json({
             message: 'User inputs retrieved',
-            obj: _.groupBy(another.timeHorizon, 'valueChosen')
+            obj: _.groupBy(aggCatFlattened, 'value')
         });
 
     });
