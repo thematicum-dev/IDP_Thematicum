@@ -55,8 +55,19 @@ router.get('/details/:id', function(req, res, next) {
         }
 
         //TODO: further work, figure out aggregation function
+        //userInput.themePropertyInputs returns everyting
+        //[0] for timeHorizon
+        //[1] for maturity
+        //[2] for categories
         x = _.map(results, function(userInput) {
-            return userInput.themePropertyInputs
+            //return _.groupBy(userInput.themePropertyInputs[0], 'valueChosen');
+            //call groupBy on this
+            //take 1st value of value chosen (because single-select for timeHorizon)
+            //think of 'count' as the iterator
+            return _.groupBy(userInput.themePropertyInputs[0].valueChosen[0], function(value) {
+                return value;
+            });
+            //return userInput.themePropertyInputs[0].valueChosen[0];
         });
 
         console.log(results);
@@ -218,7 +229,6 @@ router.post('/', function (req, res, next) {
                     });
                 }
 
-                //TODO: which object to return?
                 res.status(201).json({
                     message: 'Theme created',
                     obj: [ result, userInput ]
