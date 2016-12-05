@@ -169,7 +169,7 @@ router.get('/:id', function(req, res, next) {
 
                 cat = "categories";
                 var x = _.chain(test)
-                    .map(function(input) { return input.themeProperties.categories})
+                    .map(function(input) { return input.themeProperties[cat]})
                     .flatten()
                     .countBy()
                     .value();
@@ -194,26 +194,26 @@ router.get('/:id', function(req, res, next) {
                     }).value();
 
                 console.log('TESTING NEW FUNCTION')
-                countByProp = userInputAggregation.getCountByProperty(toTest, 'categories')
-                sumByProp = userInputAggregation.getSumByProperty(countByProp)
-                aggregationByProp = userInputAggregation.getAggregationByProperty(countByProp, sumByProp)
+                // countByProp = userInputAggregation.getCountByProperty(toTest, 'categories')
+                // sumByProp = userInputAggregation.getSumByProperty(countByProp)
+                // aggregationByProp = userInputAggregation.getAggregationByProperty(countByProp, sumByProp)
                 // console.log(countByProp)
                 // console.log(sumByProp)
                 // console.log(aggregationByProp)
 
                 console.log('Agg. data')
-                console.log(countByProp)
+                //console.log(countByProp)
 
-                toDeliver = [];
-                toDeliver = {
-                    'timeHorizon': userInputAggregation.getAggregationByProperty(
-                        userInputAggregation.getCountByProperty(toTest, 'timeHorizon'),
-                        sumByProp),
-                    'maturity': aggregationByProp,
-                    'categories': aggregationByProp}
+                // toDeliver = [];
+                // toDeliver = {
+                //     'timeHorizon': userInputAggregation.getAggregationByProperty(
+                //         userInputAggregation.getCountByProperty(toTest, 'timeHorizon'),
+                //         sumByProp),
+                //     'maturity': aggregationByProp,
+                //     'categories': aggregationByProp}
 
                 //REFACTORING HERE
-                toDeliver = userInputAggregation.getThemePropertiesAggregation(toTest, ['timeHorizon', 'maturity', 'categories']);
+                toDeliver = userInputAggregation.getThemePropertiesAggregation(test, ['timeHorizon', 'maturity', 'categories']);
 
                 //get theme properties
                 UserThemeInput.find({theme: theme._id}, function(err, results) {

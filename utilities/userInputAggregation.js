@@ -47,13 +47,18 @@ function aggregateThemeProperty(propertyInput) {
 }
 
 function getCountByProperty(collection, propertyName) {
-    console.log('collection at getCountByProp')
-    console.log(collection)
-    x = _.chain(collection)
+    // console.log('collection at getCountByProp')
+    // console.log(collection)
+    // x = _.chain(collection)
+    //     .flatten()
+    //     .countBy(propertyName)
+    //     .value();
+
+    return _.chain(collection)
+        .map(function(input) { return input.themeProperties[propertyName]})
         .flatten()
-        .countBy(propertyName)
+        .countBy()
         .value();
-    console.log(x)
 }
 
 function getSumByProperty(collection) {
@@ -75,6 +80,8 @@ function getThemePropertiesAggregation(collection, propertyList) {
         aggregationByProp = getAggregationByProperty(countByProp, sumByProp)
         aggregation[prop] = aggregationByProp;
     });
+
+
 
     console.log('Aggregation')
     console.log(aggregation)
