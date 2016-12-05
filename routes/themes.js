@@ -130,90 +130,9 @@ router.get('/:id', function(req, res, next) {
                     }
                 });
 
-                // console.log(test)
-                // _.each(test, function(testEl) {
-                //     _.each(testEl.themeProperties, function(val, key) {
-                //         console.log(key) //this is value actually
-                //         console.log(val)
-                //     });
-                // });
-
-                // var y = _.chain(test)
-                //     .map(function(input) { return test.themeProperties})
-                //     .each(function(value, key) {
-                //         //function call
-                //         console.log(key)
-                //         console.log(value)
-                //     });
-
-                //yeah
-                // _.chain(test)
-                //     .map(function(testEl) {
-                //     return testEl.themeProperties;
-                //     }).each(function(val, key) {
-                //         console.log(key) //this is value actually
-                //         console.log(val)
-                //     });
-
-                //works good and can specify the property explicitly
-                zzz = _.chain(test)
-                    .map(function(testEl) {
-                        return testEl.themeProperties;
-                    })
-                    .flatten()
-                    .countBy('categories')
-                    .value();
-
-                console.log('some test here')
-                console.log(zzz);
-
-                cat = "categories";
-                var x = _.chain(test)
-                    .map(function(input) { return input.themeProperties[cat]})
-                    .flatten()
-                    .countBy()
-                    .value();
-                console.log('Distribution')
-                console.log(x)
-
-                //AWESOME!
-                //console.log('Sum')
-                sum = _.reduce(x, function(memo, num){ return memo + num; }, 0); //sum up votes
-                //console.log(sum)
-
-                //good
-                aggregationData = _.map(x, function(val, key) {
-                    val = { value: key, count: val, percentage: userInputAggregation.roundUp(100*val/sum, 10) }
-                    return val;
-                });
-
-                //retrieve the embedded doc of themeProperties
-                toTest = _.chain(test)
-                    .map(function(testEl) {
-                        return testEl.themeProperties;
-                    }).value();
-
-                console.log('TESTING NEW FUNCTION')
-                // countByProp = userInputAggregation.getCountByProperty(toTest, 'categories')
-                // sumByProp = userInputAggregation.getSumByProperty(countByProp)
-                // aggregationByProp = userInputAggregation.getAggregationByProperty(countByProp, sumByProp)
-                // console.log(countByProp)
-                // console.log(sumByProp)
-                // console.log(aggregationByProp)
-
-                console.log('Agg. data')
-                //console.log(countByProp)
-
-                // toDeliver = [];
-                // toDeliver = {
-                //     'timeHorizon': userInputAggregation.getAggregationByProperty(
-                //         userInputAggregation.getCountByProperty(toTest, 'timeHorizon'),
-                //         sumByProp),
-                //     'maturity': aggregationByProp,
-                //     'categories': aggregationByProp}
-
-                //REFACTORING HERE
+                console.log('Aggregated data')
                 toDeliver = userInputAggregation.getThemePropertiesAggregation(test, ['timeHorizon', 'maturity', 'categories']);
+                console.log(toDeliver);
 
                 //get theme properties
                 UserThemeInput.find({theme: theme._id}, function(err, results) {
