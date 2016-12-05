@@ -243,20 +243,11 @@ router.post('/', function (req, res, next) {
             var userInput = new UserThemeInput({
                 user: user,
                 theme: result,
-                themePropertyInputs: [
-                    {
-                        property: constants.THEME_PROPERTY_TIME_HORIZON,
-                        valueChosen: req.body.timeHorizon
-                    },
-                    {
-                        property: constants.THEME_PROPERTY_MATURITY,
-                        valueChosen: req.body.maturity
-                    },
-                    {
-                        property: constants.THEME_PROPERTY_CATEGORY,
-                        valueChosen: req.body.categories
-                    },
-                ],
+                themeProperties: {
+                    timeHorizon: req.body.timeHorizon,
+                    maturity: req.body.maturity,
+                    categories: req.body.categories
+                },
                 stocksAllocationInputs: []
             });
 
