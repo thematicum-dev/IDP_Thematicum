@@ -39,32 +39,6 @@ router.get('/tags', function(req, res, next) {
     });
 });
 
-router.get('/details/:id', function(req, res, next) {
-    UserThemeInput.find({theme: req.params.id}, function(err, results) {
-        if (err) {
-            return res.status(500).json({
-                title: 'An error occurred',
-                error: err
-            });
-        }
-
-        if (!results) {
-            return res.status(500).json({
-                title: 'No investment theme found',
-                error: {message: 'Could not find any investment theme for the given id'}
-            });
-        }
-
-        themePropertyData = userInputAggregation.getThemePropertyData(results);
-
-        return res.status(200).json({
-            message: 'User inputs retrieved',
-            obj: themePropertyData
-        });
-
-    });
-});
-
 //middleware - protected routes from now on
 router.use('/', function(req, res, next) {
     jwt.verify(req.query.token, 'secret', function(err, decoded) {
@@ -81,9 +55,6 @@ router.use('/', function(req, res, next) {
 });
 
 
-function aggregate() {
-
-}
 router.get('/:id', function(req, res, next) {
     if(req.params.id) {
         Theme
@@ -104,36 +75,6 @@ router.get('/:id', function(req, res, next) {
                     });
                 }
 
-                //TEST - say these are the user inputs found for this theme
-                var test = [];
-                test.push({
-                    themeProperties: {
-                        "timeHorizon": 1,
-                        "maturity": 2,
-                        "categories": [1, 3]
-                    }
-                });
-
-                test.push({
-                    themeProperties: {
-                        "timeHorizon": 1,
-                        "maturity": 3,
-                        "categories": [1, 2, 3]
-                    }
-                });
-
-                test.push({
-                    themeProperties: {
-                        "timeHorizon": 2,
-                        "maturity": 3,
-                        "categories": [1, 4, 3]
-                    }
-                });
-
-                console.log('Aggregated data')
-                toDeliver = userInputAggregation.getThemePropertiesAggregation(test, ['timeHorizon', 'maturity', 'categories']);
-                console.log(toDeliver);
-
                 //get theme properties
                 UserThemeInput.find({theme: theme._id}, function(err, results) {
                     if (err) {
@@ -150,11 +91,13 @@ router.get('/:id', function(req, res, next) {
                         });
                     }
 
-                    themePropertyData = userInputAggregation.getThemePropertyData(results);
+                    themeProperties = userInputAggregation.getThemePropertiesAggregation(results, ['timeHorizon', 'maturity', 'categories']);
+                    console.log('Theme properties')
+                    console.log(themeProperties);
 
                     return res.status(200).json({
                         message: 'Theme properties retrieved',
-                        obj: { theme: theme, properties: themePropertyData }
+                        obj: { theme: theme, properties: themeProperties }
                     });
 
                 });

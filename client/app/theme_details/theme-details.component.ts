@@ -36,20 +36,19 @@ export class ThemeDetailsComponent implements OnInit, OnChanges {
     ngOnInit(): void {
         this.route.params
             .switchMap((params: Params) => this.searchService.getThemeById(params['id']))
-            .subscribe((theme: any) => {
-                this.theme = theme.theme;
-                this.creationDate = new Date(theme.theme.createdAt);
-                console.log(this.theme);
+            .subscribe((themeData: any) => {
+                console.log('Data retrieved for this theme')
+                console.log(themeData)
+                this.theme = themeData.theme;
+                this.creationDate = new Date(themeData.theme.createdAt);
             });
-
-        console.log(this.theme)
     }
 
     ngOnChanges(changes: SimpleChanges): void {
         var themeChange: Theme = changes.theme.currentValue;
         if (themeChange) {
             // this.autocompleteList.list = this.dataSource;
-            console.log(this.theme)
+            // console.log(this.theme)
         }
     }
 
