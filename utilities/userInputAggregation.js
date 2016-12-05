@@ -5,7 +5,8 @@ module.exports = {
     getThemePropertyData: getThemePropertyData,
     getCountByProperty: getCountByProperty,
     getSumByProperty: getSumByProperty,
-    getAggregationByProperty: getAggregationByProperty
+    getAggregationByProperty: getAggregationByProperty,
+    getThemePropertiesAggregation: getThemePropertiesAggregation
 }
 
 function roundUp(num, precision) {
@@ -46,10 +47,13 @@ function aggregateThemeProperty(propertyInput) {
 }
 
 function getCountByProperty(collection, propertyName) {
-    return _.chain(collection)
+    console.log('collection at getCountByProp')
+    console.log(collection)
+    x = _.chain(collection)
         .flatten()
         .countBy(propertyName)
         .value();
+    console.log(x)
 }
 
 function getSumByProperty(collection) {
@@ -61,4 +65,18 @@ function getAggregationByProperty(collection, sum) {
         val = { value: key, count: val, percentage: roundUp(100*val/sum, 10) }
         return val;
     });
+}
+
+function getThemePropertiesAggregation(collection, propertyList) {
+    var aggregation = {};
+    _.each(propertyList, function(prop) {
+        countByProp = getCountByProperty(collection, prop)
+        sumByProp = getSumByProperty(countByProp)
+        aggregationByProp = getAggregationByProperty(countByProp, sumByProp)
+        aggregation[prop] = aggregationByProp;
+    });
+
+    console.log('Aggregation')
+    console.log(aggregation)
+    return aggregation;
 }
