@@ -16,8 +16,12 @@ import {timeHorizonValues, maturityValues, categoryValues} from "../theme_creati
         cursor: default;
         
     }
-    label.justified-label-group:hover {
+    label.justified-label-group:hover, :focus {
         background-color: white;
+        text-decoration: none;
+        outline:none;
+        border: none;
+        box-shadow: none;
     }
 `],
     providers: [ThemeSearchService]
