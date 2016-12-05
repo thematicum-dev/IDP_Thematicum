@@ -91,7 +91,18 @@ router.get('/:id', function(req, res, next) {
                         });
                     }
 
-                    themeProperties = userInputAggregation.getThemePropertiesAggregation(results, ['timeHorizon', 'maturity', 'categories']);
+                    props = [{
+                        propertyName: 'timeHorizon',
+                        nrValuesRequired: 3
+                    }, {
+                        propertyName: 'maturity',
+                        nrValuesRequired: 5
+                    }, {
+                        propertyName: 'categories',
+                        nrValuesRequired: 6
+                    }];
+
+                    themeProperties = userInputAggregation.getThemePropertiesAggregation(results, props);
                     console.log('Theme properties')
                     console.log(themeProperties);
 

@@ -7,10 +7,10 @@ module.exports = {
 function getThemePropertiesAggregation(collection, propertyList) {
     var aggregation = {};
     _.each(propertyList, function(prop) {
-        countByProp = getCountByProperty(collection, prop)
+        countByProp = getCountByProperty(collection, prop.propertyName)
         sumByProp = getSumByProperty(countByProp)
-        aggregationByProp = getAggregationByProperty(countByProp, sumByProp)
-        aggregation[prop] = aggregationByProp;
+        aggregationByProp = getAggregationByProperty(countByProp, sumByProp, prop.nrValuesRequired)
+        aggregation[prop.propertyName] = aggregationByProp;
     });
 
     return aggregation;
@@ -28,29 +28,24 @@ function getSumByProperty(collection) {
     return _.reduce(collection, function(memo, num){ return memo + num; }, 0);
 }
 
-function getAggregationByProperty(collection, sum) {
-    console.log('At aggr by property')
-    console.log(collection)
-    var array = new Array(5); //5 elements
+function getAggregationByProperty(collection, sum, nrValuesRequired) {
+    //this also guarantees sorting by property value
+    var valuesArray = new Array(nrValuesRequired);
+
     _.each(collection, function(val, key) {
         val = { value: key, count: val, percentage: roundUp(100*val/sum, 10) };
-        array[key-1] = val;
+        valuesArray[key-1] = val;
     });
 
-    fixup(array);
-
-    return array;
-    console.log('What is array?')
-    console.log(array)
-    //check for non-existing values
-
+    fixupValuesArray(valuesArray);
+    return valuesArray;
 }
 
 function roundUp(num, precision) {
     return Math.ceil(num * precision) / precision
 }
 
-function fixup(array) {
+function fixupValuesArray(array) {
     //add dummy object representing a property not yet selected by users
     for (var i =0; i<array.length; i++) {
         if (!array[i]) {
