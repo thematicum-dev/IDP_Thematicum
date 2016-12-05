@@ -24,6 +24,7 @@ import {timeHorizonValues, maturityValues, categoryValues} from "../theme_creati
 })
 export class ThemeDetailsComponent implements OnInit, OnChanges {
     theme: Theme;
+    themeProperties: any;
     creationDate: Date;
     description = 'Lorem ipsum dolor sit amet, te qui nihil clita cetero, mei natum porro percipitur te. In qui elitr consul. Duis quando argumentum at eam. Usu adhuc postea ullamcorper no, usu regione singulis ut. Bonorum molestiae vim cu, no mei autem simul cetero. At pro odio audiam. Mea enim everti reformidans cu, id pro dico percipit ocurreret. Pro in duis mucius, fierent facilisis gubergren at eos, vel errem argumentum id. Sumo probo delenit ad qui, ut vix dico summo. Facilis mentitum ei his.';
 
@@ -40,6 +41,7 @@ export class ThemeDetailsComponent implements OnInit, OnChanges {
                 console.log('Data retrieved for this theme')
                 console.log(themeData)
                 this.theme = themeData.theme;
+                this.themeProperties = themeData.properties;
                 this.creationDate = new Date(themeData.theme.createdAt);
             });
     }

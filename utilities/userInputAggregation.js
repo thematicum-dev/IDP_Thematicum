@@ -29,12 +29,36 @@ function getSumByProperty(collection) {
 }
 
 function getAggregationByProperty(collection, sum) {
-    return _.map(collection, function(val, key) {
-        val = { value: key, count: val, percentage: roundUp(100*val/sum, 10) }
-        return val;
+    console.log('At aggr by property')
+    console.log(collection)
+    var array = new Array(5); //5 elements
+    _.each(collection, function(val, key) {
+        val = { value: key, count: val, percentage: roundUp(100*val/sum, 10) };
+        array[key-1] = val;
     });
+
+    fixup(array);
+
+    return array;
+    console.log('What is array?')
+    console.log(array)
+    //check for non-existing values
+
 }
 
 function roundUp(num, precision) {
     return Math.ceil(num * precision) / precision
+}
+
+function fixup(array) {
+    //add dummy object representing a property not yet selected by users
+    for (var i =0; i<array.length; i++) {
+        if (!array[i]) {
+            array[i] = {
+                value: i+1,
+                count: 0,
+                percentage: 0
+            };
+        }
+    }
 }
