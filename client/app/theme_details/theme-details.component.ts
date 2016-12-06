@@ -14,7 +14,7 @@ import {timeHorizonValues, maturityValues, categoryValues} from "../theme_creati
     .default-cursor {
         cursor: default;
     }
-    button.no-decoration-element, label.no-decoration-element:hover, :focus {
+    button.no-decoration-element, label.no-decoration-element:hover, label.no-decoration-element:focus {
         background-color: white;
         text-decoration: none;
         outline:none;
@@ -24,7 +24,7 @@ import {timeHorizonValues, maturityValues, categoryValues} from "../theme_creati
     hr {
         margin-top: 0;
     }
-    label.active, label.inactive-element:hover, :focus{
+    label.inactive-element:hover, label.inactive-element:not(:hover), label.inactive-element:focus {
         background-color: white;
         text-decoration: none;
         outline:none;
@@ -66,11 +66,10 @@ export class ThemeDetailsComponent implements OnInit, OnChanges {
         }
     }
 
-    test() {
+    test($event: Event) {
         if (!this.isEditMode) {
             return false;
         }
-        alert('hi');
     }
 
     getPropertyVoteDistributionStr(percentage: number, nrUsers: number) {
