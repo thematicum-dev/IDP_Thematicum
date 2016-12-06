@@ -7,6 +7,7 @@ var User = require('../models/user');
 var constants = require('../models/constants');
 var _ = require('underscore');
 var userInputAggregation = require('../utilities/userInputAggregation');
+var ObjectId = require("mongodb").ObjectID;
 
 router.get('/tags', function(req, res, next) {
     //retrieve only tags from themes
@@ -54,6 +55,62 @@ router.use('/', function(req, res, next) {
     });
 });
 
+router.get('/userinputs/:id', function(req, res, next) {
+    var decoded = jwt.decode(req.query.token);
+    User.findById(decoded.user._id, function(err, user) {
+        if (err) {
+            return res.status(500).json({
+                title: 'An error occurred',
+                error: err
+            });
+        }
+
+        Theme.findById(req.params.id, function(err, theme) {
+            if (err) {
+                return res.status(500).json({
+                    title: 'An error occurred',
+                    error: err
+                });
+            }
+
+            /*
+                Note: { _id: theme._id} clause doesn't filter documents
+                It simply populates those for which the match holds, leaving others non-populated (i.e. null valued)
+                Thus, need to filter results
+             */
+            UserThemeInput.find({})
+                .populate('theme', '_id', { _id: theme._id}, null)
+                .populate('user', '_id', { _id: user._id}, null)
+                .exec(function(err, inputs) {
+                    if (err) {
+                        return res.status(500).json({
+                            title: 'An error occurred',
+                            error: err
+                        });
+                    }
+
+                    var nonNullEntries = _.filter(inputs, function(input) {
+                        return input.theme != null && input.user != null;
+                    });
+
+                    if(!nonNullEntries) {
+                        return res.status(500).json({
+                            message: 'No user inputs for the given theme were found'
+                        });
+                    }
+
+                    //return first element
+                    return res.status(200).json({
+                        message: 'User inputs for the given theme retrieved',
+                        obj: { userInputs: nonNullEntries[0] }
+                    });
+                });
+
+        });
+
+
+    });
+});
 
 router.get('/:id', function(req, res, next) {
     if(req.params.id) {
