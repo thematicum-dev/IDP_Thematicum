@@ -13,15 +13,22 @@ import {timeHorizonValues, maturityValues, categoryValues} from "../theme_creati
     }
     .justified-label-group {
         border: 0 none;
-        cursor: default;
-        
+        cursor: default; 
     }
-    label.justified-label-group:hover, :focus {
+    
+    .default-cursor {
+        cursor: default;
+    }
+    
+    button.justified-label-group, label.justified-label-group:hover, :focus {
         background-color: white;
         text-decoration: none;
         outline:none;
         border: none;
         box-shadow: none;
+    }
+    hr {
+        margin-top: 0;
     }
 `],
     providers: [ThemeSearchService]
@@ -30,13 +37,12 @@ export class ThemeDetailsComponent implements OnInit, OnChanges {
     theme: Theme;
     themeProperties: any;
     creationDate: Date;
-    description = 'Lorem ipsum dolor sit amet, te qui nihil clita cetero, mei natum porro percipitur te. In qui elitr consul. Duis quando argumentum at eam. Usu adhuc postea ullamcorper no, usu regione singulis ut. Bonorum molestiae vim cu, no mei autem simul cetero. At pro odio audiam. Mea enim everti reformidans cu, id pro dico percipit ocurreret. Pro in duis mucius, fierent facilisis gubergren at eos, vel errem argumentum id. Sumo probo delenit ad qui, ut vix dico summo. Facilis mentitum ei his.';
 
     timeHorizonValues = timeHorizonValues;
     maturityValues = maturityValues;
     categoryValues = categoryValues;
 
-    isEditMode: boolean = false;
+    isEditMode: boolean = true;
 
     ngOnInit(): void {
         this.route.params
@@ -63,6 +69,11 @@ export class ThemeDetailsComponent implements OnInit, OnChanges {
             return false;
         }
         alert('hi');
+    }
+
+    getPropertyVoteDistributionStr(percentage: number, nrUsers: number) {
+        let trailingS = nrUsers != 1 ? 's' : '';
+        return `${percentage}% (${nrUsers} user${trailingS})`;
     }
 
     constructor(private route: ActivatedRoute, private router: Router, private searchService: ThemeSearchService) { }
