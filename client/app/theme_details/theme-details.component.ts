@@ -78,4 +78,8 @@ export class ThemeDetailsComponent implements OnInit, OnChanges {
     }
 
     constructor(private route: ActivatedRoute, private router: Router, private searchService: ThemeSearchService) { }
+
+    toggleEditMode() {
+        this.isEditMode = !this.isEditMode;
+    }
 }
