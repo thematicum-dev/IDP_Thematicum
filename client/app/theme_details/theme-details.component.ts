@@ -11,16 +11,10 @@ import {timeHorizonValues, maturityValues, categoryValues} from "../theme_creati
     styles: [`h3 {
         margin-top: 0;
     }
-    .justified-label-group {
-        border: 0 none;
-        cursor: default; 
-    }
-    
     .default-cursor {
         cursor: default;
     }
-    
-    button.justified-label-group, label.justified-label-group:hover, :focus {
+    button.no-decoration-element, label.no-decoration-element:hover, :focus {
         background-color: white;
         text-decoration: none;
         outline:none;
@@ -29,6 +23,14 @@ import {timeHorizonValues, maturityValues, categoryValues} from "../theme_creati
     }
     hr {
         margin-top: 0;
+    }
+    label.active, label.inactive-element:hover, :focus{
+        background-color: white;
+        text-decoration: none;
+        outline:none;
+        box-shadow: none;
+        border-color: #ccc;
+        cursor: default;
     }
 `],
     providers: [ThemeSearchService]
@@ -42,7 +44,7 @@ export class ThemeDetailsComponent implements OnInit, OnChanges {
     maturityValues = maturityValues;
     categoryValues = categoryValues;
 
-    isEditMode: boolean = true;
+    isEditMode: boolean = false;
 
     ngOnInit(): void {
         this.route.params
