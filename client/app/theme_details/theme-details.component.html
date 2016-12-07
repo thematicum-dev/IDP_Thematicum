@@ -52,7 +52,10 @@
 
             <div class="col-xs-10">
                 <div class="btn-group btn-group-justified" data-toggle="buttons">
-                    <label class="btn btn-default" [class.inactive-element]="!isEditMode" *ngFor="let timeHorizon of themeProperties.timeHorizon; let i = index" (click)="test($event)">
+                    <label class="btn btn-default" [style.backgroundColor]="setPropertyBackgroundColor('timeHorizon', i+1)"
+                           [class.inactive-element]="!isEditMode"
+                           *ngFor="let timeHorizon of themeProperties.timeHorizon; let i = index"
+                           (click)="test($event)">
                         <input type="radio" disabled="disabled" id="timeHorizon" name="timeHorizon" [value]="timeHorizonValues[i].value">{{timeHorizonValues[i].description}}
                         <!--<input name="timeHorizon" type="hidden" value="true"/>-->
                     </label>
@@ -78,7 +81,9 @@
 
             <div class="col-xs-10">
                 <div class="btn-group btn-group-justified" data-toggle="buttons">
-                    <label class="btn btn-default" [class.inactive-element]="!isEditMode" *ngFor="let maturity of themeProperties.maturity; let i = index">
+                    <label class="btn btn-default" [class.inactive-element]="!isEditMode"
+                           [style.backgroundColor]="setPropertyBackgroundColor('maturity', i+1)"
+                           *ngFor="let maturity of themeProperties.maturity; let i = index">
                         <input type="radio" disabled="disabled" id="maturity" name="maturity" [value]="maturityValues[i].value" >{{maturityValues[i].description}}
                     </label>
                 </div>
@@ -100,7 +105,10 @@
 
             <div class="col-xs-10">
                 <div class="btn-group btn-group-justified" data-toggle="buttons">
-                    <label class="btn btn-default" [class.inactive-element]="!isEditMode" *ngFor="let category of themeProperties.categories; let i=index">
+                    <label class="btn btn-default"
+                           [style.backgroundColor]="setPropertyBackgroundColor('categories', i+1)"
+                           [class.inactive-element]="!isEditMode"
+                           *ngFor="let category of themeProperties.categories; let i=index">
                         <input type="checkbox" disabled="disabled" id="categories" name="categories" [value]="categoryValues[i].value">{{categoryValues[i].description}}
                     </label>
                 </div>
@@ -121,6 +129,6 @@
         </div>
     </form>
 
-
 </div>
+
 

@@ -25,7 +25,6 @@ import {timeHorizonValues, maturityValues, categoryValues} from "../theme_creati
         margin-top: 0;
     }
     label.inactive-element:hover, label.inactive-element:not(:hover), label.inactive-element:focus {
-        background-color: white;
         text-decoration: none;
         outline:none;
         box-shadow: none;
@@ -38,6 +37,7 @@ import {timeHorizonValues, maturityValues, categoryValues} from "../theme_creati
 export class ThemeDetailsComponent implements OnInit, OnChanges {
     theme: Theme;
     themeProperties: any;
+    userThemeInputs: any;
     creationDate: Date;
 
     timeHorizonValues = timeHorizonValues;
@@ -45,8 +45,11 @@ export class ThemeDetailsComponent implements OnInit, OnChanges {
     categoryValues = categoryValues;
 
     isEditMode: boolean = false;
+    yellowColorCode = '#fcf8e3';
+    whiteColor = 'white';
 
     ngOnInit(): void {
+        //get theme details and characteristic distribution
         this.route.params
             .switchMap((params: Params) => this.searchService.getThemeById(params['id']))
             .subscribe((themeData: any) => {
@@ -56,6 +59,16 @@ export class ThemeDetailsComponent implements OnInit, OnChanges {
                 this.themeProperties = themeData.properties;
                 this.creationDate = new Date(themeData.theme.createdAt);
             });
+
+        //get user's input for the theme
+        this.route.params
+            .switchMap((params: Params) => this.searchService.getUserInputsPerTheme(params['id']))
+            .subscribe((userInputPerTheme: any) => {
+                console.log('User input')
+                console.log(userInputPerTheme)
+                if (userInputPerTheme) this.userThemeInputs = userInputPerTheme.userInputs.themeProperties;
+            });
+
     }
 
     ngOnChanges(changes: SimpleChanges): void {
@@ -81,5 +94,17 @@ export class ThemeDetailsComponent implements OnInit, OnChanges {
 
     toggleEditMode() {
         this.isEditMode = !this.isEditMode;
+    }
+
+    setPropertyBackgroundColor(propertyName, index) {
+        if (this.isEditMode || !this.userThemeInputs) {
+            return this.whiteColor;
+        }
+
+        if (propertyName == "categories") {
+            return this.userThemeInputs[propertyName].indexOf(index) < 0 ? this.whiteColor : this.yellowColorCode;
+        } else {
+            return this.userThemeInputs[propertyName] != index ? this.whiteColor : this.yellowColorCode;
+        }
     }
 }

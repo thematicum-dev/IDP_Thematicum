@@ -89,21 +89,23 @@ router.get('/userinputs/:id', function(req, res, next) {
                         });
                     }
 
+                    if(!inputs) {
+                        return res.status(500).json({
+                            message: 'No user inputs were found'
+                        });
+                    }
+
                     var nonNullEntries = _.filter(inputs, function(input) {
                         return input.theme != null && input.user != null;
                     });
 
-                    if(!nonNullEntries) {
-                        return res.status(500).json({
-                            message: 'No user inputs for the given theme were found'
+                    if(nonNullEntries != undefined && nonNullEntries.length > 0) {
+                        //return first element
+                        return res.status(200).json({
+                            message: 'User inputs for the given theme retrieved',
+                            obj: { userInputs: nonNullEntries[0] }
                         });
                     }
-
-                    //return first element
-                    return res.status(200).json({
-                        message: 'User inputs for the given theme retrieved',
-                        obj: { userInputs: nonNullEntries[0] }
-                    });
                 });
 
         });

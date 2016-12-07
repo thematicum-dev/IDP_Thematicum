@@ -34,4 +34,18 @@ export class ThemeSearchService {
             })
             .catch((error: Response) =>  Observable.throw(error.json()));
     }
+
+    getUserInputsPerTheme(themeId: string) {
+        const token = localStorage.getItem('token')
+            ? '?token=' + localStorage.getItem('token')
+            : '';
+
+        let apiPath = 'http://localhost:3000/api/themes/userinputs/' + themeId + token;
+
+        return this.http.get(apiPath)
+            .map((response: Response) => {
+                return response.json().obj;
+            })
+            .catch((error: Response) =>  Observable.throw(error.json()));
+    }
 }
