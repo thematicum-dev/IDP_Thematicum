@@ -9,6 +9,7 @@ import {AutocompleteList} from "../autocomplete/autocomplete-list";
 import {ThemeTagsService} from "./theme-tags.service";
 import {AutocompleteItem} from "../autocomplete/autocomplete-item";
 import {Observable} from "rxjs";
+import {Router} from "@angular/router";
 
 @Component({
     selector: 'app-theme-create',
@@ -42,7 +43,11 @@ export class ThemeCreationComponent implements OnInit {
             });
     }
 
-    constructor(private themeCreationService: ThemeCreationService, private themeTagService: ThemeTagsService) {
+    constructor(
+        private themeCreationService: ThemeCreationService,
+        private themeTagService: ThemeTagsService,
+        private router: Router) {
+
         let theme = new Theme();
         theme.tags = this.selectedTags;
         this.themeCreation = new ThemeCreationModel(theme);
@@ -80,6 +85,7 @@ export class ThemeCreationComponent implements OnInit {
             .subscribe(
                 data => {
                     console.log(data);
+                    this.router.navigate(['/theme', data.obj[0]._id]);
                 },
                 error =>  {
                     console.log(error)
