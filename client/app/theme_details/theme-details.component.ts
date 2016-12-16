@@ -31,6 +31,9 @@ import {timeHorizonValues, maturityValues, categoryValues} from "../theme_creati
         border-color: #ccc;
         cursor: default;
     }
+    label.active {
+        background-color: red;
+    }
 `],
     providers: [ThemeSearchService]
 })
@@ -45,6 +48,7 @@ export class ThemeDetailsComponent implements OnInit, OnChanges {
     categoryValues = categoryValues;
 
     isEditMode: boolean = false;
+    hasActive: boolean = false;
     yellowColorCode = '#fcf8e3';
     whiteColor = 'white';
 
@@ -79,9 +83,21 @@ export class ThemeDetailsComponent implements OnInit, OnChanges {
         }
     }
 
-    test($event: Event) {
+    test(event: Event) {
         if (!this.isEditMode) {
+            //remove active class
+            //event.target.nativeElement.removeClass('active');
+           // event.srcElement.classList.remove('inactive-element');
+            //console.log('test')
             return false;
+        }
+
+        //background-color
+        // event.srcElement.classList.remove('inactive-element');
+        if (!event.srcElement.classList.contains('active')) {
+            console.log('is active')
+        } else {
+            console.log('not active')
         }
     }
 
@@ -92,14 +108,30 @@ export class ThemeDetailsComponent implements OnInit, OnChanges {
 
     constructor(private route: ActivatedRoute, private router: Router, private searchService: ThemeSearchService) { }
 
-    toggleEditMode() {
+    toggleEditMode(timeHorizonDiv: Element) {
         this.isEditMode = !this.isEditMode;
+
+        //timeHorizonDiv.classList.remove('btn-default')
+
+        //timeHorizonDiv.children.forEach(function(label) { label.classList.remove('btn-default');});
     }
 
     setPropertyBackgroundColor(propertyName, index) {
-        if (this.isEditMode || !this.userThemeInputs) {
+        if (this.isEditMode) {
+            return
+        }
+
+        if (!this.isEditMode && !this.userThemeInputs) {
             return this.whiteColor;
         }
+
+
+
+        // if (!this.isEditMode && !this.userThemeInputs) {
+        //     return this.whiteColor;
+        // } else if (this.isEditMode && isActive) {
+        //     return 'red'
+        // }
 
         if (propertyName == "categories") {
             return this.userThemeInputs[propertyName].indexOf(index) < 0 ? this.whiteColor : this.yellowColorCode;
@@ -107,4 +139,8 @@ export class ThemeDetailsComponent implements OnInit, OnChanges {
             return this.userThemeInputs[propertyName] != index ? this.whiteColor : this.yellowColorCode;
         }
     }
+
+    // onSubmit(timeHorizonDiv, form) {
+    //
+    // }
 }
