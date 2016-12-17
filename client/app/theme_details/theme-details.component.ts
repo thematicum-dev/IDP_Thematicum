@@ -1,9 +1,10 @@
-import {Component, OnInit, OnChanges, SimpleChanges} from '@angular/core';
+import {Component, OnInit, OnChanges, SimpleChanges, ElementRef} from '@angular/core';
 import {Theme} from "../models/theme";
 import {ThemeSearchService} from "../theme_search/theme-search.service";
 import { Router, ActivatedRoute, Params } from '@angular/router';
 import 'rxjs/add/operator/switchMap';
 import {timeHorizonValues, maturityValues, categoryValues} from "../theme_creation/themeProperties";
+import {NgForm} from "@angular/forms";
 
 @Component({
     selector: 'app-theme-details',
@@ -32,14 +33,9 @@ import {timeHorizonValues, maturityValues, categoryValues} from "../theme_creati
         cursor: default;
     }
     .btn.active {
-        /*background-color: white;*/
-        /*text-decoration: none;*/
-        /*outline:none;*/
-        /*box-shadow: none;*/
-        /*border-color: #ccc;*/
-        background-color: red;
+        background-color: #d9edf7;
     }
-    input[type="radio"]:checked, input[type="radio"]:not(checked){
+    input[type="radio"], input[type="checkbox"] {
         visibility:hidden;
     }
 `],
@@ -56,7 +52,6 @@ export class ThemeDetailsComponent implements OnInit, OnChanges {
     categoryValues = categoryValues;
 
     isEditMode: boolean = false;
-    hasActive: boolean = false;
     yellowColorCode = '#fcf8e3';
     whiteColor = 'white';
 
@@ -91,56 +86,20 @@ export class ThemeDetailsComponent implements OnInit, OnChanges {
         }
     }
 
-    test(event: Event) {
-        if (!this.isEditMode) {
-            //remove active class
-            //event.target.nativeElement.removeClass('active');
-           // event.srcElement.classList.remove('inactive-element');
-            //console.log('test')
-            return false;
-        }
-
-        //background-color
-        // event.srcElement.classList.remove('inactive-element');
-        // event.srcElement.classList.remove("btn-primary");
-        // event.srcElement.classList.add("btn-primary");
-        //event.srcElement.nextElementSibling.classList.remove('active');
-
-        // if (!event.srcElement.classList.contains('active')) {
-        //     console.log('is active')
-        //     event.srcElement.classList.remove('active')
-        // } else {
-        //     console.log('not active')
-        // }
-    }
-
     getPropertyVoteDistributionStr(percentage: number, nrUsers: number) {
         let trailingS = nrUsers != 1 ? 's' : '';
         return `${percentage}% (${nrUsers} user${trailingS})`;
     }
 
-    constructor(private route: ActivatedRoute, private router: Router, private searchService: ThemeSearchService) { }
+    constructor(private elementRef: ElementRef, private route: ActivatedRoute, private router: Router, private searchService: ThemeSearchService) { }
 
-    toggleEditMode(timeHorizonDiv: Element) {
+    toggleEditMode(containerDiv: Element) {
         this.isEditMode = !this.isEditMode;
-        timeHorizonDiv.childNodes
-        //console.log(timeHorizonDiv.getElementsByTagName('label').length)
-        //let labels = timeHorizonDiv.getElementsByTagName('label');
-        let labels = timeHorizonDiv.getElementsByClassName('active')
-        console.log(labels)
+
+        let labels = containerDiv.querySelectorAll('label.active');
         for (let i = 0; i<labels.length; i++) {
-            console.log(labels[i].classList)
             labels[i].classList.remove('active');
         }
-        // for (let label in labels) {
-        //     console.log(label.classList)
-        //     //label.classList.remove('btn-default');
-        //     //label.blur()
-        // }
-        //timeHorizonDiv.getElementsByTagName('label')
-        //timeHorizonDiv.classList.remove('btn-default')
-
-        //timeHorizonDiv.children.forEach(function(label) { label.classList.remove('btn-default');});
     }
 
     setPropertyBackgroundColor(propertyName, index) {
@@ -151,14 +110,6 @@ export class ThemeDetailsComponent implements OnInit, OnChanges {
         if (!this.isEditMode && !this.userThemeInputs) {
             return this.whiteColor;
         }
-
-
-
-        // if (!this.isEditMode && !this.userThemeInputs) {
-        //     return this.whiteColor;
-        // } else if (this.isEditMode && isActive) {
-        //     return 'red'
-        // }
 
         if (propertyName == "categories") {
             return this.userThemeInputs[propertyName].indexOf(index) < 0 ? this.whiteColor : this.yellowColorCode;
