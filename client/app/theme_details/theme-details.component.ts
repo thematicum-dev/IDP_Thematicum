@@ -31,8 +31,16 @@ import {timeHorizonValues, maturityValues, categoryValues} from "../theme_creati
         border-color: #ccc;
         cursor: default;
     }
-    label.active {
+    .btn.active {
+        /*background-color: white;*/
+        /*text-decoration: none;*/
+        /*outline:none;*/
+        /*box-shadow: none;*/
+        /*border-color: #ccc;*/
         background-color: red;
+    }
+    input[type="radio"]:checked, input[type="radio"]:not(checked){
+        visibility:hidden;
     }
 `],
     providers: [ThemeSearchService]
@@ -94,11 +102,16 @@ export class ThemeDetailsComponent implements OnInit, OnChanges {
 
         //background-color
         // event.srcElement.classList.remove('inactive-element');
-        if (!event.srcElement.classList.contains('active')) {
-            console.log('is active')
-        } else {
-            console.log('not active')
-        }
+        // event.srcElement.classList.remove("btn-primary");
+        // event.srcElement.classList.add("btn-primary");
+        //event.srcElement.nextElementSibling.classList.remove('active');
+
+        // if (!event.srcElement.classList.contains('active')) {
+        //     console.log('is active')
+        //     event.srcElement.classList.remove('active')
+        // } else {
+        //     console.log('not active')
+        // }
     }
 
     getPropertyVoteDistributionStr(percentage: number, nrUsers: number) {
@@ -110,7 +123,21 @@ export class ThemeDetailsComponent implements OnInit, OnChanges {
 
     toggleEditMode(timeHorizonDiv: Element) {
         this.isEditMode = !this.isEditMode;
-
+        timeHorizonDiv.childNodes
+        //console.log(timeHorizonDiv.getElementsByTagName('label').length)
+        //let labels = timeHorizonDiv.getElementsByTagName('label');
+        let labels = timeHorizonDiv.getElementsByClassName('active')
+        console.log(labels)
+        for (let i = 0; i<labels.length; i++) {
+            console.log(labels[i].classList)
+            labels[i].classList.remove('active');
+        }
+        // for (let label in labels) {
+        //     console.log(label.classList)
+        //     //label.classList.remove('btn-default');
+        //     //label.blur()
+        // }
+        //timeHorizonDiv.getElementsByTagName('label')
         //timeHorizonDiv.classList.remove('btn-default')
 
         //timeHorizonDiv.children.forEach(function(label) { label.classList.remove('btn-default');});
@@ -139,6 +166,12 @@ export class ThemeDetailsComponent implements OnInit, OnChanges {
             return this.userThemeInputs[propertyName] != index ? this.whiteColor : this.yellowColorCode;
         }
     }
+
+    setDataToggleAttribute() {
+        return this.isEditMode ? 'buttons' : '';
+    }
+
+
 
     // onSubmit(timeHorizonDiv, form) {
     //

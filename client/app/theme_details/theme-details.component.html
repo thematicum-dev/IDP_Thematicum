@@ -51,13 +51,11 @@
             <label class="col-xs-2 col-form-label">Expected time horizon</label>
 
             <div class="col-xs-10">
-                <div class="btn-group btn-group-justified" data-toggle="buttons" >
+                <div class="btn-group btn-group-justified" [attr.data-toggle]="setDataToggleAttribute()" #timeHorizonDiv>
                     <label class="btn btn-default" [style.backgroundColor]="setPropertyBackgroundColor('timeHorizon', i+1)"
                            [class.inactive-element]="!isEditMode"
                            [class.active]="hasActive"
-                           #timeHorizonDiv
-                           *ngFor="let timeHorizon of themeProperties.timeHorizon; let i = index"
-                           (click)="test($event)">
+                           *ngFor="let timeHorizon of themeProperties.timeHorizon; let i = index">
                         <input type="radio" disabled="disabled" id="timeHorizon" name="timeHorizon" [value]="timeHorizonValues[i].value">{{timeHorizonValues[i].description}}
                         <!--<input name="timeHorizon" type="hidden" value="true"/>-->
                     </label>
