@@ -1,15 +1,16 @@
 import {Component, OnInit} from '@angular/core';
 import {AutoCompleteComponent} from "../autocomplete/autocomplete.component";
 import {ThemeCreationModel} from "../models/themeCreationModel";
-import {timeHorizonValues, maturityValues, categoryValues} from "./themeProperties";
+import {timeHorizonValues, maturityValues, categoryValues} from "../models/themePropertyValues";
 import {Theme} from "../models/theme";
 import {NgForm} from "@angular/forms";
-import {ThemeCreationService} from "./theme-creation.service";
+import {ThemeService} from "./theme.service";
 import {AutocompleteList} from "../autocomplete/autocomplete-list";
 import {ThemeTagsService} from "./theme-tags.service";
 import {AutocompleteItem} from "../autocomplete/autocomplete-item";
 import {Observable} from "rxjs";
 import {Router} from "@angular/router";
+import {ThemeProperties} from "../models/themeProperties";
 
 @Component({
     selector: 'app-theme-create',
@@ -18,7 +19,7 @@ import {Router} from "@angular/router";
         background-color: #d9edf7
     }`],
     directives: [AutoCompleteComponent],
-    providers: [ThemeCreationService, ThemeTagsService]
+    providers: [ThemeTagsService]
 })
 export class ThemeCreationComponent implements OnInit {
     selectedTags: string[] = [];
@@ -27,9 +28,9 @@ export class ThemeCreationComponent implements OnInit {
     allowEnterKey: boolean = true;
     error: string = '';
     themeCreation: ThemeCreationModel;
-    timeHorizonValues = timeHorizonValues;
-    maturityValues = maturityValues;
-    categoryValues = categoryValues;
+    // timeHorizonValues = timeHorizonValues;
+    // maturityValues = maturityValues;
+    // categoryValues = categoryValues;
     tagList: AutocompleteItem[] = [];
 
     ngOnInit(): void {
@@ -44,13 +45,13 @@ export class ThemeCreationComponent implements OnInit {
     }
 
     constructor(
-        private themeCreationService: ThemeCreationService,
+        private themeService: ThemeService,
         private themeTagService: ThemeTagsService,
         private router: Router) {
 
         let theme = new Theme();
         theme.tags = this.selectedTags;
-        this.themeCreation = new ThemeCreationModel(theme);
+        this.themeCreation = new ThemeCreationModel(theme, new ThemeProperties());
     }
 
     onNotifySelectedItem(tag: any) {
@@ -79,9 +80,10 @@ export class ThemeCreationComponent implements OnInit {
 
     onSubmit(form: NgForm) {
         //call service to save theme
-        this.setCheckedCategories();
+        //this.setCheckedCategories();
+        this.themeCreation.themeProperties.setCheckedCategories();
 
-        this.themeCreationService.createTheme(this.themeCreation)
+        this.themeService.createTheme(this.themeCreation)
             .subscribe(
                 data => {
                     console.log(data);
@@ -94,24 +96,24 @@ export class ThemeCreationComponent implements OnInit {
             );
     }
 
-    selectTimeHorizon(timeHorizon: number) {
-        this.themeCreation.timeHorizon = timeHorizon;
-    }
-
-    selectMaturity(maturity: number) {
-        this.themeCreation.maturity = maturity;
-    }
-
-    toggleCheckedCategory(category: number) {
-        categoryValues[category-1].checked = !categoryValues[category-1].checked;
-    }
-
-    setCheckedCategories() {
-        this.themeCreation.categories = categoryValues.filter(category => {
-            return category.checked;
-            })
-            .map(category => {
-                return category.value
-            });
-    }
+    // selectTimeHorizon(timeHorizon: number) {
+    //     this.themeCreation.timeHorizon = timeHorizon;
+    // }
+    //
+    // selectMaturity(maturity: number) {
+    //     this.themeCreation.maturity = maturity;
+    // }
+    //
+    // toggleCheckedCategory(category: number) {
+    //     categoryValues[category-1].checked = !categoryValues[category-1].checked;
+    // }
+    //
+    // setCheckedCategories() {
+    //     this.themeCreation.categories = categoryValues.filter(category => {
+    //         return category.checked;
+    //         })
+    //         .map(category => {
+    //             return category.value
+    //         });
+    // }
 }

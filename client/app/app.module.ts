@@ -19,6 +19,7 @@ import {AutoCompleteComponent} from "./autocomplete/autocomplete.component";
 import {ThemeCreationComponent} from "./theme_creation/theme-creation.component";
 import {ThemeDetailsComponent} from "./theme_details/theme-details.component";
 import {ErrorService} from "./error-handling/error.service";
+import {ThemeService} from "./theme_creation/theme.service";
 
 @NgModule({
     declarations: [
@@ -36,7 +37,7 @@ import {ErrorService} from "./error-handling/error.service";
         ThemeDetailsComponent
     ],
     imports: [BrowserModule, routing, FormsModule, HttpModule],
-    providers: [ AuthService, ErrorService ],
+    providers: [ AuthService, ErrorService, ThemeService ],
     bootstrap: [AppComponent]
 })
 export class AppModule {

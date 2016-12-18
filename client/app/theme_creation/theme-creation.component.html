@@ -58,7 +58,7 @@
 
             <div class="col-xs-10">
                 <div class="btn-group btn-group-justified" data-toggle="buttons">
-                    <label class="btn btn-default" *ngFor="let timeHorizon of timeHorizonValues" (click)="selectTimeHorizon(timeHorizon.value)">
+                    <label class="btn btn-default" *ngFor="let timeHorizon of themeCreation?.themeProperties?.timeHorizonValues" (click)="themeCreation?.themeProperties?.setTimeHorizon(timeHorizon.value)">
                         <input type="radio" id="timeHorizon" name="timeHorizon" [value]="timeHorizon.value">{{timeHorizon.description}}
                     </label>
                 </div>
@@ -71,7 +71,7 @@
 
             <div class="col-xs-10">
                 <div class="btn-group btn-group-justified" data-toggle="buttons">
-                    <label class="btn btn-default" *ngFor="let maturity of maturityValues" (click)="selectMaturity(maturity.value)">
+                    <label class="btn btn-default" *ngFor="let maturity of themeCreation?.themeProperties?.maturityValues" (click)="themeCreation?.themeProperties?.setMaturity(maturity.value)">
                         <input type="radio" id="maturity" name="maturity" [value]="maturity.value" >{{maturity.description}}
                     </label>
                 </div>
@@ -83,7 +83,7 @@
 
             <div class="col-xs-10">
                 <div class="btn-group btn-group-justified" data-toggle="buttons">
-                    <label class="btn btn-default" *ngFor="let category of categoryValues" (click)="toggleCheckedCategory(category.value)">
+                    <label class="btn btn-default" *ngFor="let category of themeCreation?.themeProperties?.categoryValues" (click)="themeCreation?.themeProperties?.toggleCheckedCategory(category.value)">
                         <input type="checkbox" id="categories" name="categories" [value]="category.value">{{category.description}}
                     </label>
                 </div>
@@ -95,5 +95,7 @@
         </div>
 
     </form>
+
+    {{themeCreation | json}}
 </div>
 

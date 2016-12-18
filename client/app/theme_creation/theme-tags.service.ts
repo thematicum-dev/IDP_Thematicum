@@ -4,7 +4,7 @@ import {Observable} from "rxjs";
 import {AutocompleteDatasourceInterface} from "../autocomplete/autocomplete-datasource-interface";
 
 @Injectable()
-export class ThemeTagsService implements  AutocompleteDatasourceInterface {
+export class ThemeTagsService implements AutocompleteDatasourceInterface {
     constructor(private http: Http) {
     }
 

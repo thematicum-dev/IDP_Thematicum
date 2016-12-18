@@ -3,7 +3,7 @@ import {Theme} from "../models/theme";
 import {ThemeSearchService} from "../theme_search/theme-search.service";
 import { Router, ActivatedRoute, Params } from '@angular/router';
 import 'rxjs/add/operator/switchMap';
-import {timeHorizonValues, maturityValues, categoryValues} from "../theme_creation/themeProperties";
+import {timeHorizonValues, maturityValues, categoryValues} from "../models/themePropertyValues";
 import {NgForm} from "@angular/forms";
 
 @Component({

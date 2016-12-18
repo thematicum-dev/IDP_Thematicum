@@ -53,11 +53,12 @@
 
                 <div class="col-xs-10">
                     <div class="btn-group btn-group-justified" [attr.data-toggle]="setDataToggleAttribute()">
-                        <label class="btn btn-default" [style.backgroundColor]="setPropertyBackgroundColor('timeHorizon', i+1)"
+                        <label class="btn btn-default"
+                               [style.backgroundColor]="setPropertyBackgroundColor('timeHorizon', i+1)"
                                [class.inactive-element]="!isEditMode"
-                               *ngFor="let timeHorizon of themeProperties.timeHorizon; let i = index">
+                               *ngFor="let timeHorizon of themeProperties.timeHorizon; let i = index"
+                               (click)="selectTimeHorizon(timeHorizon.value)">
                             <input type="radio" disabled="disabled" id="timeHorizon" name="timeHorizon" [value]="timeHorizonValues[i].value">{{timeHorizonValues[i].description}}
-                            <!--<input name="timeHorizon" type="hidden" value="true"/>-->
                         </label>
 
 
@@ -83,7 +84,8 @@
                     <div class="btn-group btn-group-justified" data-toggle="buttons">
                         <label class="btn btn-default" [class.inactive-element]="!isEditMode"
                                [style.backgroundColor]="setPropertyBackgroundColor('maturity', i+1)"
-                               *ngFor="let maturity of themeProperties.maturity; let i = index">
+                               *ngFor="let maturity of themeProperties.maturity; let i = index"
+                               (click)="selectMaturity(maturity.value)">
                             <input type="radio" disabled="disabled" id="maturity" name="maturity" [value]="maturityValues[i].value" >{{maturityValues[i].description}}
                         </label>
                     </div>
