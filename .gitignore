@@ -8,6 +8,8 @@ npm-debug.log
 client/*.js
 client/*.js.map
 
+us_stocks.json
+
 !systemjs.config.js
 !typings/typings.d.ts
 !wallaby.js

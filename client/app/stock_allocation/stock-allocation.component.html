@@ -1,7 +1,65 @@
-<app-autocomplete [placeholderTerm]="stockAllocationPlaceholder" [allowCustomValues]="allowCustomValues" [allowEnterKey]="allowEnterKey"
-                  [dataSource]="stockList"
-                  (notifySelectedItem)='onNotifySelectedItem($event)'
-                  (clearErrorStr)="onClearErrorStr()">
-</app-autocomplete>
+<div class="form-group row">
+    <label class="col-xs-2 col-form-label">Stock Name</label>
 
-<p>stocks: {{stockList.length}}</p>
+    <div class="col-xs-8">
+        <app-autocomplete [placeholderTerm]="stockAllocationPlaceholder" [allowCustomValues]="allowCustomValues" [allowEnterKey]="allowEnterKey"
+                          [dataSource]="stockList"
+                          (notifySelectedItem)='onNotifySelectedItem($event)'
+                          (clearErrorStr)="onClearErrorStr()">
+        </app-autocomplete>
+    </div>
+
+    <div class="col-xs-2 text-right">
+        <div class="btn-group">
+            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Select Exposure<span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu">
+                <li><a>Strong Positive</a></li>
+                <li><a>Weak Positive</a></li>
+                <li><a>Neutral</a></li>
+                <li><a>Weak Negative</a></li>
+                <li><a>Strong Negative</a></li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<!--<div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">-->
+    <!--<div class="btn-group" role="group" aria-label="First group">-->
+        <!--<button type="button" class="btn btn-default" style="background-color: forestgreen"></button>-->
+        <!--<button type="button" class="btn btn-default" style="background-color: springgreen"></button>-->
+        <!--<button type="button" class="btn btn-default" style="background-color: aliceblue"></button>-->
+        <!--<button type="button" class="btn btn-default" style="background-color: orange"></button>-->
+        <!--<button type="button" class="btn btn-default" style="background-color: orangered"></button>-->
+    <!--</div>-->
+<!--</div>-->
+
+<!--<div class="form-group row">-->
+    <!--<label class="col-xs-2 col-form-label">Select Exposure</label>-->
+
+    <!--<div class="col-xs-10">-->
+        <!--&lt;!&ndash;<a><span class="badge" style="background-color: forestgreen">Strong positive</span></a>&ndash;&gt;-->
+
+        <!--<div class="btn-group btn-group-justified" data-toggle="buttons">-->
+            <!--<label class="btn btn-default" style="background-color: forestgreen">-->
+                <!--<input type="radio" disabled="disabled">Strong Positive-->
+            <!--</label>-->
+            <!--<label class="btn btn-default" style="background-color: springgreen">-->
+                <!--<input type="radio" disabled="disabled">Weak Positive-->
+            <!--</label>-->
+            <!--<label class="btn btn-default" style="background-color: aliceblue">-->
+                <!--<input type="radio" disabled="disabled">Neutral-->
+            <!--</label>-->
+            <!--<label class="btn btn-default" style="background-color: orange">-->
+                <!--<input type="radio" disabled="disabled">Weak Negative-->
+            <!--</label>-->
+            <!--<label class="btn btn-default" style="background-color: orangered">-->
+                <!--<input type="radio" disabled="disabled">Strong Negative-->
+            <!--</label>-->
+
+        <!--</div>-->
+
+
+    <!--</div>-->
+<!--</div>-->
