@@ -28,9 +28,6 @@ export class ThemeCreationComponent implements OnInit {
     allowEnterKey: boolean = true;
     error: string = '';
     themeCreation: ThemeCreationModel;
-    // timeHorizonValues = timeHorizonValues;
-    // maturityValues = maturityValues;
-    // categoryValues = categoryValues;
     tagList: AutocompleteItem[] = [];
 
     ngOnInit(): void {

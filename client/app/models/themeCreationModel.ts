@@ -5,8 +5,5 @@ export class ThemeCreationModel {
     constructor(
         public theme: Theme,
         public themeProperties: ThemeProperties
-        // public timeHorizon?: number,
-        // public maturity?: number,
-        // public categories?: number[]
     ) {}
 }

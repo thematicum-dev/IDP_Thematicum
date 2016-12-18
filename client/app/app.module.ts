@@ -20,6 +20,7 @@ import {ThemeCreationComponent} from "./theme_creation/theme-creation.component"
 import {ThemeDetailsComponent} from "./theme_details/theme-details.component";
 import {ErrorService} from "./error-handling/error.service";
 import {ThemeService} from "./theme_creation/theme.service";
+import {StockAllocationComponent} from "./stock_allocation/stock-allocation.component";
 
 @NgModule({
     declarations: [
@@ -34,7 +35,8 @@ import {ThemeService} from "./theme_creation/theme.service";
         ThemeSearchComponent,
         AutoCompleteComponent,
         ThemeCreationComponent,
-        ThemeDetailsComponent
+        ThemeDetailsComponent,
+        StockAllocationComponent
     ],
     imports: [BrowserModule, routing, FormsModule, HttpModule],
     providers: [ AuthService, ErrorService, ThemeService ],

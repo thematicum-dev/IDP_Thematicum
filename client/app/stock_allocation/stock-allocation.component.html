@@ -1,0 +1,7 @@
+<app-autocomplete [placeholderTerm]="stockAllocationPlaceholder" [allowCustomValues]="allowCustomValues" [allowEnterKey]="allowEnterKey"
+                  [dataSource]="stockList"
+                  (notifySelectedItem)='onNotifySelectedItem($event)'
+                  (clearErrorStr)="onClearErrorStr()">
+</app-autocomplete>
+
+<p>stocks: {{stockList.length}}</p>
