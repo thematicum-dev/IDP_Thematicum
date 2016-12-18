@@ -74,13 +74,12 @@ router.put('/:id', function(req, res, next) {
             }
 
             //update existing user input values
-            //TODO: got updated to: themePropertiesAggregation
             if (req.body.timeHorizon)
-                result.themePropertiesAggregation.timeHorizon = req.body.timeHorizon;
+                result.themeProperties.timeHorizon = req.body.timeHorizon;
             if (req.body.maturity)
-                result.themePropertiesAggregation.maturity = req.body.maturity;
+                result.themeProperties.maturity = req.body.maturity;
             if (req.body.categories)
-                result.themePropertiesAggregation.categories = req.body.categories;
+                result.themeProperties.categories = req.body.categories;
 
             result.save(function(err, userInput) {
                 if (err) {

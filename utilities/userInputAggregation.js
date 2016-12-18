@@ -18,7 +18,7 @@ function getThemePropertiesAggregation(collection, propertyList) {
 
 function getCountByProperty(collection, propertyName) {
     return _.chain(collection)
-        .map(function(input) { return input.themePropertiesAggregation[propertyName]})
+        .map(function(input) { return input.themeProperties[propertyName]})
         .flatten()
         .countBy()
         .value();

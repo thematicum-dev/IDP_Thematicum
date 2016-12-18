@@ -257,9 +257,9 @@ router.post('/', function (req, res, next) {
                 user: user,
                 theme: result,
                 themeProperties: {
-                    timeHorizon: req.body.themePropertiesAggregation.timeHorizon,
-                    maturity: req.body.themePropertiesAggregation.maturity,
-                    categories: req.body.themePropertiesAggregation.categories
+                    timeHorizon: req.body.themeProperties.timeHorizon,
+                    maturity: req.body.themeProperties.maturity,
+                    categories: req.body.themeProperties.categories
                 },
                 stocksAllocationInputs: []
             });
