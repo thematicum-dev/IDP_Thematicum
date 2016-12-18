@@ -24,7 +24,10 @@
             <label class="col-xs-2 col-form-label">Tags</label>
             <div class="col-xs-10">
                 <p *ngIf="error" style="color:red">{{error}}</p>
-                <app-autocomplete [placeholderTerm]="tagsPlaceholder" [allowCustomValues]="allowCustomValues" [allowEnterKey]="allowEnterKey"
+                <app-autocomplete [placeholderTerm]="tagsPlaceholder"
+                                  [allowCustomValues]="allowCustomValues"
+                                  [allowEnterKey]="allowEnterKey"
+                                  [allowDirectClick]="allowDirectClick"
                                   [dataSource]="tagList"
                                   (notifySelectedItem)='onNotifySelectedItem($event)'
                                   (clearErrorStr)="onClearErrorStr()">

@@ -2,7 +2,10 @@
     <label class="col-xs-2 col-form-label">Stock Name</label>
 
     <div class="col-xs-8">
-        <app-autocomplete [placeholderTerm]="stockAllocationPlaceholder" [allowCustomValues]="allowCustomValues" [allowEnterKey]="allowEnterKey"
+        <app-autocomplete [placeholderTerm]="stockAllocationPlaceholder"
+                          [allowCustomValues]="allowCustomValues"
+                          [allowEnterKey]="allowEnterKey"
+                          [allowDirectClick]="allowDirectClick"
                           [dataSource]="stockList"
                           (notifySelectedItem)='onNotifySelectedItem($event)'
                           (clearErrorStr)="onClearErrorStr()">

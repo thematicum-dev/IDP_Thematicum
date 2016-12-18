@@ -26,6 +26,7 @@ export class ThemeCreationComponent implements OnInit {
     tagsPlaceholder = 'Keyword';
     allowCustomValues: boolean = true;
     allowEnterKey: boolean = true;
+    allowDirectClick: boolean = true;
     error: string = '';
     themeCreation: ThemeCreationModel;
     tagList: AutocompleteItem[] = [];

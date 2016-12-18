@@ -9,13 +9,14 @@ import {AutocompleteDatasourceInterface} from "./autocomplete-datasource-interfa
 import {AutocompleteItem} from "./autocomplete-item";
 import {ThemeTagsService} from "../theme_creation/theme-tags.service";
 
+
 @Component({
     selector: 'app-autocomplete',
     templateUrl: 'autocomplete.component.html',
-    host: {
-        '(document:click)': 'handleClick($event)',
-        '(keydown)': 'handleKeyDown($event)'
-    }
+     host: {
+     '(document:click)': 'handleClick($event)',
+     '(keydown)': 'handleKeyDown($event)'
+     }
 })
 export class AutoCompleteComponent implements OnChanges {
     const KEY_ARROW_UP = 38;
@@ -31,6 +32,8 @@ export class AutoCompleteComponent implements OnChanges {
     @Input() placeholderTerm: string;
     @Output() notifySelectedItem: EventEmitter<any> = new EventEmitter<any>();
     @Output() clearErrorStr: EventEmitter = new EventEmitter();
+    @Input() allowDirectClick: boolean;
+    currentlySelectedItem: AutocompleteItem;
 
     constructor(private elementRef: ElementRef) {}
 
@@ -48,7 +51,9 @@ export class AutoCompleteComponent implements OnChanges {
 
     /** input keyup event handler */
     filter(event: any) {
+        console.log('filter')
         //set 'selected' to false for all items in the filteredList
+        this.currentlySelectedItem = null;
         this.autocompleteList.deselectAll();
         this.clearErrorStr.emit(); //clear error string
 
@@ -104,10 +109,15 @@ export class AutoCompleteComponent implements OnChanges {
     }
 
     addSelectedItem(item: any) {
-        //emit event
-        this.notifySelectedItem.emit(item);
+        if (this.allowDirectClick) {
+            //emit event
+            this.notifySelectedItem.emit(item);
+        } else {
+            this.currentlySelectedItem = item;
+            this.autocompleteList.query = this.currentlySelectedItem.name;
+        }
 
-        this.cleanup();
+        this.cleanup(!this.allowDirectClick)
     }
 
     handleKeyDown(event: any) {
@@ -121,12 +131,14 @@ export class AutoCompleteComponent implements OnChanges {
     handleClick(event: any) {
         if (!this.elementRef.nativeElement.contains(event.target)) {
             //if the click occurs in an element (event.target) contained in elementRef, then empty filtered list
-            this.cleanup();
+            this.cleanup(!this.allowDirectClick);
         }
     }
 
-    cleanup() {
-        this.autocompleteList.query = '';
+    cleanup(keepQuery: boolean) {
+        if (!keepQuery || this.currentlySelectedItem == null) {
+            this.autocompleteList.query = '';
+        }
         this.position = -1;
         this.autocompleteList.deselectAll();
         this.autocompleteList.emptyList();
