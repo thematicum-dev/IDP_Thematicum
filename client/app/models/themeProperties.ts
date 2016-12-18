@@ -10,9 +10,6 @@ export class ThemeProperties {
     public maturity?: number;
     public categories?: number[];
 
-    constructor(
-    ) {}
-
     setTimeHorizon(timeHorizon: number) {
         console.log('setTimeHorizon')
         this.timeHorizon = timeHorizon;

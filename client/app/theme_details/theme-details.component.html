@@ -56,9 +56,9 @@
                         <label class="btn btn-default"
                                [style.backgroundColor]="setPropertyBackgroundColor('timeHorizon', i+1)"
                                [class.inactive-element]="!isEditMode"
-                               *ngFor="let timeHorizon of themeProperties.timeHorizon; let i = index"
-                               (click)="selectTimeHorizon(timeHorizon.value)">
-                            <input type="radio" disabled="disabled" id="timeHorizon" name="timeHorizon" [value]="timeHorizonValues[i].value">{{timeHorizonValues[i].description}}
+                               *ngFor="let timeHorizon of themePropertiesAggregation.timeHorizon; let i = index"
+                               (click)="themeProperties.setTimeHorizon(timeHorizon.value)">
+                            <input type="radio" disabled="disabled" id="timeHorizon" name="timeHorizon" [value]="themeProperties.timeHorizonValues[i].value">{{themeProperties.timeHorizonValues[i].description}}
                         </label>
 
 
@@ -68,7 +68,7 @@
 
                 <div class="col-xs-offset-2 col-xs-10">
                     <div class="btn-group btn-group-justified" data-toggle="buttons">
-                        <label class="btn btn-default no-decoration-element borderless default-cursor" *ngFor="let timeHorizon of themeProperties.timeHorizon; let i = index">
+                        <label class="btn btn-default no-decoration-element borderless default-cursor" *ngFor="let timeHorizon of themePropertiesAggregation.timeHorizon; let i = index">
                             {{getPropertyVoteDistributionStr(timeHorizon.percentage, timeHorizon.count)}}
                         </label>
                     </div>
@@ -84,16 +84,16 @@
                     <div class="btn-group btn-group-justified" data-toggle="buttons">
                         <label class="btn btn-default" [class.inactive-element]="!isEditMode"
                                [style.backgroundColor]="setPropertyBackgroundColor('maturity', i+1)"
-                               *ngFor="let maturity of themeProperties.maturity; let i = index"
-                               (click)="selectMaturity(maturity.value)">
-                            <input type="radio" disabled="disabled" id="maturity" name="maturity" [value]="maturityValues[i].value" >{{maturityValues[i].description}}
+                               *ngFor="let maturity of themePropertiesAggregation.maturity; let i = index"
+                               (click)="themeProperties.setMaturity(maturity.value)">
+                            <input type="radio" disabled="disabled" id="maturity" name="maturity" [value]="themeProperties.maturityValues[i].value" >{{themeProperties.maturityValues[i].description}}
                         </label>
                     </div>
                 </div>
 
                 <div class="col-xs-offset-2 col-xs-10">
                     <div class="btn-group btn-group-justified" data-toggle="buttons">
-                        <label class="btn btn-default no-decoration-element borderless default-cursor" *ngFor="let maturity of themeProperties.maturity; let i = index">
+                        <label class="btn btn-default no-decoration-element borderless default-cursor" *ngFor="let maturity of themePropertiesAggregation.maturity; let i = index">
                             {{getPropertyVoteDistributionStr(maturity.percentage, maturity.count)}}
                         </label>
                     </div>
@@ -110,15 +110,16 @@
                         <label class="btn btn-default"
                                [style.backgroundColor]="setPropertyBackgroundColor('categories', i+1)"
                                [class.inactive-element]="!isEditMode"
-                               *ngFor="let category of themeProperties.categories; let i=index">
-                            <input type="checkbox" disabled="disabled" id="categories" name="categories" [value]="categoryValues[i].value">{{categoryValues[i].description}}
+                               *ngFor="let category of themePropertiesAggregation.categories; let i=index"
+                               (click)="themeProperties.toggleCheckedCategory(category.value)">
+                            <input type="checkbox" disabled="disabled" id="categories" name="categories" [value]="themeProperties.categoryValues[i].value">{{themeProperties.categoryValues[i].description}}
                         </label>
                     </div>
                 </div>
 
                 <div class="col-xs-offset-2 col-xs-10">
                     <div class="btn-group btn-group-justified" data-toggle="buttons">
-                        <label class="btn btn-default no-decoration-element borderless default-cursor" *ngFor="let category of themeProperties.categories; let i = index">
+                        <label class="btn btn-default no-decoration-element borderless default-cursor" *ngFor="let category of themePropertiesAggregation.categories; let i = index">
                             {{getPropertyVoteDistributionStr(category.percentage, category.count)}}
                         </label>
                     </div>

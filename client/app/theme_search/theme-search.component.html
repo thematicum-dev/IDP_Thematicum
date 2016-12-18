@@ -29,7 +29,7 @@
 <div class="alert alert-info text-center" role="alert" *ngIf="form.submitted && themes.length == 0">No relevant themes found</div>
 
 <div class="list-group" *ngIf="themes.length>0">
-    <a class="list-group-item list-group-item-action borderless" *ngFor="let theme of themes" (click)="goToThemeDetails(theme.id)">
+    <a class="list-group-item list-group-item-action borderless" *ngFor="let theme of themes" (click)="goToThemeDetails(theme._id)">
         <h5 class="list-group-item-heading">{{theme.name}}</h5>
         <p class="list-group-item-text">{{theme.description}}</p>
     </a>

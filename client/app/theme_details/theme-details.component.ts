@@ -5,6 +5,8 @@ import { Router, ActivatedRoute, Params } from '@angular/router';
 import 'rxjs/add/operator/switchMap';
 import {timeHorizonValues, maturityValues, categoryValues} from "../models/themePropertyValues";
 import {NgForm} from "@angular/forms";
+import {ThemeProperties} from "../models/themeProperties";
+import {ThemeService} from "../theme_creation/theme.service";
 
 @Component({
     selector: 'app-theme-details',
@@ -42,14 +44,15 @@ import {NgForm} from "@angular/forms";
     providers: [ThemeSearchService]
 })
 export class ThemeDetailsComponent implements OnInit, OnChanges {
+    //theme existing data
     theme: Theme;
-    themeProperties: any;
+    themePropertiesAggregation: any;
     userThemeInputs: any;
+    userThemeInputsId: any;
     creationDate: Date;
 
-    timeHorizonValues = timeHorizonValues;
-    maturityValues = maturityValues;
-    categoryValues = categoryValues;
+    //theme data - for user editing
+    themeProperties: ThemeProperties = new ThemeProperties();
 
     isEditMode: boolean = false;
     yellowColorCode = '#fcf8e3';
@@ -63,7 +66,7 @@ export class ThemeDetailsComponent implements OnInit, OnChanges {
                 console.log('Data retrieved for this theme')
                 console.log(themeData)
                 this.theme = themeData.theme;
-                this.themeProperties = themeData.properties;
+                this.themePropertiesAggregation = themeData.properties;
                 this.creationDate = new Date(themeData.theme.createdAt);
             });
 
@@ -73,7 +76,10 @@ export class ThemeDetailsComponent implements OnInit, OnChanges {
             .subscribe((userInputPerTheme: any) => {
                 console.log('User input')
                 console.log(userInputPerTheme)
-                if (userInputPerTheme) this.userThemeInputs = userInputPerTheme.userInputs.themeProperties;
+                if (userInputPerTheme) {
+                    this.userThemeInputsId = userInputPerTheme.userInputs._id;
+                    this.userThemeInputs = userInputPerTheme.userInputs.themeProperties;
+                }
             });
 
     }
@@ -91,7 +97,12 @@ export class ThemeDetailsComponent implements OnInit, OnChanges {
         return `${percentage}% (${nrUsers} user${trailingS})`;
     }
 
-    constructor(private elementRef: ElementRef, private route: ActivatedRoute, private router: Router, private searchService: ThemeSearchService) { }
+    constructor(
+        private elementRef: ElementRef,
+        private route: ActivatedRoute,
+        private router: Router,
+        private searchService: ThemeSearchService,
+        private themeService: ThemeService) { }
 
     toggleEditMode(containerDiv: Element) {
         this.isEditMode = !this.isEditMode;
@@ -107,6 +118,7 @@ export class ThemeDetailsComponent implements OnInit, OnChanges {
             return
         }
 
+        console.log(this.userThemeInputs)
         if (!this.isEditMode && !this.userThemeInputs) {
             return this.whiteColor;
         }
@@ -122,9 +134,41 @@ export class ThemeDetailsComponent implements OnInit, OnChanges {
         return this.isEditMode ? 'buttons' : '';
     }
 
+    onSubmit(form: NgForm) {
+        this.themeProperties.setCheckedCategories();
 
+        /*if there isn't any existing user input for this theme, create new
+        otherwise, update existing
+        */
+        if (!this.userThemeInputs) {
+            this.themeService.createUserThemeImput(this.theme._id, this.themeProperties)
+                .subscribe(
+                    data => {
+                        console.log(data);
+                        //this.router.navigate(['/theme', this.theme._id]);
+                        window.location.reload();
+                    },
+                    error => {
+                        console.log(error)
+                    }
+                );
+        } else {
+            console.log('User theme inputs angular')
+            console.log(this.userThemeInputs)
+            console.log(this.userThemeInputsId)
+            console.log('theme id: ' + this.theme._id)
+            this.themeService.updateUserThemeInput(this.userThemeInputsId, this.themeProperties)
+                .subscribe(
+                    data => {
+                        console.log(data);
+                        //this.router.navigate(['/theme', this.theme._id]);
+                        window.location.reload();
 
-    // onSubmit(timeHorizonDiv, form) {
-    //
-    // }
+                    },
+                    error => {
+                        console.log(error)
+                    }
+                );
+        }
+    }
 }
