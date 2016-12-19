@@ -11,6 +11,8 @@ import {AutocompleteItem} from "../autocomplete/autocomplete-item";
 import {Observable} from "rxjs";
 import {Router} from "@angular/router";
 import {ThemeProperties} from "../models/themeProperties";
+import {StockAllocation} from "../models/stockAllocation";
+import {StockAllocationModel} from "../models/stockAllocationModel";
 
 @Component({
     selector: 'app-theme-create',
@@ -66,6 +68,10 @@ export class ThemeCreationComponent implements OnInit {
         }
     }
 
+    onNotifyAllocatedStocks(allocatedStock: StockAllocationModel) {
+        this.themeCreation.stockAllocation.push(allocatedStock);
+    }
+
     onTagDeselect(index: number) {
         if (index >= 0 && index < this.selectedTags.length) {
             this.selectedTags.splice(index, 1);
@@ -93,25 +99,4 @@ export class ThemeCreationComponent implements OnInit {
                 }
             );
     }
-
-    // selectTimeHorizon(timeHorizon: number) {
-    //     this.themeCreation.timeHorizon = timeHorizon;
-    // }
-    //
-    // selectMaturity(maturity: number) {
-    //     this.themeCreation.maturity = maturity;
-    // }
-    //
-    // toggleCheckedCategory(category: number) {
-    //     categoryValues[category-1].checked = !categoryValues[category-1].checked;
-    // }
-    //
-    // setCheckedCategories() {
-    //     this.themeCreation.categories = categoryValues.filter(category => {
-    //         return category.checked;
-    //         })
-    //         .map(category => {
-    //             return category.value
-    //         });
-    // }
 }

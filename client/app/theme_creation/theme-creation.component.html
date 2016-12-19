@@ -99,14 +99,14 @@
             <legend>Stock Allocation</legend>
         </fieldset>
 
-        <app-stock-allocation></app-stock-allocation>
+        <app-stock-allocation (notifyAllocatedStocks)="onNotifyAllocatedStocks($event)"></app-stock-allocation>
 
         <div class="text-right">
             <button class="btn btn-primary" type="submit" [disabled]="!form.form.valid">Save</button>
         </div>
 
     </form>
-
-    <!--{{themeCreation | json}}-->
+    {{themeCreation?.theme | json}}
+    {{themeCreation?.stockAllocation | json}}
 </div>
 

@@ -3,6 +3,7 @@ var router = express.Router();
 var jwt = require('jsonwebtoken');
 var Theme = require('../models/theme');
 var UserThemeInput = require('../models/userThemeInput');
+var UserThemeStockAllocation = require('../models/userThemeStockAllocation');
 var User = require('../models/user');
 var constants = require('../models/constants');
 var _ = require('underscore');
@@ -236,6 +237,13 @@ router.post('/', function (req, res, next) {
             });
         }
 
+        if (!user) {
+            return res.status(500).json({
+                title: 'No user found',
+                error: { message: 'No user for the given token was found'}
+            });
+        }
+
         //save new Theme
         var theme = new Theme({
             name: req.body.theme.name,
@@ -260,8 +268,7 @@ router.post('/', function (req, res, next) {
                     timeHorizon: req.body.themeProperties.timeHorizon,
                     maturity: req.body.themeProperties.maturity,
                     categories: req.body.themeProperties.categories
-                },
-                stocksAllocationInputs: []
+                }
             });
 
             userInput.save(function(err, userInput) {
@@ -272,9 +279,29 @@ router.post('/', function (req, res, next) {
                     });
                 }
 
-                res.status(201).json({
-                    message: 'Theme created',
-                    obj: [ result, userInput ]
+                //TODO: find stock by id
+
+                console.log(req.body.stockAllocation)
+                return;
+
+                var stockAllocation = new UserThemeStockAllocation({
+                    user: user,
+                    theme: result,
+                    stockAllocation: req.body.stockAllocation
+                });
+
+                stockAllocation.save(function(err, stockAllocation) {
+                    if (err) {
+                        return res.status(500).json({
+                            title: 'An error occurred',
+                            error: err
+                        });
+                    }
+
+                    return res.status(201).json({
+                        message: 'Theme created',
+                        obj: [ result, userInput, stockAllocation ]
+                    });
                 });
             });
         });

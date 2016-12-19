@@ -1,8 +1,10 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, EventEmitter} from '@angular/core';
 import {AutocompleteItem} from "../autocomplete/autocomplete-item";
 import {StockService} from "./stock.service";
 import {Stock} from "../models/stock";
 import {StockAllocation} from "../models/stockAllocation";
+import {Output} from "@angular/core/src/metadata/directives";
+import {StockAllocationModel} from "../models/stockAllocationModel";
 
 @Component({
     selector: 'app-stock-allocation',
@@ -19,16 +21,21 @@ import {StockAllocation} from "../models/stockAllocation";
         .btn.btn-link {
             color: red;
         }
+        td>label {
+            padding: 6px 12px; 
+            margin-bottom: 0px;
+        }
     `]
 })
 export class StockAllocationComponent implements OnInit {
-    stockAllocationPlaceholder: String = 'Search by company name or ticker';
+    stockAllocationPlaceholder: String = 'Search by company name';
     allowCustomValues: boolean = false;
     allowEnterKey: boolean = false;
     allowDirectClick: boolean = false;
 
     stockList: AutocompleteItem[] = [];
     allocatedStocks: StockAllocation[] = [];
+    @Output() notifyAllocatedStocks: EventEmitter<StockAllocationModel> = new EventEmitter<StockAllocationModel>();
     currentlySelectedStock: Stock;
 
     error: string = '';
@@ -77,16 +84,14 @@ export class StockAllocationComponent implements OnInit {
     }
 
     onSelectExposure(index: number, stocksAutocomplete: any) {
-        //keep [] of {stock, exposure}
-        //add new element to that []
-        //emit event to autocomplete component
+        //add allocated stock
         if (this.currentlySelectedStock) {
             this.allocatedStocks.push(new StockAllocation(this.currentlySelectedStock, index));
+            //notify parent component about allocated stock
+            this.notifyAllocatedStocks.emit(new StockAllocationModel(this.currentlySelectedStock.id, index));
             this.currentlySelectedStock = null;
             stocksAutocomplete.clearCurrentlySelectedItem();
         }
-
-        console.log('test' + index)
     }
 
     removeStock(stockIndex: number) {
