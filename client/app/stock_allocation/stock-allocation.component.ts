@@ -2,11 +2,24 @@ import {Component, OnInit} from '@angular/core';
 import {AutocompleteItem} from "../autocomplete/autocomplete-item";
 import {StockService} from "./stock.service";
 import {Stock} from "../models/stock";
+import {StockAllocation} from "../models/stockAllocation";
 
 @Component({
     selector: 'app-stock-allocation',
     templateUrl: 'stock-allocation.component.html',
-    providers: [StockService]
+    providers: [StockService],
+    styles: [`
+        select, select:hover, select:focus {
+            background-color: white;
+            text-decoration: none;
+            outline:none;
+            border: none;
+            box-shadow: none;
+        }
+        .btn.btn-link {
+            color: red;
+        }
+    `]
 })
 export class StockAllocationComponent implements OnInit {
     stockAllocationPlaceholder: String = 'Search by company name or ticker';
@@ -15,10 +28,11 @@ export class StockAllocationComponent implements OnInit {
     allowDirectClick: boolean = false;
 
     stockList: AutocompleteItem[] = [];
-    selectedStocks: Stock[] = [];
+    allocatedStocks: StockAllocation[] = [];
     currentlySelectedStock: Stock;
 
     error: string = '';
+    stockExposures = ['Strong Positive', 'Weak Positive', 'Neutral', 'Weak Negative', 'Strong Negative'];
 
     constructor(private stockService: StockService) {}
 
@@ -43,13 +57,14 @@ export class StockAllocationComponent implements OnInit {
     }
 
     onClearErrorStr() {
-        // this.error = '';
+        this.error = '';
     }
 
     onNotifySelectedItem(item: any) {
+        //TODO: duplicate entries
         //search by name (assume unique name)
-        let existingItem = this.selectedStocks.find(el => {
-            return el == item.name
+        let existingItem = this.allocatedStocks.find((el: StockAllocation) => {
+            return el.stock.name == item.name
         });
 
         //do not add an item if it was already selected
@@ -61,5 +76,21 @@ export class StockAllocationComponent implements OnInit {
         }
     }
 
+    onSelectExposure(index: number, stocksAutocomplete: any) {
+        //keep [] of {stock, exposure}
+        //add new element to that []
+        //emit event to autocomplete component
+        if (this.currentlySelectedStock) {
+            this.allocatedStocks.push(new StockAllocation(this.currentlySelectedStock, index));
+            this.currentlySelectedStock = null;
+            stocksAutocomplete.clearCurrentlySelectedItem();
+        }
+
+        console.log('test' + index)
+    }
+
+    removeStock(stockIndex: number) {
+        this.allocatedStocks.splice(stockIndex, 1);
+    }
 
 }

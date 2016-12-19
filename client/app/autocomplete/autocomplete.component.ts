@@ -109,16 +109,29 @@ export class AutoCompleteComponent implements OnChanges {
     }
 
     addSelectedItem(item: any) {
-        if (this.allowDirectClick) {
-            //emit event
-            this.notifySelectedItem.emit(item);
-        } else {
+        this.notifySelectedItem.emit(item);
+
+        if (!this.allowDirectClick) {
             this.currentlySelectedItem = item;
             this.autocompleteList.query = this.currentlySelectedItem.name;
         }
 
         this.cleanup(!this.allowDirectClick)
     }
+
+    /*
+     addSelectedItem(item: any) {
+     if (this.allowDirectClick) {
+     //emit event
+     this.notifySelectedItem.emit(item);
+     } else {
+     this.currentlySelectedItem = item;
+     this.autocompleteList.query = this.currentlySelectedItem.name;
+     }
+
+     this.cleanup(!this.allowDirectClick)
+     }
+     */
 
     handleKeyDown(event: any) {
         // Prevent default actions of arrow keys
@@ -142,5 +155,9 @@ export class AutoCompleteComponent implements OnChanges {
         this.position = -1;
         this.autocompleteList.deselectAll();
         this.autocompleteList.emptyList();
+    }
+
+    clearCurrentlySelectedItem() {
+        this.currentlySelectedItem = null;
     }
 }

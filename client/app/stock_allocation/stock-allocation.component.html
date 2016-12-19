@@ -1,68 +1,69 @@
 <div class="form-group row">
     <label class="col-xs-2 col-form-label">Stock Name</label>
 
-    <div class="col-xs-8">
-        <app-autocomplete [placeholderTerm]="stockAllocationPlaceholder"
-                          [allowCustomValues]="allowCustomValues"
-                          [allowEnterKey]="allowEnterKey"
-                          [allowDirectClick]="allowDirectClick"
-                          [dataSource]="stockList"
-                          (notifySelectedItem)='onNotifySelectedItem($event)'
-                          (clearErrorStr)="onClearErrorStr()">
-        </app-autocomplete>
-    </div>
+    <div class="col-xs-10">
+        <p *ngIf="error" style="color:red">{{error}}</p>
 
-    <div class="col-xs-2 text-right">
-        <div class="btn-group">
-            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                Select Exposure<span class="caret"></span>
-            </button>
-            <ul class="dropdown-menu">
-                <li><a>Strong Positive</a></li>
-                <li><a>Weak Positive</a></li>
-                <li><a>Neutral</a></li>
-                <li><a>Weak Negative</a></li>
-                <li><a>Strong Negative</a></li>
-            </ul>
+        <div class="input-group">
+            <app-autocomplete [placeholderTerm]="stockAllocationPlaceholder"
+                              [allowCustomValues]="allowCustomValues"
+                              [allowEnterKey]="allowEnterKey"
+                              [allowDirectClick]="allowDirectClick"
+                              [dataSource]="stockList"
+                              (notifySelectedItem)='onNotifySelectedItem($event)'
+                              (clearErrorStr)="onClearErrorStr()"
+                              #stocksAutocomplete>
+            </app-autocomplete>
+
+            <span class="input-group-btn">
+                <div class="btn-group">
+                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Select Exposure<span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li *ngFor="let exposure of stockExposures; let i = index;" (click)="onSelectExposure(i, stocksAutocomplete)"><a>{{exposure}}</a></li>
+                    </ul>
+                </div>
+            </span>
         </div>
     </div>
 </div>
 
-<!--<div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">-->
-    <!--<div class="btn-group" role="group" aria-label="First group">-->
-        <!--<button type="button" class="btn btn-default" style="background-color: forestgreen"></button>-->
-        <!--<button type="button" class="btn btn-default" style="background-color: springgreen"></button>-->
-        <!--<button type="button" class="btn btn-default" style="background-color: aliceblue"></button>-->
-        <!--<button type="button" class="btn btn-default" style="background-color: orange"></button>-->
-        <!--<button type="button" class="btn btn-default" style="background-color: orangered"></button>-->
-    <!--</div>-->
-<!--</div>-->
+<div class="form-group row" *ngIf="allocatedStocks && allocatedStocks.length > 0">
+    <label class="col-xs-2 col-form-label">Allocated Stocks</label>
+    <div class="col-xs-6">
+        <!--<label *ngIf="allocatedStocks && allocatedStocks.length > 0">Allocated Stocks</label>-->
+        <div class="panel panel-default">
+            <table class="table">
+                <tbody>
+                <tr *ngFor="let stockAllocation of allocatedStocks; let stockIdx = index">
+                    <td scope="row"><label>{{stockAllocation.stock.name | lowercase}}</label></td>
 
-<!--<div class="form-group row">-->
-    <!--<label class="col-xs-2 col-form-label">Select Exposure</label>-->
+                    <td>
+                        <select
+                                class="form-control"
+                                id=""
+                                [(ngModel)]="stockAllocation.exposure"
+                                name=""
+                                required>
+                            <option *ngFor="let exposure of stockExposures; let i = index" [ngValue]="i">{{ exposure }}</option>
+                        </select>
+                    </td>
+                    <td>
+                        <button type="button" class="btn btn-link" (click)="removeStock(stockIdx)">Remove</button>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
 
-    <!--<div class="col-xs-10">-->
-        <!--&lt;!&ndash;<a><span class="badge" style="background-color: forestgreen">Strong positive</span></a>&ndash;&gt;-->
+<div class="form-group row">
+    <label class="col-xs-2 col-form-label">Allocated Stocks</label>
 
-        <!--<div class="btn-group btn-group-justified" data-toggle="buttons">-->
-            <!--<label class="btn btn-default" style="background-color: forestgreen">-->
-                <!--<input type="radio" disabled="disabled">Strong Positive-->
-            <!--</label>-->
-            <!--<label class="btn btn-default" style="background-color: springgreen">-->
-                <!--<input type="radio" disabled="disabled">Weak Positive-->
-            <!--</label>-->
-            <!--<label class="btn btn-default" style="background-color: aliceblue">-->
-                <!--<input type="radio" disabled="disabled">Neutral-->
-            <!--</label>-->
-            <!--<label class="btn btn-default" style="background-color: orange">-->
-                <!--<input type="radio" disabled="disabled">Weak Negative-->
-            <!--</label>-->
-            <!--<label class="btn btn-default" style="background-color: orangered">-->
-                <!--<input type="radio" disabled="disabled">Strong Negative-->
-            <!--</label>-->
-
-        <!--</div>-->
-
-
-    <!--</div>-->
-<!--</div>-->
+    <div class="col-xs-10">
+        currently selected {{currentlySelectedStock}}
+        allocated {{allocatedStocks | json}}
+    </div>
+</div>
