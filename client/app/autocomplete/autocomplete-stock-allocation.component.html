@@ -1,0 +1,60 @@
+<div class="form-group row">
+    <label class="col-xs-2 col-form-label">Stock Name</label>
+
+    <div class="col-xs-10">
+        <p *ngIf="error" style="color:red">{{error}}</p>
+
+        <div class="input-group">
+            <app-autocomplete [placeholderTerm]="autocompletePlaceholder"
+                              [allowCustomValues]="allowCustomValues"
+                              [allowEnterKey]="allowEnterKey"
+                              [allowDirectClick]="allowDirectClick"
+                              [dataSource]="itemList"
+                              (notifySelectedItem)='selectItem($event)'
+                              (clearErrorStr)="clearErrorStr()"
+                              #stocksAutocomplete>
+            </app-autocomplete>
+
+            <span class="input-group-btn">
+                <div class="btn-group">
+                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Select Exposure<span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li *ngFor="let exposure of stockExposures; let i = index;" (click)="onSelectExposure(i, stocksAutocomplete)"><a>{{exposure}}</a></li>
+                    </ul>
+                </div>
+            </span>
+        </div>
+    </div>
+</div>
+
+<div class="form-group row" *ngIf="selectedItems && selectedItems.length > 0">
+    <label class="col-xs-2 col-form-label">Allocated Stocks</label>
+    <div class="col-xs-6">
+        <!--<label *ngIf="allocatedStocks && allocatedStocks.length > 0">Allocated Stocks</label>-->
+        <div class="panel panel-default">
+            <table class="table">
+                <tbody>
+                <tr *ngFor="let stockAllocation of selectedItems; let stockIdx = index">
+                    <td scope="row"><label>{{stockAllocation.stock.name | lowercase}}</label></td>
+
+                    <td>
+                        <select
+                                class="form-control"
+                                id=""
+                                [(ngModel)]="stockAllocation.exposure"
+                                name=""
+                                required>
+                            <option *ngFor="let exposure of stockExposures; let i = index" [ngValue]="i">{{ exposure }}</option>
+                        </select>
+                    </td>
+                    <td>
+                        <button type="button" class="btn btn-link" (click)="deselectItem(stockIdx)">Remove</button>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

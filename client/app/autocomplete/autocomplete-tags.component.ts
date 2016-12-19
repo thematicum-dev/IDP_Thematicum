@@ -6,7 +6,8 @@ import {ThemeTagsService} from "../theme_creation/theme-tags.service";
 
 @Component({
     selector: 'app-autocomplete-tags',
-    templateUrl: 'autocomplete-tags.component.html'
+    templateUrl: 'autocomplete-tags.component.html',
+    providers: [ThemeTagsService]
 })
 export class AutoCompleteTagsComponent extends AutoCompleteContainerComponent implements OnInit, AutocompleteItemSelectionInterface {
     autocompletePlaceholder = 'Keyword';
@@ -18,6 +19,7 @@ export class AutoCompleteTagsComponent extends AutoCompleteContainerComponent im
     selectedItems: any[] = []; //selected items
 
     ngOnInit(): void {
+        console.log('ngInit in tags component')
         this.themeTagService.getAutocompleteList().subscribe(data => {
                 for (let tag of data) {
                     this.itemList.push(new AutocompleteItem(tag));

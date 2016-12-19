@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, ElementRef} from '@angular/core';
 import {AutoCompleteComponent} from "../autocomplete/autocomplete.component";
 import {ThemeCreationModel} from "../models/themeCreationModel";
 import {timeHorizonValues, maturityValues, categoryValues} from "../models/themePropertyValues";
@@ -13,6 +13,7 @@ import {Router} from "@angular/router";
 import {ThemeProperties} from "../models/themeProperties";
 import {StockAllocation} from "../models/stockAllocation";
 import {StockAllocationModel} from "../models/stockAllocationModel";
+import {AutoCompleteContainerComponent} from "../autocomplete/autocomplete-container.component";
 
 @Component({
     selector: 'app-theme-create',
@@ -20,8 +21,7 @@ import {StockAllocationModel} from "../models/stockAllocationModel";
     styles: [`.btn-default.active, .btn-default:active {
         background-color: #d9edf7
     }`],
-    directives: [AutoCompleteComponent],
-    providers: [ThemeTagsService]
+    directives: [AutoCompleteComponent]
 })
 export class ThemeCreationComponent implements OnInit {
     selectedTags: string[] = [];
@@ -34,19 +34,20 @@ export class ThemeCreationComponent implements OnInit {
     tagList: AutocompleteItem[] = [];
 
     ngOnInit(): void {
-        this.themeTagService.getAutocompleteList().subscribe(data => {
-                for (let tag of data) {
-                    this.tagList.push(new AutocompleteItem(tag));
-                }
-            },
-            error => {
-                console.log(error)
-            });
+        // console.log('ngInit in theme creation')
+        // this.themeTagService.getAutocompleteList().subscribe(data => {
+        //         for (let tag of data) {
+        //             this.tagList.push(new AutocompleteItem(tag));
+        //         }
+        //     },
+        //     error => {
+        //         console.log(error)
+        //     });
     }
 
     constructor(
+        private elementRef: ElementRef,
         private themeService: ThemeService,
-        private themeTagService: ThemeTagsService,
         private router: Router) {
 
         let theme = new Theme();
@@ -82,9 +83,14 @@ export class ThemeCreationComponent implements OnInit {
     //     this.error = '';
     // }
 
-    onSubmit(form: NgForm) {
+    onSubmit(form: NgForm, themeTags: AutoCompleteContainerComponent, themeStockAllocation: AutoCompleteContainerComponent) {
         //call service to save theme
         //this.setCheckedCategories();
+        console.log(themeTags.selectedItems)
+        console.log(themeStockAllocation.selectedItems)
+
+
+        return;
         this.themeCreation.themeProperties.setCheckedCategories();
 
         this.themeService.createTheme(this.themeCreation)

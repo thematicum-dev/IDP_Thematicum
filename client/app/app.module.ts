@@ -23,6 +23,7 @@ import {ThemeService} from "./theme_creation/theme.service";
 import {StockAllocationComponent} from "./stock_allocation/stock-allocation.component";
 import {AutoCompleteContainerComponent} from "./autocomplete/autocomplete-container.component";
 import {AutoCompleteTagsComponent} from "./autocomplete/autocomplete-tags.component";
+import {AutoCompleteStockAllocationComponent} from "./autocomplete/autocomplete-stock-allocation.component";
 
 @NgModule({
     declarations: [
@@ -40,7 +41,8 @@ import {AutoCompleteTagsComponent} from "./autocomplete/autocomplete-tags.compon
         ThemeDetailsComponent,
         StockAllocationComponent,
         AutoCompleteContainerComponent,
-        AutoCompleteTagsComponent
+        AutoCompleteTagsComponent,
+        AutoCompleteStockAllocationComponent
     ],
     imports: [BrowserModule, routing, FormsModule, HttpModule],
     providers: [ AuthService, ErrorService, ThemeService ],
