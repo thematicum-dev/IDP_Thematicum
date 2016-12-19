@@ -53,34 +53,34 @@ export class ThemeCreationComponent implements OnInit {
         theme.tags = this.selectedTags;
         this.themeCreation = new ThemeCreationModel(theme, new ThemeProperties());
     }
-
-    onNotifySelectedItem(tag: any) {
-        //search by name (assume unique name)
-        let existingItem = this.selectedTags.find(el => {
-            return el == tag.name
-        });
-
-        //do not add an item if it was already selected
-        if(!existingItem) {
-            this.selectedTags.push(tag.name);
-        } else {
-            this.error = 'This item has already been selected. Please choose another one';
-        }
-    }
+    //
+    // onNotifySelectedItem(tag: any) {
+    //     //search by name (assume unique name)
+    //     let existingItem = this.selectedTags.find(el => {
+    //         return el == tag.name
+    //     });
+    //
+    //     //do not add an item if it was already selected
+    //     if(!existingItem) {
+    //         this.selectedTags.push(tag.name);
+    //     } else {
+    //         this.error = 'This item has already been selected. Please choose another one';
+    //     }
+    // }
 
     onNotifyAllocatedStocks(allocatedStock: StockAllocationModel) {
         this.themeCreation.stockAllocation.push(allocatedStock);
     }
 
-    onTagDeselect(index: number) {
-        if (index >= 0 && index < this.selectedTags.length) {
-            this.selectedTags.splice(index, 1);
-        }
-    }
-
-    onClearErrorStr() {
-        this.error = '';
-    }
+    // onTagDeselect(index: number) {
+    //     if (index >= 0 && index < this.selectedTags.length) {
+    //         this.selectedTags.splice(index, 1);
+    //     }
+    // }
+    //
+    // onClearErrorStr() {
+    //     this.error = '';
+    // }
 
     onSubmit(form: NgForm) {
         //call service to save theme

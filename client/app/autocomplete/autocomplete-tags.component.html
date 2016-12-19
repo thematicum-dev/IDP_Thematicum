@@ -1,0 +1,20 @@
+<div class="form-group row">
+    <label class="col-xs-2 col-form-label">Tags</label>
+    <div class="col-xs-10">
+        <p *ngIf="error" style="color:red">{{error}}</p>
+        <app-autocomplete [placeholderTerm]="autocompletePlaceholder"
+                          [allowCustomValues]="allowCustomValues"
+                          [allowEnterKey]="allowEnterKey"
+                          [allowDirectClick]="allowDirectClick"
+                          [dataSource]="itemList"
+                          (notifySelectedItem)='selectItem($event)'
+                          (clearErrorStr)="clearErrorStr()">
+        </app-autocomplete>
+    </div>
+</div>
+
+<div class="form-group row col-xs-offset-2">
+    <button class="btn btn-default btn-tag" *ngFor="let tag of selectedItems; let i = index" type="button" (click)="deselectItem(i)">
+        {{tag}} <span class="badge">X</span>
+    </button>
+</div>

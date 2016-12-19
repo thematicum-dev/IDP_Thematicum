@@ -21,6 +21,8 @@ import {ThemeDetailsComponent} from "./theme_details/theme-details.component";
 import {ErrorService} from "./error-handling/error.service";
 import {ThemeService} from "./theme_creation/theme.service";
 import {StockAllocationComponent} from "./stock_allocation/stock-allocation.component";
+import {AutoCompleteContainerComponent} from "./autocomplete/autocomplete-container.component";
+import {AutoCompleteTagsComponent} from "./autocomplete/autocomplete-tags.component";
 
 @NgModule({
     declarations: [
@@ -36,7 +38,9 @@ import {StockAllocationComponent} from "./stock_allocation/stock-allocation.comp
         AutoCompleteComponent,
         ThemeCreationComponent,
         ThemeDetailsComponent,
-        StockAllocationComponent
+        StockAllocationComponent,
+        AutoCompleteContainerComponent,
+        AutoCompleteTagsComponent
     ],
     imports: [BrowserModule, routing, FormsModule, HttpModule],
     providers: [ AuthService, ErrorService, ThemeService ],

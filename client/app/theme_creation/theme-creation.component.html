@@ -20,26 +20,29 @@
             </div>
         </div>
 
-        <div class="form-group row">
-            <label class="col-xs-2 col-form-label">Tags</label>
-            <div class="col-xs-10">
-                <p *ngIf="error" style="color:red">{{error}}</p>
-                <app-autocomplete [placeholderTerm]="tagsPlaceholder"
-                                  [allowCustomValues]="allowCustomValues"
-                                  [allowEnterKey]="allowEnterKey"
-                                  [allowDirectClick]="allowDirectClick"
-                                  [dataSource]="tagList"
-                                  (notifySelectedItem)='onNotifySelectedItem($event)'
-                                  (clearErrorStr)="onClearErrorStr()">
-                </app-autocomplete>
-            </div>
-        </div>
+        <!-- TAGS -->
+        <!--<div class="form-group row">-->
+            <!--<label class="col-xs-2 col-form-label">Tags</label>-->
+            <!--<div class="col-xs-10">-->
+                <!--<p *ngIf="error" style="color:red">{{error}}</p>-->
+                <!--<app-autocomplete [placeholderTerm]="tagsPlaceholder"-->
+                                  <!--[allowCustomValues]="allowCustomValues"-->
+                                  <!--[allowEnterKey]="allowEnterKey"-->
+                                  <!--[allowDirectClick]="allowDirectClick"-->
+                                  <!--[dataSource]="tagList"-->
+                                  <!--(notifySelectedItem)='onNotifySelectedItem($event)'-->
+                                  <!--(clearErrorStr)="onClearErrorStr()">-->
+                <!--</app-autocomplete>-->
+            <!--</div>-->
+        <!--</div>-->
 
-        <div class="form-group row col-xs-offset-2">
-            <button class="btn btn-default btn-tag" *ngFor="let tag of selectedTags; let i = index" type="button" (click)="onTagDeselect(i)">
-                {{tag}} <span class="badge">X</span>
-            </button>
-        </div>
+        <!--<div class="form-group row col-xs-offset-2">-->
+            <!--<button class="btn btn-default btn-tag" *ngFor="let tag of selectedTags; let i = index" type="button" (click)="onTagDeselect(i)">-->
+                <!--{{tag}} <span class="badge">X</span>-->
+            <!--</button>-->
+        <!--</div>-->
+
+        <app-autocomplete-tags></app-autocomplete-tags>
 
         <div class="form-group row">
             <label class="col-xs-2 col-form-label" for="description">Description</label>
