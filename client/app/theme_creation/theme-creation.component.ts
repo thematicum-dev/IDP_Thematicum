@@ -50,7 +50,6 @@ export class ThemeCreationComponent {
                 },
                 error =>  {
                     console.log(error)
-                    this.error = error;
                 }
             );
     }

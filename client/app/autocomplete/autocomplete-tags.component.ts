@@ -1,15 +1,18 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, Injector, Inject} from '@angular/core';
 import {AutoCompleteContainerComponent} from "./autocomplete-container.component";
 import {AutocompleteItemSelectionInterface} from "./autocomplete-item-selection-interface";
 import {AutocompleteItem} from "./autocomplete-item";
 import {ThemeTagsService} from "../theme_creation/theme-tags.service";
+import {AutocompleteDatasourceInterface} from "./autocomplete-datasource-interface";
 
 @Component({
     selector: 'app-autocomplete-tags',
     templateUrl: 'autocomplete-tags.component.html',
-    providers: [ThemeTagsService]
+    providers: [
+        ThemeTagsService
+    ]
 })
-export class AutoCompleteTagsComponent extends AutoCompleteContainerComponent implements OnInit, AutocompleteItemSelectionInterface {
+export class AutoCompleteTagsComponent extends AutoCompleteContainerComponent implements OnInit {
     autocompletePlaceholder = 'Keyword';
     allowCustomValues: boolean = true;
     allowEnterKey: boolean = true;
@@ -18,21 +21,20 @@ export class AutoCompleteTagsComponent extends AutoCompleteContainerComponent im
     itemList: AutocompleteItem[] = []; //data source (all items)
     selectedItems: any[] = []; //selected items
 
+    //TODO: DI in inheritance
+    constructor(private autocompleteService: ThemeTagsService) {}
+
     ngOnInit(): void {
-        console.log('ngInit in tags component')
-        this.themeTagService.getAutocompleteList().subscribe(data => {
-                for (let tag of data) {
-                    this.itemList.push(new AutocompleteItem(tag));
-                }
+        this.autocompleteService.getAutocompleteList().subscribe(data => {
+                this.initializeAutocompleteData(data);
             },
             error => {
                 console.log(error)
             });
     }
 
-    constructor(private themeTagService: ThemeTagsService) {}
-
     selectItem(item: any) {
+        //TODO: further refactor or extract this method
         let existingItem = this.selectedItems.find(el => {
             return el == item.name
         });
@@ -41,13 +43,13 @@ export class AutoCompleteTagsComponent extends AutoCompleteContainerComponent im
         if(!existingItem) {
             this.selectedItems.push(item.name);
         } else {
-            this.error = 'This item has already been selected. Please choose another one';
+            this.error = this.duplicateChosenErrorStr;
         }
     }
 
-    deselectItem(index: number) {
-        if (index >= 0 && index < this.selectedItems.length) {
-            this.selectedItems.splice(index, 1);
+    initializeAutocompleteData(data: any) {
+        for (let tag of data) {
+            this.itemList.push(new AutocompleteItem(tag));
         }
     }
 }

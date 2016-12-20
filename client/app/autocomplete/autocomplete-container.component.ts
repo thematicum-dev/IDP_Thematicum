@@ -1,11 +1,7 @@
-import { Component } from '@angular/core';
 import {AutocompleteItem} from "./autocomplete-item";
+import {AutocompleteItemSelectionInterface} from "./autocomplete-item-selection-interface";
 
-@Component({
-    selector: 'app-autocomplete-container',
-    template: '<p>Autocomplete Container</p>'
-})
-export class AutoCompleteContainerComponent {
+export class AutoCompleteContainerComponent implements AutocompleteItemSelectionInterface {
     autocompletePlaceholder = '';
     allowCustomValues: boolean;
     allowEnterKey: boolean;
@@ -13,8 +9,19 @@ export class AutoCompleteContainerComponent {
     error: string = '';
     itemList: AutocompleteItem[] = []; //data source (all items)
     selectedItems: any[] = []; //selected items
+    duplicateChosenErrorStr = 'This item has already been selected. Please choose another one';
 
     clearErrorStr() {
         this.error = '';
     }
+
+    selectItem(item: any) {}
+
+    deselectItem(index: number) {
+        if (index >= 0 && index < this.selectedItems.length) {
+            this.selectedItems.splice(index, 1);
+        }
+    }
+
+    initializeAutocompleteData(data: any) {}
 }

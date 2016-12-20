@@ -53,7 +53,7 @@ export class AutoCompleteComponent implements OnChanges {
     filter(event: any) {
         console.log('filter')
         //set 'selected' to false for all items in the filteredList
-        this.currentlySelectedItem = null;
+        this.clearCurrentlySelectedItem();
         this.autocompleteList.deselectAll();
         this.clearErrorStr.emit(); //clear error string
 
@@ -118,20 +118,6 @@ export class AutoCompleteComponent implements OnChanges {
 
         this.cleanup(!this.allowDirectClick)
     }
-
-    /*
-     addSelectedItem(item: any) {
-     if (this.allowDirectClick) {
-     //emit event
-     this.notifySelectedItem.emit(item);
-     } else {
-     this.currentlySelectedItem = item;
-     this.autocompleteList.query = this.currentlySelectedItem.name;
-     }
-
-     this.cleanup(!this.allowDirectClick)
-     }
-     */
 
     handleKeyDown(event: any) {
         // Prevent default actions of arrow keys

@@ -40,7 +40,6 @@ import {AutoCompleteStockAllocationComponent} from "./autocomplete/autocomplete-
         ThemeCreationComponent,
         ThemeDetailsComponent,
         StockAllocationComponent,
-        AutoCompleteContainerComponent,
         AutoCompleteTagsComponent,
         AutoCompleteStockAllocationComponent
     ],
