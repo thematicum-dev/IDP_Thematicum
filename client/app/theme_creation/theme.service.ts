@@ -17,6 +17,7 @@ export class ThemeService {
             : '';
         const headers = new Headers({'Content-Type': 'application/json'});
 
+        //TODO: don't stringify static data (e.g. theme property values)
         console.log(body);
         return this.http.post('http://localhost:3000/api/themes' + token, body, {headers: headers})
             .map((response: Response) => response.json())

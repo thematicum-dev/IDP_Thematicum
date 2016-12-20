@@ -5,6 +5,7 @@ var Theme = require('../models/theme');
 var UserThemeInput = require('../models/userThemeInput');
 var UserThemeStockAllocation = require('../models/userThemeStockAllocation');
 var User = require('../models/user');
+var Stock = require('../models/stock');
 var constants = require('../models/constants');
 var _ = require('underscore');
 var userInputAggregation = require('../utilities/userInputAggregation');
@@ -279,34 +280,65 @@ router.post('/', function (req, res, next) {
                     });
                 }
 
+
                 //TODO: find stock by id
+                getStockAllocation(req.body.stockAllocation, function(allocatedStocks) {
+                    console.log('Getting stock allocation:')
+                    console.log(allocatedStocks)
 
-                console.log(req.body.stockAllocation)
-                return;
+                    var userStockAllocation = new UserThemeStockAllocation({
+                        user: user,
+                        theme: result,
+                        stockAllocation: allocatedStocks
+                    });
 
-                var stockAllocation = new UserThemeStockAllocation({
-                    user: user,
-                    theme: result,
-                    stockAllocation: req.body.stockAllocation
-                });
+                    userStockAllocation.save(function(err, userStockAllocation) {
+                        if (err) {
+                            return res.status(500).json({
+                                title: 'An error occurred',
+                                error: err
+                            });
+                        }
 
-                stockAllocation.save(function(err, stockAllocation) {
-                    if (err) {
-                        return res.status(500).json({
-                            title: 'An error occurred',
-                            error: err
+                        return res.status(201).json({
+                            message: 'Theme created',
+                            obj: [ result, userInput, userStockAllocation ]
                         });
-                    }
-
-                    return res.status(201).json({
-                        message: 'Theme created',
-                        obj: [ result, userInput, stockAllocation ]
                     });
                 });
             });
         });
     });
 });
+
+//pass as parameter: req.body.stockAllocation
+function getStockAllocation(stockAllocationData, callback) {
+    var allocatedStocks = [];
+    for (var i=0; i<stockAllocationData.length; i++) {
+        var stockId = stockAllocationData[i].stockId;
+        var exposure = stockAllocationData[i].exposure;
+
+        findStockById(stockId, exposure, i, function(iter, result) {
+            allocatedStocks.push(result);
+
+            if (iter == stockAllocationData.length - 1) {
+                callback(allocatedStocks);
+            }
+        })
+    }
+}
+
+function findStockById(stockId, exposure, iter, callback) {
+    Stock.findById(stockId, function(err, result) {
+        if (err) {
+            console.log(err)
+            return
+        }
+
+        var stockAlloc = {stock: result, exposure: exposure};
+        callback(iter, stockAlloc)
+    })
+}
 
 
 module.exports = router;

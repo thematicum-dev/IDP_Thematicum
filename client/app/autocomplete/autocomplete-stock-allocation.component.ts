@@ -95,6 +95,7 @@ export class AutoCompleteStockAllocationComponent extends AutoCompleteContainerC
             //TODO: can add a StockAllocationModel instead, or another object, having fewer properties
             this.selectedItems.push(new StockAllocation(this.currentlySelectedStock, index));
             this.currentlySelectedStock = null;
+            //TODO: refactor this call to child component
             stocksAutocomplete.clearCurrentlySelectedItem();
         }
     }

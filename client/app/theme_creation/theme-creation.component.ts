@@ -14,6 +14,7 @@ import {ThemeProperties} from "../models/themeProperties";
 import {StockAllocation} from "../models/stockAllocation";
 import {StockAllocationModel} from "../models/stockAllocationModel";
 import {AutoCompleteContainerComponent} from "../autocomplete/autocomplete-container.component";
+import {Stock} from "../models/stock";
 
 @Component({
     selector: 'app-theme-create',
@@ -39,7 +40,12 @@ export class ThemeCreationComponent {
         console.log(themeTags.selectedItems)
         console.log(themeStockAllocation.selectedItems)
 
-        return;
+        //update model with data from child components
+        this.themeCreation.theme.tags = themeTags.selectedItems;
+        this.themeCreation.stockAllocation = themeStockAllocation.selectedItems
+            .map(function(item: StockAllocation) {
+                return new StockAllocationModel(item.stock.id, item.exposure);
+            });
         this.themeCreation.themeProperties.setCheckedCategories();
 
         this.themeService.createTheme(this.themeCreation)
