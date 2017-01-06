@@ -9,7 +9,7 @@ var mongoose = require('mongoose');
 var appRoutes = require('./routes/app');
 var authRoutes = require('./routes/auth');
 var accessCodeRoutes = require('./routes/accessCodes');
-var investmentThemesRoutes = require('./routes/investmentThemes');
+var testRoute = require('./routes/test');
 var themeRoutes = require('./routes/themes');
 var userInputRoutes = require('./routes/userThemeInputs');
 var stockRoutes = require('./routes/stocks');
@@ -41,6 +41,7 @@ app.use('/api/accesscodes', accessCodeRoutes);
 app.use('/api/themes', themeRoutes);
 app.use('/api/userinputs', userInputRoutes);
 app.use('/api/stocks', stockRoutes);
+app.use('/api/test', testRoute);
 app.use('/', appRoutes);
 
 // catch 404 and forward to error handler

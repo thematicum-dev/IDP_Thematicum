@@ -17,5 +17,5 @@ var schema = new Schema({
 });
 
 //validUntil: "2017-04-30T22:00:00.000Z"
-schema.plugin(mongooseUniqueValidator);
+schema.plugin(mongooseUniqueValidator, { message: 'The {PATH} {VALUE} already exists' });
 module.exports = mongoose.model('RegistrationAccessCode', schema);
