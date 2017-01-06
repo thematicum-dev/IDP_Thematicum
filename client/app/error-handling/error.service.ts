@@ -6,7 +6,16 @@ export class ErrorService {
 
     handleError(error: any) {
         //TODO: error format consistency
-        const errorData = new Error(error.title, error.error.message);
-        this.errorOccurred.emit(errorData);
+        if (error.error.name === "ValidationError" && error.error.errors) {
+            var validationErrorMessages = [];
+            Object.entries(error.error.errors).forEach(
+                ([key, value]) => {
+                    validationErrorMessages.push(value.message)
+                }
+            );
+            this.errorOccurred.emit(new Error(validationErrorMessages));
+        } else {
+            this.errorOccurred.emit(new Error([error.error .message || error.title]));
+        }
     }
 }

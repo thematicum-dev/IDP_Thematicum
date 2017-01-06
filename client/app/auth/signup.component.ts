@@ -21,7 +21,6 @@ export class SignupComponent {
 
     selectedPersonalRole = this.personalRoles[0]; //default value
     registrationAccessCode: String = "";
-    error: Error;
 
     constructor(private authService: AuthService, private router: Router) {}
 
@@ -40,7 +39,6 @@ export class SignupComponent {
                 },
                 error =>  {
                     console.log(error)
-                    this.error = error;
                 }
             );
     }

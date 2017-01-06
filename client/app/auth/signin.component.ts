@@ -12,7 +12,6 @@ import {ErrorComponent} from "../error-handling/error.component";
 })
 export class SigninComponent {
     user: User;
-    error: Error;
 
     constructor(private authService: AuthService, private router: Router) {}
 
@@ -33,7 +32,6 @@ export class SigninComponent {
                 },
                 error => {
                     console.log(error)
-                    this.error = error;
                 }
             );
     }

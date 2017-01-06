@@ -1,1 +1,5 @@
-<div class="error-message" *ngIf="isDisplayed">{{error | json}}</div>
+<div class="error-message" *ngIf="error">
+    <p *ngFor="let errorMsg of error.errorMessages">
+        {{errorMsg}}
+    </p>
+</div>
