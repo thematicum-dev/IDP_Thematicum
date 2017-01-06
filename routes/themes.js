@@ -47,10 +47,15 @@ router.use('/', function(req, res, next) {
     jwt.verify(req.query.token, 'secret', function(err, decoded) {
         if(err) {
             //invalid token
-            return res.status(401).json({
+            return next({
                 title: 'Not Authenticated',
-                error: err
+                error: err,
+                status: 401
             });
+            // return res.status(401).json({
+            //     title: 'Not Authenticated',
+            //     error: err
+            // });
         }
 
         next();
@@ -123,14 +128,20 @@ router.get('/:id', function(req, res, next) {
             .populate('creator')
             .exec(function (err, theme) {
                 if (err) {
-                    return res.status(500).json({
-                        title: 'An error occurred at finding theme by id',
-                        error: err
-                    });
+                    // return res.status(500).json({
+                    //     title: 'An error occurred at finding theme by id',
+                    //     error: err
+                    // });
+                    return next(err);
                 }
 
                 if (!theme) {
-                    return res.status(500).json({
+                    // return res.status(500).json({
+                    //     title: 'No investment theme found',
+                    //     error: {message: 'Could not find any investment theme for the given id'}
+                    // });
+
+                    return next({
                         title: 'No investment theme found',
                         error: {message: 'Could not find any investment theme for the given id'}
                     });

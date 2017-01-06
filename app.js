@@ -48,5 +48,10 @@ app.use(function (req, res, next) {
     return res.render('index');
 });
 
+//error handling
+app.use(function (err, req, res, next) {
+    console.log('Error handling middleware')
+    res.status(err.status || 500).json(err);
+})
 
 module.exports = app;
