@@ -66,7 +66,7 @@ router.post('/', function (req, res, next) {
 router.post('/signin', function(req, res, next) {
     User.findOne({email: req.body.email}, function(err, user) {
         if (err) {
-            return res.status(500).json({
+            return next({
                 title: 'An error occurred',
                 error: err
             });
@@ -75,17 +75,19 @@ router.post('/signin', function(req, res, next) {
         if(!user) {
             //unauthorized status code
             //use generic, not specific, error message
-            return res.status(401).json({
+            return next({
                 title: 'Login failed',
-                error: { message: 'Invalid login credentials' }
+                error: { message: 'Invalid login credentials' },
+                status: 401
             });
         }
 
         //check password
         if (!bcrypt.compareSync(req.body.password, user.password)) {
-            return res.status(401).json({
+            return next({
                 title: 'Login failed',
-                error: { message: 'Invalid login credentials' }
+                error: { message: 'Invalid login credentials' },
+                status: 401
             });
         }
 

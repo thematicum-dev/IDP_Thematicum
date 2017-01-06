@@ -7,14 +7,14 @@ router.get('/', function(req, res, next) {
     timeInMillis = new Date().getTime();
     RegistrationAccessCode.find({validFrom: {'$lte': timeInMillis}, validUntil: {'$gte': timeInMillis}}, function(err, results) {
         if (err) {
-            return res.status(500).json({
+            return next({
                 title: 'An error occurred',
                 error: err
             });
         }
 
         if (!results) {
-            return res.status(500).json({
+            return next({
                 title: 'No access codes',
                 error: { message: 'Could not find valid access codes' }
             });

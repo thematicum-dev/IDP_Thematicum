@@ -15,14 +15,14 @@ router.get('/tags', function(req, res, next) {
     //retrieve only tags from themes
     Theme.find({tags: { $ne: null }}, {'tags': 1, '_id': 0}, function(err, results) {
         if (err) {
-            return res.status(500).json({
+            return next({
                 title: 'An error occurred',
                 error: err
             });
         }
 
         if (!results) {
-            return res.status(500).json({
+            return next({
                 title: 'No tags found',
                 error: {message: 'Could not find any tags'}
             });
@@ -52,10 +52,6 @@ router.use('/', function(req, res, next) {
                 error: err,
                 status: 401
             });
-            // return res.status(401).json({
-            //     title: 'Not Authenticated',
-            //     error: err
-            // });
         }
 
         next();
@@ -66,7 +62,7 @@ router.get('/userinputs/:id', function(req, res, next) {
     var decoded = jwt.decode(req.query.token);
     User.findById(decoded.user._id, function(err, user) {
         if (err) {
-            return res.status(500).json({
+            return next({
                 title: 'An error occurred',
                 error: err
             });
@@ -74,7 +70,7 @@ router.get('/userinputs/:id', function(req, res, next) {
 
         Theme.findById(req.params.id, function(err, theme) {
             if (err) {
-                return res.status(500).json({
+                return next({
                     title: 'An error occurred',
                     error: err
                 });
@@ -90,14 +86,14 @@ router.get('/userinputs/:id', function(req, res, next) {
                 .populate('user', '_id', { _id: user._id}, null)
                 .exec(function(err, inputs) {
                     if (err) {
-                        return res.status(500).json({
+                        return next({
                             title: 'An error occurred',
                             error: err
                         });
                     }
 
                     if(!inputs) {
-                        return res.status(500).json({
+                        return next({
                             message: 'No user inputs were found'
                         });
                     }
@@ -128,19 +124,13 @@ router.get('/:id', function(req, res, next) {
             .populate('creator')
             .exec(function (err, theme) {
                 if (err) {
-                    // return res.status(500).json({
-                    //     title: 'An error occurred at finding theme by id',
-                    //     error: err
-                    // });
-                    return next(err);
+                    return next({
+                        title: 'An error occurred at finding theme by id',
+                        error: err
+                    });
                 }
 
                 if (!theme) {
-                    // return res.status(500).json({
-                    //     title: 'No investment theme found',
-                    //     error: {message: 'Could not find any investment theme for the given id'}
-                    // });
-
                     return next({
                         title: 'No investment theme found',
                         error: {message: 'Could not find any investment theme for the given id'}
@@ -150,14 +140,14 @@ router.get('/:id', function(req, res, next) {
                 //get theme properties
                 UserThemeInput.find({theme: theme._id}, function(err, results) {
                     if (err) {
-                        return res.status(500).json({
+                        return next({
                             title: 'An error occurred',
                             error: err
                         });
                     }
 
                     if (!results) {
-                        return res.status(500).json({
+                        return next({
                             title: 'No theme properties found',
                             error: {message: 'Could not find any user input for the given theme'}
                         });
@@ -196,14 +186,14 @@ router.get('/', function(req, res, nex) {
             .sort({score: {$meta: "textScore"}})
             .exec(function (err, results) {
                 if (err) {
-                    return res.status(500).json({
+                    return next({
                         title: 'An error occurred at theme text search',
                         error: err
                     });
                 }
 
                 if (!results) {
-                    return res.status(500).json({
+                    return next({
                         title: 'No investment themes found',
                         error: {message: 'Could not find any investment theme'}
                     });
@@ -217,14 +207,14 @@ router.get('/', function(req, res, nex) {
     } else {
         Theme.find(function (err, allThemes) {
             if (err) {
-                return res.status(500).json({
+                return next({
                     title: 'An error occurred at getting all themes',
                     error: err
                 });
             }
 
             if (!allThemes) {
-                return res.status(500).json({
+                return next({
                     title: 'No investment themes found',
                     error: {message: 'Could not find any investment theme'}
                 });
@@ -243,14 +233,14 @@ router.post('/', function (req, res, next) {
     var decoded = jwt.decode(req.query.token);
     User.findById(decoded.user._id, function(err, user) {
         if (err) {
-            return res.status(500).json({
+            return next({
                 title: 'An error occurred',
                 error: err
             });
         }
 
         if (!user) {
-            return res.status(500).json({
+            return next({
                 title: 'No user found',
                 error: { message: 'No user for the given token was found'}
             });
@@ -266,7 +256,7 @@ router.post('/', function (req, res, next) {
 
         theme.save(function(err, result) {
             if (err) {
-                return res.status(500).json({
+                return next({
                     title: 'An error occurred at saving theme',
                     error: err
                 });
@@ -285,7 +275,7 @@ router.post('/', function (req, res, next) {
 
             userInput.save(function(err, userInput) {
                 if (err) {
-                    return res.status(500).json({
+                    return next({
                         title: 'An error occurred',
                         error: err
                     });
@@ -305,7 +295,7 @@ router.post('/', function (req, res, next) {
 
                     userStockAllocation.save(function(err, userStockAllocation) {
                         if (err) {
-                            return res.status(500).json({
+                            return next({
                                 title: 'An error occurred',
                                 error: err
                             });

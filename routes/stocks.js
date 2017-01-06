@@ -5,14 +5,14 @@ var Stock = require('../models/stock');
 router.get('/', function(req, res, next) {
     Stock.find({}, function(err, results) {
         if (err) {
-            return res.status(500).json({
+            return next({
                 title: 'An error occurred',
                 error: err
             });
         }
 
         if (!results) {
-            return res.status(500).json({
+            return next({
                 title: 'No stocks found',
                 error: { message: 'Could not find any stocks' }
             });

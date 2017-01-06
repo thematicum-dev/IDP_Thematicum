@@ -12,23 +12,24 @@ router.use('/', function(req, res, next) {
     jwt.verify(req.query.token, 'secret', function(err, decoded) {
         if(err) {
             //invalid token
-            return res.status(401).json({
+            return next({
                 title: 'Not Authenticated',
-                error: err
+                error: err,
+                status: 401
             });
         }
 
         var decoded = jwt.decode(req.query.token);
         User.findById(decoded.user._id, function(err, user) {
             if (err) {
-                return res.status(500).json({
+                return next({
                     title: 'An error occurred',
                     error: err
                 });
             }
 
             if (!user) {
-                return res.status(500).json({
+                return next({
                     title: 'No user found',
                     error: {message: 'No user was found'}
                 });
@@ -53,23 +54,24 @@ router.put('/:id', function(req, res, next) {
         .populate('user', '_id', { _id: authenticatedUser._id}, null)
         .exec(function(err, result) {
             if (err) {
-                return res.status(500).json({
+                return next({
                     title: 'An error occurred',
                     error: err
                 });
             }
 
             if(!result) {
-                return res.status(500).json({
+                return next({
                     title: 'No user input found',
                     error: { message: 'No user input was found for this theme'}
                 });
             }
 
             if (result.user == null) {
-                return res.status(401).json({
+                return next({
                     title: 'Not authorized',
-                    error: { message: 'Not authorized to modify this resource'}
+                    error: { message: 'Not authorized to modify this resource'},
+                    status: 401
                 });
             }
 
@@ -83,7 +85,7 @@ router.put('/:id', function(req, res, next) {
 
             result.save(function(err, userInput) {
                 if (err) {
-                    return res.status(500).json({
+                    return next({
                         title: 'An error occurred',
                         error: err
                     });
@@ -104,14 +106,14 @@ router.post('/', function (req, res, next) {
     //find theme
     Theme.findById(req.query.themeId, function(err, theme) {
         if (err) {
-            return res.status(500).json({
+            return next({
                 title: 'An error occurred',
                 error: err
             });
         }
 
         if (!theme) {
-            return res.status(500).json({
+            return next({
                 title: 'No theme found',
                 error: {message: "No theme found"}
             });
@@ -131,7 +133,7 @@ router.post('/', function (req, res, next) {
 
         userInput.save(function(err, userInput) {
             if (err) {
-                return res.status(500).json({
+                return next({
                     title: 'An error occurred',
                     error: err
                 });
