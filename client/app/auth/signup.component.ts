@@ -38,7 +38,7 @@ export class SignupComponent {
                     this.router.navigateByUrl('/signin');
                 },
                 error =>  {
-                    console.log(error)
+                    //console.log(error)
                 }
             );
     }

@@ -13,6 +13,24 @@ router.get('/', function(req, res, next) {
     })
 });
 
+router.get('/isAuthenticated', function(req, res, next) {
+    jwt.verify(req.query.token, 'secret', function (err, decoded) {
+        if (err) {
+            //invalid token
+            return next({
+                title: 'Not Authenticated',
+                error: err,
+                status: 401
+            });
+        }
+
+        //TODO: check for user?
+        return res.status(200).json({
+            message: 'User is authenticated'
+        });
+    });
+});
+
 //create a user
 router.post('/', function (req, res, next) {
     //check accessCode validity

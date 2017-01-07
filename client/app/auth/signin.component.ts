@@ -28,10 +28,10 @@ export class SigninComponent {
                     localStorage.setItem('token', data.token);
                     localStorage.setItem('userId', data.userId);
                     localStorage.setItem('username', data.username);
-                    this.router.navigateByUrl('/');
+                    //this.router.navigateByUrl('/');
                 },
                 error => {
-                    console.log(error)
+                    //console.log(error)
                 }
             );
     }

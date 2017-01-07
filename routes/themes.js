@@ -68,11 +68,20 @@ router.get('/userinputs/:id', function(req, res, next) {
             });
         }
 
+        //TODO: if (!user)
+
         Theme.findById(req.params.id, function(err, theme) {
             if (err) {
                 return next({
                     title: 'An error occurred',
                     error: err
+                });
+            }
+
+            if (!theme) {
+                return next({
+                    title: 'No theme found',
+                    error: {message: 'Could not find any investment theme for the given id'}
                 });
             }
 

@@ -1,7 +1,6 @@
-<div>
-    <h2>Sign in</h2>
+<h1>Sign in</h1>
 
-    <form (ngSubmit)="onSubmit(form)" #form="ngForm">
+<form (ngSubmit)="onSubmit(form)" #form="ngForm">
         <div class="form-group row">
             <label class="col-xs-2 col-form-label" for="email">Email</label>
             <div class="col-xs-10">
@@ -14,7 +13,7 @@
                         #email="ngModel"
                         required
                         pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$">
-                <div [hidden]="email.valid || email.pristine" class="alert alert-danger">Email is required and with valid syntax</div>
+                <div [hidden]="email.valid || email.pristine" class="data-validation-message">Valid email is required</div>
             </div>
         </div>
 
@@ -29,12 +28,13 @@
                         name="password"
                         #password="ngModel"
                         required>
-                <div [hidden]="password.valid || password.pristine" class="alert alert-danger">Password is required and with 8 characters minimum</div>
+                <div [hidden]="password.valid || password.pristine" class="data-validation-message">Password is required</div>
             </div>
         </div>
 
-        <button class="btn btn-primary" type="submit" [disabled]="!form.form.valid">Sign in</button>
+        <div class="text-right">
+            <button class="btn btn-primary" type="submit" [disabled]="!form.form.valid">Sign in</button>
+        </div>
 
         <app-error></app-error>
     </form>
-</div>

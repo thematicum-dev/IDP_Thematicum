@@ -42,9 +42,8 @@ app.use('/api/themes', themeRoutes);
 app.use('/api/userinputs', userInputRoutes);
 app.use('/api/stocks', stockRoutes);
 app.use('/api/test', testRoute);
-app.use('/', appRoutes);
+//app.use('/', appRoutes);
 
-// catch 404 and forward to error handler
 app.use(function (req, res, next) {
     return res.render('index');
 });

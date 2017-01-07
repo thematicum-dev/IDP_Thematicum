@@ -9,6 +9,8 @@ import {ErrorService} from "../error-handling/error.service";
 
 @Injectable()
 export class AuthService {
+    redirectUrl: string;
+
     constructor(private http: Http, private router: Router, private errorService: ErrorService) {}
 
     signup(signupModel: SignupModel) {
@@ -29,7 +31,10 @@ export class AuthService {
         const headers = new Headers({'Content-Type': 'application/json'});
 
         return this.http.post('http://localhost:3000/auth/signin', body, {headers: headers})
-            .map((response: Response) => response.json())
+            .map((response: Response) => {
+                this.redirectToUrlAfterLogin();
+                return response.json()
+            })
             .catch((error: Response) =>  {
                 this.errorService.handleError(error.json());
                 return Observable.throw(error.json())
@@ -41,11 +46,41 @@ export class AuthService {
         this.router.navigate(['/']);
     }
 
-    isLoggedIn() {
-        return localStorage.getItem('token') !== null;
+    isLoggedIn(): Observable<boolean> {
+        var token = this.getStoredToken();
+        if (token == null) {
+            console.log('Null token')
+            return Observable.of(false);
+        }
+
+        const token = '?token=' + token;
+
+        return this.http.get('http://localhost:3000/auth/isAuthenticated' + token)
+            .map((response: Response) => {
+                    console.log('Response for authentication: ', status==200)
+                    console.log(response)
+                    return Observable.of(response.status == 200);
+                }
+            )
+            .catch((error: Response) =>  {
+                console.log('Error in authentication')
+                console.log(error)
+                return Observable.of(false);
+            });
     }
 
     getLoggedInUser() {
         return localStorage.getItem('username');
+    }
+
+    getStoredToken() {
+        return localStorage.getItem('token');
+    }
+
+    redirectToUrlAfterLogin() {
+        if (this.redirectUrl) {
+            console.log('am i even inside this')
+            this.router.navigate([this.redirectUrl]);
+        }
     }
 }

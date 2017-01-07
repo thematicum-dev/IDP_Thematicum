@@ -3,10 +3,11 @@ import {Http, Headers, Response} from "@angular/http";
 import 'rxjs/Rx';
 import {Observable} from "rxjs";
 import {Theme} from "../models/theme";
+import {ErrorService} from "../error-handling/error.service";
 
 @Injectable()
 export class ThemeSearchService {
-    constructor(private http: Http) { }
+    constructor(private http: Http, private errorService: ErrorService) { }
 
     searchThemes(searchTerm: string) {
         const token = localStorage.getItem('token')
@@ -32,7 +33,10 @@ export class ThemeSearchService {
             .map((response: Response) => {
                 return response.json().obj;
             })
-            .catch((error: Response) =>  Observable.throw(error.json()));
+            .catch((error: Response) =>  {
+                this.errorService.handleError(error.json());
+                Observable.throw(error.json())
+            });
     }
 
     getUserInputsPerTheme(themeId: string) {

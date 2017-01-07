@@ -24,6 +24,8 @@ import {StockAllocationComponent} from "./stock_allocation/stock-allocation.comp
 import {AutoCompleteContainerComponent} from "./autocomplete/autocomplete-container.component";
 import {AutoCompleteTagsComponent} from "./autocomplete/autocomplete-tags.component";
 import {AutoCompleteStockAllocationComponent} from "./autocomplete/autocomplete-stock-allocation.component";
+import {NotFoundComponent} from "./static_pages/not-found.component";
+import {AuthGuard} from "./auth/auth-guard.service";
 
 @NgModule({
     declarations: [
@@ -41,10 +43,11 @@ import {AutoCompleteStockAllocationComponent} from "./autocomplete/autocomplete-
         ThemeDetailsComponent,
         StockAllocationComponent,
         AutoCompleteTagsComponent,
-        AutoCompleteStockAllocationComponent
+        AutoCompleteStockAllocationComponent,
+        NotFoundComponent
     ],
     imports: [BrowserModule, routing, FormsModule, HttpModule],
-    providers: [ AuthService, ErrorService, ThemeService ],
+    providers: [ AuthService, ErrorService, ThemeService, AuthGuard ],
     bootstrap: [AppComponent]
 })
 export class AppModule {
