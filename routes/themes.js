@@ -10,35 +10,18 @@ var constants = require('../models/constants');
 var _ = require('underscore');
 var userInputAggregation = require('../utilities/userInputAggregation');
 var ObjectId = require("mongodb").ObjectID;
+var repository = require("../data_access/dataRepository");
 
 router.get('/tags', function(req, res, next) {
-    //retrieve only tags from themes
-    Theme.find({tags: { $ne: null }}, {'tags': 1, '_id': 0}, function(err, results) {
-        if (err) {
-            return next({
-                title: 'An error occurred',
-                error: err
-            });
+    repository.getAllThemeTags(Theme, function(err, results) {
+        if(err) {
+            next(err);
         }
 
-        if (!results) {
-            return next({
-                title: 'No tags found',
-                error: {message: 'Could not find any tags'}
-            });
-        } else {
-            var tags = new Set();
-            _.each(results, function(themeTags) {
-                _.each(themeTags.tags, function(tag) {
-                    tags.add(tag)
-                });
-            });
-
-            return res.status(200).json({
-                message: 'Theme tags retrieved',
-                obj: Array.from(tags)
-            });
-        }
+        return res.status(200).json({
+            message: 'Theme tags retrieved',
+            obj: Array.from(results)
+        });
     });
 });
 
@@ -129,110 +112,67 @@ router.get('/userinputs/:id', function(req, res, next) {
 });
 
 router.get('/:id', function(req, res, next) {
-    if(req.params.id) {
-        Theme
-            .findById(req.params.id)
-            .populate('creator')
-            .exec(function (err, theme) {
-                if (err) {
-                    return next({
-                        title: 'An error occurred at finding theme by id',
-                        error: err
-                    });
-                }
+    repository.getThemeById(Theme, req.params.id, function(err, theme) {
+        if (err) {
+            next(err)
+        }
 
-                if (!theme) {
-                    return next({
-                        title: 'No investment theme found',
-                        error: {message: 'Could not find any investment theme for the given id'},
-                        status: 404
-                    });
-                }
-
-                //get theme properties
-                UserThemeInput.find({theme: theme._id}, function(err, results) {
-                    if (err) {
-                        return next({
-                            title: 'An error occurred',
-                            error: err
-                        });
-                    }
-
-                    if (!results) {
-                        return next({
-                            title: 'No theme properties found',
-                            error: {message: 'Could not find any user input for the given theme'},
-                            status: 404
-                        });
-                    }
-
-                    props = [{
-                        propertyName: 'timeHorizon',
-                        nrValuesRequired: 3
-                    }, {
-                        propertyName: 'maturity',
-                        nrValuesRequired: 5
-                    }, {
-                        propertyName: 'categories',
-                        nrValuesRequired: 6
-                    }];
-
-                    themeProperties = userInputAggregation.getThemePropertiesAggregation(results, props);
-                    console.log('Theme properties')
-                    console.log(themeProperties);
-
-                    return res.status(200).json({
-                        message: 'Theme properties retrieved',
-                        obj: { theme: theme, properties: themeProperties }
-                    });
-
-                });
-            });
-    }
-});
-
-router.get('/', function(req, res, nex) {
-    if(req.query.searchQuery) {
-        Theme.find(
-            {$text: {$search: req.query.searchQuery}},
-            {score: {$meta: 'textScore'}})
-            .sort({score: {$meta: "textScore"}})
-            .exec(function (err, results) {
-                if (err) {
-                    return next({
-                        title: 'An error occurred at theme text search',
-                        error: err
-                    });
-                }
-
-                if (!results) {
-                    return next({
-                        title: 'No investment themes found',
-                        error: {message: 'Could not find any investment theme'},
-                        status: 404
-                    });
-                }
-
-                return res.status(200).json({
-                    message: 'Investment themes retrieved',
-                    obj: results
-                });
-            });
-    } else {
-        Theme.find(function (err, allThemes) {
+        //get theme properties
+        UserThemeInput.find({theme: theme._id}, function(err, results) {
             if (err) {
                 return next({
-                    title: 'An error occurred at getting all themes',
+                    title: 'An error occurred',
                     error: err
                 });
             }
 
-            if (!allThemes) {
+            if (!results) {
                 return next({
-                    title: 'No investment themes found',
-                    error: {message: 'Could not find any investment theme'},
+                    title: 'No theme properties found',
+                    error: {message: 'Could not find any user input for the given theme'},
                     status: 404
                 });
+            }
+
+            props = [{
+                propertyName: 'timeHorizon',
+                nrValuesRequired: 3
+            }, {
+                propertyName: 'maturity',
+                nrValuesRequired: 5
+            }, {
+                propertyName: 'categories',
+                nrValuesRequired: 6
+            }];
+
+            themeProperties = userInputAggregation.getThemePropertiesAggregation(results, props);
+            console.log('Theme properties')
+            console.log(themeProperties);
+
+            return res.status(200).json({
+                message: 'Theme properties retrieved',
+                obj: { theme: theme, properties: themeProperties }
+            });
+
+        });
+    });
+});
+
+router.get('/', function(req, res, nex) {
+    if(req.query.searchQuery) {
+        repository.getThemeByTextSearch(Theme, req.query.searchQuery, function(err, results) {
+            if (err) {
+                next(err)
+            }
+            return res.status(200).json({
+                message: 'Investment themes retrieved',
+                obj: results
+            });
+        });
+    } else {
+        repository.getAll(Theme, function(err, allThemes) {
+            if(err) {
+                next(err)
             }
 
             return res.status(200).json({

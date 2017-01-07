@@ -23,7 +23,7 @@
                     <a routerLinkActive="active" [routerLink]="['/signin']" *ngIf="!isLoggedIn()">Sign In</a>
                 </li>
 
-                <li class="dropdown" *ngIf="isLoggedIn">
+                <li class="dropdown" *ngIf="isLoggedIn()">
                     <a class="dropdown-toggle" data-toggle="dropdown">{{getLoggedInUser()}}<b class="caret"></b></a>
                     <ul class="dropdown-menu">
                         <li>

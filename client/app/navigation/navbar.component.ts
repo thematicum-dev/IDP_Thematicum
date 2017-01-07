@@ -7,17 +7,17 @@ import {User} from "../models/user";
     templateUrl: 'navbar.component.html'
 })
 export class NavbarComponent implements OnInit {
-    //isLoggedIn: boolean;
+    loggedIn: boolean = false;
     constructor(private authService: AuthService) {}
 
     ngOnInit(): void {
         this.authService.isLoggedIn().subscribe((value: boolean) => {
-            //this.isLoggedIn = value;
+            this.loggedIn = value;
         })
     }
 
     isLoggedIn() {
-        return this.authService.isLoggedIn();
+        return this.authService.getStoredToken() != null;
     }
 
     onLogoutClick() {
