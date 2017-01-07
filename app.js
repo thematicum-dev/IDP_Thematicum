@@ -51,7 +51,7 @@ app.use(function (req, res, next) {
 //error handling
 app.use(function (err, req, res, next) {
     console.log('Error handling middleware')
-    res.status(err.status || 500).json(err);
+    return res.status(err.status || 500).json(err);
 })
 
 module.exports = app;

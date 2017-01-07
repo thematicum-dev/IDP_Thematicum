@@ -34,8 +34,9 @@ export class ThemeSearchService {
                 return response.json().obj;
             })
             .catch((error: Response) =>  {
-                this.errorService.handleError(error.json());
-                Observable.throw(error.json())
+                console.log('Is this an error?')
+                this.errorService.handleError(error);
+                return Observable.throw(error.json())
             });
     }
 

@@ -6,8 +6,15 @@ import {User} from "../models/user";
     selector: 'app-navbar',
     templateUrl: 'navbar.component.html'
 })
-export class NavbarComponent {
-    constructor(private authService: AuthService) { }
+export class NavbarComponent implements OnInit {
+    //isLoggedIn: boolean;
+    constructor(private authService: AuthService) {}
+
+    ngOnInit(): void {
+        this.authService.isLoggedIn().subscribe((value: boolean) => {
+            //this.isLoggedIn = value;
+        })
+    }
 
     isLoggedIn() {
         return this.authService.isLoggedIn();

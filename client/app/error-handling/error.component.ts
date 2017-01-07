@@ -7,7 +7,7 @@ import {Error} from './error';
     selector: 'app-error',
     templateUrl: 'error.component.html'
 })
-export class ErrorComponent implements  OnInit {
+export class ErrorComponent implements OnInit {
     error: Error = null;
 
     constructor(private  errorService: ErrorService) {}

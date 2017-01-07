@@ -68,7 +68,7 @@ router.get('/userinputs/:id', function(req, res, next) {
             });
         }
 
-        //TODO: if (!user)
+        //TODO: if not
 
         Theme.findById(req.params.id, function(err, theme) {
             if (err) {
@@ -81,7 +81,8 @@ router.get('/userinputs/:id', function(req, res, next) {
             if (!theme) {
                 return next({
                     title: 'No theme found',
-                    error: {message: 'Could not find any investment theme for the given id'}
+                    error: {message: 'Could not find any investment theme for the given id'},
+                    status: 404
                 });
             }
 
@@ -103,7 +104,8 @@ router.get('/userinputs/:id', function(req, res, next) {
 
                     if(!inputs) {
                         return next({
-                            message: 'No user inputs were found'
+                            message: 'No user inputs were found',
+                            status: 404
                         });
                     }
 
@@ -142,7 +144,8 @@ router.get('/:id', function(req, res, next) {
                 if (!theme) {
                     return next({
                         title: 'No investment theme found',
-                        error: {message: 'Could not find any investment theme for the given id'}
+                        error: {message: 'Could not find any investment theme for the given id'},
+                        status: 404
                     });
                 }
 
@@ -158,7 +161,8 @@ router.get('/:id', function(req, res, next) {
                     if (!results) {
                         return next({
                             title: 'No theme properties found',
-                            error: {message: 'Could not find any user input for the given theme'}
+                            error: {message: 'Could not find any user input for the given theme'},
+                            status: 404
                         });
                     }
 
@@ -204,7 +208,8 @@ router.get('/', function(req, res, nex) {
                 if (!results) {
                     return next({
                         title: 'No investment themes found',
-                        error: {message: 'Could not find any investment theme'}
+                        error: {message: 'Could not find any investment theme'},
+                        status: 404
                     });
                 }
 
@@ -225,7 +230,8 @@ router.get('/', function(req, res, nex) {
             if (!allThemes) {
                 return next({
                     title: 'No investment themes found',
-                    error: {message: 'Could not find any investment theme'}
+                    error: {message: 'Could not find any investment theme'},
+                    status: 404
                 });
             }
 

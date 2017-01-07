@@ -21,7 +21,7 @@ export class AuthService {
         return this.http.post('http://localhost:3000/auth', body, {headers: headers})
             .map((response: Response) => response.json())
             .catch((error: Response) =>  {
-                this.errorService.handleError(error.json());
+                this.errorService.handleError(error);
                 return Observable.throw(error.json())
             });
     }
@@ -36,13 +36,14 @@ export class AuthService {
                 return response.json()
             })
             .catch((error: Response) =>  {
-                this.errorService.handleError(error.json());
+                this.errorService.handleError(error);
                 return Observable.throw(error.json())
             });
     }
 
     logout() {
         localStorage.clear();
+        this.redirectUrl = null;
         this.router.navigate(['/']);
     }
 
@@ -79,8 +80,10 @@ export class AuthService {
 
     redirectToUrlAfterLogin() {
         if (this.redirectUrl) {
-            console.log('am i even inside this')
+            console.log('Redirect to ', this.redirectUrl)
             this.router.navigate([this.redirectUrl]);
+        } else {
+            this.router.navigate(['/home']);
         }
     }
 }

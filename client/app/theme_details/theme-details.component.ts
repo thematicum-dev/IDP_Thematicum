@@ -68,6 +68,9 @@ export class ThemeDetailsComponent implements OnInit, OnChanges {
                 this.theme = themeData.theme;
                 this.themePropertiesAggregation = themeData.properties;
                 this.creationDate = new Date(themeData.theme.createdAt);
+            }, (error: any) => {
+                console.log('Error at theme details: get theme')
+                console.log(error)
             });
 
         //get user's input for the theme
@@ -80,6 +83,9 @@ export class ThemeDetailsComponent implements OnInit, OnChanges {
                     this.userThemeInputsId = userInputPerTheme.userInputs._id;
                     this.userThemeInputs = userInputPerTheme.userInputs.themeProperties;
                 }
+            }, (error: any) => {
+                console.log('Error at theme details: get user inputs per theme')
+                console.log(error)
             });
 
     }
