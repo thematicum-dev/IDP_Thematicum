@@ -1,5 +1,6 @@
 var _ = require('underscore');
 var UserThemeInput = require('../models/userThemeInput');
+var Theme = require('../models/theme');
 var userInputAggregation = require('../utilities/userInputAggregation');
 
 module.exports = {
@@ -7,7 +8,8 @@ module.exports = {
     getById: getById,
     getAllThemeTags: getAllThemeTags,
     getThemeByTextSearch: getThemeByTextSearch,
-    getThemeById: getThemeById
+    getThemeById: getThemeById,
+    addUserInput: addUserInput
 }
 
 function getAll(collection, callback){
@@ -31,9 +33,24 @@ function getAll(collection, callback){
     });
 }
 
-function getById(collection, callback) {
-    collection.findById(function(err, result) {
-        callback(err, result);
+function getById(collection, id, callback) {
+    collection.findById(id, function(err, result) {
+        if (err) {
+            callback({
+                title: 'An error occurred',
+                error: err
+            }, null);
+        }
+
+        if (!result) {
+            callback({
+                title: 'No item found',
+                error: {message: 'Could not find any item for the given id'},
+                status: 404
+            }, null);
+        }
+
+        callback(null, result);
     });
 }
 
@@ -193,4 +210,38 @@ function getThemeByTextSearch(themeCollection, searchTerm, callback) {
 
             callback(null, results);
         });
+}
+
+function addUserInput(themeId, user, reqBody, callback) {
+    getById(Theme, themeId, function(err, result) {
+        if (err) {
+            callback(err, null)
+        }
+
+        //new UserThemeInput
+        var userInput = new UserThemeInput({
+            user: user,
+            theme: result,
+            themeProperties: {
+                timeHorizon: reqBody.timeHorizon,
+                maturity: reqBody.maturity,
+                categories: reqBody.categories
+            }
+        });
+
+        save(userInput, callback);
+    });
+}
+
+function save(data, callback) {
+    data.save(function(err, result) {
+        if (err) {
+            callback({
+                title: 'An error occurred',
+                error: err
+            }, null);
+        }
+
+        callback(null, result);
+    });
 }

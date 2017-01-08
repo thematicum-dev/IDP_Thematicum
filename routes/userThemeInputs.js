@@ -5,49 +5,46 @@ var Theme = require('../models/theme');
 var UserThemeInput = require('../models/userThemeInput');
 var constants = require('../models/constants');
 var jwt = require('jsonwebtoken');
-var authenticatedUser;
+var authenticatedUser; //TODO: remove
+var repository = require('../data_access/dataRepository');
+var authUtilities = require('../utilities/authUtilities');
 
-//middleware - protected routes from now on
-router.use('/', function(req, res, next) {
-    jwt.verify(req.query.token, 'secret', function(err, decoded) {
-        if(err) {
-            //invalid token
-            return next({
-                title: 'Not Authenticated',
-                error: err,
-                status: 401
-            });
-        }
+//auth middleware
+router.use('/', authUtilities.authenticationMiddleware);
 
-        var decoded = jwt.decode(req.query.token);
-        User.findById(decoded.user._id, function(err, user) {
-            if (err) {
-                return next({
-                    title: 'An error occurred',
-                    error: err
-                });
-            }
-
-            if (!user) {
-                return next({
-                    title: 'No user found',
-                    error: {message: 'No user was found'}
-                });
-            }
-
-            authenticatedUser = user;
-
-            next();
-        });
-    });
-});
-
-
-router.get('/', function(req, res, next) {
-    return res.status(200).json({
-        message: 'get user inputs'
-    })
-});
+// router.use('/', function(req, res, next) {
+//     jwt.verify(req.query.token, 'secret', function(err, decoded) {
+//         if(err) {
+//             //invalid token
+//             return next({
+//                 title: 'Not Authenticated',
+//                 error: err,
+//                 status: 401
+//             });
+//         }
+//
+//         var decoded = jwt.decode(req.query.token);
+//         User.findById(decoded.user._id, function(err, user) {
+//             if (err) {
+//                 return next({
+//                     title: 'An error occurred',
+//                     error: err
+//                 });
+//             }
+//
+//             if (!user) {
+//                 return next({
+//                     title: 'No user found',
+//                     error: {message: 'No user was found'}
+//                 });
+//             }
+//
+//             authenticatedUser = user;
+//
+//             next();
+//         });
+//     });
+// });
 
 router.put('/:id', function(req, res, next) {
     UserThemeInput.findById(req.params.id)
@@ -101,49 +98,16 @@ router.put('/:id', function(req, res, next) {
 });
 
 router.post('/', function (req, res, next) {
-    //get authenticated user
-    console.log('finding theme: ' + req.query.themeId)
-    //find theme
-    Theme.findById(req.query.themeId, function(err, theme) {
+    repository.addUserInput(req.query.themeId, res.locals.user, req.body, function(err, result) {
         if (err) {
-            return next({
-                title: 'An error occurred',
-                error: err
-            });
+            next(err)
         }
 
-        if (!theme) {
-            return next({
-                title: 'No theme found',
-                error: {message: "No theme found"}
-            });
-        }
-
-        //save new UserThemeInput
-        var userInput = new UserThemeInput({
-            user: authenticatedUser,
-            theme: theme,
-            themeProperties: {
-                timeHorizon: req.body.timeHorizon,
-                maturity: req.body.maturity,
-                categories: req.body.categories
-            },
-            stocksAllocationInputs: []
+        return res.status(201).json({
+            message: 'User input created',
+            obj: result
         });
 
-        userInput.save(function(err, userInput) {
-            if (err) {
-                return next({
-                    title: 'An error occurred',
-                    error: err
-                });
-            }
-
-            return res.status(201).json({
-                message: 'User input created',
-                obj: userInput
-            });
-        });
     });
 });
 
