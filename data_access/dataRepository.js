@@ -63,7 +63,7 @@ function getAllThemeTags(themesCollection, callback) {
             });
         });
 
-        callback(null, tags);
+        callback(null, Array.from(tags));
     });
 }
 

@@ -11,6 +11,7 @@ var _ = require('underscore');
 var userInputAggregation = require('../utilities/userInputAggregation');
 var ObjectId = require("mongodb").ObjectID;
 var repository = require("../data_access/dataRepository");
+var authUtilities = require("../utilities/authUtilities");
 
 router.get('/tags', function(req, res, next) {
     repository.getAllThemeTags(Theme, function(err, results) {
@@ -20,26 +21,13 @@ router.get('/tags', function(req, res, next) {
 
         return res.status(200).json({
             message: 'Theme tags retrieved',
-            obj: Array.from(results)
+            obj: results
         });
     });
 });
 
-//middleware - protected routes from now on
-router.use('/', function(req, res, next) {
-    jwt.verify(req.query.token, 'secret', function(err, decoded) {
-        if(err) {
-            //invalid token
-            return next({
-                title: 'Not Authenticated',
-                error: err,
-                status: 401
-            });
-        }
-
-        next();
-    });
-});
+//auth middleware
+router.use('/', authUtilities.authenticationMiddleware);
 
 router.get('/userinputs/:id', function(req, res, next) {
     var decoded = jwt.decode(req.query.token);

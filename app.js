@@ -13,6 +13,7 @@ var testRoute = require('./routes/test');
 var themeRoutes = require('./routes/themes');
 var userInputRoutes = require('./routes/userThemeInputs');
 var stockRoutes = require('./routes/stocks');
+var authUtilities = require('./utilities/authUtilities');
 
 var app = express();
 mongoose.connect('localhost:27017/thematicum');
@@ -42,6 +43,7 @@ app.use('/api/themes', themeRoutes);
 app.use('/api/userinputs', userInputRoutes);
 app.use('/api/stocks', stockRoutes);
 app.use('/api/test', testRoute);
+
 //app.use('/', appRoutes);
 
 app.use(function (req, res, next) {
