@@ -18,7 +18,7 @@ function jwtVerify(req, res, next) {
         }
 
         //var decodedToken = jwt.decode(token); //TODO: redundant?
-        res.locals.user = decoded;
+        res.locals.user = decoded.user; //TODO: consistency
         next();
     });
 }

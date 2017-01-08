@@ -40,6 +40,7 @@ export class ThemeSearchService {
             });
     }
 
+    //TODO: delete
     getUserInputsPerTheme(themeId: string) {
         const token = localStorage.getItem('token')
             ? '?token=' + localStorage.getItem('token')

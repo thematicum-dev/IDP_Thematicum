@@ -68,25 +68,32 @@ export class ThemeDetailsComponent implements OnInit, OnChanges {
                 this.theme = themeData.theme;
                 this.themePropertiesAggregation = themeData.properties;
                 this.creationDate = new Date(themeData.theme.createdAt);
+
+                //theme input from specific user
+                if (themeData.userInputs) {
+                    this.userThemeInputsId = themeData.userInputs._id;
+                    this.userThemeInputs = themeData.userInputs.themeProperties;
+                }
+
             }, (error: any) => {
                 console.log('Error at theme details: get theme')
                 console.log(error)
             });
 
         //get user's input for the theme
-        this.route.params
-            .switchMap((params: Params) => this.searchService.getUserInputsPerTheme(params['id']))
-            .subscribe((userInputPerTheme: any) => {
-                console.log('User input')
-                console.log(userInputPerTheme)
-                if (userInputPerTheme) {
-                    this.userThemeInputsId = userInputPerTheme.userInputs._id;
-                    this.userThemeInputs = userInputPerTheme.userInputs.themeProperties;
-                }
-            }, (error: any) => {
-                console.log('Error at theme details: get user inputs per theme')
-                console.log(error)
-            });
+        // this.route.params
+        //     .switchMap((params: Params) => this.searchService.getUserInputsPerTheme(params['id']))
+        //     .subscribe((userInputPerTheme: any) => {
+        //         console.log('User input')
+        //         console.log(userInputPerTheme)
+        //         if (userInputPerTheme) {
+        //             this.userThemeInputsId = userInputPerTheme.userInputs._id;
+        //             this.userThemeInputs = userInputPerTheme.userInputs.themeProperties;
+        //         }
+        //     }, (error: any) => {
+        //         console.log('Error at theme details: get user inputs per theme')
+        //         console.log(error)
+        //     });
 
     }
 

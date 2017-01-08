@@ -67,11 +67,44 @@ function getAllThemeTags(themesCollection, callback) {
     });
 }
 
-function getUserThemeInputs() {
+function getUserThemeInputs(themeId, user, themeData, callback) {
+    UserThemeInput.find({})
+        .populate('theme', '_id', { _id: themeId}, null)
+        .populate('user', '_id', { _id: user._id}, null)
+        .exec(function(err, results) {
+            if (err) {
+                callback({
+                    title: 'An error occurred',
+                    error: err
+                }, null);
+            }
 
+            if(!results) {
+                callback({
+                    message: 'No user inputs were found',
+                    status: 404
+                }, null);
+            }
+
+            /*
+                 Note: { _id: themeId} clause doesn't filter documents
+                 It simply populates those for which the match holds, leaving others non-populated (i.e. null valued)
+                 Thus, need to filter results
+             */
+            var nonNullEntries = _.filter(results, function(input) {
+                return input.theme != null && input.user != null;
+            });
+
+            if(nonNullEntries != undefined && nonNullEntries.length > 0) {
+                //add further data to themeData
+                themeData.userInputs = nonNullEntries[0];
+            }
+
+            callback(null, themeData)
+        });
 }
 
-function getAllThemeInputs(theme, callback) {
+function getAllThemeInputs(theme, user, callback) {
     //get theme properties
     UserThemeInput.find({theme: theme._id}, function(err, results) {
         if (err) {
@@ -101,17 +134,19 @@ function getAllThemeInputs(theme, callback) {
         }];
 
         var themeProperties = userInputAggregation.getThemePropertiesAggregation(results, props);
-        console.log('Theme properties')
-        console.log(themeProperties);
 
-        callback(null, { theme: theme, properties: themeProperties });
+        var themeData = {theme: theme, properties: themeProperties};
+        if(!user) {
+            callback(null, themeData);
+        }
 
+        getUserThemeInputs(theme._id, user, themeData, callback);
     });
 }
 
-function getThemeById(themeCollection, id, callback) {
+function getThemeById(themeCollection, themeId, user, callback) {
     themeCollection
-        .findById(id)
+        .findById(themeId)
         .populate('creator', 'name personalRole') //limit the user fields populated
         .exec(function (err, result) {
             if (err) {
@@ -129,7 +164,7 @@ function getThemeById(themeCollection, id, callback) {
                 }, null);
             }
 
-            getAllThemeInputs(result, callback)
+            getAllThemeInputs(result, user, callback)
             //callback(null, result)
         });
 }
