@@ -1,11 +1,5 @@
 var express = require('express');
 var router = express.Router();
-var User = require('../models/user');
-var Theme = require('../models/theme');
-var UserThemeInput = require('../models/userThemeInput');
-var constants = require('../models/constants');
-var jwt = require('jsonwebtoken');
-var authenticatedUser; //TODO: remove
 var repository = require('../data_access/dataRepository');
 var authUtilities = require('../utilities/authUtilities');
 

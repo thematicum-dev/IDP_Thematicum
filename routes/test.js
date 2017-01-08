@@ -3,6 +3,9 @@ var router = express.Router();
 var jwt = require('jsonwebtoken');
 var repository = require('../data_access/dataRepository');
 var User = require('../models/user');
+var Stock = require('../models/stock');
+var repository = require('../data_access/dataRepository');
+var Promise = require('promise');
 
 router.get('/', function (req, res, next) {
     //callback here
@@ -14,27 +17,48 @@ router.get('/', function (req, res, next) {
     });
 });
 
-//test - protected routes from now on
-// router.use('/', function(req, res, next) {
-//     jwt.verify(req.query.token, 'secret', function(err, decoded) {
-//         if(err) {
-//             //invalid token
-//             return res.status(401).json({
-//                 title: 'Not Authenticated',
-//                 error: err
-//             });
-//         }
-//
-//         next();
-//     });
-// });
+router.post('/stocks', function (req, res, next) {
+    getStockAllocation(req.body.stockAllocation, function(err, allocatedStocks) {
+        console.log('Getting stock allocation:')
+        console.log(allocatedStocks)
+        if (err) {
+            next(err)
+        }
 
-router.get('/all', function (req, res, next) {
-    return res.json({
-        text: 'GET investment themes - protected'
-    })
+        return res.status(201).json({
+            stockAlloc: allocatedStocks
+        });
+    });
 });
 
+function getStockAllocation(stockAllocationData, callback) {
+    var allocatedStocks = [];
+    stockAllocationData.forEach(function(item, index){
+        var stockId = item.stockId;
+        var exposure = item.exposure;
+        setStockAndExposure(stockId, exposure, function(err, result) {
+            if(err) {
+                callback(err, null)
+            }
+
+            allocatedStocks.push(result)
+            if (index == stockAllocationData.length -1) {
+                callback(null, allocatedStocks)
+            }
+        });
+    });
+}
+
+function setStockAndExposure(stockId, exposure, callback) {
+    repository.getById(Stock, stockId, function(err, result) {
+        if (err) {
+            callback(err, null)
+        }
+
+        var stockAlloc = {stock: result, exposure: exposure};
+        callback(null, stockAlloc);
+    });
+}
 
 
 module.exports = router;

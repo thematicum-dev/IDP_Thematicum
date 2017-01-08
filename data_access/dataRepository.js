@@ -1,7 +1,9 @@
 var _ = require('underscore');
 var UserThemeInput = require('../models/userThemeInput');
 var Theme = require('../models/theme');
+var Stock = require('../models/stock');
 var userInputAggregation = require('../utilities/userInputAggregation');
+var UserThemeStockAllocation = require('../models/userThemeStockAllocation');
 
 module.exports = {
     getAll: getAll,
@@ -10,6 +12,7 @@ module.exports = {
     getThemeByTextSearch: getThemeByTextSearch,
     getThemeById: getThemeById,
     addUserInput: addUserInput,
+    addTheme: addTheme,
     updateUserInput: updateUserInput
 }
 
@@ -17,7 +20,7 @@ function getAll(collection, callback){
     collection.find(function (err, results) {
         if (err) {
             callback({
-                title: 'An error occurred getting items from ' + collection.toString(),
+                title: 'An error occurred getting items',
                 error: err
             }, null);
         }
@@ -25,7 +28,7 @@ function getAll(collection, callback){
         if (!results) {
             callback({
                 title: 'No results found',
-                error: { message: 'No results found from ' + collection.toString() },
+                error: { message: 'No results found' },
                 status: 404
             }, null);
         }
@@ -272,6 +275,59 @@ function updateUserInput(userInputId, user, reqBody, callback) {
         });
 }
 
+function addTheme(user, reqBody, callback) {
+    //new Theme
+    var theme = new Theme({
+        name: reqBody.theme.name,
+        tags: reqBody.theme.tags,
+        description: reqBody.theme.description,
+        creator: user
+    });
+
+    save(theme, function(err, theme) {
+        if(err) {
+            callback(err, null);
+        }
+
+        //new UserThemeInput
+        var userInput = new UserThemeInput({
+            user: user,
+            theme: theme,
+            themeProperties: {
+                timeHorizon: reqBody.themeProperties.timeHorizon,
+                maturity: reqBody.themeProperties.maturity,
+                categories: reqBody.themeProperties.categories
+            }
+        });
+
+        save(userInput, function(err, userInput) {
+            if(err) {
+                callback(err, null);
+            }
+
+            getRequestedStockAllocation(reqBody.stockAllocation, function(err, stockAllocation) {
+                if (err) {
+                    callback(err, null)
+                }
+
+                var userStockAllocation = new UserThemeStockAllocation({
+                    user: user,
+                    theme: theme,
+                    stockAllocation: stockAllocation
+                });
+
+                save(userStockAllocation, function(err, stockAlloc) {
+                    if(err) {
+                        callback(err, null)
+                    }
+
+                    callback(null, [ theme, userInput, stockAlloc ]);
+                });
+            });
+        });
+    });
+}
+
 function save(data, callback) {
     data.save(function(err, result) {
         if (err) {
@@ -282,5 +338,35 @@ function save(data, callback) {
         }
 
         callback(null, result);
+    });
+}
+
+//pass as parameter: req.body.stockAllocation
+function getRequestedStockAllocation(stockAllocationData, callback) {
+    var allocatedStocks = [];
+    stockAllocationData.forEach(function(item, index){
+        var stockId = item.stockId;
+        var exposure = item.exposure;
+        setStockAndExposure(stockId, exposure, function(err, result) {
+            if(err) {
+                callback(err, null)
+            }
+
+            allocatedStocks.push(result)
+            if (index == stockAllocationData.length -1) {
+                callback(null, allocatedStocks)
+            }
+        });
+    });
+}
+
+function setStockAndExposure(stockId, exposure, callback) {
+    getById(Stock, stockId, function(err, result) {
+        if (err) {
+            callback(err, null)
+        }
+
+        var stockAlloc = {stock: result, exposure: exposure};
+        callback(null, stockAlloc);
     });
 }
