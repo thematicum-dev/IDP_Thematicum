@@ -9,7 +9,8 @@ module.exports = {
     getAllThemeTags: getAllThemeTags,
     getThemeByTextSearch: getThemeByTextSearch,
     getThemeById: getThemeById,
-    addUserInput: addUserInput
+    addUserInput: addUserInput,
+    updateUserInput: updateUserInput
 }
 
 function getAll(collection, callback){
@@ -182,7 +183,6 @@ function getThemeById(themeCollection, themeId, user, callback) {
             }
 
             getAllThemeInputs(result, user, callback)
-            //callback(null, result)
         });
 }
 
@@ -231,6 +231,45 @@ function addUserInput(themeId, user, reqBody, callback) {
 
         save(userInput, callback);
     });
+}
+
+function updateUserInput(userInputId, user, reqBody, callback) {
+    UserThemeInput
+        .findById(userInputId)
+        .populate('user', '_id', { _id: user._id}, null)
+        .exec(function(err, result) {
+            if (err) {
+                callback({
+                    title: 'An error occurred',
+                    error: err
+                }, null);
+            }
+
+            if(!result) {
+                callback({
+                    title: 'No user input found',
+                    error: { message: 'No user input was found for this theme'}
+                }, null);
+            }
+
+            if (result.user == null) {
+                callback({
+                    title: 'Forbidden',
+                    error: { message: 'Not authorized to modify this resource'},
+                    status: 403
+                }, null);
+            }
+
+            //update existing user input values
+            if (reqBody.timeHorizon)
+                result.themeProperties.timeHorizon = reqBody.timeHorizon;
+            if (reqBody.maturity)
+                result.themeProperties.maturity = reqBody.maturity;
+            if (reqBody.categories)
+                result.themeProperties.categories = reqBody.categories;
+
+            save(result, callback)
+        });
 }
 
 function save(data, callback) {
