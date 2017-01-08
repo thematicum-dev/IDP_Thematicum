@@ -1,4 +1,6 @@
 var _ = require('underscore');
+var UserThemeInput = require('../models/userThemeInput');
+var userInputAggregation = require('../utilities/userInputAggregation');
 
 module.exports = {
     getAll: getAll,
@@ -65,12 +67,46 @@ function getAllThemeTags(themesCollection, callback) {
     });
 }
 
-function getAllThemeInputs() {
+function getUserThemeInputs() {
 
 }
 
-function getUserThemeInputs() {
+function getAllThemeInputs(theme, callback) {
+    //get theme properties
+    UserThemeInput.find({theme: theme._id}, function(err, results) {
+        if (err) {
+            callback({
+                title: 'An error occurred',
+                error: err
+            }, null);
+        }
 
+        if (!results) {
+            callback({
+                title: 'No theme properties found',
+                error: {message: 'Could not find any user input for the given theme'},
+                status: 404
+            }, null);
+        }
+
+        var props = [{
+            propertyName: 'timeHorizon',
+            nrValuesRequired: 3
+        }, {
+            propertyName: 'maturity',
+            nrValuesRequired: 5
+        }, {
+            propertyName: 'categories',
+            nrValuesRequired: 6
+        }];
+
+        var themeProperties = userInputAggregation.getThemePropertiesAggregation(results, props);
+        console.log('Theme properties')
+        console.log(themeProperties);
+
+        callback(null, { theme: theme, properties: themeProperties });
+
+    });
 }
 
 function getThemeById(themeCollection, id, callback) {
@@ -93,7 +129,8 @@ function getThemeById(themeCollection, id, callback) {
                 }, null);
             }
 
-            callback(null, result)
+            getAllThemeInputs(result, callback)
+            //callback(null, result)
         });
 }
 
@@ -122,4 +159,3 @@ function getThemeByTextSearch(themeCollection, searchTerm, callback) {
             callback(null, results);
         });
 }
-

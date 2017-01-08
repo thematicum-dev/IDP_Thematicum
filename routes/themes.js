@@ -112,48 +112,14 @@ router.get('/userinputs/:id', function(req, res, next) {
 });
 
 router.get('/:id', function(req, res, next) {
-    repository.getThemeById(Theme, req.params.id, function(err, theme) {
+    repository.getThemeById(Theme, req.params.id, function(err, result) {
         if (err) {
             next(err)
         }
 
-        //get theme properties
-        UserThemeInput.find({theme: theme._id}, function(err, results) {
-            if (err) {
-                return next({
-                    title: 'An error occurred',
-                    error: err
-                });
-            }
-
-            if (!results) {
-                return next({
-                    title: 'No theme properties found',
-                    error: {message: 'Could not find any user input for the given theme'},
-                    status: 404
-                });
-            }
-
-            props = [{
-                propertyName: 'timeHorizon',
-                nrValuesRequired: 3
-            }, {
-                propertyName: 'maturity',
-                nrValuesRequired: 5
-            }, {
-                propertyName: 'categories',
-                nrValuesRequired: 6
-            }];
-
-            themeProperties = userInputAggregation.getThemePropertiesAggregation(results, props);
-            console.log('Theme properties')
-            console.log(themeProperties);
-
-            return res.status(200).json({
-                message: 'Theme properties retrieved',
-                obj: { theme: theme, properties: themeProperties }
-            });
-
+        return res.status(200).json({
+            message: 'Theme data retrieved',
+            obj: result
         });
     });
 });
