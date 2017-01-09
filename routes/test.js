@@ -4,6 +4,7 @@ var jwt = require('jsonwebtoken');
 var repository = require('../data_access/dataRepository');
 var User = require('../models/user');
 var Stock = require('../models/stock');
+var Theme = require('../models/theme');
 var repository = require('../data_access/dataRepository');
 var Promise = require('promise');
 
@@ -17,16 +18,23 @@ router.get('/', function (req, res, next) {
     });
 });
 
-router.post('/stocks', function (req, res, next) {
-    getStockAllocation(req.body.stockAllocation, function(err, allocatedStocks) {
-        console.log('Getting stock allocation:')
-        console.log(allocatedStocks)
+router.post('/stocks/:themeId', function (req, res, next) {
+    repository.getById(Theme, req.params.themeId, function(err, theme) {
         if (err) {
-            next(err)
+            console.log('Is next called?')
+            return next(err);
         }
 
-        return res.status(201).json({
-            stockAlloc: allocatedStocks
+        console.log('test', theme)
+
+        repository.getThemeStocks(theme._id, function(err, results) {
+            if(err) {
+                return next(err)
+            }
+
+            return res.status(200).json({
+                themeStocks: results
+            });
         });
     });
 });

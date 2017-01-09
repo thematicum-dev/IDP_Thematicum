@@ -9,7 +9,7 @@ router.use('/', authUtilities.authenticationMiddleware);
 router.put('/:id', function(req, res, next) {
     repository.updateUserInput(req.params.id, res.locals.user, req.body, function(err, result) {
         if(err) {
-            next(err);
+            return next(err);
         }
 
         return res.status(200).json({
@@ -22,7 +22,7 @@ router.put('/:id', function(req, res, next) {
 router.post('/', function (req, res, next) {
     repository.addUserInput(req.query.themeId, res.locals.user, req.body, function(err, result) {
         if (err) {
-            next(err)
+            return next(err)
         }
 
         return res.status(201).json({

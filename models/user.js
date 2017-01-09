@@ -8,8 +8,7 @@ var schema = new Schema({
         type: String,
         required: [true, 'The user name field is required'],
         minlength: [4, 'User name must have at least 4 letters'],
-        maxlength: [32, 'User name must have at most 32 letters'],
-        validate: [validator.isAlpha, 'Invalid characters in user name']
+        maxlength: [32, 'User name must have at most 32 letters']
     },
     email: {
         type: String,

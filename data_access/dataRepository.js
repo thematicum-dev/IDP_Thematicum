@@ -4,6 +4,7 @@ var Theme = require('../models/theme');
 var Stock = require('../models/stock');
 var userInputAggregation = require('../utilities/userInputAggregation');
 var UserThemeStockAllocation = require('../models/userThemeStockAllocation');
+var mongoose = require('mongoose');
 
 module.exports = {
     getAll: getAll,
@@ -13,7 +14,8 @@ module.exports = {
     getThemeById: getThemeById,
     addUserInput: addUserInput,
     addTheme: addTheme,
-    updateUserInput: updateUserInput
+    updateUserInput: updateUserInput,
+    getThemeStocks: getThemeStocks
 }
 
 function getAll(collection, callback){
@@ -40,29 +42,28 @@ function getAll(collection, callback){
 function getById(collection, id, callback) {
     collection.findById(id, function(err, result) {
         if (err) {
-            callback({
+            return callback({
                 title: 'An error occurred',
                 error: err
             }, null);
         }
 
         if (!result) {
-            callback({
+            return callback({
                 title: 'No item found',
                 error: {message: 'Could not find any item for the given id'},
                 status: 404
             }, null);
         }
 
-        callback(null, result);
+        return callback(null, result);
     });
 }
 
 function getAllThemeTags(themesCollection, callback) {
     themesCollection.find({tags: { $ne: null }}, {'tags': 1, '_id': 0}, function(err, results) {
         if (err) {
-            //prepare error
-            callback({
+            return callback({
                 title: 'An error occurred',
                 error: err
             }, null);
@@ -70,8 +71,7 @@ function getAllThemeTags(themesCollection, callback) {
 
         //TODO: 1st theme creation would result in 500 error!
         if (!results) {
-            //prepare error
-            callback({
+            return callback({
                 title: 'No tags found',
                 error: { message: 'Could not find any tags' }
             }, null);
@@ -84,7 +84,7 @@ function getAllThemeTags(themesCollection, callback) {
             });
         });
 
-        callback(null, Array.from(tags));
+        return callback(null, Array.from(tags));
     });
 }
 
@@ -94,14 +94,14 @@ function getUserThemeInputs(themeId, user, themeData, callback) {
         .populate('user', '_id', { _id: user._id}, null)
         .exec(function(err, results) {
             if (err) {
-                callback({
+                return callback({
                     title: 'An error occurred',
                     error: err
                 }, null);
             }
 
             if(!results) {
-                callback({
+                return callback({
                     message: 'No user inputs were found',
                     status: 404
                 }, null);
@@ -121,7 +121,19 @@ function getUserThemeInputs(themeId, user, themeData, callback) {
                 themeData.userInputs = nonNullEntries[0];
             }
 
-            callback(null, themeData)
+            return callback(null, themeData)
+        });
+}
+
+function getThemeStocks(themeId, callback) {
+    UserThemeStockAllocation.find({theme: themeId})
+        .populate('stockAllocation.stock', '_id companyName country')
+        .exec(function(err, result) {
+            if(err) {
+                return callback(err, null);
+            }
+
+            return callback(null, result)
         });
 }
 
@@ -129,14 +141,14 @@ function getAllThemeInputs(theme, user, callback) {
     //get theme properties
     UserThemeInput.find({theme: theme._id}, function(err, results) {
         if (err) {
-            callback({
+            return callback({
                 title: 'An error occurred',
                 error: err
             }, null);
         }
 
         if (!results) {
-            callback({
+            return callback({
                 title: 'No theme properties found',
                 error: {message: 'Could not find any user input for the given theme'},
                 status: 404
@@ -158,7 +170,7 @@ function getAllThemeInputs(theme, user, callback) {
 
         var themeData = {theme: theme, properties: themeProperties};
         if(!user) {
-            callback(null, themeData);
+            return callback(null, themeData);
         }
 
         getUserThemeInputs(theme._id, user, themeData, callback);
@@ -171,14 +183,14 @@ function getThemeById(themeCollection, themeId, user, callback) {
         .populate('creator', 'name personalRole') //limit the user fields populated
         .exec(function (err, result) {
             if (err) {
-                callback({
+                return callback({
                     title: 'An error occurred at finding theme by id',
                     error: err
                 }, null);
             }
 
             if (!result) {
-                callback({
+                return callback({
                     title: 'No investment theme found',
                     error: {message: 'Could not find any investment theme for the given id'},
                     status: 404
@@ -196,7 +208,7 @@ function getThemeByTextSearch(themeCollection, searchTerm, callback) {
         .sort({score: {$meta: "textScore"}})
         .exec(function (err, results) {
             if (err) {
-                callback({
+                return callback({
                     title: 'An error occurred at theme text search',
                     error: err
                 }, null);
@@ -204,21 +216,21 @@ function getThemeByTextSearch(themeCollection, searchTerm, callback) {
 
             //TODO: if no matching theme is found, the result is [], i.e. not null
             if (!results) {
-                callback({
+                return callback({
                     title: 'No investment themes found',
                     error: {message: 'Could not find any investment theme'},
                     status: 404
                 }, null);
             }
 
-            callback(null, results);
+            return callback(null, results);
         });
 }
 
 function addUserInput(themeId, user, reqBody, callback) {
     getById(Theme, themeId, function(err, result) {
         if (err) {
-            callback(err, null)
+            return callback(err, null)
         }
 
         //new UserThemeInput
@@ -237,26 +249,27 @@ function addUserInput(themeId, user, reqBody, callback) {
 }
 
 function updateUserInput(userInputId, user, reqBody, callback) {
+    //TODO: redundand to populate user, maybe simplify
     UserThemeInput
         .findById(userInputId)
         .populate('user', '_id', { _id: user._id}, null)
         .exec(function(err, result) {
             if (err) {
-                callback({
+                return callback({
                     title: 'An error occurred',
                     error: err
                 }, null);
             }
 
             if(!result) {
-                callback({
+                return callback({
                     title: 'No user input found',
                     error: { message: 'No user input was found for this theme'}
                 }, null);
             }
 
             if (result.user == null) {
-                callback({
+                return callback({
                     title: 'Forbidden',
                     error: { message: 'Not authorized to modify this resource'},
                     status: 403
@@ -286,7 +299,7 @@ function addTheme(user, reqBody, callback) {
 
     save(theme, function(err, theme) {
         if(err) {
-            callback(err, null);
+            return callback(err, null);
         }
 
         //new UserThemeInput
@@ -302,12 +315,12 @@ function addTheme(user, reqBody, callback) {
 
         save(userInput, function(err, userInput) {
             if(err) {
-                callback(err, null);
+                return callback(err, null);
             }
 
             getRequestedStockAllocation(reqBody.stockAllocation, function(err, stockAllocation) {
                 if (err) {
-                    callback(err, null)
+                    return callback(err, null)
                 }
 
                 var userStockAllocation = new UserThemeStockAllocation({
@@ -318,10 +331,10 @@ function addTheme(user, reqBody, callback) {
 
                 save(userStockAllocation, function(err, stockAlloc) {
                     if(err) {
-                        callback(err, null)
+                        return callback(err, null)
                     }
 
-                    callback(null, [ theme, userInput, stockAlloc ]);
+                    return callback(null, [ theme, userInput, stockAlloc ]);
                 });
             });
         });
@@ -331,13 +344,13 @@ function addTheme(user, reqBody, callback) {
 function save(data, callback) {
     data.save(function(err, result) {
         if (err) {
-            callback({
+            return callback({
                 title: 'An error occurred',
                 error: err
             }, null);
         }
 
-        callback(null, result);
+        return callback(null, result);
     });
 }
 
@@ -349,12 +362,12 @@ function getRequestedStockAllocation(stockAllocationData, callback) {
         var exposure = item.exposure;
         setStockAndExposure(stockId, exposure, function(err, result) {
             if(err) {
-                callback(err, null)
+                return callback(err, null)
             }
 
             allocatedStocks.push(result)
             if (index == stockAllocationData.length -1) {
-                callback(null, allocatedStocks)
+                return callback(null, allocatedStocks)
             }
         });
     });
@@ -363,10 +376,10 @@ function getRequestedStockAllocation(stockAllocationData, callback) {
 function setStockAndExposure(stockId, exposure, callback) {
     getById(Stock, stockId, function(err, result) {
         if (err) {
-            callback(err, null)
+            return callback(err, null)
         }
 
         var stockAlloc = {stock: result, exposure: exposure};
-        callback(null, stockAlloc);
+        return callback(null, stockAlloc);
     });
 }
