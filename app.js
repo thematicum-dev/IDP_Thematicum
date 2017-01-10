@@ -50,7 +50,8 @@ app.use(function (req, res, next) {
 
 //error handling
 app.use(function (err, req, res, next) {
-    console.log('Error handling middleware')
+    console.log('Error handling middleware', err)
+
     return res.status(err.status || 500).json(err);
 })
 

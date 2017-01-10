@@ -6,6 +6,7 @@ var User = require('../models/user');
 var Stock = require('../models/stock');
 var Theme = require('../models/theme');
 var repository = require('../data_access/dataRepository');
+var stockRepo = require('../data_access/stockRepository');
 var Promise = require('promise');
 
 router.get('/', function (req, res, next) {
@@ -36,6 +37,18 @@ router.post('/stocks/:themeId', function (req, res, next) {
                 themeStocks: results
             });
         });
+    });
+});
+
+router.get('/stocks', function(req, res, next) {
+    stockRepo.insertMany(function(err, results) {
+       if(err) {
+           return next(err);
+       }
+
+       return res.status(200).json({
+           test: results
+       });
     });
 });
 

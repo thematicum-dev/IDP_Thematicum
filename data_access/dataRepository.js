@@ -9,13 +9,15 @@ var mongoose = require('mongoose');
 module.exports = {
     getAll: getAll,
     getById: getById,
+    save: save,
     getAllThemeTags: getAllThemeTags,
     getThemeByTextSearch: getThemeByTextSearch,
     getThemeById: getThemeById,
     addUserInput: addUserInput,
     addTheme: addTheme,
     updateUserInput: updateUserInput,
-    getThemeStocks: getThemeStocks
+    getThemeStocks: getThemeStocks,
+    insertMany: insertMany
 }
 
 function getAll(collection, callback){
@@ -318,25 +320,29 @@ function addTheme(user, reqBody, callback) {
                 return callback(err, null);
             }
 
-            getRequestedStockAllocation(reqBody.stockAllocation, function(err, stockAllocation) {
-                if (err) {
-                    return callback(err, null)
-                }
+            //TODO: stock allocation in progress
+            return callback(null, [ theme, userInput ]);
 
-                var userStockAllocation = new UserThemeStockAllocation({
-                    user: user,
-                    theme: theme,
-                    stockAllocation: stockAllocation
-                });
-
-                save(userStockAllocation, function(err, stockAlloc) {
-                    if(err) {
-                        return callback(err, null)
-                    }
-
-                    return callback(null, [ theme, userInput, stockAlloc ]);
-                });
-            });
+            // getRequestedStockAllocation(reqBody.stockAllocation, function(err, stockAllocation) {
+            //     if (err) {
+            //         return callback(err, null)
+            //     }
+            //
+            //
+            //     var userStockAllocation = new UserThemeStockAllocation({
+            //         user: user,
+            //         theme: theme,
+            //         stockAllocation: stockAllocation
+            //     });
+            //
+            //     save(userStockAllocation, function(err, stockAlloc) {
+            //         if(err) {
+            //             return callback(err, null)
+            //         }
+            //
+            //         return callback(null, [ theme, userInput, stockAlloc ]);
+            //     });
+            // });
         });
     });
 }
@@ -351,6 +357,17 @@ function save(data, callback) {
         }
 
         return callback(null, result);
+    });
+}
+
+//if an error occurs at one element, the other elements are nonetheless saves
+function insertMany(collection, dataArray, callback) {
+    collection.create(dataArray, function(err, results) {
+        if (err) {
+            return callback(err, null);
+        }
+
+        return callback(null, results);
     });
 }
 
