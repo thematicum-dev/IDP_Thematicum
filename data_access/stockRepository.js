@@ -21,7 +21,7 @@ function insertManyAllocations(themeId, user, stockAllocationData, callback) {
             if (err) {
                 return callback(err, null)
             }
-            console.log('Theme')
+
             return callback(null, results);
         });
     });
@@ -179,6 +179,7 @@ function groupByStockAndExposure(stockAllocations) {
     _.each(groupedByStock, function(value, key, list) {
         var element = {};
         element.themeStockCompositionId = key;
+        //TODO: get other details
         element.exposureDistribution = aggregateExposureDistribution(value);
         exposureDistributionPerStock.push(element)
     });

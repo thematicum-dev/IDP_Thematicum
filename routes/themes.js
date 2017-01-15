@@ -5,6 +5,8 @@ var repository = require("../data_access/dataRepository");
 var authUtilities = require("../utilities/authUtilities");
 
 //auth middleware
+
+
 router.use('/', authUtilities.authenticationMiddleware);
 
 router.get('/tags', function(req, res, next) {

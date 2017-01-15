@@ -52,6 +52,18 @@ router.get('/stocks', function(req, res, next) {
     });
 });
 
+router.get('/test1', function(req, res, next) {
+    return res.status(200).json({
+        message: 'Test 1'
+    })
+});
+
+router.get('/test2', function(req, res, next) {
+    return res.status(200).json({
+        message: 'Test 2'
+    })
+});
+
 function getStockAllocation(stockAllocationData, callback) {
     var allocatedStocks = [];
     stockAllocationData.forEach(function(item, index){
