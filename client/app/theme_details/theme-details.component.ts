@@ -7,6 +7,7 @@ import {timeHorizonValues, maturityValues, categoryValues} from "../models/theme
 import {NgForm} from "@angular/forms";
 import {ThemeProperties} from "../models/themeProperties";
 import {ThemeService} from "../theme_creation/theme.service";
+import {Observable} from "rxjs";
 
 @Component({
     selector: 'app-theme-details',
@@ -46,10 +47,10 @@ import {ThemeService} from "../theme_creation/theme.service";
 export class ThemeDetailsComponent implements OnInit, OnChanges {
     //theme existing data
     theme: Theme;
+    selectedThemeId: string;
     themePropertiesAggregation: any;
     userThemeInputs: any;
     userThemeInputsId: any;
-    creationDate: Date;
 
     //theme data - for user editing
     themeProperties: ThemeProperties = new ThemeProperties();
@@ -59,42 +60,27 @@ export class ThemeDetailsComponent implements OnInit, OnChanges {
     whiteColor = 'white';
 
     ngOnInit(): void {
-        //get theme details and characteristic distribution
         this.route.params
-            .switchMap((params: Params) => this.searchService.getThemeById(params['id']))
-            .subscribe((themeData: any) => {
-                console.log('Data retrieved for this theme')
-                console.log(themeData)
-                this.theme = themeData.theme;
-                this.themePropertiesAggregation = themeData.properties;
-                this.creationDate = new Date(themeData.theme.createdAt);
+            .switchMap((params: Params) => {
+                let themeId = params['id'];
+                let theme = this.searchService.getThemeById(themeId);
+                let themeProperties = this.searchService.getThemeProperties(themeId);
+                let themePropertiesByUser = this.searchService.getThemePropertiesByUser(themeId);
 
-                //theme input from specific user
-                if (themeData.userInputs) {
-                    this.userThemeInputsId = themeData.userInputs._id;
-                    this.userThemeInputs = themeData.userInputs.themeProperties;
+                return Observable.forkJoin([theme, themeProperties, themePropertiesByUser]);
+            })
+            .subscribe(results => {
+                console.log('Theme: ', results[0]);
+                console.log('Properties: ', results[1]);
+                console.log('By user: ', results[2]);
+
+                this.theme = results[0];
+                this.theme.createdAt = new Date(results[0].createdAt);
+                this.themePropertiesAggregation = results[1].properties;
+                if (results[2].themeProperties) {
+                    this.userThemeInputs = results[2].themeProperties;
                 }
-
-            }, (error: any) => {
-                console.log('Error at theme details: get theme')
-                console.log(error)
             });
-
-        //get user's input for the theme
-        // this.route.params
-        //     .switchMap((params: Params) => this.searchService.getUserInputsPerTheme(params['id']))
-        //     .subscribe((userInputPerTheme: any) => {
-        //         console.log('User input')
-        //         console.log(userInputPerTheme)
-        //         if (userInputPerTheme) {
-        //             this.userThemeInputsId = userInputPerTheme.userInputs._id;
-        //             this.userThemeInputs = userInputPerTheme.userInputs.themeProperties;
-        //         }
-        //     }, (error: any) => {
-        //         console.log('Error at theme details: get user inputs per theme')
-        //         console.log(error)
-        //     });
-
     }
 
     ngOnChanges(changes: SimpleChanges): void {

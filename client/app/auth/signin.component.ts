@@ -8,6 +8,7 @@ import {ErrorComponent} from "../error-handling/error.component";
 @Component({
     selector: 'app-signin',
     templateUrl: 'signin.component.html',
+    styleUrls: [`.well { padding-top: 0px}`],
     directives: [ErrorComponent]
 })
 export class SigninComponent {

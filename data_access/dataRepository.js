@@ -110,7 +110,7 @@ function getUserThemeInputs(themeId, user, themeData, callback) {
             }
 
             /*
-                 Note: { _id: themeId} clause doesn't filter documents
+                 Note: { _id: selectedThemeId} clause doesn't filter documents
                  It simply populates those for which the match holds, leaving others non-populated (i.e. null valued)
                  Thus, need to filter results
              */
@@ -362,7 +362,7 @@ function save(data, callback) {
 
 //if an error occurs at one element, the other elements are nonetheless saves
 function insertMany(collection, dataArray, callback) {
-    collection.create(dataArray, function(err, results) {
+    collection.createMany(dataArray, function(err, results) {
         if (err) {
             return callback(err, null);
         }

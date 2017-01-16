@@ -9,13 +9,15 @@ import {ErrorService} from "../error-handling/error.service";
 export class ThemeSearchService {
     constructor(private http: Http, private errorService: ErrorService) { }
 
-    searchThemes(searchTerm: string) {
-        const token = localStorage.getItem('token')
-            ? '?token=' + localStorage.getItem('token')
-            : '';
+    baseAPI: string = 'http://localhost:3000/api/';
 
+    //TODO: delegate to avoid duplicate code
+    /*
+        e.g. apiCall(apiPath: string): Observable<any> {}
+     */
+    searchThemes(searchTerm: string) {
         let searchQuery = searchTerm ? "&searchQuery=" + searchTerm : '';
-        let apiPath = 'http://localhost:3000/api/themes' + token + searchQuery;
+        let apiPath = this.baseAPI + 'themes' + this.setTokenQueryParam() + searchQuery;
 
         return this.http.get(apiPath)
             .map((response: Response) => {
@@ -25,33 +27,53 @@ export class ThemeSearchService {
     }
 
     getThemeById(id: string) {
-        const token = localStorage.getItem('token')
-            ? '?token=' + localStorage.getItem('token')
-            : '';
-
-        return this.http.get('http://localhost:3000/api/themes/' + id + token)
+        let apiPath = this.baseAPI + 'themes/' + id + this.setTokenQueryParam();
+        return this.http.get(apiPath)
             .map((response: Response) => {
                 return response.json().obj;
             })
             .catch((error: Response) =>  {
-                console.log('Is this an error?')
                 this.errorService.handleError(error);
+                return Observable.throw(error.json())
+            });
+    }
+
+    getThemeProperties(themeId: string) {
+        let apiPath = this.baseAPI + 'themeproperties/theme/' + themeId + this.setTokenQueryParam();
+        return this.http.get(apiPath)
+            .map((response: Response) => {
+                return response.json().obj;
+            })
+            .catch((error: Response) =>  {
+                //this.errorService.handleError(error);
+                return Observable.throw(error.json())
+            });
+    }
+
+    getThemePropertiesByUser(themeId: string) {
+        let apiPath = this.baseAPI + 'themeproperties/theme/' + themeId + '/user' +  this.setTokenQueryParam();
+        return this.http.get(apiPath)
+            .map((response: Response) => {
+                return response.json().obj;
+            })
+            .catch((error: Response) =>  {
+                //this.errorService.handleError(error);
                 return Observable.throw(error.json())
             });
     }
 
     //TODO: delete
     getUserInputsPerTheme(themeId: string) {
-        const token = localStorage.getItem('token')
-            ? '?token=' + localStorage.getItem('token')
-            : '';
-
-        let apiPath = 'http://localhost:3000/api/themes/userinputs/' + themeId + token;
+        let apiPath = 'http://localhost:3000/api/themes/userinputs/' + themeId + this.setTokenQueryParam();
 
         return this.http.get(apiPath)
             .map((response: Response) => {
                 return response.json().obj;
             })
             .catch((error: Response) =>  Observable.throw(error.json()));
+    }
+
+    setTokenQueryParam() {
+        return localStorage.getItem('token') ? '?token=' + localStorage.getItem('token') : '';
     }
 }

@@ -20,7 +20,7 @@ router.put('/:id', function(req, res, next) {
 });
 
 router.post('/', function (req, res, next) {
-    repository.addUserInput(req.query.themeId, res.locals.user, req.body, function(err, result) {
+    repository.addUserInput(req.query.selectedThemeId, res.locals.user, req.body, function(err, result) {
         if (err) {
             return next(err)
         }

@@ -7,8 +7,8 @@ var authUtilities = require('../utilities/authUtilities');
 router.use('/', authUtilities.authenticationMiddleware);
 
 router.post('/', function(req, res, next) {
-    // req.query.themeId, res.locals.user, req.body
-    stockRepository.insertManyAllocations(req.query.themeId, res.locals.user, req.body.stockAllocation, function(err, results){
+    // req.query.selectedThemeId, res.locals.user, req.body
+    stockRepository.insertManyAllocations(req.query.selectedThemeId, res.locals.user, req.body.stockAllocation, function(err, results){
         if(err) {
             return next(err);
         }
@@ -21,7 +21,7 @@ router.post('/', function(req, res, next) {
 });
 
 router.get('/', function(req, res, next) {
-   stockRepository.getStockAllocationsByTheme(req.query.themeId, function(err, results) {
+   stockRepository.getStockAllocationsByTheme(req.query.selectedThemeId, function(err, results) {
        if(err) {
            return next(err);
        }

@@ -19,8 +19,8 @@ router.get('/', function (req, res, next) {
     });
 });
 
-router.post('/stocks/:themeId', function (req, res, next) {
-    repository.getById(Theme, req.params.themeId, function(err, theme) {
+router.post('/stocks/:selectedThemeId', function (req, res, next) {
+    repository.getById(Theme, req.params.selectedThemeId, function(err, theme) {
         if (err) {
             console.log('Is next called?')
             return next(err);

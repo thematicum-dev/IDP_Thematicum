@@ -29,7 +29,7 @@ export class ThemeService {
         const token = localStorage.getItem('token')
             ? '?token=' + localStorage.getItem('token')
             : '';
-        const themeId = themeId ? '&themeId=' + themeId : '';
+        const themeId = themeId ? '&selectedThemeId=' + themeId : '';
 
         const headers = new Headers({'Content-Type': 'application/json'});
 

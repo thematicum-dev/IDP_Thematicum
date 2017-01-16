@@ -7,7 +7,8 @@ import {SignupModel} from "./signup-model";
 
 @Component({
     selector: 'app-signup',
-    templateUrl: 'signup.component.html'
+    templateUrl: 'signup.component.html',
+    styleUrls: [`.well { padding-top: 0px}`]
 })
 export class SignupComponent {
     //TODO: fetch personal roles from backend

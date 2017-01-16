@@ -9,11 +9,16 @@ var mongoose = require('mongoose');
 var authRoutes = require('./routes/auth');
 var accessCodeRoutes = require('./routes/accessCodes');
 var testRoute = require('./routes/test');
-var themeRoutes = require('./routes/themes');
+//var themeRoutes = require('./routes/themes');
+//TODO: testing controllers
+var themeRoutes = require('./routes/theme.routes');
 var userInputRoutes = require('./routes/userThemeInputs');
 var stockRoutes = require('./routes/stocks');
 var authUtilities = require('./utilities/authUtilities');
 var test1 = require('./routes/test1');
+
+var themePropertiesRoutes = require('./routes/themeProperties.routes');
+var stockAllocationRoutes = require('./routes/stockAllocations.routes');
 
 var app = express();
 mongoose.connect('localhost:27017/thematicum');
@@ -40,11 +45,12 @@ app.use(function (req, res, next) {
 app.use('/auth', authRoutes);
 app.use('/api/accesscodes', accessCodeRoutes);
 app.use('/api/themes', themeRoutes);
+app.use('/api/themeproperties/', themePropertiesRoutes);
 app.use('/api/userinputs', userInputRoutes);
 app.use('/api/stocks', stockRoutes);
 app.use('/api/test', testRoute);
 app.use('/api/test1', test1);
-
+app.use('/api/stockallocations', stockAllocationRoutes);
 
 app.use(function (req, res, next) {
     return res.render('index');

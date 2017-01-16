@@ -1,6 +1,8 @@
-<h1>Sign in</h1>
+<div class="container">
+<div class="well col-xs-offset-3 col-xs-6">
+    <h1>Sign in</h1>
 
-<form (ngSubmit)="onSubmit(form)" #form="ngForm">
+    <form (ngSubmit)="onSubmit(form)" #form="ngForm">
         <div class="form-group row">
             <label class="col-xs-2 col-form-label" for="email">Email</label>
             <div class="col-xs-10">
@@ -38,3 +40,5 @@
 
         <app-error></app-error>
     </form>
+ </div>
+</div>
