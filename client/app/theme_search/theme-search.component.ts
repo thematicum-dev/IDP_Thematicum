@@ -17,28 +17,33 @@ export class ThemeSearchComponent implements OnInit {
     constructor(private searchService: ThemeSearchService, private router: Router, private route: ActivatedRoute) {}
 
     ngOnInit(): void {
+        //TODO: refactor - create separate classes to override the 2 cases implementation
         if(this.route.snapshot.queryParams['query']) {
-            this.searchTerm = this.route.snapshot.queryParams['query'];
-            this.searchThemesByQueryParam();
+            this.searchTerm = this.route.snapshot.queryParams['query'].trim();
+            this.searchThemes(this.searchTerm)
+        }
+        if(this.route.snapshot.queryParams['all'] && this.route.snapshot.queryParams['all'] === 'true') {
+            this.searchThemes(null)
         }
     }
 
     onSubmit(form: NgForm) {
-        this.updateQueryParam();
-        this.searchThemesByQueryParam();
+        if(this.searchTerm) {
+            this.router.navigate([], {queryParams:{query: this.searchTerm}});
+            this.searchThemes(this.searchTerm);
+        } else {
+            this.router.navigate([], {queryParams:{all: 'true'}});
+            this.searchThemes(null);
+        }
     }
 
     goToThemeDetails(themeId: string) {
         this.router.navigate(['/theme', themeId]);
     }
 
-    updateQueryParam() {
-        this.router.navigate([], this.searchTerm ? {queryParams:{query:this.searchTerm}} : {});
-        //this.router.navigate([], {queryParams:{query:this.searchTerm}});
-    }
-
-    searchThemesByQueryParam() {
-        this.searchService.searchThemes(this.searchTerm.trim())
+    searchThemes(searchTerm: any) {
+        //TODO: consider separate APIs for getting all themes vs. searching
+        this.searchService.searchThemes(searchTerm)
             .subscribe(
                 data => {
                     this.themes = [];
