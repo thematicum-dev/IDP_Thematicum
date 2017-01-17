@@ -75,7 +75,7 @@ exports.list = function(req, res, next) {
                 }
 
                 //TODO: if no matching theme is found, the result is [], i.e. not null
-                if (!result) {
+                if (!results) {
                     return res.status(404).send({
                         message: 'No themes found for the search query'
                     });

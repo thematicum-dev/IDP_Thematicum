@@ -8,8 +8,6 @@ import {NgForm} from "@angular/forms";
 import {ThemeProperties} from "../models/themeProperties";
 import {ThemeService} from "../theme_creation/theme.service";
 import {Observable, Observer} from "rxjs";
-// import * as $ from 'jquery';
-declare var $:JQueryStatic;
 
 @Component({
     selector: 'app-theme-details',
@@ -49,12 +47,7 @@ declare var $:JQueryStatic;
 `],
     providers: [ThemeSearchService]
 })
-export class ThemeDetailsComponent implements OnInit, OnChanges, AfterViewInit {
-    ngAfterViewInit(): void {
-        $(document).ready(function(){
-            //$("#myModal").modal("show")
-        });
-    }
+export class ThemeDetailsComponent implements OnInit, OnChanges {
     //theme existing data
     theme: Theme;
     selectedThemeId: string;
