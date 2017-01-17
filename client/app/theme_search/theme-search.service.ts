@@ -27,9 +27,11 @@ export class ThemeSearchService {
     }
 
     getThemeById(id: string) {
+        console.log('getThemeById: ', id)
         let apiPath = this.baseAPI + 'themes/' + id + this.setTokenQueryParam();
         return this.http.get(apiPath)
             .map((response: Response) => {
+                //console.log('Response: ', response)
                 return response.json().obj;
             })
             .catch((error: Response) =>  {
@@ -45,7 +47,7 @@ export class ThemeSearchService {
                 return response.json().obj;
             })
             .catch((error: Response) =>  {
-                //this.errorService.handleError(error);
+                this.errorService.handleError(error);
                 return Observable.throw(error.json())
             });
     }
@@ -57,8 +59,8 @@ export class ThemeSearchService {
                 return response.json().obj;
             })
             .catch((error: Response) =>  {
-                //this.errorService.handleError(error);
-                return Observable.throw(error.json())
+                return this.errorService.handleError(error);
+                //return Observable.throw(error.json())
             });
     }
 

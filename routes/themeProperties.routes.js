@@ -17,7 +17,7 @@ router.route('/:themepropertyId')
     .put(themePropertiesController.update)
     .delete(themePropertiesController.delete);
 
-router.param('selectedThemeId', themePropertiesController.themeById);
+router.param('themeId', themePropertiesController.themeById);
 router.param('themepropertyId', themePropertiesController.themePropertyById);
 
 module.exports = router;

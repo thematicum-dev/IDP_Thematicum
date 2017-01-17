@@ -26,6 +26,8 @@ import {AutoCompleteTagsComponent} from "./autocomplete/autocomplete-tags.compon
 import {AutoCompleteStockAllocationComponent} from "./autocomplete/autocomplete-stock-allocation.component";
 import {ErrorPageComponent} from "./static_pages/error-page.component";
 import {AuthGuard} from "./auth/auth-guard.service";
+import {ThemePropertiesComponent} from "./theme_details/theme-properties.component";
+import {Ng2Bs3ModalModule} from "ng2-bs3-modal/ng2-bs3-modal";
 
 @NgModule({
     declarations: [
@@ -41,12 +43,13 @@ import {AuthGuard} from "./auth/auth-guard.service";
         AutoCompleteComponent,
         ThemeCreationComponent,
         ThemeDetailsComponent,
+        ThemePropertiesComponent,
         StockAllocationComponent,
         AutoCompleteTagsComponent,
         AutoCompleteStockAllocationComponent,
         ErrorPageComponent
     ],
-    imports: [BrowserModule, routing, FormsModule, HttpModule],
+    imports: [BrowserModule, routing, FormsModule, HttpModule, Ng2Bs3ModalModule],
     providers: [ AuthService, ErrorService, ThemeService, AuthGuard ],
     bootstrap: [AppComponent]
 })

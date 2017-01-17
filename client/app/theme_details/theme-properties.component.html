@@ -1,0 +1,7 @@
+<p>Theme properties</p>
+
+<div *ngIf="themePropertiesAggregation">
+    <label class="btn btn-default" *ngFor="let timeHorizon of themePropertiesAggregation.timeHorizon; let i = index">
+        {{timeHorizon | json}}
+    </label>
+</div>

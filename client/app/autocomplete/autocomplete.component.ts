@@ -31,7 +31,7 @@ export class AutoCompleteComponent implements OnChanges {
     @Input() dataSource: AutocompleteItem[];
     @Input() placeholderTerm: string;
     @Output() notifySelectedItem: EventEmitter<any> = new EventEmitter<any>();
-    @Output() clearErrorStr: EventEmitter = new EventEmitter();
+    @Output() clearErrorStr: EventEmitter<any> = new EventEmitter<any>();
     @Input() allowDirectClick: boolean;
     currentlySelectedItem: AutocompleteItem;
 

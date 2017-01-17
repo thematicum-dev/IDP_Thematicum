@@ -18,6 +18,6 @@ router.route('/:themeId')
     .put(themeController.update)
     .delete(themeController.delete);
 
-router.param('selectedThemeId', themeController.themeById);
+router.param('themeId', themeController.themeById);
 
 module.exports = router;

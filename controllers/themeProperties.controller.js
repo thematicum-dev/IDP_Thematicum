@@ -74,6 +74,8 @@ exports.listByThemeAndUser = function(req, res, next) {
             });
         }
 
+        console.log('user inputs', results)
+
         return res.status(200).send({
             message: 'User theme properties retrieved',
             obj: results
@@ -106,6 +108,18 @@ exports.update = function(req, res, next) {
 
 exports.delete = function(req, res, next) {
     //TODO: implement
+    console.log('At delete theme property')
+    var themeProperty = req.themeProperty;
+
+    themeProperty.remove(function(err) {
+        if(err) {
+            return next(err);
+        }
+
+        return res.status(200).json({
+            message: 'Theme property deleted'
+        });
+    })
 }
 
 //TODO: extract this separately

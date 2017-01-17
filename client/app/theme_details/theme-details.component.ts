@@ -1,4 +1,4 @@
-import {Component, OnInit, OnChanges, SimpleChanges, ElementRef} from '@angular/core';
+import {Component, OnInit, OnChanges, SimpleChanges, ElementRef, AfterViewInit} from '@angular/core';
 import {Theme} from "../models/theme";
 import {ThemeSearchService} from "../theme_search/theme-search.service";
 import { Router, ActivatedRoute, Params } from '@angular/router';
@@ -7,7 +7,9 @@ import {timeHorizonValues, maturityValues, categoryValues} from "../models/theme
 import {NgForm} from "@angular/forms";
 import {ThemeProperties} from "../models/themeProperties";
 import {ThemeService} from "../theme_creation/theme.service";
-import {Observable} from "rxjs";
+import {Observable, Observer} from "rxjs";
+// import * as $ from 'jquery';
+declare var $:JQueryStatic;
 
 @Component({
     selector: 'app-theme-details',
@@ -41,10 +43,18 @@ import {Observable} from "rxjs";
     input[type="radio"], input[type="checkbox"] {
         visibility:hidden;
     }
+    .modal-backdrop {
+        z-index: -1;
+    }   
 `],
     providers: [ThemeSearchService]
 })
-export class ThemeDetailsComponent implements OnInit, OnChanges {
+export class ThemeDetailsComponent implements OnInit, OnChanges, AfterViewInit {
+    ngAfterViewInit(): void {
+        $(document).ready(function(){
+            //$("#myModal").modal("show")
+        });
+    }
     //theme existing data
     theme: Theme;
     selectedThemeId: string;
@@ -62,25 +72,47 @@ export class ThemeDetailsComponent implements OnInit, OnChanges {
     ngOnInit(): void {
         this.route.params
             .switchMap((params: Params) => {
-                let themeId = params['id'];
-                let theme = this.searchService.getThemeById(themeId);
-                let themeProperties = this.searchService.getThemeProperties(themeId);
-                let themePropertiesByUser = this.searchService.getThemePropertiesByUser(themeId);
-
-                return Observable.forkJoin([theme, themeProperties, themePropertiesByUser]);
+                return Observable.of(params['id']);
             })
-            .subscribe(results => {
-                console.log('Theme: ', results[0]);
-                console.log('Properties: ', results[1]);
-                console.log('By user: ', results[2]);
+            .subscribe(id => this.selectedThemeId = id);
 
-                this.theme = results[0];
-                this.theme.createdAt = new Date(results[0].createdAt);
-                this.themePropertiesAggregation = results[1].properties;
-                if (results[2].themeProperties) {
-                    this.userThemeInputs = results[2].themeProperties;
-                }
+        this.searchService.getThemeById(this.selectedThemeId).subscribe(
+            data => {
+                console.log('ThemeId: ', this.selectedThemeId);
+                this.theme = data;
+                this.theme.createdAt = new Date(data.createdAt);
+                //console.log(data)
+            },
+            error => {
+                //TODO: handle error by displaying message
+                console.log('Error getting theme data: ', error);
             });
+
+        this.searchService.getThemeProperties(this.selectedThemeId).subscribe(
+            data => {
+                this.themePropertiesAggregation = data.properties;
+                console.log('Properties: ', this.themePropertiesAggregation)
+            },
+            error => {
+                console.log('Error getting theme properties: ', error);
+            }
+        );
+
+
+        this.searchService.getThemePropertiesByUser(this.selectedThemeId).subscribe(
+            data => {
+                if (data.themeProperties) {
+                    console.log('Properties: ', data.themeProperties)
+                    //TODO: maybe wrap everything in a single object
+                    this.userThemeInputs = data.themeProperties;
+                    this.userThemeInputsId = data._id;
+                }
+            },
+            error => {
+                //No need to handle this error in particular, user simply hasn't input anything for this theme
+                console.log('Error getting theme properties by user: ', error);
+            }
+        );
     }
 
     ngOnChanges(changes: SimpleChanges): void {
@@ -105,7 +137,13 @@ export class ThemeDetailsComponent implements OnInit, OnChanges {
 
     toggleEditMode(containerDiv: Element) {
         this.isEditMode = !this.isEditMode;
+        console.log('Container div: ', containerDiv)
 
+        if(!containerDiv) {
+            return;
+        }
+
+        //TODO: containerDiv is undefined
         let labels = containerDiv.querySelectorAll('label.active');
         for (let i = 0; i<labels.length; i++) {
             labels[i].classList.remove('active');
@@ -117,7 +155,7 @@ export class ThemeDetailsComponent implements OnInit, OnChanges {
             return
         }
 
-        console.log(this.userThemeInputs)
+        //console.log(this.userThemeInputs) //TODO: remove this - lots of lines
         if (!this.isEditMode && !this.userThemeInputs) {
             return this.whiteColor;
         }
@@ -135,13 +173,13 @@ export class ThemeDetailsComponent implements OnInit, OnChanges {
 
     onSubmit(form: NgForm) {
         this.themeProperties.setCheckedCategories();
-
         /*if there isn't any existing user input for this theme, create new
         otherwise, update existing
         */
         if (!this.userThemeInputs) {
             this.themeService.createUserThemeImput(this.theme._id, this.themeProperties)
                 .subscribe(
+                    //this.themePropertiesEditingSubscription()
                     data => {
                         console.log(data);
                         //this.router.navigate(['/theme', this.theme._id]);
@@ -152,10 +190,6 @@ export class ThemeDetailsComponent implements OnInit, OnChanges {
                     }
                 );
         } else {
-            console.log('User theme inputs angular')
-            console.log(this.userThemeInputs)
-            console.log(this.userThemeInputsId)
-            console.log('theme id: ' + this.theme._id)
             this.themeService.updateUserThemeInput(this.userThemeInputsId, this.themeProperties)
                 .subscribe(
                     data => {
@@ -169,5 +203,35 @@ export class ThemeDetailsComponent implements OnInit, OnChanges {
                     }
                 );
         }
+    }
+
+    //TODO: reuse observer?
+    themePropertiesEditingSubscription() {
+        return Observer.create(
+            function (data) {
+                console.log('Next: %s', data);
+            },
+            function (err) {
+                console.log('Error: %s', err);
+            },
+            function () {
+                console.log('Completed');
+            });
+    }
+
+    closeModal(modal: any) {
+        console.log('Closing modal ', this.userThemeInputsId)
+        if(this.userThemeInputsId) {
+            this.themeService.deleteUserThemeInput(this.userThemeInputsId).subscribe(
+                data => {
+                    console.log(data);
+                },
+                error => {
+                    //TODO: handle error
+                    console.log(error);
+                }
+            )
+        }
+        modal.close();
     }
 }

@@ -9,6 +9,12 @@ import {ThemeProperties} from "../models/themeProperties";
 @Injectable()
 export class ThemeService {
     constructor(private http: Http) {}
+    baseAPI: string = 'http://localhost:3000/api/';
+    headers = new Headers({'Content-Type': 'application/json'});
+
+    setTokenQueryParam() {
+        return localStorage.getItem('token') ? '?token=' + localStorage.getItem('token') : '';
+    }
 
     createTheme(themeCreationModel: ThemeCreationModel) {
         const body = JSON.stringify(themeCreationModel);
@@ -18,7 +24,7 @@ export class ThemeService {
         const headers = new Headers({'Content-Type': 'application/json'});
 
         //TODO: don't stringify static data (e.g. theme property values)
-        console.log(body);
+        //console.log(body);
         return this.http.post('http://localhost:3000/api/themes' + token, body, {headers: headers})
             .map((response: Response) => response.json())
             .catch((error: Response) =>  Observable.throw(error.json()));
@@ -26,29 +32,28 @@ export class ThemeService {
 
     createUserThemeImput(themeId: any, themeProperties: ThemeProperties) {
         const body = JSON.stringify(themeProperties);
-        const token = localStorage.getItem('token')
-            ? '?token=' + localStorage.getItem('token')
-            : '';
-        const themeId = themeId ? '&selectedThemeId=' + themeId : '';
+        let apiPath = this.baseAPI + 'themeproperties/theme/' + themeId + this.setTokenQueryParam();
 
-        const headers = new Headers({'Content-Type': 'application/json'});
-
-        return this.http.post('http://localhost:3000/api/userinputs' + token + themeId, body, {headers: headers})
+        return this.http.post(apiPath, body, {headers: this.headers})
             .map((response: Response) => response.json())
             .catch((error: Response) =>  Observable.throw(error.json()));
     }
 
     updateUserThemeInput(userThemeInputId: any, themeProperties: ThemeProperties) {
-        console.log(userThemeInputId)
         const body = JSON.stringify(themeProperties);
-        const token = localStorage.getItem('token')
-            ? '?token=' + localStorage.getItem('token')
-            : '';
+        let apiPath = this.baseAPI + 'themeproperties/' + userThemeInputId + this.setTokenQueryParam();
 
-        const headers = new Headers({'Content-Type': 'application/json'});
-
-        return this.http.put('http://localhost:3000/api/userinputs/' + userThemeInputId + token, body, {headers: headers})
+        return this.http.put(apiPath, body, {headers: this.headers})
             .map((response: Response) => response.json())
             .catch((error: Response) =>  Observable.throw(error.json()));
+    }
+
+    deleteUserThemeInput(userThemeInputId: string) {
+        console.log('Service theme input id: ', userThemeInputId)
+        let apiPath = this.baseAPI + 'themeproperties/' + userThemeInputId + this.setTokenQueryParam();
+        return this.http.delete(apiPath)
+            .map((response: Response) => response.json())
+            .catch((error: Response) =>  Observable.throw(error.json()));
+        //return Observable.of('test');
     }
 }
