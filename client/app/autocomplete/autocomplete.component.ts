@@ -5,7 +5,7 @@ import {
 import {AutocompleteList} from "./autocomplete-list";
 import {items} from "./dummy-data";
 import {Input, Output} from "@angular/core/src/metadata/directives";
-import {AutocompleteDatasourceInterface} from "./autocomplete-datasource-interface";
+import {AutocompleteDatasourceService} from "./autocomplete-datasource.service";
 import {AutocompleteItem} from "./autocomplete-item";
 import {ThemeTagsService} from "../theme_creation/theme-tags.service";
 

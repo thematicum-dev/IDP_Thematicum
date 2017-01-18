@@ -3,16 +3,14 @@ import {AutoCompleteContainerComponent} from "./autocomplete-container.component
 import {AutocompleteItemSelectionInterface} from "./autocomplete-item-selection-interface";
 import {AutocompleteItem} from "./autocomplete-item";
 import {ThemeTagsService} from "../theme_creation/theme-tags.service";
-import {AutocompleteDatasourceInterface} from "./autocomplete-datasource-interface";
+import {AutocompleteDatasourceService} from "./autocomplete-datasource.service";
 
 @Component({
     selector: 'app-autocomplete-tags',
     templateUrl: 'autocomplete-tags.component.html',
-    providers: [
-        ThemeTagsService
-    ]
+    providers: [AutocompleteDatasourceService]
 })
-export class AutoCompleteTagsComponent extends AutoCompleteContainerComponent implements OnInit {
+export class AutoCompleteTagsComponent extends AutoCompleteContainerComponent {
     autocompletePlaceholder = 'Keyword';
     allowCustomValues: boolean = true;
     allowEnterKey: boolean = true;
@@ -22,15 +20,8 @@ export class AutoCompleteTagsComponent extends AutoCompleteContainerComponent im
     selectedItems: any[] = []; //selected items
 
     //TODO: DI in inheritance
-    constructor(private autocompleteService: ThemeTagsService) {}
-
-    ngOnInit(): void {
-        this.autocompleteService.getAutocompleteList().subscribe(data => {
-                this.initializeAutocompleteData(data);
-            },
-            error => {
-                console.log(error)
-            });
+    constructor(private dataSource: AutocompleteDatasourceService) {
+        super(dataSource);
     }
 
     selectItem(item: any) {

@@ -1,10 +1,10 @@
 import {Http, Response} from "@angular/http";
 import {Injectable} from "@angular/core";
 import {Observable} from "rxjs";
-import {AutocompleteDatasourceInterface} from "../autocomplete/autocomplete-datasource-interface";
+import {AutocompleteDatasourceService} from "../autocomplete/autocomplete-datasource.service";
 
 @Injectable()
-export class StockService implements AutocompleteDatasourceInterface {
+export class StockService implements AutocompleteDatasourceService {
     constructor(private http: Http) {
     }
 

@@ -6,7 +6,7 @@ import {ThemeTagsService} from "../theme_creation/theme-tags.service";
 import {StockService} from "../stock_allocation/stock.service";
 import {Stock} from "../models/stock";
 import {StockAllocation} from "../models/stockAllocation";
-import {AutocompleteDatasourceInterface} from "./autocomplete-datasource-interface";
+import {AutocompleteDatasourceService} from "./autocomplete-datasource.service";
 import {StockAllocationModel} from "../models/stockAllocationModel";
 
 @Component({

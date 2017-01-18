@@ -41,9 +41,13 @@ import {Observable, Observer} from "rxjs";
     input[type="radio"], input[type="checkbox"] {
         visibility:hidden;
     }
-    .modal-backdrop {
-        z-index: -1;
-    }   
+    .well button.btn-default {
+        background-color: #f5f5f5;
+        text-decoration: none;
+        outline:none;
+        border: none;
+        box-shadow: none;
+    }
 `],
     providers: [ThemeSearchService]
 })
@@ -61,6 +65,9 @@ export class ThemeDetailsComponent implements OnInit, OnChanges {
     isEditMode: boolean = false;
     yellowColorCode = '#fcf8e3';
     whiteColor = 'white';
+    wellBackgroundColor = '#f5f5f5';
+
+    isCreator = true;
 
     ngOnInit(): void {
         this.route.params
