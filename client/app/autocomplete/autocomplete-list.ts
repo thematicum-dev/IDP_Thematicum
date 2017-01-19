@@ -1,6 +1,4 @@
 import {AutocompleteItem} from "./autocomplete-item";
-import {isNullOrUndefined} from "util";
-import {ThemeTagsService} from "../theme_creation/theme-tags.service";
 
 export class AutocompleteList {
     filteredList: AutocompleteItem[] = [];

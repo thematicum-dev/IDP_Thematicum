@@ -13,7 +13,8 @@ var testRoute = require('./routes/test');
 //TODO: testing controllers
 var themeRoutes = require('./routes/theme.routes');
 var userInputRoutes = require('./routes/userThemeInputs');
-var stockRoutes = require('./routes/stocks');
+//var stockRoutes = require('./routes/stocks');
+var stockRoutes = require('./routes/stock.routes');
 var authUtilities = require('./utilities/authUtilities');
 var test1 = require('./routes/test1');
 

@@ -1,20 +1,13 @@
-import {Component, OnInit, ElementRef} from '@angular/core';
-import {AutoCompleteComponent} from "../autocomplete/autocomplete.component";
+import {Component} from '@angular/core';
 import {ThemeCreationModel} from "../models/themeCreationModel";
-import {timeHorizonValues, maturityValues, categoryValues} from "../models/themePropertyValues";
 import {Theme} from "../models/theme";
 import {NgForm} from "@angular/forms";
 import {ThemeService} from "./theme.service";
-import {AutocompleteList} from "../autocomplete/autocomplete-list";
-import {ThemeTagsService} from "./theme-tags.service";
-import {AutocompleteItem} from "../autocomplete/autocomplete-item";
-import {Observable} from "rxjs";
 import {Router} from "@angular/router";
 import {ThemeProperties} from "../models/themeProperties";
 import {StockAllocation} from "../models/stockAllocation";
 import {StockAllocationModel} from "../models/stockAllocationModel";
 import {AutoCompleteContainerComponent} from "../autocomplete/autocomplete-container.component";
-import {Stock} from "../models/stock";
 
 @Component({
     selector: 'app-theme-create',

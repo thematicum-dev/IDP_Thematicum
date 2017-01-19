@@ -1,11 +1,9 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule }   from '@angular/forms';
-
 import { AppComponent } from "./app.component";
 import {NavbarComponent} from "./navigation/navbar.component";
 import {FooterComponent} from "./navigation/footer.component";
-
 import { routing } from "./app.routing";
 import {HomepageComponent} from "./navigation/homepage.component";
 import {AboutComponent} from "./static_pages/about.component";
@@ -20,8 +18,6 @@ import {ThemeCreationComponent} from "./theme_creation/theme-creation.component"
 import {ThemeDetailsComponent} from "./theme_details/theme-details.component";
 import {ErrorService} from "./error-handling/error.service";
 import {ThemeService} from "./theme_creation/theme.service";
-import {StockAllocationComponent} from "./stock_allocation/stock-allocation.component";
-import {AutoCompleteContainerComponent} from "./autocomplete/autocomplete-container.component";
 import {AutoCompleteTagsComponent} from "./autocomplete/autocomplete-tags.component";
 import {AutoCompleteStockAllocationComponent} from "./autocomplete/autocomplete-stock-allocation.component";
 import {ErrorPageComponent} from "./static_pages/error-page.component";
@@ -46,7 +42,6 @@ import {ThemeCharacteristicsEditingComponent} from "./theme_creation/theme-chara
         ThemeDetailsComponent,
         ThemeCharacteristicsEditingComponent,
         ThemePropertiesComponent,
-        StockAllocationComponent,
         AutoCompleteTagsComponent,
         AutoCompleteStockAllocationComponent,
         ErrorPageComponent

@@ -1,8 +1,6 @@
-import {Component, OnInit, Injector, Inject} from '@angular/core';
+import {Component} from '@angular/core';
 import {AutoCompleteContainerComponent} from "./autocomplete-container.component";
-import {AutocompleteItemSelectionInterface} from "./autocomplete-item-selection-interface";
 import {AutocompleteItem} from "./autocomplete-item";
-import {ThemeTagsService} from "../theme_creation/theme-tags.service";
 import {AutocompleteDatasourceService} from "./autocomplete-datasource.service";
 
 @Component({
@@ -11,16 +9,12 @@ import {AutocompleteDatasourceService} from "./autocomplete-datasource.service";
     providers: [AutocompleteDatasourceService]
 })
 export class AutoCompleteTagsComponent extends AutoCompleteContainerComponent {
-    autocompletePlaceholder = 'Keyword';
-    allowCustomValues: boolean = true;
-    allowEnterKey: boolean = true;
-    allowDirectClick: boolean = true;
-    error: string = '';
-    itemList: AutocompleteItem[] = []; //data source (all items)
-    selectedItems: any[] = []; //selected items
-
-    //TODO: DI in inheritance
     constructor(private dataSource: AutocompleteDatasourceService) {
+        this.dataSourceAPI = 'http://localhost:3000/api/themes/tags' + '?token=' + localStorage.getItem('token');
+        this.autocompletePlaceholder = 'Keyword';
+        this.allowCustomValues = true;
+        this.allowEnterKey = true;
+        this.allowDirectClick = true;
         super(dataSource);
     }
 

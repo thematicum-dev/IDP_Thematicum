@@ -4,10 +4,20 @@ import {OnInit} from "@angular/core";
 import {AutocompleteDatasourceService} from "./autocomplete-datasource.service";
 
 export class AutoCompleteContainerComponent implements AutocompleteItemSelectionInterface, OnInit {
+    dataSourceAPI: string;
+    autocompletePlaceholder = '';
+    allowCustomValues: boolean;
+    allowEnterKey: boolean;
+    allowDirectClick: boolean;
+
+    error: string = '';
+    itemList: AutocompleteItem[] = []; //data source (all items)
+    selectedItems: any[] = []; //selected items
+    duplicateChosenErrorStr = 'This item has already been selected. Please choose another one';
+
     constructor(private dataSource: AutocompleteDatasourceService) {}
+
     ngOnInit(): void {
-        console.log('Implementing OnInit')
-        console.log('Data source: ', this.dataSource)
         this.dataSource.getAutocompleteList(this.dataSourceAPI).subscribe(data => {
             this.initializeAutocompleteData(data);
         },
@@ -15,16 +25,6 @@ export class AutoCompleteContainerComponent implements AutocompleteItemSelection
             console.log(error)
         });
     }
-    autocompletePlaceholder = '';
-    allowCustomValues: boolean;
-    allowEnterKey: boolean;
-    allowDirectClick: boolean;
-    error: string = '';
-    itemList: AutocompleteItem[] = []; //data source (all items)
-    selectedItems: any[] = []; //selected items
-    duplicateChosenErrorStr = 'This item has already been selected. Please choose another one';
-    //TODO: provide api string as an input from parent
-    dataSourceAPI = 'http://localhost:3000/api/themes/tags' + '?token=' + localStorage.getItem('token');
 
     clearErrorStr() {
         this.error = '';
