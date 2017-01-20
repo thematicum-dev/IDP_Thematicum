@@ -18,7 +18,7 @@
                         <ul class="dropdown-menu">
                             <li><a (click)="toggleThemeCharacteristicsEditable()">Edit</a></li>
                             <li role="separator" class="divider"></li>
-                            <li><a>Delete</a></li>
+                            <li><a (click)="modal.show()">Delete</a></li>
                         </ul>
                     </div>
 
@@ -69,7 +69,7 @@
                 <ul class="dropdown-menu">
                     <li><a (click)="toggleEditMode(propertiesContainer)">Edit</a></li>
                     <li *ngIf="userThemeInputs" role="separator" class="divider"></li>
-                    <li *ngIf="userThemeInputs"><a (click)="modal.open()">Delete</a></li>
+                    <li *ngIf="userThemeInputs"><a type="button" (click)="modal.show()">Delete</a></li>
                 </ul>
             </div>
 
@@ -176,30 +176,18 @@
     </div>
 </div>
 
-<!--<button type="button" class="btn btn-default" (click)="modal.open()">Delete</button>-->
 
-<!-- Modal for delete confirmation -->
-<!--<modal #modal>-->
-    <!--<modal-body>-->
-        <!--<h5>Are you sure you want to delete your input to this theme?</h5>-->
-    <!--</modal-body>-->
-    <!--<modal-footer>-->
-        <!--<button type="button" class="btn btn-default" data-dismiss="modal" (click)="modal.dismiss()">Cancel</button>-->
-        <!--<button type="button" class="btn btn-primary" (click)="closeModal(modal)">Delete</button>-->
-    <!--</modal-footer>-->
-<!--</modal>-->
-
-<button type="button" (click)="modal.show()">test</button>
-<app-modal>
+<!-- Delete Theme modal -->
+<app-modal #modal>
     <div class="app-modal-header">
-        header
+        <h5>Delete Theme</h5>
     </div>
     <div class="app-modal-body">
-        Whatever content you like, form fields, anything
+        <p>Are you sure you want to delete this theme and all its properties and stock allocation data?</p>
     </div>
     <div class="app-modal-footer">
         <button type="button" class="btn btn-default" (click)="modal.hide()">Close</button>
-        <button type="button" class="btn btn-primary">Save changes</button>
+        <button type="button" class="btn btn-primary" (click)="deleteTheme(modal)">Delete</button>
     </div>
 </app-modal>
 

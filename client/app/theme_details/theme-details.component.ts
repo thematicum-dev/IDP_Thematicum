@@ -156,6 +156,11 @@ export class ThemeDetailsComponent implements OnInit, OnChanges {
         this.isThemeCharacteristicsEditable = false;
     }
 
+    deleteTheme(modal: any) {
+        //TODO: implement DELETE theme
+        modal.hide();
+    }
+
     toggleEditMode(containerDiv: Element) {
         this.isEditMode = !this.isEditMode;
         console.log('Container div: ', containerDiv)
