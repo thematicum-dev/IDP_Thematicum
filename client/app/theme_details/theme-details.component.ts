@@ -140,6 +140,14 @@ export class ThemeDetailsComponent implements OnInit, OnChanges {
         //TODO: cancel changes to model
     }
 
+    cancelThemeEditing(theme: Theme) {
+        //cancel changes made to Theme, by restoring previous model
+        this.theme = theme;
+
+        //set isThemeCharacteristicsEditable to false
+        this.isThemeCharacteristicsEditable = false;
+    }
+
     toggleEditMode(containerDiv: Element) {
         this.isEditMode = !this.isEditMode;
         console.log('Container div: ', containerDiv)
