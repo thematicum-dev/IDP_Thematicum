@@ -140,13 +140,6 @@ export class ThemeDetailsComponent implements OnInit, OnChanges {
         //TODO: cancel changes to model
     }
 
-    toggleThemeCharacteristicsEditableAndReload() {
-        this.isThemeCharacteristicsEditable = !this.isThemeCharacteristicsEditable;
-        //TODO: cancel changes to model
-        //TODO: remove this ugly thing
-        window.location.reload();
-    }
-
     toggleEditMode(containerDiv: Element) {
         this.isEditMode = !this.isEditMode;
         console.log('Container div: ', containerDiv)

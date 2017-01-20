@@ -5,6 +5,7 @@ import 'rxjs/Rx';
 import {Observable} from "rxjs";
 import {ThemeCreationModel} from "../models/themeCreationModel";
 import {ThemeProperties} from "../models/themeProperties";
+import {Theme} from "../models/theme";
 
 @Injectable()
 export class ThemeService {
@@ -54,6 +55,14 @@ export class ThemeService {
         return this.http.delete(apiPath)
             .map((response: Response) => response.json())
             .catch((error: Response) =>  Observable.throw(error.json()));
-        //return Observable.of('test');
+    }
+
+    updateTheme(theme: Theme) {
+        const body = JSON.stringify(theme);
+        let apiPath = this.baseAPI + 'themes/' + theme._id + this.setTokenQueryParam();
+
+        return this.http.put(apiPath, body, {headers: this.headers})
+            .map((response: Response) => response.json())
+            .catch((error: Response) =>  Observable.throw(error.json()));
     }
 }

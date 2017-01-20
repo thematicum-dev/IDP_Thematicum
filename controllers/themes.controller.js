@@ -33,7 +33,27 @@ exports.read = function(req, res, next) {
 }
 
 exports.update = function(req, res, next) {
-    //TODO: implement
+    var theme = req.theme;
+
+    if (req.body.name)
+        theme.name = req.body.name;
+    if (req.body.description)
+        theme.description = req.body.description;
+    //TODO: allow empty tags or not?
+    if (req.body.tags)
+        theme.tags = req.body.tags;
+
+    theme.save(function(err, result) {
+        if (err) {
+            return next(err);
+        }
+
+        return res.status(201).json({
+            message: 'Theme updated',
+            obj: result
+        });
+
+    });
 }
 
 exports.delete = function(req, res, next) {
