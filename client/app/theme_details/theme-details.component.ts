@@ -8,6 +8,8 @@ import {NgForm} from "@angular/forms";
 import {ThemeProperties} from "../models/themeProperties";
 import {ThemeService} from "../theme_creation/theme.service";
 import {Observable, Observer} from "rxjs";
+import {ModalComponent} from "./modal.component";
+import {ViewChild} from "@angular/core/src/metadata/di";
 
 @Component({
     selector: 'app-theme-details',
@@ -47,6 +49,9 @@ import {Observable, Observer} from "rxjs";
         outline:none;
         border: none;
         box-shadow: none;
+    },
+    .modal {
+      background: rgba(0,0,0,0.6);
     }
 `],
     providers: [ThemeSearchService]
@@ -69,6 +74,9 @@ export class ThemeDetailsComponent implements OnInit, OnChanges {
 
     isCreator = true;
     isThemeCharacteristicsEditable = false;
+
+    @ViewChild(ModalComponent)
+    public readonly modal: ModalComponent;
 
     ngOnInit(): void {
         this.route.params

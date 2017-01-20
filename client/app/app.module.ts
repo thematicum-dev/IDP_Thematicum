@@ -25,6 +25,7 @@ import {AuthGuard} from "./auth/auth-guard.service";
 import {ThemePropertiesComponent} from "./theme_details/theme-properties.component";
 import {Ng2Bs3ModalModule} from "ng2-bs3-modal/ng2-bs3-modal";
 import {ThemeCharacteristicsEditingComponent} from "./theme_creation/theme-characteristics-editing.component";
+import {ModalComponent} from "./theme_details/modal.component";
 
 @NgModule({
     declarations: [
@@ -44,7 +45,8 @@ import {ThemeCharacteristicsEditingComponent} from "./theme_creation/theme-chara
         ThemePropertiesComponent,
         AutoCompleteTagsComponent,
         AutoCompleteStockAllocationComponent,
-        ErrorPageComponent
+        ErrorPageComponent,
+        ModalComponent
     ],
     imports: [BrowserModule, routing, FormsModule, ReactiveFormsModule, HttpModule, Ng2Bs3ModalModule],
     providers: [ AuthService, ErrorService, ThemeService, AuthGuard ],
