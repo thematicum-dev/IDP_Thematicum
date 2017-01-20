@@ -1,4 +1,4 @@
-import {Component} from '@angular/core';
+import {Component, Input, OnChanges, SimpleChanges} from '@angular/core';
 import {AutoCompleteContainerComponent} from "./autocomplete-container.component";
 import {AutocompleteItem} from "./autocomplete-item";
 import {AutocompleteDatasourceService} from "./autocomplete-datasource.service";
@@ -8,7 +8,8 @@ import {AutocompleteDatasourceService} from "./autocomplete-datasource.service";
     templateUrl: 'autocomplete-tags.component.html',
     providers: [AutocompleteDatasourceService]
 })
-export class AutoCompleteTagsComponent extends AutoCompleteContainerComponent {
+export class AutoCompleteTagsComponent extends AutoCompleteContainerComponent implements OnChanges {
+    @Input() themeTags: any[];
     constructor(private dataSource: AutocompleteDatasourceService) {
         this.dataSourceAPI = 'http://localhost:3000/api/themes/tags' + '?token=' + localStorage.getItem('token');
         this.autocompletePlaceholder = 'Keyword';
@@ -16,6 +17,13 @@ export class AutoCompleteTagsComponent extends AutoCompleteContainerComponent {
         this.allowEnterKey = true;
         this.allowDirectClick = true;
         super(dataSource);
+    }
+
+    ngOnChanges(changes: SimpleChanges): void {
+        var themeTagsInputChange: any[] = changes.themeTags.currentValue;
+        if (themeTagsInputChange) {
+            this.selectedItems = this.themeTags;
+        }
     }
 
     selectItem(item: any) {

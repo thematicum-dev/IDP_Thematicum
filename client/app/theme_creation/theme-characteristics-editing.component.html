@@ -1,29 +1,46 @@
-<div class="form-group row">
-    <label class="col-xs-2 col-form-label" for="themeName">Theme name</label>
-    <div class="col-xs-10">
-        <input
-                type="text"
-                placeholder="Investment theme"
-                id="themeName"
-                class="form-control"
-                [(ngModel)]="theme.name"
-                name="themeName"
-        >
+<form (ngSubmit)="onSubmit()" #form="ngForm">
+    <div class="form-group row">
+        <label class="col-xs-2 col-form-label" for="themeName">Theme name</label>
+        <div class="col-xs-10">
+            <input type="text"
+                   placeholder="Investment theme"
+                   id="themeName"
+                   class="form-control"
+                   [(ngModel)]="theme.name"
+                   name="themeName"
+                   #themeName="ngModel"
+                   required
+                   minlength="4"
+                   maxlength="32">
+            <div *ngIf="themeName.dirty && !themeName.valid" class="data-validation-message">
+                Theme name is required and between 4 to 34 characters
+            </div>
+        </div>
     </div>
-</div>
 
-<div class="form-group row">
-    <label class="col-xs-2 col-form-label" for="description">Description</label>
-    <div class="col-xs-10">
-                <textarea
-                        id="description"
-                        placeholder="Please enter a description (min 140 characters, maximum 500 characters)"
-                        class="form-control"
-                        [(ngModel)]="theme.description"
-                        name="description"
-                        rows="7"></textarea>
+    <div class="form-group row">
+        <label class="col-xs-2 col-form-label" for="description">Description</label>
+        <div class="col-xs-10">
+        <textarea id="description"
+                  placeholder="Please enter a description (min 140 characters, maximum 500 characters)"
+                  class="form-control"
+                  [(ngModel)]="theme.description"
+                  name="description"
+                  #description="ngModel"
+                  rows="7"
+                  required
+                  minlength="4"
+                  maxlength="500"></textarea>
+            <div *ngIf="description.dirty && !description.valid" class="data-validation-message">
+                Description is required and between 4 to 500 characters
+            </div>
+        </div>
     </div>
-</div>
 
-<app-autocomplete-tags #themeTags></app-autocomplete-tags>
+    <app-autocomplete-tags [themeTags]="theme.tags" #themeTags></app-autocomplete-tags>
 
+    <div class="text-right">
+        <button class="btn btn-default" type="button" (click)="notifyCancelEditing()">Cancel</button>
+        <button class="btn btn-primary" type="submit" [disabled]="!form.form.valid">Save</button>
+    </div>
+</form>

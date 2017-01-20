@@ -16,7 +16,7 @@
                         </button>
 
                         <ul class="dropdown-menu">
-                            <li><a>Edit</a></li>
+                            <li><a (click)="toggleThemeCharacteristicsEditable()">Edit</a></li>
                             <li role="separator" class="divider"></li>
                             <li><a>Delete</a></li>
                         </ul>
@@ -29,7 +29,7 @@
             </div>
         </div>
 
-        <div>
+        <div #themeCharacteristicsNonEditable *ngIf="!isThemeCharacteristicsEditable">
             <div class="row">
                 <div class="col-xs-2">
                     <label>Theme description</label>
@@ -49,13 +49,8 @@
             </div>
         </div>
 
-        <form (ngSubmit)="onSubmit()" #form="ngForm">
-            <app-theme-characteristics-editing [theme]="theme"></app-theme-characteristics-editing>
-            <div class="text-right">
-                <button class="btn btn-default" type="button" (click)="toggleEditMode(propertiesContainer)">Cancel</button>
-                <button class="btn btn-primary" type="submit" [disabled]="!form.form.valid">Save</button>
-            </div>
-        </form>
+        <app-theme-characteristics-editing *ngIf="isThemeCharacteristicsEditable" [theme]="theme" [themeTags]="theme.tags" (cancelEditing)="toggleThemeCharacteristicsEditable()">
+        </app-theme-characteristics-editing>
 
     </div>
 

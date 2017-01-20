@@ -68,6 +68,7 @@ export class ThemeDetailsComponent implements OnInit, OnChanges {
     wellBackgroundColor = '#f5f5f5';
 
     isCreator = true;
+    isThemeCharacteristicsEditable = false;
 
     ngOnInit(): void {
         this.route.params
@@ -119,7 +120,6 @@ export class ThemeDetailsComponent implements OnInit, OnChanges {
         var themeChange: Theme = changes.theme.currentValue;
         if (themeChange) {
             // this.autocompleteList.list = this.dataSource;
-            // console.log(this.theme)
         }
     }
 
@@ -134,6 +134,18 @@ export class ThemeDetailsComponent implements OnInit, OnChanges {
         private router: Router,
         private searchService: ThemeSearchService,
         private themeService: ThemeService) { }
+
+    toggleThemeCharacteristicsEditable() {
+        this.isThemeCharacteristicsEditable = !this.isThemeCharacteristicsEditable;
+        //TODO: cancel changes to model
+    }
+
+    toggleThemeCharacteristicsEditableAndReload() {
+        this.isThemeCharacteristicsEditable = !this.isThemeCharacteristicsEditable;
+        //TODO: cancel changes to model
+        //TODO: remove this ugly thing
+        window.location.reload();
+    }
 
     toggleEditMode(containerDiv: Element) {
         this.isEditMode = !this.isEditMode;
