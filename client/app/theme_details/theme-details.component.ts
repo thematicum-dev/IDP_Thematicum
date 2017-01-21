@@ -10,6 +10,7 @@ import {ThemeService} from "../theme_creation/theme.service";
 import {Observable, Observer} from "rxjs";
 import {ModalComponent} from "./modal.component";
 import {ViewChild} from "@angular/core/src/metadata/di";
+import {timeHorizonValues, maturityValues, categoryValues} from "../models/themePropertyValues";
 
 @Component({
     selector: 'app-theme-details',
@@ -63,6 +64,10 @@ export class ThemeDetailsComponent implements OnInit, OnChanges {
     themePropertiesAggregation: any;
     userThemeInputs: any;
     userThemeInputsId: any;
+
+    timeHorizonValues = timeHorizonValues;
+    maturityValues = maturityValues;
+    categoryValues = categoryValues;
 
     //theme data - for user editing
     themeProperties: ThemeProperties = new ThemeProperties();
@@ -178,10 +183,10 @@ export class ThemeDetailsComponent implements OnInit, OnChanges {
 
     setPropertyBackgroundColor(propertyName, index) {
         if (this.isEditMode) {
-            return
+            return;
         }
 
-        //console.log(this.userThemeInputs) //TODO: remove this - lots of lines
+        //TODO: 1st condition is not really needed
         if (!this.isEditMode && !this.userThemeInputs) {
             return this.whiteColor;
         }

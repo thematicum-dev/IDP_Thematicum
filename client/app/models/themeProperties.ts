@@ -1,13 +1,11 @@
-import {timeHorizonValues, maturityValues, categoryValues} from "../models/themePropertyValues";
+import {categoryValues} from "../models/themePropertyValues";
 
 export class ThemeProperties {
-    timeHorizonValues = timeHorizonValues;
-    maturityValues = maturityValues;
     categoryValues = categoryValues;
 
-    public timeHorizon?: number;
-    public maturity?: number;
-    public categories?: number[];
+    public timeHorizon: number;
+    public maturity: number;
+    public categories: number[];
 
     setTimeHorizon(timeHorizon: number) {
         this.timeHorizon = timeHorizon;
@@ -26,6 +24,14 @@ export class ThemeProperties {
             return category.checked;
         }).map(category => {
                 return category.value
+        });
+    }
+
+    getCheckedCategories() {
+        return categoryValues.filter(category => {
+            return category.checked;
+        }).map(category => {
+            return category.value
         });
     }
 }

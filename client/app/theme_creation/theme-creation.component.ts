@@ -8,6 +8,7 @@ import {ThemeProperties} from "../models/themeProperties";
 import {StockAllocation} from "../models/stockAllocation";
 import {StockAllocationModel} from "../models/stockAllocationModel";
 import {AutoCompleteContainerComponent} from "../autocomplete/autocomplete-container.component";
+import {timeHorizonValues, maturityValues, categoryValues} from "../models/themePropertyValues";
 
 @Component({
     selector: 'app-theme-create',
@@ -18,6 +19,10 @@ import {AutoCompleteContainerComponent} from "../autocomplete/autocomplete-conta
 })
 export class ThemeCreationComponent {
     themeCreation: ThemeCreationModel;
+
+    timeHorizonValues = timeHorizonValues;
+    maturityValues = maturityValues;
+    categoryValues = categoryValues;
 
     constructor(
         private themeService: ThemeService,
