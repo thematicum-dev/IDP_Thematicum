@@ -1,4 +1,5 @@
 var _ = require('underscore');
+var constants = require('../models/constants');
 
 module.exports = {
     groupByStockAndExposure: groupByStockAndExposure
@@ -12,29 +13,47 @@ function groupByStockAndExposure(stockAllocations) {
     _.each(groupedByStock, function(value, key, list) {
         var element = {};
         element.themeStockCompositionId = key;
-        //TODO: get other details
         element.exposureDistribution = aggregateExposureDistribution(value);
         exposureDistributionPerStock.push(element)
     });
-
     return exposureDistributionPerStock;
 }
 
 function aggregateExposureDistribution(allocationsPerStock) {
-    var totalCount = allocationsPerStock.length;
-    return _.chain(allocationsPerStock)
+    let totalCount = allocationsPerStock.length;
+    let totalExposureValuesNr = constants.TOTAL_EXPOSURE_VALUES_NR;
+    var exposureArray = new Array(totalExposureValuesNr);
+
+    _.chain(allocationsPerStock)
         .countBy(function(stockAllocation) {
-            return stockAllocation.exposure; })
-        .map(function(value, key) {
-            return {
+            return stockAllocation.exposure;
+        })
+        .each(function(value, key, list) {
+            console.log('Key: ', key, ' Value: ', value);
+            exposureArray[key] = {
                 value: key,
                 count: value,
                 percentage: roundUp(100*value/totalCount, 10)
-            }
-        })
-        .value();
+            };
+        });
+
+    fixupExposureValues(exposureArray);
+    return exposureArray;
 }
 
 function roundUp(num, precision) {
     return Math.ceil(num * precision) / precision
+}
+
+function fixupExposureValues(array) {
+    //add dummy object representing an exposure with 0 votes
+    for (var i =0; i<array.length; i++) {
+        if (!array[i]) {
+            array[i] = {
+                value: i,
+                count: 0,
+                percentage: 0
+            };
+        }
+    }
 }
