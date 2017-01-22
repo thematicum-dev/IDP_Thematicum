@@ -26,6 +26,7 @@ import {ThemePropertiesComponent} from "./theme_details/theme-properties.compone
 import {Ng2Bs3ModalModule} from "ng2-bs3-modal/ng2-bs3-modal";
 import {ThemeCharacteristicsEditingComponent} from "./theme_creation/theme-characteristics-editing.component";
 import {ModalComponent} from "./theme_details/modal.component";
+import {ThemeStockAllocationComponent} from "./stock_allocation/theme-stock-allocation.component";
 
 @NgModule({
     declarations: [
@@ -43,6 +44,7 @@ import {ModalComponent} from "./theme_details/modal.component";
         ThemeDetailsComponent,
         ThemeCharacteristicsEditingComponent,
         ThemePropertiesComponent,
+        ThemeStockAllocationComponent,
         AutoCompleteTagsComponent,
         AutoCompleteStockAllocationComponent,
         ErrorPageComponent,

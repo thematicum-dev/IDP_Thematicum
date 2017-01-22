@@ -42,6 +42,13 @@ import {timeHorizonValues, maturityValues, categoryValues} from "../models/theme
         .modal {
             background: rgba(0,0,0,0.6);
         }
+        .dropdown-toggle:active {
+            background: white;
+        }
+        .open>.dropdown-toggle {
+            background: white;
+            box-shadow: none;
+        }
         `
     ]
 })
