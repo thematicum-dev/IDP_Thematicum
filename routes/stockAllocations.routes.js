@@ -11,10 +11,10 @@ router.route('/theme/:themeId')
     .get(stockAllocationsController.listByTheme)
     .post(stockAllocationsController.createMany);
 
-router.route('theme/:themeId/user')
+router.route('/theme/:themeId/user')
     .get(stockAllocationsController.listByThemeAndUser);
 
-router.route('theme/:themeId/themestockcompositions')
+router.route('/theme/:themeId/themestockcompositions')
     .get(stockAllocationsController.listStockCompositions);
 
 router.route('/themestockcomposition/:themestockcompositionId')
@@ -24,7 +24,7 @@ router.route('/:stockallocationId')
     .put(stockAllocationsController.update)
     .delete(stockAllocationsController.delete);
 
-router.param('selectedThemeId', stockAllocationsController.themeById);
+router.param('themeId', stockAllocationsController.themeById);
 router.param('themestockcompositionId', stockAllocationsController.themeStockCompositionById);
 router.param('stockallocationId', stockAllocationsController.stockAllocationById);
 

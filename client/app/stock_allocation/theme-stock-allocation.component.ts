@@ -1,9 +1,14 @@
-import {Component} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {ModalComponent} from "../theme_details/modal.component";
 import {ViewChild} from "@angular/core/src/metadata/di";
+import {ThemeSearchService} from "../theme_search/theme-search.service";
+import {Input} from "@angular/core/src/metadata/directives";
+import {Observable} from "rxjs";
+import {ThemeStockCompositionAllocationModel} from "./theme-stock-composition-allocation-model";
 @Component({
     selector: 'app-theme-stock-allocation',
     templateUrl: 'theme-stock-allocation.component.html',
+    providers: [ThemeSearchService],
     styles: [
         `hr {
             margin-top: 0;
@@ -46,7 +51,8 @@ import {ViewChild} from "@angular/core/src/metadata/di";
         }`
     ]
 })
-export class ThemeStockAllocationComponent {
+export class ThemeStockAllocationComponent implements OnInit {
+    @Input() themeId: string;
     stocks: any[] = [
         {name: 'Stock 1 Stock 1 Stock 1', country: 'USA', addedOn: 'Jan 2017', validated: false, userAlloc: true},
         {name: 'Stock 2 Stock 2', country: 'USA', addedOn: 'Dec 2016', validated: true, userAlloc: false},
@@ -63,9 +69,57 @@ export class ThemeStockAllocationComponent {
     ]
 
     selectedExposure: any;
+    isStockAllocationEditable: boolean = false;
+
+    stockAllocationModel: ThemeStockCompositionAllocationModel[] = [];
 
     @ViewChild(ModalComponent)
     public readonly modal: ModalComponent;
+
+    constructor(private themeService: ThemeSearchService) {}
+
+    ngOnInit(): void {
+        let stockCompositions =  this.themeService.getThemeStockCompositions(this.themeId);
+        let allocationDistribution = this.themeService.getThemeStockAllocationDistribution(this.themeId);
+        let userAllocations = this.themeService.getThemeStockAllocationByUser(this.themeId);
+
+        Observable.forkJoin([stockCompositions, allocationDistribution, userAllocations]).subscribe(
+            (results: any) => {
+                console.log('results: ', results);
+                let _stockCompositions = results[0];
+                let _allocationDistribution = results[1];
+                let _userAllocations = results[2];
+
+                //expected equal length
+                if (_stockCompositions.length != _allocationDistribution.length) {
+                    return;
+                }
+
+                this.stockAllocationModel = _stockCompositions.map(function (composition, index, array) {
+                    let model = new ThemeStockCompositionAllocationModel(
+                        composition._id,
+                        composition.stock.companyName,
+                        composition.stock.country,
+                        composition.addedAt,
+                        composition.isValidated);
+                    model.exposureDistribution = _allocationDistribution[index].exposureDistribution;
+
+                    let userInputForStockComposition = _userAllocations.filter(function(item) {
+                        return item.themeStockComposition._id == composition._id;
+                    });
+
+                    if(userInputForStockComposition && userInputForStockComposition.length > 0) {
+                        model.currentUserAllocation = userInputForStockComposition[0];
+                    }
+
+                    return model;
+                });
+            },
+            error => {
+                console.log(error);
+            }
+        );
+    }
 
     setExposureBackgroundColor(index: number) {
         let exposureBackgroundColors = ['#52BE80', '#ABEBC6', '#FFFFFF', '#F2D7D5', '#D98880']
@@ -74,5 +128,9 @@ export class ThemeStockAllocationComponent {
 
     setStockBackground(index: number) {
         return index % 2 == 0 ? '#F8F9F9' : 'white';
+    }
+
+    toggleStockAllocationEditable() {
+        this.isStockAllocationEditable = !this.isStockAllocationEditable;
     }
 }

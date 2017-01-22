@@ -64,15 +64,43 @@ export class ThemeSearchService {
             });
     }
 
-    //TODO: delete
-    getUserInputsPerTheme(themeId: string) {
-        let apiPath = 'http://localhost:3000/api/themes/userinputs/' + themeId + this.setTokenQueryParam();
-
+    getThemeStockCompositions(themeId: string) {
+        let apiPath = this.baseAPI + 'stockallocations/theme/' + themeId + '/themestockcompositions' + this.setTokenQueryParam();
         return this.http.get(apiPath)
             .map((response: Response) => {
                 return response.json().obj;
             })
-            .catch((error: Response) =>  Observable.throw(error.json()));
+            .catch((error: Response) =>  {
+                console.log(error)
+                //return this.errorService.handleError(error);
+                return Observable.throw(error.json())
+            });
+    }
+
+    getThemeStockAllocationDistribution(themeId: string) {
+        let apiPath = this.baseAPI + 'stockallocations/theme/' + themeId + this.setTokenQueryParam();
+        return this.http.get(apiPath)
+            .map((response: Response) => {
+                return response.json().obj;
+            })
+            .catch((error: Response) =>  {
+                console.log(error)
+                //return this.errorService.handleError(error);
+                return Observable.throw(error.json())
+            });
+    }
+
+    getThemeStockAllocationByUser(themeId: string) {
+        let apiPath = this.baseAPI + 'stockallocations/theme/' + themeId + '/user' + this.setTokenQueryParam();
+        return this.http.get(apiPath)
+            .map((response: Response) => {
+                return response.json().obj;
+            })
+            .catch((error: Response) =>  {
+                console.log(error)
+                //return this.errorService.handleError(error);
+                return Observable.throw(error.json())
+            });
     }
 
     setTokenQueryParam() {

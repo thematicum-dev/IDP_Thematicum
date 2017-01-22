@@ -98,7 +98,9 @@ exports.listByThemeAndUser = function(req, res, next) {
 }
 
 exports.listStockCompositions = function(req, res, next) {
-    ThemeStockComposition.find({theme: req.theme._id}, function(err, results) {
+    ThemeStockComposition.find({theme: req.theme._id})
+        .populate('stock', 'companyName country')
+        .exec(function(err, results) {
         if(err) {
             return next(err);
         }
@@ -113,7 +115,7 @@ exports.listStockCompositions = function(req, res, next) {
             message: 'Theme-stock compositions retrieved',
             obj: results
         });
-    })
+    });
 }
 
 exports.delete = function(req, res, next) {
