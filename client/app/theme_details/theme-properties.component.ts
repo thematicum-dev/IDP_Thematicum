@@ -147,6 +147,7 @@ export class ThemePropertiesComponent implements OnInit {
                     data => {
                         console.log(data);
                         //this.router.navigate(['/theme', this.theme._id]);
+                        //TODO: remove this, instead issue another http request to get the "refreshed" user properties
                         window.location.reload();
                     },
                     error => {
@@ -170,17 +171,19 @@ export class ThemePropertiesComponent implements OnInit {
     }
 
     deleteUserThemeInput(modal: any) {
-        // if(this.userThemeInputsId) {
-        //     this.themeService.deleteUserThemeInput(this.userThemeInputsId).subscribe(
-        //         data => {
-        //             console.log(data);
-        //         },
-        //         error => {
-        //             //TODO: handle error
-        //             console.log(error);
-        //         }
-        //     )
-        // }
-        modal.hide();
+        if(this.userThemeInputsId) {
+            this.themeService.deleteUserThemeInput(this.userThemeInputsId).subscribe(
+                data => {
+                    console.log(data);
+                    modal.hide();
+                    window.location.reload();
+                },
+                error => {
+                    //TODO: handle error
+                    console.log(error);
+                    modal.hide();
+                }
+            )
+        }
     }
 }

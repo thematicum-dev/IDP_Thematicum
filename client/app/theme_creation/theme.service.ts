@@ -62,7 +62,7 @@ export class ThemeService {
         let apiPath = this.baseAPI + 'themes/' + theme._id + this.setTokenQueryParam();
 
         return this.http.put(apiPath, body, {headers: this.headers})
-            .map((response: Response) => response.json())
+            .map((response: Response) => response.json().obj)
             .catch((error: Response) =>  Observable.throw(error.json()));
     }
 }

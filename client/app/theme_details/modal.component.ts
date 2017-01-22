@@ -18,6 +18,8 @@ export class ModalComponent {
 
     public hide(): void {
         this.visibleAnimate = false;
-        setTimeout(() => this.visible = false, 300);
+        this.visible = false;
+        //TODO: timetout causes issues
+        //setTimeout(() => this.visible = false, 300);
     }
 }

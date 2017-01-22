@@ -3,7 +3,7 @@
         <div class="row">
             <div class="col-xs-10 text-center">
                 <h3>{{theme.name}}</h3>
-                <p>Created on: {{theme.createdAt.toDateString()}}, by {{theme.creator?.name}}</p>
+                <p>Created on: {{theme.createdAt}}, by {{theme.creator?.name}}</p>
             </div>
 
             <div class="col-xs-2 text-right">
@@ -49,7 +49,7 @@
             </div>
         </div>
 
-        <app-theme-characteristics-editing *ngIf="isEditable" [theme]="theme" [themeTags]="theme.tags" (cancelEditing)="cancelThemeEditing($event)">
+        <app-theme-characteristics-editing *ngIf="isEditable" [theme]="theme" [themeTags]="theme.tags" (themeEmitter)="cancelThemeEditing($event)">
         </app-theme-characteristics-editing>
 
     </div>

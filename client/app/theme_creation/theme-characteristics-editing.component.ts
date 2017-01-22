@@ -11,7 +11,7 @@ import {ThemeService} from "./theme.service";
 export class ThemeCharacteristicsEditingComponent implements OnChanges {
     @Input() theme: Theme;
     @Input() themeTags: any[];
-    @Output() cancelEditing: EventEmitter<Theme> = new EventEmitter<Theme>();
+    @Output() themeEmitter: EventEmitter<Theme> = new EventEmitter<Theme>();
     themeCopy: Theme;
 
     constructor(private themeService: ThemeService) {}
@@ -27,9 +27,9 @@ export class ThemeCharacteristicsEditingComponent implements OnChanges {
 
     onSubmit() {
         this.themeService.updateTheme(this.theme).subscribe(
-            data => {
+            (data: Theme) => {
                 console.log(data);
-                window.location.reload();
+                this.themeEmitter.emit(data)
             },
             error => console.log(error)
         )
@@ -37,6 +37,6 @@ export class ThemeCharacteristicsEditingComponent implements OnChanges {
 
     notifyCancelEditing() {
         //theme characteristics are no longer editable
-        this.cancelEditing.emit(this.themeCopy);
+        this.themeEmitter.emit(this.themeCopy);
     }
 }

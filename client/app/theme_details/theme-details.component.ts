@@ -77,6 +77,8 @@ export class ThemeDetailsComponent implements OnInit, OnChanges {
         //cancel changes made to Theme, by restoring previous model
         this.theme = theme;
 
+        //TODO: problem with date.toDateString() when updating theme
+
         //set isThemeCharacteristicsEditable to false
         this.isEditable = false;
     }
