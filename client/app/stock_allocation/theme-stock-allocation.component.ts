@@ -16,7 +16,7 @@ import {ThemeStockCompositionAllocationModel} from "./theme-stock-composition-al
         .userAllocatedStock {
             border-style: solid;
             border-width: 2px;
-            border-color: #000000;
+            border-color: black;
         }
         .default-cursor {
             cursor: default;
@@ -53,23 +53,17 @@ import {ThemeStockCompositionAllocationModel} from "./theme-stock-composition-al
 })
 export class ThemeStockAllocationComponent implements OnInit {
     @Input() themeId: string;
-    stocks: any[] = [
-        {name: 'Stock 1 Stock 1 Stock 1', country: 'USA', addedOn: 'Jan 2017', validated: false, userAlloc: true},
-        {name: 'Stock 2 Stock 2', country: 'USA', addedOn: 'Dec 2016', validated: true, userAlloc: false},
-        {name: 'Stock 3 Stock 3 Stock 3', country: 'USA', addedOn: 'Nov 2016', validated: false, userAlloc: true},
-        {name: 'Stock 4 Stock 4', country: 'USA', addedOn: 'Jan 2017', validated: true, userAlloc: false}
-        ]
+    // stocks: any[] = [
+    //     {name: 'Stock 1 Stock 1 Stock 1', country: 'USA', addedOn: 'Jan 2017', validated: false, userAlloc: true},
+    //     {name: 'Stock 2 Stock 2', country: 'USA', addedOn: 'Dec 2016', validated: true, userAlloc: false},
+    //     {name: 'Stock 3 Stock 3 Stock 3', country: 'USA', addedOn: 'Nov 2016', validated: false, userAlloc: true},
+    //     {name: 'Stock 4 Stock 4', country: 'USA', addedOn: 'Jan 2017', validated: true, userAlloc: false}
+    //     ]
+    //
+    exposures = ['Strongly Positive', 'Weakly Positive', 'Neutral', 'Weakly Negative', 'Strongly Negative'];
 
-    exposures: any[] = [
-        {name: 'Strongly Positive', value: '20%'},
-        {name: 'Weakly Positive', value: '20%'},
-        {name: 'Neutral', value: '20%'},
-        {name: 'Weakly Negative', value: '20%'},
-        {name: 'Strongly Negative', value: '20%'}
-    ]
-
-    selectedExposure: any;
-    isStockAllocationEditable: boolean = false;
+    //
+    editedExposure: any;
 
     stockAllocationModel: ThemeStockCompositionAllocationModel[] = [];
 
@@ -130,7 +124,12 @@ export class ThemeStockAllocationComponent implements OnInit {
         return index % 2 == 0 ? '#F8F9F9' : 'white';
     }
 
-    toggleStockAllocationEditable() {
-        this.isStockAllocationEditable = !this.isStockAllocationEditable;
+    toggleStockAllocationEditable(allocationModel: ThemeStockCompositionAllocationModel) {
+        allocationModel.isAllocationEditable = !allocationModel.isAllocationEditable;
+    }
+
+    getExposureDistributionStr(percentage: number, nrUsers: number) {
+        let trailingS = nrUsers != 1 ? 's' : '';
+        return `${percentage}% (${nrUsers} user${trailingS})`;
     }
 }
