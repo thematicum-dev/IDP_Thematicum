@@ -38,7 +38,7 @@
                 <ul class="dropdown-menu">
                     <li><a (click)="toggleStockAllocationEditable(allocationModel)">{{allocationModel.currentUserAllocation ? 'Edit' : 'Add'}}</a></li>
                     <li *ngIf="allocationModel.currentUserAllocation" role="separator" class="divider"></li>
-                    <li *ngIf="allocationModel.currentUserAllocation"><a type="button" (click)="modal.show()">Delete</a></li>
+                    <li *ngIf="allocationModel.currentUserAllocation"><a type="button" (click)="modal.setData(allocationModel.currentUserAllocation._id);modal.show();">Delete</a></li>
                 </ul>
             </div>
         </div>
@@ -46,21 +46,21 @@
 
     <div class="row" >
         <div class="col-xs-6 col-xs-offset-6" *ngIf="allocationModel.isAllocationEditable">
-            <form #form="ngForm">
+            <form #form="ngForm" (ngSubmit)="createOrUpdateStockAllocation(allocationModel, exposureSelect.selectedIndex.valueOf())">
                 <div class="form-group row">
                     <label class="col-xs-3 col-form-label" for="exposure">Select Exposure</label>
                     <div class="col-xs-5">
                         <select
                                 class="form-control"
                                 id="exposure"
-                                [(ngModel)]="editedExposure"
                                 name="exposure"
+                                #exposureSelect
                                 required>
                             <option *ngFor="let exposure of exposures; let i = index" [ngValue]="i">{{ exposure }}</option>
                         </select>
                     </div>
                     <div class="col-xs-4">
-                        <button class="btn btn-default" type="button">Cancel</button>
+                        <button class="btn btn-default" type="button" (click)="toggleStockAllocationEditable(allocationModel)">Cancel</button>
                         <button class="btn btn-primary" type="submit" [disabled]="!form.form.valid">Save</button>
                     </div>
                 </div>
@@ -115,6 +115,6 @@
     </div>
     <div class="app-modal-footer">
         <button type="button" class="btn btn-default" (click)="modal.hide()">Close</button>
-        <button type="button" class="btn btn-primary" (click)="modal.hide()">Delete</button>
+        <button type="button" class="btn btn-primary" (click)="deleteUserStockAllocation(modal)">Delete</button>
     </div>
 </app-modal>

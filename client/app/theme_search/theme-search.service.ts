@@ -10,6 +10,7 @@ export class ThemeSearchService {
     constructor(private http: Http, private errorService: ErrorService) { }
 
     baseAPI: string = 'http://localhost:3000/api/';
+    headers = new Headers({'Content-Type': 'application/json'});
 
     //TODO: delegate to avoid duplicate code
     /*
@@ -101,6 +102,31 @@ export class ThemeSearchService {
                 //return this.errorService.handleError(error);
                 return Observable.throw(error.json())
             });
+    }
+
+    updateUserStockAllocation(allocationId: string, exposure: number) {
+        let apiPath = this.baseAPI + 'stockallocations/' + allocationId + this.setTokenQueryParam();
+        const body = {exposure: exposure};
+
+        return this.http.put(apiPath, body, {headers: this.headers})
+            .map((response: Response) => response.json().obj)
+            .catch((error: Response) =>  Observable.throw(error.json()));
+    }
+
+    createUserStockAllocation(themeStockCompositionId: string, exposure: number) {
+        let apiPath = this.baseAPI + 'stockallocations/themestockcomposition/' + themeStockCompositionId + this.setTokenQueryParam();
+        const body = {exposure: exposure};
+
+        return this.http.post(apiPath, body, this.headers)
+            .map((response: Response) => response.json())
+            .catch((error: Response) =>  Observable.throw(error.json()));
+    }
+
+    deleteUserStockAllocation(allocationId: string) {
+        let apiPath = this.baseAPI + 'stockallocations/' + allocationId + this.setTokenQueryParam();
+        return this.http.delete(apiPath)
+            .map((response: Response) => response.json())
+            .catch((error: Response) =>  Observable.throw(error.json()));
     }
 
     setTokenQueryParam() {

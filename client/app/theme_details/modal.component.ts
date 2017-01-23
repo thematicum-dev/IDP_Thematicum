@@ -10,6 +10,15 @@ import {Component} from '@angular/core';
 export class ModalComponent {
     public visible = false;
     private visibleAnimate = false;
+    private data: any; //a variable to allow the modal to carry context data
+
+    public setData(contextData: any) {
+        this.data = contextData;
+    }
+
+    public getData() {
+        return this.data;
+    }
 
     public show(): void {
         this.visible = true;

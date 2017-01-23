@@ -119,7 +119,17 @@ exports.listStockCompositions = function(req, res, next) {
 }
 
 exports.delete = function(req, res, next) {
-    //TODO: implement
+    var stockAllocation = req.stockAllocation;
+
+    stockAllocation.remove(function(err) {
+        if(err) {
+            return next(err);
+        }
+
+        return res.status(200).json({
+            message: 'Stock allocation deleted'
+        });
+    });
 }
 
 exports.themeById = function(req, res, next, id) {
@@ -193,8 +203,9 @@ exports.stockAllocationById = function(req, res, next, id) {
             });
         }
 
-        //TODO: (maybe refactor) check authorization
-        if (res.locals.user && result.user._id.equals(res.locals.user._id)) {
+        //TODO: (maybe refactor) authorization check
+        //"user" field of UserThemeStockAllocation is not populated => can check directly on it, instead of populating and checking its _id
+        if (res.locals.user && result.user.equals(res.locals.user._id)) {
             req.stockAllocation = result;
             return next();
         }

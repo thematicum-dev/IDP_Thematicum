@@ -53,16 +53,7 @@ import {ThemeStockCompositionAllocationModel} from "./theme-stock-composition-al
 })
 export class ThemeStockAllocationComponent implements OnInit {
     @Input() themeId: string;
-    // stocks: any[] = [
-    //     {name: 'Stock 1 Stock 1 Stock 1', country: 'USA', addedOn: 'Jan 2017', validated: false, userAlloc: true},
-    //     {name: 'Stock 2 Stock 2', country: 'USA', addedOn: 'Dec 2016', validated: true, userAlloc: false},
-    //     {name: 'Stock 3 Stock 3 Stock 3', country: 'USA', addedOn: 'Nov 2016', validated: false, userAlloc: true},
-    //     {name: 'Stock 4 Stock 4', country: 'USA', addedOn: 'Jan 2017', validated: true, userAlloc: false}
-    //     ]
-    //
     exposures = ['Strongly Positive', 'Weakly Positive', 'Neutral', 'Weakly Negative', 'Strongly Negative'];
-
-    //
     editedExposure: any;
 
     stockAllocationModel: ThemeStockCompositionAllocationModel[] = [];
@@ -131,5 +122,36 @@ export class ThemeStockAllocationComponent implements OnInit {
     getExposureDistributionStr(percentage: number, nrUsers: number) {
         let trailingS = nrUsers != 1 ? 's' : '';
         return `${percentage}% (${nrUsers} user${trailingS})`;
+    }
+
+    createOrUpdateStockAllocation(allocationModel: ThemeStockCompositionAllocationModel, exposure: number) {
+        console.log('Selected exposure: ', exposure)
+        if(allocationModel.currentUserAllocation) {
+            //update user's stock allocation
+            this.themeService.updateUserStockAllocation(allocationModel.currentUserAllocation._id, exposure).subscribe(
+                data => {
+                    console.log(data);
+                },
+                error => {
+                    console.log(error);
+                }
+            )
+        } else {
+            //create new stock allocation by user
+            this.themeService.createUserStockAllocation(allocationModel.themeStockCompositionId, exposure).subscribe(
+                data => console.log(data),
+                error => console.log(error)
+            );
+        }
+    }
+
+    deleteUserStockAllocation(modal: ModalComponent) {
+        let allocationId = modal.getData();
+        console.log('allocationId', allocationId);
+        this.themeService.deleteUserStockAllocation(allocationId).subscribe(
+            data => console.log(data),
+            error => console.log(error)
+        );
+        modal.hide();
     }
 }

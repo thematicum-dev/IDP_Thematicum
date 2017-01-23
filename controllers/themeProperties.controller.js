@@ -107,8 +107,6 @@ exports.update = function(req, res, next) {
 }
 
 exports.delete = function(req, res, next) {
-    //TODO: implement
-    console.log('At delete theme property')
     var themeProperty = req.themeProperty;
 
     themeProperty.remove(function(err) {
@@ -119,7 +117,7 @@ exports.delete = function(req, res, next) {
         return res.status(200).json({
             message: 'Theme property deleted'
         });
-    })
+    });
 }
 
 //TODO: extract this separately
