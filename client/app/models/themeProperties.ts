@@ -20,11 +20,7 @@ export class ThemeProperties {
     }
 
     setCheckedCategories() {
-        this.categories = categoryValues.filter(category => {
-            return category.checked;
-        }).map(category => {
-                return category.value
-        });
+        this.categories = this.getCheckedCategories();
     }
 
     getCheckedCategories() {
@@ -33,5 +29,9 @@ export class ThemeProperties {
         }).map(category => {
             return category.value
         });
+    }
+
+    uncheckAllCategories() {
+        this.categoryValues.forEach(category => category.checked = false);
     }
 }
