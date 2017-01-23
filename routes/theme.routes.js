@@ -16,7 +16,7 @@ router.route('/')
 router.route('/:themeId')
     .get(themeController.read)
     .put(themeController.update)
-    .delete(themeController.delete);
+    .delete(themeController.deleteThemeData);
 
 router.param('themeId', themeController.themeById);
 

@@ -1,16 +1,27 @@
 var Theme = require('../models/theme');
+var UserThemeInput = require('../models/userThemeInput');
+var ThemeStockComposition = require('../models/themeStockComposition');
+var UserThemeStockAllocation = require('../models/userThemeStockAllocation');
 var mongoose = require('mongoose');
 var _ = require('underscore');
 
-exports.createMany = function(req, res, next) {
-    //var article = new Article(req.body);
+module.exports = {
+    createMany: createMany,
+    read: read,
+    update: update,
+    deleteThemeData: deleteThemeData,
+    getTags: getTags,
+    list: list,
+    themeById: themeById
+}
+
+function createMany(req, res, next) {
     var theme = new Theme({
         name: req.body.theme.name,
         tags: req.body.theme.tags,
         description: req.body.theme.description,
         creator: res.locals.user
     });
-    //TODO: how to store authenticated user: req.user or res.locals.user
 
     theme.save(function (err) {
         if (err) {
@@ -23,7 +34,7 @@ exports.createMany = function(req, res, next) {
     });
 }
 
-exports.read = function(req, res, next) {
+function read(req, res, next) {
     // convert mongoose document to JSON
     var theme = req.theme ? req.theme.toJSON() : {};
     return res.status(200).json({
@@ -32,7 +43,7 @@ exports.read = function(req, res, next) {
     });
 }
 
-exports.update = function(req, res, next) {
+function update(req, res, next) {
     var theme = req.theme;
 
     if (req.body.name)
@@ -56,11 +67,81 @@ exports.update = function(req, res, next) {
     });
 }
 
-exports.delete = function(req, res, next) {
-    //TODO: implement
+function deleteThemeData(req, res, next) {
+    //TODO: delete related theme data, when deleting a theme, or not?
+    var theme = req.theme;
+
+    let deleteThemeDoc = deleteTheme(theme);
+    let deleteUserThemeinputs = deleteUserInputsForTheme(theme);
+    let deleteStocks = deleteStocksForTheme(theme);
+    Promise.all([deleteThemeDoc, deleteUserThemeinputs, deleteStocks])
+        .then(result => {
+            return res.status(200).json({
+                message: 'Theme related data deleted',
+                obj: result
+            })
+        })
+        .catch(error => { next(error) });
 }
 
-exports.getTags = function(req, res, next) {
+function deleteTheme(theme) {
+    return new Promise(function (resolve, reject) {
+        theme.remove(function(err) {
+            if(err) {
+                reject(err);
+            }
+
+            resolve({message: 'Theme deleted'});
+        });
+    });
+}
+
+function deleteUserInputsForTheme(theme) {
+    return new Promise(function (resolve, reject) {
+        UserThemeInput.remove({theme: theme._id}, function(err) {
+           if(err) {
+               reject(err);
+           }
+
+           resolve({message: 'Theme inputs deleted'});
+        });
+    });
+}
+
+function deleteStocksForTheme(theme) {
+    return deleteStockCompositionsForTheme(theme)
+        .then(compositions => {
+            return _.map(compositions, function(composition) {
+                deleteStockAllocationForComposition(composition)
+            });
+        });
+}
+
+function deleteStockCompositionsForTheme(theme) {
+    return new Promise(function (resolve, reject) {
+        ThemeStockComposition.remove({theme: theme._id}, function(err, results) {
+            if(err) {
+                reject(err);
+            }
+
+            resolve(results);
+        });
+    });
+}
+
+function deleteStockAllocationForComposition(composition) {
+    return new Promise(function (resolve, reject) {
+        UserThemeStockAllocation.remove({themeStockComposition: composition._id}, function(err, results) {
+            if(err) {
+                reject(err);
+            }
+
+            resolve(results);
+        });
+    });
+}
+
+function getTags(req, res, next) {
     Theme.find({tags: { $ne: null }}, {'tags': 1, '_id': 0}, function(err, results) {
         if (err) {
             return next(err);
@@ -82,7 +163,7 @@ exports.getTags = function(req, res, next) {
     });
 }
 
-exports.list = function(req, res, next) {
+function list(req, res, next) {
     //TODO: sorting?
     if(req.query.searchQuery) {
         Theme.find(
@@ -120,7 +201,7 @@ exports.list = function(req, res, next) {
     }
 }
 
-exports.themeById = function (req, res, next, id) {
+function themeById(req, res, next, id) {
     if (!mongoose.Types.ObjectId.isValid(id)) {
         return next({
             title: 'Mongoose Invalid Object Id',
