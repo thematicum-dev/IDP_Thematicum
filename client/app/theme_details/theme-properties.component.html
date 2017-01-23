@@ -19,7 +19,7 @@
 <hr>
 
 <div *ngIf="themePropertiesAggregation" #propertiesContainer>
-    <form (ngSubmit)="onSubmit(form)" #form="ngForm">
+    <form (ngSubmit)="createOrUpdateThemeProperty(form)" #form="ngForm">
         <div>
             <div class="form-group row">
                 <label class="col-xs-2 col-form-label">Expected time horizon</label>
@@ -109,6 +109,8 @@
         </div>
     </form>
 </div>
+
+UserInputs: {{userThemeInputs | json}}
 
 <!-- Delete user theme input modal -->
 <app-modal #modal>

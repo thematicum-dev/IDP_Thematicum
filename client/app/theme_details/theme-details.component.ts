@@ -50,10 +50,8 @@ export class ThemeDetailsComponent implements OnInit, OnChanges {
         this.selectedThemeId = this.route.snapshot.params['id'];
         this.searchService.getThemeById(this.selectedThemeId).subscribe(
             data => {
-                console.log('ThemeId: ', this.selectedThemeId);
                 this.theme = data;
                 this.theme.createdAt = new Date(data.createdAt);
-                //console.log(data)
             },
             error => {
                 //TODO: handle error by displaying message
@@ -73,7 +71,7 @@ export class ThemeDetailsComponent implements OnInit, OnChanges {
         this.isEditable = !this.isEditable;
     }
 
-    cancelThemeEditing(theme: Theme) {
+    onThemeChanged(theme: Theme) {
         //cancel changes made to Theme, by restoring previous model
         this.theme = theme;
 

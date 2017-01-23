@@ -1,4 +1,4 @@
-import {Component, OnInit, OnChanges, SimpleChanges} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {ModalComponent} from "../theme_details/modal.component";
 import {ViewChild} from "@angular/core/src/metadata/di";
 import {ThemeSearchService} from "../theme_search/theme-search.service";

@@ -1,12 +1,13 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, EventEmitter} from '@angular/core';
 import {ThemeSearchService} from "../theme_search/theme-search.service";
 import {ThemeService} from "../theme_creation/theme.service";
 import {ThemeProperties} from "../models/themeProperties";
 import {ModalComponent} from "./modal.component";
 import {ViewChild} from "@angular/core/src/metadata/di";
 import {NgForm} from "@angular/forms";
-import {Input} from "@angular/core/src/metadata/directives";
+import {Input, Output} from "@angular/core/src/metadata/directives";
 import {timeHorizonValues, maturityValues, categoryValues} from "../models/themePropertyValues";
+import {Observable} from "rxjs";
 
 @Component({
     selector: 'app-theme-properties',
@@ -74,31 +75,46 @@ export class ThemePropertiesComponent implements OnInit {
     constructor(private searchService: ThemeSearchService, private themeService: ThemeService) { }
 
     ngOnInit(): void {
-        this.searchService.getThemeProperties(this.themeId).subscribe(
+        this.getJoinedObservable().subscribe(
             data => {
-                this.themePropertiesAggregation = data.properties;
-                console.log('Properties: ', this.themePropertiesAggregation)
-            },
-            error => {
-                console.log('Error getting theme properties: ', error);
-            }
-        );
-
-
-        this.searchService.getThemePropertiesByUser(this.themeId).subscribe(
-            data => {
-                if (data.themeProperties) {
-                    console.log('Properties: ', data.themeProperties)
-                    //TODO: maybe wrap everything in a single object
-                    this.userThemeInputs = data.themeProperties;
-                    this.userThemeInputsId = data._id;
+                console.log('data: ', data)
+                if(data.isDataByUser) {
+                    this.onNextThemePropertiesByUser(data);
+                } else {
+                    this.onNextThemeProperties(data);
                 }
             },
             error => {
-                //No need to handle this error in particular, user simply hasn't input anything for this theme
-                console.log('Error getting theme properties by user: ', error);
+                console.log('error: ', error);
             }
-        );
+        )
+    }
+
+    onNextThemeProperties(data: any) {
+        console.log('onNextThemeProperties: ', data)
+        this.themePropertiesAggregation = data.properties;
+    }
+
+    onNextThemePropertiesByUser(data: any) {
+        console.log('onNextThemePropertiesByUser: ', data)
+        if (data.themeProperties) {
+            console.log('Properties: ', data.themeProperties)
+            //TODO: maybe wrap everything in a single object
+            this.userThemeInputs = data.themeProperties;
+            this.userThemeInputsId = data._id;
+        }
+    }
+
+    getJoinedObservable() {
+        let themeProperties = this.searchService.getThemeProperties(this.themeId).map(themeProperty => {
+            themeProperty.isDataByUser = false; //to distinguish between Observables' results
+            return themeProperty;
+        });
+        let themePropertiesByUser =  this.searchService.getThemePropertiesByUser(this.themeId).map(propertyByUser => {
+            propertyByUser.isDataByUser = true;
+            return propertyByUser;
+        });
+        return Observable.concat(themeProperties, themePropertiesByUser);
     }
 
     getPropertyVoteDistributionStr(percentage: number, nrUsers: number) {
@@ -123,9 +139,10 @@ export class ThemePropertiesComponent implements OnInit {
 
     setPropertyBackgroundColor(propertyName, index) {
         if (this.isEditMode) {
+            //console.log('Is this called?')
             return;
         }
-
+        //console.log('How about this: ', this.userThemeInputs)
         //TODO: 1st condition is not really needed
         if (!this.isEditMode && !this.userThemeInputs) {
             return this.WHITE_COLOR;
@@ -142,48 +159,61 @@ export class ThemePropertiesComponent implements OnInit {
         return this.isEditMode ? 'buttons' : '';
     }
 
-    onSubmit(form: NgForm) {
+    createOrUpdateThemeProperty(form: NgForm) {
         this.themeProperties.setCheckedCategories();
         /*if there isn't any existing user input for this theme, create new
          otherwise, update existing
          */
-        if (!this.userThemeInputs) {
-            this.themeService.createUserThemeImput(this.themeId, this.themeProperties)
-                .subscribe(
-                    //this.themePropertiesEditingSubscription()
-                    data => {
-                        console.log(data);
-                        //this.router.navigate(['/theme', this.theme._id]);
-                        //TODO: remove this, instead issue another http request to get the "refreshed" user properties
-                        window.location.reload();
-                    },
-                    error => {
-                        console.log(error)
-                    }
-                );
-        } else {
-            this.themeService.updateUserThemeInput(this.userThemeInputsId, this.themeProperties)
-                .subscribe(
-                    data => {
-                        console.log(data);
-                        //this.router.navigate(['/theme', this.theme._id]);
-                        window.location.reload();
+        let themePropertyChangedObservable: Observable<any> = this.userThemeInputs ?
+            this.themeService.updateUserThemeInput(this.userThemeInputsId, this.themeProperties) :
+            this.themeService.createUserThemeImput(this.themeId, this.themeProperties);
 
+        this.isEditMode = false;
+        //TODO: refactor to merge observables
+        themePropertyChangedObservable.subscribe(
+            data => {
+                console.log(data);
+                this.getJoinedObservable().subscribe(
+                    data => {
+                        if(data.isDataByUser) {
+                            this.onNextThemePropertiesByUser(data);
+                        } else {
+                            this.onNextThemeProperties(data);
+                        }
                     },
                     error => {
-                        console.log(error)
+                        console.log('error: ', error);
                     }
-                );
-        }
+                )
+            },
+            error => console.log(error)
+        );
     }
 
     deleteUserThemeInput(modal: any) {
+        this.isEditMode = false;
+        //update model
+        modal.hide();
         if(this.userThemeInputsId) {
+            //TODO: refactor to merge observables
             this.themeService.deleteUserThemeInput(this.userThemeInputsId).subscribe(
                 data => {
                     console.log(data);
-                    modal.hide();
-                    window.location.reload();
+                    this.userThemeInputsId = null;
+                    this.userThemeInputs = null;
+                    this.getJoinedObservable().subscribe(
+                        data => {
+                            console.log('data: ', data)
+                            if(data.isDataByUser) {
+                                this.onNextThemePropertiesByUser(data);
+                            } else {
+                                this.onNextThemeProperties(data);
+                            }
+                        },
+                        error => {
+                            console.log('error: ', error);
+                        }
+                    )
                 },
                 error => {
                     //TODO: handle error
