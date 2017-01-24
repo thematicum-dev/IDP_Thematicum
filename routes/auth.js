@@ -4,6 +4,8 @@ var User = require('../models/user');
 var bcrypt = require('bcryptjs');
 var jwt = require('jsonwebtoken');
 var accessCodeValidity = require('../utilities/isAccessCodeValid');
+var AppError = require('../utilities/appError');
+var AppResponse = require('../utilities/appResponse');
 
 //test
 //http://localhost:3000/auth
@@ -17,17 +19,16 @@ router.get('/isAuthenticated', function(req, res, next) {
     jwt.verify(req.query.token, 'secret', function (err, decoded) {
         if (err) {
             //invalid token
-            return next({
-                title: 'Not Authenticated',
-                error: err,
-                status: 401
-            });
+            // return next({
+            //     title: 'Not Authenticated',
+            //     error: err,
+            //     status: 401
+            // });
+            return next(err);
         }
 
         //TODO: check for user?
-        return res.status(200).json({
-            message: 'User is authenticated'
-        });
+        return res.status(200).json(new AppResponse('User is authenticated', null));
     });
 });
 
@@ -36,23 +37,16 @@ router.post('/', function (req, res, next) {
     //check accessCode validity
     accessCodeValidity.isAccessCodeValid(req.body.accessCode, req.body.currentTime, function(err, results) {
         if (err) {
-            return res.status(500).json({
-                title: 'An error occurred',
-                error: err
-            });
+            return next(err);
         }
 
         if(!results) {
-            return res.status(500).json({
-                title: 'Invalid Access Code'
-            });
+            return next(new AppError('Invalid Access Code', 500));
         }
 
         //check here for password length, since it will be later encrypted
         if (req.body.user.password.length < 8) {
-            return res.status(500).json({
-                title: 'Validation error: password must be no shorter than 8 characters'
-            });
+            return next(new AppError('Validation error: password must be no shorter than 8 characters', 500));
         }
 
         //encrypt password
@@ -66,16 +60,10 @@ router.post('/', function (req, res, next) {
         console.log(user);
         user.save(function(err, result) {
             if (err) {
-                return next({
-                    title: 'An error occurred',
-                    error: err
-                });
+                return next(err);
             }
 
-            res.status(201).json({
-                message: 'User created',
-                obj: result
-            });
+            res.status(201).json(new AppResponse('User created', result));
         });
     });
 });
@@ -84,29 +72,18 @@ router.post('/', function (req, res, next) {
 router.post('/signin', function(req, res, next) {
     User.findOne({email: req.body.email}, function(err, user) {
         if (err) {
-            return next({
-                title: 'An error occurred',
-                error: err
-            });
+            return next(err);
         }
 
         if(!user) {
             //unauthorized status code
             //use generic, not specific, error message
-            return next({
-                title: 'Login failed',
-                error: { message: 'Invalid login credentials' },
-                status: 401
-            });
+            return next(new AppError('Invalid login credentials', 401));
         }
 
         //check password
         if (!bcrypt.compareSync(req.body.password, user.password)) {
-            return next({
-                title: 'Login failed',
-                error: { message: 'Invalid login credentials' },
-                status: 401
-            });
+            return next(new AppError('Invalid login credentials', 401));
         }
 
         //valid login credentials (valid for 7200sec = 2hr)
@@ -118,6 +95,6 @@ router.post('/signin', function(req, res, next) {
             username: user.name
         })
     });
-});
+})
 
 module.exports = router;

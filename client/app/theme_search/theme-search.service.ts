@@ -36,7 +36,7 @@ export class ThemeSearchService {
                 return response.json().obj;
             })
             .catch((error: Response) =>  {
-                this.errorService.handleError(error);
+                //this.errorService.handleError(error);
                 return Observable.throw(error.json())
             });
     }
@@ -48,7 +48,7 @@ export class ThemeSearchService {
                 return response.json().obj;
             })
             .catch((error: Response) =>  {
-                this.errorService.handleError(error);
+                //this.errorService.handleError(error);
                 return Observable.throw(error.json())
             });
     }
@@ -60,8 +60,8 @@ export class ThemeSearchService {
                 return response.json().obj;
             })
             .catch((error: Response) =>  {
-                return this.errorService.handleError(error);
-                //return Observable.throw(error.json())
+                //return this.errorService.handleError(error);
+                return Observable.throw(error.json())
             });
     }
 

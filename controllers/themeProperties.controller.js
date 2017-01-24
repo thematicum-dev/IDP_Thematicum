@@ -3,6 +3,8 @@ var UserThemeInput = require('../models/userThemeInput');
 var mongoose = require('mongoose');
 var userInputAggregation = require('../utilities/userInputAggregation');
 var _ = require('underscore');
+var AppError = require('../utilities/appError');
+var AppResponse = require('../utilities/appResponse');
 
 exports.listByTheme = function(req, res, next) {
     //get theme properties aggregation
@@ -12,9 +14,7 @@ exports.listByTheme = function(req, res, next) {
         }
 
         if (!results) {
-            return res.status(404).send({
-                message: 'No theme property found for the theme'
-            });
+            return next(new AppError('No theme property found for the theme', 404));
         }
 
         var props = [{
@@ -30,10 +30,7 @@ exports.listByTheme = function(req, res, next) {
 
         var themeProperties = userInputAggregation.getThemePropertiesAggregation(results, props);
 
-        return res.status(200).send({
-            message: 'Theme properties retrieved',
-            obj: {properties: themeProperties}
-        });
+        return res.status(200).json(new AppResponse('Theme properties retrieved', {properties: themeProperties}));
     });
 }
 
@@ -55,10 +52,7 @@ exports.create = function(req, res, next) {
             return next(err);
         }
 
-        return res.status(201).json({
-            message: 'Theme property created',
-            obj: result
-        });
+        return res.status(201).json(new AppResponse('Theme property created', result));
     });
 }
 
@@ -69,17 +63,10 @@ exports.listByThemeAndUser = function(req, res, next) {
         }
 
         if(!results) {
-            return res.status(404).send({
-                message: 'No theme property from the user'
-            });
+            return next(new AppError('No theme property from the user', 404));
         }
 
-        console.log('user inputs', results)
-
-        return res.status(200).send({
-            message: 'User theme properties retrieved',
-            obj: results
-        });
+        return res.status(200).json(new AppResponse('User theme properties retrieved', results));
     });
 }
 
@@ -123,11 +110,7 @@ exports.delete = function(req, res, next) {
 //TODO: extract this separately
 exports.themeById = function(req, res, next, id) {
     if (!mongoose.Types.ObjectId.isValid(id)) {
-        return next({
-            title: 'Mongoose Invalid Object Id',
-            error: {message: 'Invalid Object Id'},
-            status: 400
-        });
+        return next(new AppError('Invalid Object Id', 400));
     }
 
     Theme.findById(id).populate('creator', 'name personalRole')
@@ -137,9 +120,7 @@ exports.themeById = function(req, res, next, id) {
             }
 
             if (!result) {
-                return res.status(404).send({
-                    message: 'No theme found for the given Id'
-                });
+                return next(new AppError('No theme found for the given Id', 404));
             }
 
             req.theme = result;
@@ -149,11 +130,7 @@ exports.themeById = function(req, res, next, id) {
 
 exports.themePropertyById = function(req, res, next, id) {
     if (!mongoose.Types.ObjectId.isValid(id)) {
-        return next({
-            title: 'Mongoose Invalid Object Id',
-            error: {message: 'Invalid Object Id'},
-            status: 400
-        });
+        return next(new AppError('Invalid Object Id', 400));
     }
 
     UserThemeInput.findById(id)
@@ -164,9 +141,7 @@ exports.themePropertyById = function(req, res, next, id) {
             }
 
             if (!result) {
-                return res.status(404).send({
-                    message: 'No theme property found for the given Id'
-                });
+                return next(new AppError('No theme property found for the given Id', 404));
             }
 
             //TODO: (maybe refactor) check authorization
@@ -175,8 +150,6 @@ exports.themePropertyById = function(req, res, next, id) {
                 return next();
             }
 
-            return res.status(403).send({
-                message: 'Not authorized'
-            });
+            return next(new AppError('Not authorized', 403));
         });
 }

@@ -5,16 +5,15 @@ var Stock = require('../models/stock');
 var mongoose = require('mongoose');
 var _ = require('underscore');
 var stockAllocationAggregation = require('../utilities/stockAllocationAggregation');
+var AppError = require('../utilities/appError');
+var AppResponse = require('../utilities/appResponse');
 
 exports.createMany = function (req, res, next) {
     //add many stocks
     Promise.all(req.body.stockAllocation.map(allocationData =>
             createStockCompositionAndAllocation(allocationData, req.theme, res.locals.user)))
         .then(result => {
-            return res.status(201).json({
-                message: 'Theme-stock composition and allocation created',
-                obj: result
-            })
+            return res.status(201).json(new AppResponse('Theme-stock compositions and allocations created', result));
         })
         .catch(error => { next(error) });
 }
@@ -22,10 +21,7 @@ exports.createMany = function (req, res, next) {
 exports.create = function(req, res, next) {
     createStockAllocation(req.themeStockComposition, res.locals.user, req.body.exposure)
         .then(result => {
-            return res.status(201).json({
-                message: 'Stock allocation created',
-                obj: result
-            })
+            return res.status(201).json(new AppResponse('Stock allocation created', result));
         })
         .catch(error => { next(error) });
 }
@@ -40,10 +36,7 @@ exports.update = function(req, res, next) {
             return next(err);
         }
 
-        return res.status(200).json({
-            message: 'Stock allocation updated',
-            obj: result
-        });
+        return res.status(200).json(new AppResponse('Stock allocation updated', result));
     });
 }
 
@@ -67,10 +60,7 @@ exports.listByTheme = function(req, res, next) {
             stockAllocationAggregation.groupByStockAndExposure(nonNullEntries)
             : [];
 
-        return res.status(201).json({
-            message: 'Stock exposure distribution by theme',
-            obj: stockExposureDistribution
-        });
+        return res.status(201).json(new AppResponse('Stock exposure distribution by theme', stockExposureDistribution));
     });
 }
 
@@ -90,10 +80,7 @@ exports.listByThemeAndUser = function(req, res, next) {
                 return input.themeStockComposition != null;
             });
 
-            return res.status(201).json({
-                message: 'Stock allocations by theme and by user',
-                obj: nonNullEntries
-        });
+            return res.status(201).json(new AppResponse('Stock allocations by theme and by user', nonNullEntries));
     });
 }
 
@@ -106,39 +93,47 @@ exports.listStockCompositions = function(req, res, next) {
         }
 
         if(!results) {
-            return res.status(404).send({
-                message: 'No theme-stock compositions for the given theme'
-            });
+            return next(new AppError('No theme-stock compositions for the given theme', 404));
         }
 
-        return res.status(200).send({
-            message: 'Theme-stock compositions retrieved',
-            obj: results
-        });
+        return res.status(200).json(new AppResponse('Theme-stock compositions retrieved', results));
     });
 }
 
 exports.delete = function(req, res, next) {
     var stockAllocation = req.stockAllocation;
+    let compositionId = stockAllocation.themeStockComposition;
 
     stockAllocation.remove(function(err) {
         if(err) {
             return next(err);
         }
 
-        return res.status(200).json({
-            message: 'Stock allocation deleted'
+        //if the deleted allocation was the only one for the specific theme-stock-composition, delete the composition too
+        UserThemeStockAllocation.find({themeStockComposition: compositionId}, function(err, results) {
+            if(err) {
+                return next(err);
+            }
+
+            //i.e. we deleted the only allocation remaining for this theme-stock composition
+            if(!results || results.length == 0) {
+                //delete composition
+                ThemeStockComposition.remove({_id: new mongoose.Types.ObjectId(compositionId)}, function(err) {
+                    if(err) {
+                        return next(err);
+                    }
+                    return res.status(200).json(new AppResponse('Stock allocation and composition deleted', null));
+                });
+            } else {
+                return res.status(200).json(new AppResponse('Stock allocation deleted', null));
+            }
         });
     });
 }
 
 exports.themeById = function(req, res, next, id) {
     if (!mongoose.Types.ObjectId.isValid(id)) {
-        return next({
-            title: 'Mongoose Invalid Object Id',
-            error: {message: 'Invalid Object Id'},
-            status: 400
-        });
+        return next(new AppError('Invalid Object Id', 400));
     }
 
     Theme.findById(id).populate('creator', 'name personalRole')
@@ -148,9 +143,7 @@ exports.themeById = function(req, res, next, id) {
             }
 
             if (!result) {
-                return res.status(404).send({
-                    message: 'No theme found for the given Id'
-                });
+                return next(new AppError('No theme found for the given Id', 404));
             }
 
             req.theme = result;
@@ -160,11 +153,7 @@ exports.themeById = function(req, res, next, id) {
 
 exports.themeStockCompositionById = function(req, res, next, id) {
     if (!mongoose.Types.ObjectId.isValid(id)) {
-        return next({
-            title: 'Mongoose Invalid Object Id',
-            error: {message: 'Invalid Object Id'},
-            status: 400
-        });
+        return next(new AppError('Invalid Object Id', 400));
     }
 
     ThemeStockComposition.findById(id, function(err, result) {
@@ -173,9 +162,7 @@ exports.themeStockCompositionById = function(req, res, next, id) {
         }
 
         if (!result) {
-            return res.status(404).send({
-                message: 'No theme-stock composition found for the given Id'
-            });
+            return next(new AppError('No theme-stock composition found for the given Id', 404));
         }
 
         req.themeStockComposition = result;
@@ -185,11 +172,7 @@ exports.themeStockCompositionById = function(req, res, next, id) {
 
 exports.stockAllocationById = function(req, res, next, id) {
     if (!mongoose.Types.ObjectId.isValid(id)) {
-        return next({
-            title: 'Mongoose Invalid Object Id',
-            error: {message: 'Invalid Object Id'},
-            status: 400
-        });
+        return next(new AppError('Invalid Object Id', 400));
     }
 
     UserThemeStockAllocation.findById(id, function(err, result) {
@@ -198,9 +181,7 @@ exports.stockAllocationById = function(req, res, next, id) {
         }
 
         if (!result) {
-            return res.status(404).send({
-                message: 'No stock allocation found for the given Id'
-            });
+            return next(new AppError('No stock allocation found for the given Id', 404));
         }
 
         //TODO: (maybe refactor) authorization check
@@ -210,9 +191,7 @@ exports.stockAllocationById = function(req, res, next, id) {
             return next();
         }
 
-        return res.status(403).send({
-            message: 'Not authorized'
-        });
+        return next(new AppError('Not authorized', 403));
     });
 }
 
@@ -238,6 +217,7 @@ function createThemeStockComposition(theme, stock, user) {
                 reject(err);
             }
 
+            console.log('created themeStockComposition')
             resolve(result);
         });
     });
@@ -269,11 +249,7 @@ function getStockById(id) {
             }
 
             if(!result) {
-                reject({
-                    title: 'No stock found',
-                    error: {message: 'No stock found',
-                    status: 404}
-                });
+                reject(new AppError('No stock found for the given Id', 404));
             }
 
             resolve(result);

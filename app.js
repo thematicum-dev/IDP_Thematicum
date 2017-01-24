@@ -61,6 +61,7 @@ app.use(function (req, res, next) {
 app.use(function (err, req, res, next) {
     console.log('Error handling middleware', err)
 
+    console.log('Json error: ', JSON.stringify(err));
     return res.status(err.status || 500).json(err);
 })
 
