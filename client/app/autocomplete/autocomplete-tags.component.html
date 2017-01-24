@@ -7,6 +7,9 @@
                           [allowEnterKey]="allowEnterKey"
                           [allowDirectClick]="allowDirectClick"
                           [dataSource]="itemList"
+                          [queryRequired]="true"
+                          [queryMinLength]="4"
+                          [queryMaxLength]="32"
                           (notifySelectedItem)='selectItem($event)'
                           (clearErrorStr)="clearErrorStr()"
                           (notifyError)="setErrorStr($event)">

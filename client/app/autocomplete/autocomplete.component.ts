@@ -31,6 +31,9 @@ export class AutoCompleteComponent implements OnChanges {
     @Output() clearErrorStr: EventEmitter<any> = new EventEmitter<any>();
     @Output() notifyError: EventEmitter<any> = new EventEmitter<any>();
     @Input() allowDirectClick: boolean;
+    @Input() queryRequired: boolean;
+    @Input() queryMinLength: number;
+    @Input() queryMaxLength: number;
     currentlySelectedItem: AutocompleteItem;
 
     constructor(private elementRef: ElementRef) {}
@@ -98,7 +101,7 @@ export class AutoCompleteComponent implements OnChanges {
 
         if(!isQueryModelValid) {
             //emit error
-            this.notifyError.emit('Query is required and 4-32 characters long');
+            this.notifyError.emit(this.getValidationErrorMsg());
             return;
         }
 
@@ -110,6 +113,10 @@ export class AutoCompleteComponent implements OnChanges {
         } else if (this.allowUserEnteredValues) {
             this.addSelectedItem({name: this.autocompleteList.query});
         }
+    }
+
+    getValidationErrorMsg() {
+        return !this.queryRequired ? '' : 'Query is required (' + this.queryMinLength + ' - ' + this.queryMaxLength + ' characters)';
     }
 
     addSelectedItem(item: any) {
