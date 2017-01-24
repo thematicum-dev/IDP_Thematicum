@@ -13,7 +13,6 @@ import {ErrorComponent} from "../error-handling/error.component";
 })
 export class SigninComponent {
     user: User;
-
     constructor(private authService: AuthService, private router: Router) {}
 
     onSubmit(form: NgForm) {
@@ -31,9 +30,7 @@ export class SigninComponent {
                     localStorage.setItem('username', data.username);
                     //this.router.navigateByUrl('/');
                 },
-                error => {
-                    //console.log(error)
-                }
+                error => {console.log(error)}
             );
     }
 

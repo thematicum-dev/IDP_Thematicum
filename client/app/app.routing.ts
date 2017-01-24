@@ -21,7 +21,7 @@ const APP_ROUTES: Routes = [
     { path: 'theme/:id', component: ThemeDetailsComponent },
     { path: 'profile', component: UserProfileComponent},
     { path: 'error/:errorMsg', component: ErrorPageComponent},
-    { path: '**', redirectTo: '/error/404', pathMatch: 'full' },
+    { path: '**', redirectTo: '/home', pathMatch: 'full' },
 ];
 
 export const routing = RouterModule.forRoot(APP_ROUTES);

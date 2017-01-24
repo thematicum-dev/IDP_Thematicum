@@ -38,17 +38,37 @@ export class ErrorService {
 
     public handleError (error: Response | any) {
         // In a real world app, we might use a remote logging infrastructure
-        let errMsg: string;
-        if (error instanceof Response) {
-            const body = error.json() || '';
-            const err = body.error || JSON.stringify(body);
-            errMsg = `${error.status} - ${error.statusText || ''} ${err}`;
-        } else {
-            errMsg = error.message ? error.message : error.toString();
+        console.log(error)
+        console.log('json: ', error.json())
+        let errorJson = error.json();
+        var errMsg = errorJson.title ? `${errorJson.title}.` : '';
+        errMsg += errorJson.error && errorJson.error.message ? `${errorJson.error.message}` : '';
+
+        console.log('errMsg: ', errMsg);
+        if (error.status == 401) {
+            this.router.navigate(['/signin']);
+            this.errorOccurred.emit(new Error([errMsg]));
+        } else if (error.status == 500) {
+            //check for validation messages
+            console.log('how about here?')
+            if(errorJson.error && errorJson.error.errors) {
+                console.log('Check validation errors')
+                this.errorOccurred.emit(this.getValidationError(errorJson.error.errors));
+            } else {
+                console.log('is this issued?')
+                this.errorOccurred.emit(new Error([errMsg]));
+            }
+            //return Observable.throw(errMsg);
         }
+        // if (error instanceof Response) {
+        //     const body = error.json() || '';
+        //     const err = body.error || JSON.stringify(body);
+        //     errMsg = `${error.status} - ${error.statusText || ''} ${body}`;
+        // } else {
+        //     errMsg = error.message ? error.message : error.toString();
+        // }
         //console.error(errMsg);
        // this.errorOccurred.emit(new Error([errMsg]));
-        return Observable.throw(errMsg);
     }
 
 

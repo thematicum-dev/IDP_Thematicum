@@ -7,10 +7,11 @@ import {ThemeCreationModel} from "../models/themeCreationModel";
 import {ThemeProperties} from "../models/themeProperties";
 import {Theme} from "../models/theme";
 import {StockAllocationModel} from "../models/stockAllocationModel";
+import {ErrorService} from "../error-handling/error.service";
 
 @Injectable()
 export class ThemeService {
-    constructor(private http: Http) {}
+    constructor(private http: Http, private errorService: ErrorService) {}
     baseAPI: string = 'http://localhost:3000/api/';
     headers = new Headers({'Content-Type': 'application/json'});
 
@@ -20,11 +21,13 @@ export class ThemeService {
 
     createTheme(theme: Theme) {
         const body = JSON.stringify(theme);
-        console.log('Theme create service: ', body)
         let apiPath = this.baseAPI + 'themes/' + this.setTokenQueryParam();
         return this.http.post(apiPath, body, {headers: this.headers})
             .map((response: Response) => response.json().obj)
-            .catch((error: Response) =>  Observable.throw(error.json()));
+            .catch((error: Response) =>  {
+                this.errorService.handleError(error);
+                return Observable.throw(error.json())
+            });
     }
 
     createManyStockCompositionsAndAllocations(themeId: any, stockAllocation: StockAllocationModel[]) {
