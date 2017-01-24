@@ -8,7 +8,8 @@
                           [allowDirectClick]="allowDirectClick"
                           [dataSource]="itemList"
                           (notifySelectedItem)='selectItem($event)'
-                          (clearErrorStr)="clearErrorStr()">
+                          (clearErrorStr)="clearErrorStr()"
+                          (notifyError)="setErrorStr($event)">
         </app-autocomplete>
     </div>
 </div>

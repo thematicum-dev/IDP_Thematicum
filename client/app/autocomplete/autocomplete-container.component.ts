@@ -31,6 +31,11 @@ export class AutoCompleteContainerComponent implements AutocompleteItemSelection
         this.error = '';
     }
 
+    setErrorStr(errorStr: string) {
+        console.log('At setErrorStr: ', errorStr);
+        this.error = errorStr;
+    }
+
     selectItem(item: any) {}
 
     deselectItem(index: number) {

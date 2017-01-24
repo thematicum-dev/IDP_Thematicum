@@ -5,6 +5,7 @@ import {
 import {AutocompleteList} from "./autocomplete-list";
 import {Input, Output} from "@angular/core/src/metadata/directives";
 import {AutocompleteItem} from "./autocomplete-item";
+import {NgModel} from "@angular/forms";
 
 @Component({
     selector: 'app-autocomplete',
@@ -28,6 +29,7 @@ export class AutoCompleteComponent implements OnChanges {
     @Input() placeholderTerm: string;
     @Output() notifySelectedItem: EventEmitter<any> = new EventEmitter<any>();
     @Output() clearErrorStr: EventEmitter<any> = new EventEmitter<any>();
+    @Output() notifyError: EventEmitter<any> = new EventEmitter<any>();
     @Input() allowDirectClick: boolean;
     currentlySelectedItem: AutocompleteItem;
 
@@ -46,7 +48,7 @@ export class AutoCompleteComponent implements OnChanges {
     }
 
     /** input keyup event handler */
-    filter(event: any) {
+    filter(event: any, queryModel: NgModel) {
         console.log('filter')
         //set 'selected' to false for all items in the filteredList
         this.clearCurrentlySelectedItem();
@@ -61,7 +63,7 @@ export class AutoCompleteComponent implements OnChanges {
                 this.handleKeyArrowDown();
                 break;
             case this.KEY_ENTER:
-                this.handleKeyEnter();
+                this.handleKeyEnter(queryModel.valid);
                 break;
             default:
                 this.filterQuery();
@@ -89,8 +91,14 @@ export class AutoCompleteComponent implements OnChanges {
 
     }
 
-    handleKeyEnter() {
+    handleKeyEnter(isQueryModelValid: boolean) {
         if (!this.allowEnterKey) {
+            return;
+        }
+
+        if(!isQueryModelValid) {
+            //emit error
+            this.notifyError.emit('Query is required and 4-32 characters long');
             return;
         }
 

@@ -96,6 +96,7 @@
 
         <div class="text-right">
             <button class="btn btn-primary" type="submit"
+                    formnovalidate
                     [disabled]="!form.form.valid || !themeCreation?.themeProperties?.timeHorizon || !themeCreation?.themeProperties?.maturity || themeCreation?.themeProperties?.getCheckedCategories().length == 0 ">
                 Save</button>
         </div>
