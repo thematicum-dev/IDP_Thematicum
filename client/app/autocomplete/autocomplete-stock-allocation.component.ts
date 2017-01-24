@@ -3,6 +3,8 @@ import {AutoCompleteContainerComponent} from "./autocomplete-container.component
 import {Stock} from "../models/stock";
 import {StockAllocation} from "../models/stockAllocation";
 import {AutocompleteDatasourceService} from "./autocomplete-datasource.service";
+import {Input} from "@angular/core/src/metadata/directives";
+import {AutocompleteItem} from "./autocomplete-item";
 
 @Component({
     selector: 'app-autocomplete-stock-allocation',
@@ -26,6 +28,7 @@ import {AutocompleteDatasourceService} from "./autocomplete-datasource.service";
     `]
 })
 export class AutoCompleteStockAllocationComponent extends AutoCompleteContainerComponent {
+    @Input() preFilterStockIds: string[];
     stockExposures = ['Strong Positive', 'Weak Positive', 'Neutral', 'Weak Negative', 'Strong Negative'];
     currentlySelectedStock: Stock;
 
@@ -51,6 +54,14 @@ export class AutoCompleteStockAllocationComponent extends AutoCompleteContainerC
                 item.reportingCurrency);
             this.itemList.push(stock);
         }
+    }
+
+    preFilter() {
+        if(!this.preFilterStockIds) {
+            return;
+        }
+        //filter stocks already allocated to theme from being displayed in the autocomplete
+        this.itemList = this.itemList.filter((item: AutocompleteItem) => this.preFilterStockIds.indexOf(item.id) < 0);
     }
 
     selectItem(item: any) {

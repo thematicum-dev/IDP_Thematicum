@@ -105,8 +105,27 @@
     </div>
 </div>
 
+<!-- New Allocations -->
+<div class="row">
+    <div class="col-xs-10">
+        <label>New Allocations</label>
+    </div>
+</div>
+<hr>
 
-<p>Model: {{stockAllocationModel | json}}</p>
+<button class="btn btn-primary" *ngIf="!addOtherStocks" (click)="toggleAddOtherStocks()">Add Other Stocks</button>
+<div *ngIf="addOtherStocks">
+    <form #stockForm="ngForm" (ngSubmit)="createStockCompositionAndAllocation(themeStockAllocation.selectedItems)">
+        <app-autocomplete-stock-allocation [preFilterStockIds]="stockIds" #themeStockAllocation></app-autocomplete-stock-allocation>
+
+        <div class="text-right">
+            <button class="btn btn-default" type="button" (click)="toggleAddOtherStocks()">Cancel</button>
+            <button class="btn btn-primary" type="submit"
+                    formnovalidate
+                    [disabled]="!stockForm.form.valid || !themeStockAllocation.selectedItems || themeStockAllocation.selectedItems.length == 0">Save</button>
+        </div>
+    </form>
+</div>
 <!-- Delete user theme input modal -->
 <app-modal #modal>
     <div class="app-modal-header">

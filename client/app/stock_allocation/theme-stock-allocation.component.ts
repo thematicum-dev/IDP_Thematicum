@@ -5,11 +5,13 @@ import {ThemeSearchService} from "../theme_search/theme-search.service";
 import {Input} from "@angular/core/src/metadata/directives";
 import {Observable, Observer} from "rxjs";
 import {ThemeStockCompositionAllocationModel} from "./theme-stock-composition-allocation-model";
+import {StockAllocationModel} from "../models/stockAllocationModel";
+import {ThemeService} from "../theme_creation/theme.service";
 
 @Component({
     selector: 'app-theme-stock-allocation',
     templateUrl: 'theme-stock-allocation.component.html',
-    providers: [ThemeSearchService],
+    providers: [ThemeSearchService, ThemeService],
     styles: [
         `hr {
             margin-top: 0;
@@ -56,11 +58,13 @@ export class ThemeStockAllocationComponent implements OnInit {
     @Input() themeId: string;
     exposures = ['Strongly Positive', 'Weakly Positive', 'Neutral', 'Weakly Negative', 'Strongly Negative'];
     stockAllocationModel: ThemeStockCompositionAllocationModel[] = [];
+    stockIds: string[]; //to prefilter stocks available in autocomplete
+    addOtherStocks: boolean = false;
 
     @ViewChild(ModalComponent)
     public readonly modal: ModalComponent;
 
-    constructor(private themeService: ThemeSearchService) {}
+    constructor(private themeService: ThemeSearchService, private _themeService: ThemeService) {}
 
     ngOnInit(): void {
         this.getJoinedObservable()
@@ -83,6 +87,10 @@ export class ThemeStockAllocationComponent implements OnInit {
 
     toggleStockAllocationEditable(allocationModel: ThemeStockCompositionAllocationModel) {
         allocationModel.isAllocationEditable = !allocationModel.isAllocationEditable;
+    }
+
+    toggleAddOtherStocks() {
+        this.addOtherStocks = !this.addOtherStocks;
     }
 
     getExposureDistributionStr(nrUsers: number) {
@@ -136,6 +144,26 @@ export class ThemeStockAllocationComponent implements OnInit {
         modal.hide();
     }
 
+    createStockCompositionAndAllocation(allocations: any[]) {
+        let allocationsArray = allocations.map(allocation => new StockAllocationModel(allocation.stock.id, allocation.exposure));
+        this._themeService.createManyStockCompositionsAndAllocations(this.themeId, allocationsArray).subscribe(
+            data => {
+                console.log(data)
+                this.toggleAddOtherStocks();
+                this.getJoinedObservable()
+                    .subscribe(
+                        (results: any) => {
+                            this.handleResults(results);
+                        },
+                        (error) => console.log(error)
+                    );
+            },
+            error => {
+                console.log(error)
+            }
+        );
+    }
+
     handleResults(results: any) {
         console.log('results: ', results);
         let _stockCompositions = results[0];
@@ -150,6 +178,7 @@ export class ThemeStockAllocationComponent implements OnInit {
         this.stockAllocationModel = _stockCompositions.map(function (composition, index, array) {
             let model = new ThemeStockCompositionAllocationModel(
                 composition._id,
+                composition.stock._id,
                 composition.stock.companyName,
                 composition.stock.country,
                 composition.addedAt,
@@ -165,6 +194,9 @@ export class ThemeStockAllocationComponent implements OnInit {
             }
             return model;
         });
+
+        //set selected stock IDs
+        this.stockIds = this.stockAllocationModel.map(allocation => allocation.stockId);
     }
 
     getJoinedObservable() {

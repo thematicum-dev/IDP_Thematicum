@@ -4,6 +4,7 @@ export class ThemeStockCompositionAllocationModel {
     isAllocationEditable: boolean = false;
     constructor(
         public themeStockCompositionId: string,
+        public stockId: string,
         public stockName: string,
         public stockCountry: string,
         public addedAt: string,
