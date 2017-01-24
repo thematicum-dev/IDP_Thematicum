@@ -6,7 +6,7 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var mongoose = require('mongoose');
 
-var authRoutes = require('./routes/auth');
+var authRoutes = require('./routes/auth.routes');
 var accessCodeRoutes = require('./routes/accessCodes');
 var testRoute = require('./routes/test');
 //var themeRoutes = require('./routes/themes');

@@ -18,7 +18,7 @@ export class AuthService {
         const headers = new Headers({'Content-Type': 'application/json'});
 
         console.log(body);
-        return this.http.post('http://localhost:3000/auth', body, {headers: headers})
+        return this.http.post('http://localhost:3000/auth/signup', body, {headers: headers})
             .map((response: Response) => response.json())
             .catch((error: Response) =>  {
                 this.errorService.handleError(error);
