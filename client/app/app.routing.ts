@@ -8,6 +8,7 @@ import {ThemeCreationComponent} from "./theme_creation/theme-creation.component"
 import {ThemeDetailsComponent} from "./theme_details/theme-details.component";
 import {AuthGuard} from "./auth/auth-guard.service";
 import {ErrorPageComponent} from "./static_pages/error-page.component";
+import {UserProfileComponent} from "./user_profile/user-profile.component";
 
 const APP_ROUTES: Routes = [
     { path: '', redirectTo: '/home', pathMatch: 'full' },
@@ -18,6 +19,7 @@ const APP_ROUTES: Routes = [
     { path: 'search', component: ThemeSearchComponent, canActivate: [AuthGuard] },
     { path: 'theme/create', component: ThemeCreationComponent },
     { path: 'theme/:id', component: ThemeDetailsComponent },
+    { path: 'profile', component: UserProfileComponent},
     { path: 'error/:errorMsg', component: ErrorPageComponent},
     { path: '**', redirectTo: '/error/404', pathMatch: 'full' },
 ];

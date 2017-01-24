@@ -41,6 +41,6 @@
 
     <div class="text-right">
         <button class="btn btn-default" type="button" (click)="notifyCancelEditing()">Cancel</button>
-        <button class="btn btn-primary" type="submit" [disabled]="!form.form.valid">Save</button>
+        <button class="btn btn-primary" type="submit" formnovalidate [disabled]="!form.form.valid">Save</button>
     </div>
 </form>

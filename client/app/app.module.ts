@@ -27,6 +27,7 @@ import {Ng2Bs3ModalModule} from "ng2-bs3-modal/ng2-bs3-modal";
 import {ThemeCharacteristicsEditingComponent} from "./theme_creation/theme-characteristics-editing.component";
 import {ModalComponent} from "./theme_details/modal.component";
 import {ThemeStockAllocationComponent} from "./stock_allocation/theme-stock-allocation.component";
+import {UserProfileComponent} from "./user_profile/user-profile.component";
 
 @NgModule({
     declarations: [
@@ -37,6 +38,7 @@ import {ThemeStockAllocationComponent} from "./stock_allocation/theme-stock-allo
         AboutComponent,
         SignupComponent,
         SigninComponent,
+        UserProfileComponent,
         ErrorComponent,
         ThemeSearchComponent,
         AutoCompleteComponent,
