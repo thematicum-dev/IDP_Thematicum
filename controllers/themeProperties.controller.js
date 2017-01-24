@@ -37,7 +37,7 @@ exports.listByTheme = function(req, res, next) {
     });
 }
 
-exports.createMany = function(req, res, next) {
+exports.create = function(req, res, next) {
     //TODO: createOrUpdate - check in frontend?
     //new UserThemeInput
     var themeProperty = new UserThemeInput({

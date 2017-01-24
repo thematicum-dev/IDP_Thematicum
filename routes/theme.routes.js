@@ -11,7 +11,7 @@ router.route('/tags')
 
 router.route('/')
     .get(themeController.list)
-    .post(themeController.createMany);
+    .post(themeController.create);
 
 router.route('/:themeId')
     .get(themeController.read)

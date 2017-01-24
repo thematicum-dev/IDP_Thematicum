@@ -6,7 +6,7 @@ var mongoose = require('mongoose');
 var _ = require('underscore');
 
 module.exports = {
-    createMany: createMany,
+    create: create,
     read: read,
     update: update,
     deleteThemeData: deleteThemeData,
@@ -15,11 +15,11 @@ module.exports = {
     themeById: themeById
 }
 
-function createMany(req, res, next) {
+function create(req, res, next) {
     var theme = new Theme({
-        name: req.body.theme.name,
-        tags: req.body.theme.tags,
-        description: req.body.theme.description,
+        name: req.body.name,
+        tags: req.body.tags,
+        description: req.body.description,
         creator: res.locals.user
     });
 

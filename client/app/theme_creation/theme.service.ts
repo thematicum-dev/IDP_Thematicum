@@ -6,6 +6,7 @@ import {Observable} from "rxjs";
 import {ThemeCreationModel} from "../models/themeCreationModel";
 import {ThemeProperties} from "../models/themeProperties";
 import {Theme} from "../models/theme";
+import {StockAllocationModel} from "../models/stockAllocationModel";
 
 @Injectable()
 export class ThemeService {
@@ -17,16 +18,21 @@ export class ThemeService {
         return localStorage.getItem('token') ? '?token=' + localStorage.getItem('token') : '';
     }
 
-    createTheme(themeCreationModel: ThemeCreationModel) {
-        const body = JSON.stringify(themeCreationModel);
-        const token = localStorage.getItem('token')
-            ? '?token=' + localStorage.getItem('token')
-            : '';
-        const headers = new Headers({'Content-Type': 'application/json'});
+    createTheme(theme: Theme) {
+        const body = JSON.stringify(theme);
+        console.log('Theme create service: ', body)
+        let apiPath = this.baseAPI + 'themes/' + this.setTokenQueryParam();
+        return this.http.post(apiPath, body, {headers: this.headers})
+            .map((response: Response) => response.json().obj)
+            .catch((error: Response) =>  Observable.throw(error.json()));
+    }
 
-        //TODO: don't stringify static data (e.g. theme property values)
-        //console.log(body);
-        return this.http.post('http://localhost:3000/api/themes' + token, body, {headers: headers})
+    createManyStockCompositionsAndAllocations(themeId: any, stockAllocation: StockAllocationModel[]) {
+        const stockAllocationBody = {stockAllocation: stockAllocation};
+        const body = JSON.stringify(stockAllocationBody);
+        let apiPath = this.baseAPI + 'stockallocations/theme/' + themeId + this.setTokenQueryParam();
+
+        return this.http.post(apiPath, body, {headers: this.headers})
             .map((response: Response) => response.json())
             .catch((error: Response) =>  Observable.throw(error.json()));
     }

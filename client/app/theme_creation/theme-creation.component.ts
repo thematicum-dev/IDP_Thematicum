@@ -9,6 +9,7 @@ import {StockAllocation} from "../models/stockAllocation";
 import {StockAllocationModel} from "../models/stockAllocationModel";
 import {AutoCompleteContainerComponent} from "../autocomplete/autocomplete-container.component";
 import {timeHorizonValues, maturityValues, categoryValues} from "../models/themePropertyValues";
+import {Observable} from "rxjs";
 
 @Component({
     selector: 'app-theme-create',
@@ -18,26 +19,15 @@ import {timeHorizonValues, maturityValues, categoryValues} from "../models/theme
     }`]
 })
 export class ThemeCreationComponent {
-    themeCreation: ThemeCreationModel;
+    themeCreation: ThemeCreationModel = new ThemeCreationModel();
 
     timeHorizonValues = timeHorizonValues;
     maturityValues = maturityValues;
     categoryValues = categoryValues;
 
-    constructor(
-        private themeService: ThemeService,
-        private router: Router) {
-
-        let theme = new Theme();
-        // theme.tags = this.selectedTags;
-        this.themeCreation = new ThemeCreationModel(theme, new ThemeProperties());
-    }
+    constructor(private themeService: ThemeService, private router: Router) {}
 
     onSubmit(form: NgForm, themeTags: AutoCompleteContainerComponent, themeStockAllocation: AutoCompleteContainerComponent) {
-        //call service to save theme
-        console.log(themeTags.selectedItems)
-        console.log(themeStockAllocation.selectedItems)
-
         //update model with data from child components
         this.themeCreation.theme.tags = themeTags.selectedItems;
         this.themeCreation.stockAllocation = themeStockAllocation.selectedItems
@@ -46,15 +36,23 @@ export class ThemeCreationComponent {
             });
         this.themeCreation.themeProperties.setCheckedCategories();
 
-        this.themeService.createTheme(this.themeCreation)
-            .subscribe(
-                data => {
-                    console.log(data);
-                    this.router.navigate(['/theme', data.obj[0]._id]);
-                },
-                error =>  {
-                    console.log(error)
-                }
-            );
+        this.themeService.createTheme(this.themeCreation.theme).subscribe(
+            theme => {
+                let propertiesObservable = this.themeService.createUserThemeImput(theme._id, this.themeCreation.themeProperties);
+                let stockAllocationObservable = this.themeService.createManyStockCompositionsAndAllocations(theme._id, this.themeCreation.stockAllocation);
+
+                Observable.forkJoin([propertiesObservable, stockAllocationObservable]).subscribe(
+                    data => {
+                        console.log('Theme creation data: ', data);
+                        //navigate
+                        this.router.navigate(['/theme', theme._id]);
+                    },
+                    error => console.log(error)
+                )
+            },
+            error => {
+                console.log('Error at creating theme: ', error)
+            }
+        );
     }
 }

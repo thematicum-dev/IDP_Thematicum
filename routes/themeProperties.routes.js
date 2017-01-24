@@ -8,7 +8,7 @@ router.use('/', authUtilities.authenticationMiddleware);
 
 router.route('/theme/:themeId')
     .get(themePropertiesController.listByTheme)
-    .post(themePropertiesController.createMany);
+    .post(themePropertiesController.create);
 
 router.route('/theme/:themeId/user')
     .get(themePropertiesController.listByThemeAndUser)
