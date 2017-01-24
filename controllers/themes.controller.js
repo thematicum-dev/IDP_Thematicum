@@ -71,10 +71,10 @@ function deleteThemeData(req, res, next) {
     //TODO: delete related theme data, when deleting a theme, or not?
     var theme = req.theme;
 
-    let deleteThemeDoc = deleteTheme(theme);
-    let deleteUserThemeinputs = deleteUserInputsForTheme(theme);
-    let deleteStocks = deleteStocksForTheme(theme);
-    Promise.all([deleteThemeDoc, deleteUserThemeinputs, deleteStocks])
+    let deleteThemePromise = deleteTheme(theme);
+    let deleteUserThemeInputsPromise = deleteUserInputsForTheme(theme);
+    let deleteStocksPromise = deleteStocks(theme);
+    Promise.all([deleteThemePromise, deleteUserThemeInputsPromise, deleteStocksPromise])
         .then(result => {
             return res.status(200).json({
                 message: 'Theme related data deleted',
@@ -108,35 +108,40 @@ function deleteUserInputsForTheme(theme) {
     });
 }
 
-function deleteStocksForTheme(theme) {
-    return deleteStockCompositionsForTheme(theme)
-        .then(compositions => {
-            return _.map(compositions, function(composition) {
-                deleteStockAllocationForComposition(composition)
-            });
-        });
-}
-
-function deleteStockCompositionsForTheme(theme) {
-    return new Promise(function (resolve, reject) {
-        ThemeStockComposition.remove({theme: theme._id}, function(err, results) {
+function deleteStocks(theme) {
+    let findCompositionsPromise = new Promise(function (resolve, reject) {
+        ThemeStockComposition.find({theme: theme._id}, function(err, compositions) {
             if(err) {
                 reject(err);
             }
 
-            resolve(results);
+            resolve(compositions);
         });
     });
+
+    return findCompositionsPromise
+        .then(results => {
+            results.forEach(result => {
+                return deleteStockAllocationsForComposition(result);
+            })
+        });
 }
 
-function deleteStockAllocationForComposition(composition) {
+function deleteStockAllocationsForComposition(composition) {
     return new Promise(function (resolve, reject) {
-        UserThemeStockAllocation.remove({themeStockComposition: composition._id}, function(err, results) {
+        //remove theme-stock composition
+        composition.remove(function(err) {
             if(err) {
                 reject(err);
             }
+            //remove stock allocations for the given theme-stock composition
+            UserThemeStockAllocation.remove({themeStockComposition: composition._id}, function(err, results) {
+                if(err) {
+                    reject(err);
+                }
 
-            resolve(results);
+                resolve(results);
+            });
         });
     });
 }

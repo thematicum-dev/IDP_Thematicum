@@ -129,6 +129,13 @@ export class ThemeSearchService {
             .catch((error: Response) =>  Observable.throw(error.json()));
     }
 
+    deleteTheme(themeId: string) {
+        let apiPath = this.baseAPI + 'themes/' + themeId + this.setTokenQueryParam();
+        return this.http.delete(apiPath)
+            .map((response: Response) => response.json())
+            .catch((error: Response) =>  Observable.throw(error.json()));
+    }
+
     setTokenQueryParam() {
         return localStorage.getItem('token') ? '?token=' + localStorage.getItem('token') : '';
     }

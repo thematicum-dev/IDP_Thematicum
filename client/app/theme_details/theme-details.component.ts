@@ -1,7 +1,7 @@
 import {Component, OnInit, OnChanges, SimpleChanges, ElementRef, AfterViewInit} from '@angular/core';
 import {Theme} from "../models/theme";
 import {ThemeSearchService} from "../theme_search/theme-search.service";
-import { ActivatedRoute } from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import 'rxjs/add/operator/switchMap';
 import {ThemeService} from "../theme_creation/theme.service";
 import {ModalComponent} from "./modal.component";
@@ -39,6 +39,7 @@ export class ThemeDetailsComponent implements OnInit, OnChanges {
 
     constructor(
         private route: ActivatedRoute,
+        private router: Router,
         private searchService: ThemeSearchService,
         private themeService: ThemeService) { }
 
@@ -82,7 +83,13 @@ export class ThemeDetailsComponent implements OnInit, OnChanges {
     }
 
     deleteTheme(modal: any) {
-        //TODO: implement DELETE theme
+        this.searchService.deleteTheme(this.selectedThemeId).subscribe(
+            data => {
+                console.log(data);
+                this.router.navigate(['/search']);
+            },
+            error => console.log(error)
+        )
         modal.hide();
     }
 }
