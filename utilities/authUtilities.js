@@ -1,4 +1,5 @@
 var jwt = require('jsonwebtoken');
+var AppAuthError = require('./appAuthError');
 
 module.exports = {
     authenticationMiddleware: jwtVerify
@@ -10,11 +11,7 @@ function jwtVerify(req, res, next) {
     jwt.verify(token, 'secret', function(err, decoded) {
         if(err) {
             //invalid token
-            return next({
-                title: 'Not Authenticated',
-                error: err,
-                status: 401
-            });
+            return next(new AppAuthError(err.name, 401));
         }
 
         //var decodedToken = jwt.decode(token); //TODO: redundant?
@@ -25,7 +22,4 @@ function jwtVerify(req, res, next) {
         //TODO: check if user exists in the db?
         next();
     });
-}
-
-function jwtDecode() {
 }

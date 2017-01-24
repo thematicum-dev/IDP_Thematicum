@@ -8,18 +8,20 @@ var schema = new Schema({
         type: String,
         required: true,
         unique: true,
+        uniqueCaseInsensitive: true,
         minlength: 4,
         maxlength: 32
     },
     tags: [{
         type: String,
-        minlength: 3,
-        maxlength: 16
+        minlength: 4,
+        maxlength: 32
     }],
     description: {
         type: String,
         required: true,
         unique: true,
+        uniqueCaseInsensitive: true,
         minlength: 4,
         maxlength: 500
     },
@@ -28,5 +30,5 @@ var schema = new Schema({
     }}, { timestamps: true }) ;
 
 schema.index({ name: 'text' });
-schema.plugin(mongooseUniqueValidator);
+schema.plugin(mongooseUniqueValidator, { message: 'The {PATH} \'{VALUE}\' already exists' });
 module.exports = mongoose.model('Theme', schema);

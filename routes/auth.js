@@ -7,24 +7,14 @@ var accessCodeValidity = require('../utilities/isAccessCodeValid');
 var AppError = require('../utilities/appError');
 var AppResponse = require('../utilities/appResponse');
 
-//test
-//http://localhost:3000/auth
-router.get('/', function(req, res, next) {
-    return res.json({
-        text: 'hello world'
-    })
-});
-
 router.get('/isAuthenticated', function(req, res, next) {
     jwt.verify(req.query.token, 'secret', function (err, decoded) {
         if (err) {
-            //invalid token
-            // return next({
-            //     title: 'Not Authenticated',
-            //     error: err,
-            //     status: 401
-            // });
-            return next(err);
+            //TODO: return custom error?
+            let customError = err.name == 'TokenExpiredError' ? 'Your session expired. Please log in again.' :
+                err.name == 'JsonWebTokenError' ? 'Invalid authentication token. Please log in.' :
+                    'Authentication error';
+            return next(new AppError(customError, 401));
         }
 
         //TODO: check for user?
@@ -57,13 +47,12 @@ router.post('/', function (req, res, next) {
             personalRole: req.body.user.personalRole
         });
 
-        console.log(user);
         user.save(function(err, result) {
             if (err) {
                 return next(err);
             }
 
-            res.status(201).json(new AppResponse('User created', result));
+            res.status(201).json(new AppResponse('User created', null));
         });
     });
 });
@@ -76,8 +65,6 @@ router.post('/signin', function(req, res, next) {
         }
 
         if(!user) {
-            //unauthorized status code
-            //use generic, not specific, error message
             return next(new AppError('Invalid login credentials', 401));
         }
 
@@ -87,13 +74,13 @@ router.post('/signin', function(req, res, next) {
         }
 
         //valid login credentials (valid for 7200sec = 2hr)
-        var token = jwt.sign({user: user}, 'secret', {expiresIn: 7200});
+        var token = jwt.sign({user: user}, 'secret', {expiresIn: 10});
         res.status(200).json({
             message: 'Successful login',
             token: token,
             userId: user._id,
             username: user.name
-        })
+        });
     });
 })
 
