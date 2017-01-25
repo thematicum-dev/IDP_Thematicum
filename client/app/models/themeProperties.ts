@@ -3,8 +3,8 @@ import {categoryValues} from "../models/themePropertyValues";
 export class ThemeProperties {
     categoryValues = categoryValues;
 
-    public timeHorizon: number;
-    public maturity: number;
+    public timeHorizon: number = null;
+    public maturity: number = null;
     public categories: number[];
 
     setTimeHorizon(timeHorizon: number) {
@@ -33,5 +33,12 @@ export class ThemeProperties {
 
     uncheckAllCategories() {
         this.categoryValues.forEach(category => category.checked = false);
+    }
+
+    clearProperties() {
+        this.timeHorizon = null;
+        this.maturity = null;
+        this.categories = null;
+        this.uncheckAllCategories();
     }
 }

@@ -120,7 +120,7 @@ export class ThemePropertiesComponent implements OnInit {
 
     clearEditing(containerDiv: Element) {
         this.isEditMode = !this.isEditMode;
-        this.themeProperties.uncheckAllCategories();
+        this.themeProperties.clearProperties();
         console.log('Container div: ', containerDiv)
 
         if(!containerDiv) {
@@ -158,8 +158,8 @@ export class ThemePropertiesComponent implements OnInit {
     clearUserInputs() {
         this.userThemeInputs = null;
         this.userThemeInputsId = null;
-        this.themeProperties.uncheckAllCategories();
         this.isEditMode = false;
+        this.themeProperties.clearProperties();
     }
 
     createOrUpdateThemeProperty(form: NgForm) {

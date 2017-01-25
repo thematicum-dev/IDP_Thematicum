@@ -105,7 +105,7 @@
         <div *ngIf="isEditMode" class="text-right">
             <button class="btn btn-default" type="button" (click)="clearEditing(propertiesContainer)">Cancel</button>
             <button class="btn btn-primary" type="submit"
-                    [disabled]="!form.form.valid || !themeProperties?.timeHorizon || !themeProperties?.timeHorizon || themeProperties?.getCheckedCategories().length == 0">Save</button>
+                    [disabled]="!form.form.valid || themeProperties?.timeHorizon == null || themeProperties?.timeHorizon == null || themeProperties?.getCheckedCategories().length == 0">Save</button>
         </div>
     </form>
 </div>

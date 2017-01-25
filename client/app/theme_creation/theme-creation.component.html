@@ -97,12 +97,11 @@
         <div class="text-right">
             <button class="btn btn-primary" type="submit"
                     formnovalidate
-                    [disabled]="!form.form.valid || !themeCreation?.themeProperties?.timeHorizon || !themeCreation?.themeProperties?.maturity || themeCreation?.themeProperties?.getCheckedCategories().length == 0 ">
+                    [disabled]="!form.form.valid || themeCreation?.themeProperties?.timeHorizon == null || themeCreation?.themeProperties?.maturity == null || themeCreation?.themeProperties?.getCheckedCategories().length == 0">
                 Save</button>
         </div>
 
     </form>
-
     <app-error></app-error>
 </div>
 
