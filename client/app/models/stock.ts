@@ -1,6 +1,5 @@
 import {AutocompleteItem} from "../autocomplete/autocomplete-item";
 export class Stock extends AutocompleteItem {
-
     constructor(
         public name: string,
         public alias: string,

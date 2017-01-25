@@ -18,7 +18,7 @@
         <label>Exposure</label>
         <div class="btn-group btn-group-justified">
             <label class="btn btn-default no-decoration-element borderless default-cursor" style="padding: 0" *ngFor="let exposure of exposures; let i=index">
-                <input type="radio" name="exposure" [value]="i" >{{exposure}}
+                {{exposure}}
             </label>
         </div>
     </div>
@@ -82,7 +82,7 @@
                     <label class="btn btn-default inactive-element" *ngFor="let exposure of exposures; let exposureIdx=index"
                            [style.backgroundColor]="setExposureBackgroundColor(exposureIdx)"
                            [style.borderColor]="allocationModel.currentUserAllocation && allocationModel.currentUserAllocation.exposure == exposureIdx ? 'black' : ''">
-                        <input type="radio" name="exposure">{{allocationModel.exposureDistribution[exposureIdx].percentage}}%
+                        {{allocationModel.exposureDistribution[exposureIdx].percentage}}%
                     </label>
                 </div>
             </div>
@@ -96,7 +96,7 @@
             <div class="col-xs-6 col-xs-offset-1" >
                 <div class="btn-group btn-group-justified">
                     <label class="btn btn-default borderless no-decoration-element default-cursor" *ngFor="let exposure of exposures; let exposureIdx=index">
-                        <input type="radio" name="exposureUsers">{{getExposureDistributionStr(allocationModel.exposureDistribution[exposureIdx].count)}}
+                        {{getExposureDistributionStr(allocationModel.exposureDistribution[exposureIdx].count)}}
                     </label>
                 </div>
             </div>

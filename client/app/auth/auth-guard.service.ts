@@ -9,7 +9,6 @@ export class AuthGuard implements CanActivate {
 
     canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
         let url: string = state.url;
-        console.log(url)
 
         return this.authService.isLoggedIn().map(e => {
             if (e) {

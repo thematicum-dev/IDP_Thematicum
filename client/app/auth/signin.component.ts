@@ -26,7 +26,6 @@ export class SigninComponent {
                 data => {
                     //store the token in the local storage
                     localStorage.setItem('token', data.token);
-                    localStorage.setItem('userId', data.userId);
                     localStorage.setItem('username', data.username);
                     //this.router.navigateByUrl('/');
                 },

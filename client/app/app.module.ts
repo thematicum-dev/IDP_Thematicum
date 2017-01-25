@@ -20,7 +20,6 @@ import {ErrorService} from "./error-handling/error.service";
 import {ThemeService} from "./services/theme.service";
 import {AutoCompleteTagsComponent} from "./autocomplete/autocomplete-tags.component";
 import {AutoCompleteStockAllocationComponent} from "./autocomplete/autocomplete-stock-allocation.component";
-import {ErrorPageComponent} from "./static_pages/error-page.component";
 import {AuthGuard} from "./auth/auth-guard.service";
 import {ThemePropertiesComponent} from "./theme_details/theme-properties.component";
 import {Ng2Bs3ModalModule} from "ng2-bs3-modal/ng2-bs3-modal";
@@ -49,7 +48,6 @@ import {UserProfileComponent} from "./user_profile/user-profile.component";
         ThemeStockAllocationComponent,
         AutoCompleteTagsComponent,
         AutoCompleteStockAllocationComponent,
-        ErrorPageComponent,
         ModalComponent
     ],
     imports: [BrowserModule, routing, FormsModule, ReactiveFormsModule, HttpModule, Ng2Bs3ModalModule],

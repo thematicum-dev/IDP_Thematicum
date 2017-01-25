@@ -7,7 +7,6 @@ import {ThemeSearchComponent} from "./theme_search/theme-search.component";
 import {ThemeCreationComponent} from "./theme_creation/theme-creation.component";
 import {ThemeDetailsComponent} from "./theme_details/theme-details.component";
 import {AuthGuard} from "./auth/auth-guard.service";
-import {ErrorPageComponent} from "./static_pages/error-page.component";
 import {UserProfileComponent} from "./user_profile/user-profile.component";
 
 const APP_ROUTES: Routes = [
@@ -20,7 +19,6 @@ const APP_ROUTES: Routes = [
     { path: 'theme/create', component: ThemeCreationComponent },
     { path: 'theme/:id', component: ThemeDetailsComponent },
     { path: 'profile', component: UserProfileComponent},
-    { path: 'error/:errorMsg', component: ErrorPageComponent},
     { path: '**', redirectTo: '/home', pathMatch: 'full' },
 ];
 
