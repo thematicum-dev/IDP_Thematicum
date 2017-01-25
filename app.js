@@ -6,29 +6,22 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var mongoose = require('mongoose');
 
-var authRoutes = require('./routes/auth.routes');
-var accessCodeRoutes = require('./routes/accessCodes');
-var testRoute = require('./routes/test');
-//var themeRoutes = require('./routes/themes');
-//TODO: testing controllers
-var themeRoutes = require('./routes/theme.routes');
-var userInputRoutes = require('./routes/userThemeInputs');
-//var stockRoutes = require('./routes/stocks');
-var stockRoutes = require('./routes/stock.routes');
-var authUtilities = require('./utilities/authUtilities');
-var test1 = require('./routes/test1');
-
-var themePropertiesRoutes = require('./routes/themeProperties.routes');
-var stockAllocationRoutes = require('./routes/stockAllocations.routes');
+//routes
+var authRoutes = require('./server/routes/auth.routes');
+var accessCodeRoutes = require('./server/routes/accessCodes'); //TODO: refactor
+var themeRoutes = require('./server/routes/theme.routes');
+var stockRoutes = require('./server/routes/stock.routes');
+var themePropertiesRoutes = require('./server/routes/themeProperties.routes');
+var stockAllocationRoutes = require('./server/routes/stockAllocations.routes');
 
 var app = express();
 mongoose.connect('localhost:27017/thematicum');
 
 // view engine setup
-app.set('views', path.join(__dirname, 'views'));
+app.set('views', path.join(__dirname, './server/views'));
 app.set('view engine', 'hbs');
 
-// uncomment after placing your favicon in /public
+//uncomment after placing your favicon in /public
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 app.use(logger('dev'));
 app.use(bodyParser.json());
@@ -47,10 +40,7 @@ app.use('/api/auth', authRoutes);
 app.use('/api/accesscodes', accessCodeRoutes);
 app.use('/api/themes', themeRoutes);
 app.use('/api/themeproperties/', themePropertiesRoutes);
-app.use('/api/userinputs', userInputRoutes);
 app.use('/api/stocks', stockRoutes);
-app.use('/api/test', testRoute);
-app.use('/api/test1', test1);
 app.use('/api/stockallocations', stockAllocationRoutes);
 
 app.use(function (req, res, next) {
@@ -59,10 +49,8 @@ app.use(function (req, res, next) {
 
 //error handling
 app.use(function (err, req, res, next) {
-    console.log('Error handling middleware', err)
-
-    console.log('Json error: ', JSON.stringify(err));
+    console.log('Error handling middleware', JSON.stringify(err))
     return res.status(err.status || 500).json(err);
-})
+});
 
 module.exports = app;
