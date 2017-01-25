@@ -5,6 +5,7 @@ var userInputAggregation = require('../utilities/userInputAggregation');
 var _ = require('underscore');
 var AppError = require('../utilities/appError');
 var AppResponse = require('../utilities/appResponse');
+var constants = require('../utilities/constants');
 
 exports.listByTheme = function(req, res, next) {
     //get theme properties aggregation
@@ -19,13 +20,13 @@ exports.listByTheme = function(req, res, next) {
 
         var props = [{
             propertyName: 'timeHorizon',
-            nrValuesRequired: 3
+            nrValuesRequired: constants.TOTAL_TIME_HORIZON_VALUES
         }, {
             propertyName: 'maturity',
-            nrValuesRequired: 5
+            nrValuesRequired: constants.TOTAL_MATURITY_VALUES
         }, {
             propertyName: 'categories',
-            nrValuesRequired: 6
+            nrValuesRequired: constants.TOTAL_CATEGORY_VALUES
         }];
 
         var themeProperties = userInputAggregation.getThemePropertiesAggregation(results, props);

@@ -1,5 +1,5 @@
 var _ = require('underscore');
-var constants = require('../models/constants');
+var constants = require('./constants');
 
 module.exports = {
     groupByStockAndExposure: groupByStockAndExposure
@@ -21,7 +21,7 @@ function groupByStockAndExposure(stockAllocations) {
 
 function aggregateExposureDistribution(allocationsPerStock) {
     let totalCount = allocationsPerStock.length;
-    let totalExposureValuesNr = constants.TOTAL_EXPOSURE_VALUES_NR;
+    let totalExposureValuesNr = constants.TOTAL_EXPOSURE_VALUES;
     var exposureArray = new Array(totalExposureValuesNr);
 
     _.chain(allocationsPerStock)

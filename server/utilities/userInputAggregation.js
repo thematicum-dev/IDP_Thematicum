@@ -7,9 +7,9 @@ module.exports = {
 function getThemePropertiesAggregation(collection, propertyList) {
     var aggregation = {};
     _.each(propertyList, function(prop) {
-        countByProp = getCountByProperty(collection, prop.propertyName)
-        sumByProp = getSumByProperty(countByProp)
-        aggregationByProp = getAggregationByProperty(countByProp, sumByProp, prop.nrValuesRequired)
+        let countByProp = getCountByProperty(collection, prop.propertyName)
+        let sumByProp = getSumByProperty(countByProp)
+        let aggregationByProp = getAggregationByProperty(countByProp, sumByProp, prop.nrValuesRequired)
         aggregation[prop.propertyName] = aggregationByProp;
     });
 
@@ -34,7 +34,7 @@ function getAggregationByProperty(collection, sum, nrValuesRequired) {
 
     _.each(collection, function(val, key) {
         val = { value: key, count: val, percentage: roundUp(100*val/sum, 10) };
-        valuesArray[key-1] = val;
+        valuesArray[key] = val;
     });
 
     fixupValuesArray(valuesArray);
@@ -50,7 +50,7 @@ function fixupValuesArray(array) {
     for (var i =0; i<array.length; i++) {
         if (!array[i]) {
             array[i] = {
-                value: i+1,
+                value: i,
                 count: 0,
                 percentage: 0
             };

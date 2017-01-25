@@ -16,7 +16,7 @@ export class ThemeProperties {
     }
 
     toggleCheckedCategory(category: number) {
-        this.categoryValues[category-1].checked = !categoryValues[category-1].checked;
+        this.categoryValues[category].checked = !categoryValues[category].checked;
     }
 
     setCheckedCategories() {

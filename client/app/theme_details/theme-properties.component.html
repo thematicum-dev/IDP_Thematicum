@@ -27,7 +27,7 @@
                 <div class="col-xs-10">
                     <div class="btn-group btn-group-justified" [attr.data-toggle]="setDataToggleAttribute()">
                         <label class="btn btn-default"
-                               [style.backgroundColor]="setPropertyBackgroundColor('timeHorizon', i+1)"
+                               [style.backgroundColor]="setPropertyBackgroundColor('timeHorizon', i)"
                                [class.inactive-element]="!isEditMode"
                                *ngFor="let timeHorizon of themePropertiesAggregation.timeHorizon; let i = index"
                                (click)="themeProperties.setTimeHorizon(timeHorizon.value)">
@@ -56,7 +56,7 @@
                 <div class="col-xs-10">
                     <div class="btn-group btn-group-justified" data-toggle="buttons">
                         <label class="btn btn-default" [class.inactive-element]="!isEditMode"
-                               [style.backgroundColor]="setPropertyBackgroundColor('maturity', i+1)"
+                               [style.backgroundColor]="setPropertyBackgroundColor('maturity', i)"
                                *ngFor="let maturity of themePropertiesAggregation.maturity; let i = index"
                                (click)="themeProperties.setMaturity(maturity.value)">
                             <input type="radio" disabled="disabled" id="maturity" name="maturity" [value]="maturityValues[i].value" >{{maturityValues[i].description}}
@@ -81,7 +81,7 @@
                 <div class="col-xs-10">
                     <div class="btn-group btn-group-justified" [attr.data-toggle]="setDataToggleAttribute()">
                         <label class="btn btn-default"
-                               [style.backgroundColor]="setPropertyBackgroundColor('categories', i+1)"
+                               [style.backgroundColor]="setPropertyBackgroundColor('categories', i)"
                                [class.inactive-element]="!isEditMode"
                                *ngFor="let category of themePropertiesAggregation.categories; let i=index"
                                (click)="themeProperties.toggleCheckedCategory(category.value)">
