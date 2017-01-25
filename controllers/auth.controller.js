@@ -57,7 +57,7 @@ exports.signin = function (req, res, next) {
         }
 
         //valid login credentials (valid for 7200sec = 2hr)
-        var token = jwt.sign({user: user}, 'secret', {expiresIn: 120});
+        var token = jwt.sign({user: user}, 'secret', {expiresIn: 7200});
         res.status(200).json({
             message: 'Successful login',
             token: token,

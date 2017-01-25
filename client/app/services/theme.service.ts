@@ -15,6 +15,11 @@ export class ThemeService {
     baseAPI: string = 'http://localhost:3000/api/';
     headers = new Headers({'Content-Type': 'application/json'});
 
+    //TODO: delegate/refactor
+    /*
+     e.g. apiCall(apiPath: string): Observable<any> {}
+     */
+
     setTokenQueryParam() {
         return localStorage.getItem('token') ? '?token=' + localStorage.getItem('token') : '';
     }
@@ -37,7 +42,10 @@ export class ThemeService {
 
         return this.http.post(apiPath, body, {headers: this.headers})
             .map((response: Response) => response.json())
-            .catch((error: Response) =>  Observable.throw(error.json()));
+            .catch((error: Response) =>  {
+                this.errorService.handleError(error);
+                return Observable.throw(error.json())
+            });
     }
 
     createUserThemeImput(themeId: any, themeProperties: ThemeProperties) {
@@ -46,7 +54,10 @@ export class ThemeService {
 
         return this.http.post(apiPath, body, {headers: this.headers})
             .map((response: Response) => response.json())
-            .catch((error: Response) =>  Observable.throw(error.json()));
+            .catch((error: Response) =>  {
+                this.errorService.handleError(error);
+                return Observable.throw(error.json())
+            });
     }
 
     updateUserThemeInput(userThemeInputId: any, themeProperties: ThemeProperties) {
@@ -55,7 +66,10 @@ export class ThemeService {
 
         return this.http.put(apiPath, body, {headers: this.headers})
             .map((response: Response) => response.json())
-            .catch((error: Response) =>  Observable.throw(error.json()));
+            .catch((error: Response) =>  {
+                this.errorService.handleError(error);
+                return Observable.throw(error.json())
+            });
     }
 
     deleteUserThemeInput(userThemeInputId: string) {
@@ -63,7 +77,10 @@ export class ThemeService {
         let apiPath = this.baseAPI + 'themeproperties/' + userThemeInputId + this.setTokenQueryParam();
         return this.http.delete(apiPath)
             .map((response: Response) => response.json())
-            .catch((error: Response) =>  Observable.throw(error.json()));
+            .catch((error: Response) =>  {
+                this.errorService.handleError(error);
+                return Observable.throw(error.json())
+            });
     }
 
     updateTheme(theme: Theme) {
@@ -72,13 +89,12 @@ export class ThemeService {
 
         return this.http.put(apiPath, body, {headers: this.headers})
             .map((response: Response) => response.json().obj)
-            .catch((error: Response) =>  Observable.throw(error.json()));
+            .catch((error: Response) =>  {
+                this.errorService.handleError(error);
+                return Observable.throw(error.json())
+            });
     }
 
-    //TODO: delegate to avoid duplicate code
-    /*
-     e.g. apiCall(apiPath: string): Observable<any> {}
-     */
     searchThemes(searchTerm: string) {
         let searchQuery = searchTerm ? "&searchQuery=" + searchTerm : '';
         let apiPath = this.baseAPI + 'themes' + this.setTokenQueryParam() + searchQuery;
@@ -87,7 +103,10 @@ export class ThemeService {
             .map((response: Response) => {
                 return response.json().obj;
             })
-            .catch((error: Response) =>  Observable.throw(error.json()));
+            .catch((error: Response) =>  {
+                this.errorService.handleError(error);
+                return Observable.throw(error.json())
+            });
     }
 
     getThemeById(id: string) {
@@ -95,11 +114,10 @@ export class ThemeService {
         let apiPath = this.baseAPI + 'themes/' + id + this.setTokenQueryParam();
         return this.http.get(apiPath)
             .map((response: Response) => {
-                //console.log('Response: ', response)
                 return response.json().obj;
             })
             .catch((error: Response) =>  {
-                //this.errorService.handleError(error);
+                this.errorService.handleError(error);
                 return Observable.throw(error.json())
             });
     }
@@ -111,7 +129,7 @@ export class ThemeService {
                 return response.json().obj;
             })
             .catch((error: Response) =>  {
-                //this.errorService.handleError(error);
+                this.errorService.handleError(error);
                 return Observable.throw(error.json())
             });
     }
@@ -123,7 +141,7 @@ export class ThemeService {
                 return response.json().obj;
             })
             .catch((error: Response) =>  {
-                //return this.errorService.handleError(error);
+                this.errorService.handleError(error);
                 return Observable.throw(error.json())
             });
     }
@@ -136,7 +154,7 @@ export class ThemeService {
             })
             .catch((error: Response) =>  {
                 console.log(error)
-                //return this.errorService.handleError(error);
+                this.errorService.handleError(error);
                 return Observable.throw(error.json())
             });
     }
@@ -149,7 +167,7 @@ export class ThemeService {
             })
             .catch((error: Response) =>  {
                 console.log(error)
-                //return this.errorService.handleError(error);
+                this.errorService.handleError(error);
                 return Observable.throw(error.json())
             });
     }
@@ -162,7 +180,7 @@ export class ThemeService {
             })
             .catch((error: Response) =>  {
                 console.log(error)
-                //return this.errorService.handleError(error);
+                this.errorService.handleError(error);
                 return Observable.throw(error.json())
             });
     }
@@ -173,7 +191,10 @@ export class ThemeService {
 
         return this.http.put(apiPath, body, {headers: this.headers})
             .map((response: Response) => response.json().obj)
-            .catch((error: Response) =>  Observable.throw(error.json()));
+            .catch((error: Response) =>  {
+                this.errorService.handleError(error);
+                return Observable.throw(error.json());
+            });
     }
 
     createUserStockAllocation(themeStockCompositionId: string, exposure: number) {
@@ -182,20 +203,29 @@ export class ThemeService {
 
         return this.http.post(apiPath, body, this.headers)
             .map((response: Response) => response.json())
-            .catch((error: Response) =>  Observable.throw(error.json()));
+            .catch((error: Response) =>  {
+                this.errorService.handleError(error);
+                return Observable.throw(error.json());
+            });
     }
 
     deleteUserStockAllocation(allocationId: string) {
         let apiPath = this.baseAPI + 'stockallocations/' + allocationId + this.setTokenQueryParam();
         return this.http.delete(apiPath)
             .map((response: Response) => response.json())
-            .catch((error: Response) =>  Observable.throw(error.json()));
+            .catch((error: Response) =>  {
+                this.errorService.handleError(error);
+                return Observable.throw(error.json());
+            });
     }
 
     deleteTheme(themeId: string) {
         let apiPath = this.baseAPI + 'themes/' + themeId + this.setTokenQueryParam();
         return this.http.delete(apiPath)
             .map((response: Response) => response.json())
-            .catch((error: Response) =>  Observable.throw(error.json()));
+            .catch((error: Response) =>  {
+                this.errorService.handleError(error);
+                return Observable.throw(error.json());
+            });
     }
 }

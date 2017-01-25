@@ -37,7 +37,7 @@ export class AuthService {
         return this.http.post(apiPath, body, {headers: this.headers})
             .map((response: Response) => {
                 this.redirectToUrlAfterLogin();
-                return response.json()
+                return response.json();
             })
             .catch((error: Response) =>  {
                 this.errorService.handleError(error);
@@ -53,20 +53,18 @@ export class AuthService {
 
     isLoggedIn(): Observable<boolean> {
         var token = this.getStoredToken();
-        if (token == null) {
-            console.log('Null token')
+        if (!token) {
             return Observable.of(false);
         }
 
         let apiPath = this.baseAPI + 'auth/isAuthenticated' + this.setTokenQueryParam();
         return this.http.get(apiPath)
             .map((response: Response) => {
-                    console.log(response)
                     return Observable.of(response.status == 200);
                 }
             )
             .catch((error: Response) =>  {
-                console.log(error)
+                this.errorService.handleError(error);
                 return Observable.of(false);
             });
     }

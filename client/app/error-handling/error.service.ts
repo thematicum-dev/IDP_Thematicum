@@ -16,15 +16,14 @@ export class ErrorService {
 
         console.log('errJson: ', errorJson);
         if (error.status == 401) {
+            localStorage.clear();
             this.router.navigate(['/signin']);
             this.errorOccurred.emit(new Error([errMsg]));
-        } else if (error.status == 500) {
+        } else if (error.status == 500 && errorJson.errors) {
             //check for validation messages
-            if(errorJson.errors) {
-                this.errorOccurred.emit(this.getValidationError(errorJson.errors));
-            } else {
-                this.errorOccurred.emit(new Error([errMsg]));
-            }
+            this.errorOccurred.emit(this.getValidationError(errorJson.errors));
+        } else {
+            this.errorOccurred.emit(new Error([errMsg]));
         }
     }
 
