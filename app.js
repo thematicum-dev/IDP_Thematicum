@@ -45,12 +45,12 @@ app.use('/api/stocks', stockRoutes);
 app.use('/api/stockallocations', stockAllocationRoutes);
 app.use('/api/admin', adminRoutes);
 
-app.use(function (req, res, next) {
+app.route('/', function (req, res, next) {
     return res.render('index');
 });
 
 //error handling
-app.route('/', function (err, req, res, next) {
+app.use(function (err, req, res, next) {
     console.log('Error handling middleware', JSON.stringify(err))
     return res.status(err.status || 500).json(err);
 });
