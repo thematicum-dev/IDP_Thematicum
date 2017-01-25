@@ -8,11 +8,11 @@ var mongoose = require('mongoose');
 
 //routes
 var authRoutes = require('./server/routes/auth.routes');
-var accessCodeRoutes = require('./server/routes/accessCodes'); //TODO: refactor
 var themeRoutes = require('./server/routes/theme.routes');
 var stockRoutes = require('./server/routes/stock.routes');
 var themePropertiesRoutes = require('./server/routes/themeProperties.routes');
 var stockAllocationRoutes = require('./server/routes/stockAllocations.routes');
+var adminRoutes = require('./server/routes/admin.routes');
 
 var app = express();
 mongoose.connect('localhost:27017/thematicum');
@@ -37,11 +37,11 @@ app.use(function (req, res, next) {
 });
 
 app.use('/api/auth', authRoutes);
-app.use('/api/accesscodes', accessCodeRoutes);
 app.use('/api/themes', themeRoutes);
 app.use('/api/themeproperties/', themePropertiesRoutes);
 app.use('/api/stocks', stockRoutes);
 app.use('/api/stockallocations', stockAllocationRoutes);
+app.use('/api/admin', adminRoutes);
 
 app.use(function (req, res, next) {
     return res.render('index');
