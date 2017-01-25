@@ -1,17 +1,15 @@
 import {Component, OnInit} from '@angular/core';
 import {ModalComponent} from "../theme_details/modal.component";
 import {ViewChild} from "@angular/core/src/metadata/di";
-import {ThemeSearchService} from "../theme_search/theme-search.service";
 import {Input} from "@angular/core/src/metadata/directives";
 import {Observable, Observer} from "rxjs";
 import {ThemeStockCompositionAllocationModel} from "./theme-stock-composition-allocation-model";
 import {StockAllocationModel} from "../models/stockAllocationModel";
-import {ThemeService} from "../theme_creation/theme.service";
+import {ThemeService} from "../services/theme.service";
 
 @Component({
     selector: 'app-theme-stock-allocation',
     templateUrl: 'theme-stock-allocation.component.html',
-    providers: [ThemeSearchService, ThemeService],
     styles: [
         `hr {
             margin-top: 0;
@@ -64,7 +62,7 @@ export class ThemeStockAllocationComponent implements OnInit {
     @ViewChild(ModalComponent)
     public readonly modal: ModalComponent;
 
-    constructor(private themeService: ThemeSearchService, private _themeService: ThemeService) {}
+    constructor(private themeService: ThemeService) {}
 
     ngOnInit(): void {
         this.getJoinedObservable()
@@ -146,7 +144,7 @@ export class ThemeStockAllocationComponent implements OnInit {
 
     createStockCompositionAndAllocation(allocations: any[]) {
         let allocationsArray = allocations.map(allocation => new StockAllocationModel(allocation.stock.id, allocation.exposure));
-        this._themeService.createManyStockCompositionsAndAllocations(this.themeId, allocationsArray).subscribe(
+        this.themeService.createManyStockCompositionsAndAllocations(this.themeId, allocationsArray).subscribe(
             data => {
                 console.log(data)
                 this.toggleAddOtherStocks();

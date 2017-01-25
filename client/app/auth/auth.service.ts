@@ -9,16 +9,20 @@ import {ErrorService} from "../error-handling/error.service";
 
 @Injectable()
 export class AuthService {
+    baseAPI: string = 'http://localhost:3000/api/';
+    headers = new Headers({'Content-Type': 'application/json'});
     redirectUrl: string;
-
     constructor(private http: Http, private router: Router, private errorService: ErrorService) {}
 
+    setTokenQueryParam() {
+        return localStorage.getItem('token') ? '?token=' + localStorage.getItem('token') : '';
+    }
+    
     signup(signupModel: SignupModel) {
         const body = JSON.stringify(signupModel);
-        const headers = new Headers({'Content-Type': 'application/json'});
 
-        console.log(body);
-        return this.http.post('http://localhost:3000/auth/signup', body, {headers: headers})
+        let apiPath = this.baseAPI + 'auth/signup';
+        return this.http.post(apiPath, body, {headers: this.headers})
             .map((response: Response) => response.json())
             .catch((error: Response) =>  {
                 this.errorService.handleError(error);
@@ -28,9 +32,9 @@ export class AuthService {
 
     signin(user: User) {
         const body = JSON.stringify(user);
-        const headers = new Headers({'Content-Type': 'application/json'});
 
-        return this.http.post('http://localhost:3000/auth/signin', body, {headers: headers})
+        let apiPath = this.baseAPI + 'auth/signin';
+        return this.http.post(apiPath, body, {headers: this.headers})
             .map((response: Response) => {
                 this.redirectToUrlAfterLogin();
                 return response.json()
@@ -54,17 +58,14 @@ export class AuthService {
             return Observable.of(false);
         }
 
-        const token = '?token=' + token;
-
-        return this.http.get('http://localhost:3000/auth/isAuthenticated' + token)
+        let apiPath = this.baseAPI + 'auth/isAuthenticated' + this.setTokenQueryParam();
+        return this.http.get(apiPath)
             .map((response: Response) => {
-                    console.log('Response for authentication: ', status==200)
                     console.log(response)
                     return Observable.of(response.status == 200);
                 }
             )
             .catch((error: Response) =>  {
-                console.log('Error in authentication')
                 console.log(error)
                 return Observable.of(false);
             });

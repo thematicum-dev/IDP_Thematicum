@@ -2,7 +2,7 @@ import {Component} from '@angular/core';
 import {ThemeCreationModel} from "../models/themeCreationModel";
 import {Theme} from "../models/theme";
 import {NgForm} from "@angular/forms";
-import {ThemeService} from "./theme.service";
+import {ThemeService} from "../services/theme.service";
 import {Router} from "@angular/router";
 import {ThemeProperties} from "../models/themeProperties";
 import {StockAllocation} from "../models/stockAllocation";

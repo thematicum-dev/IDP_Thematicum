@@ -17,7 +17,7 @@ import {AutoCompleteComponent} from "./autocomplete/autocomplete.component";
 import {ThemeCreationComponent} from "./theme_creation/theme-creation.component";
 import {ThemeDetailsComponent} from "./theme_details/theme-details.component";
 import {ErrorService} from "./error-handling/error.service";
-import {ThemeService} from "./theme_creation/theme.service";
+import {ThemeService} from "./services/theme.service";
 import {AutoCompleteTagsComponent} from "./autocomplete/autocomplete-tags.component";
 import {AutoCompleteStockAllocationComponent} from "./autocomplete/autocomplete-stock-allocation.component";
 import {ErrorPageComponent} from "./static_pages/error-page.component";

@@ -1,6 +1,5 @@
 import {Component, OnInit, EventEmitter} from '@angular/core';
-import {ThemeSearchService} from "../theme_search/theme-search.service";
-import {ThemeService} from "../theme_creation/theme.service";
+import {ThemeService} from "../services/theme.service";
 import {ThemeProperties} from "../models/themeProperties";
 import {ModalComponent} from "./modal.component";
 import {ViewChild} from "@angular/core/src/metadata/di";
@@ -72,7 +71,7 @@ export class ThemePropertiesComponent implements OnInit {
     @ViewChild(ModalComponent)
     public readonly modal: ModalComponent;
 
-    constructor(private searchService: ThemeSearchService, private themeService: ThemeService) { }
+    constructor(private themeService: ThemeService) { }
 
     ngOnInit(): void {
         this.getJoinedObservable().subscribe(
@@ -103,11 +102,11 @@ export class ThemePropertiesComponent implements OnInit {
     }
 
     getJoinedObservable() {
-        let themeProperties = this.searchService.getThemeProperties(this.themeId).map(themeProperty => {
+        let themeProperties = this.themeService.getThemeProperties(this.themeId).map(themeProperty => {
             themeProperty.isDataByUser = false; //to distinguish between Observables' results
             return themeProperty;
         });
-        let themePropertiesByUser =  this.searchService.getThemePropertiesByUser(this.themeId).map(propertyByUser => {
+        let themePropertiesByUser =  this.themeService.getThemePropertiesByUser(this.themeId).map(propertyByUser => {
             propertyByUser.isDataByUser = true;
             return propertyByUser;
         });

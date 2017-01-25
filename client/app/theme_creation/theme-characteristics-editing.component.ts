@@ -2,7 +2,7 @@ import {Component, EventEmitter, OnChanges, SimpleChanges, ElementRef} from '@an
 import {Theme} from "../models/theme";
 import {Input, Output} from "@angular/core/src/metadata/directives";
 import {FormBuilder, Validators} from "@angular/forms";
-import {ThemeService} from "./theme.service";
+import {ThemeService} from "../services/theme.service";
 
 @Component({
     selector: 'app-theme-characteristics-editing',

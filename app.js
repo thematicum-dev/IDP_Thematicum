@@ -43,7 +43,7 @@ app.use(function (req, res, next) {
     next();
 });
 
-app.use('/auth', authRoutes);
+app.use('/api/auth', authRoutes);
 app.use('/api/accesscodes', accessCodeRoutes);
 app.use('/api/themes', themeRoutes);
 app.use('/api/themeproperties/', themePropertiesRoutes);

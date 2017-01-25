@@ -1,9 +1,8 @@
 import {Component, OnInit, OnChanges, SimpleChanges, ElementRef, AfterViewInit} from '@angular/core';
 import {Theme} from "../models/theme";
-import {ThemeSearchService} from "../theme_search/theme-search.service";
 import {ActivatedRoute, Router} from '@angular/router';
 import 'rxjs/add/operator/switchMap';
-import {ThemeService} from "../theme_creation/theme.service";
+import {ThemeService} from "../services/theme.service";
 import {ModalComponent} from "./modal.component";
 import {ViewChild} from "@angular/core/src/metadata/di";
 
@@ -24,8 +23,7 @@ import {ViewChild} from "@angular/core/src/metadata/di";
             .modal {
               background: rgba(0,0,0,0.6);
             }
-        `],
-    providers: [ThemeSearchService]
+        `]
 })
 export class ThemeDetailsComponent implements OnInit, OnChanges {
     //theme existing data
@@ -40,7 +38,7 @@ export class ThemeDetailsComponent implements OnInit, OnChanges {
     constructor(
         private route: ActivatedRoute,
         private router: Router,
-        private searchService: ThemeSearchService,
+        private themeServie: ThemeService,
         private themeService: ThemeService) { }
 
     ngOnInit(): void {
@@ -49,7 +47,7 @@ export class ThemeDetailsComponent implements OnInit, OnChanges {
         }
 
         this.selectedThemeId = this.route.snapshot.params['id'];
-        this.searchService.getThemeById(this.selectedThemeId).subscribe(
+        this.themeService.getThemeById(this.selectedThemeId).subscribe(
             data => {
                 this.theme = data;
                 this.theme.createdAt = new Date(data.createdAt);
@@ -83,7 +81,7 @@ export class ThemeDetailsComponent implements OnInit, OnChanges {
     }
 
     deleteTheme(modal: any) {
-        this.searchService.deleteTheme(this.selectedThemeId).subscribe(
+        this.themeService.deleteTheme(this.selectedThemeId).subscribe(
             data => {
                 console.log(data);
                 this.router.navigate(['/search']);

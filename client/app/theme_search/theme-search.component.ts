@@ -1,20 +1,19 @@
 import {Component, OnInit} from '@angular/core';
-import {ThemeSearchService} from "./theme-search.service";
 import {NgForm} from "@angular/forms";
 import {Theme} from "../models/theme";
 import {AutoCompleteComponent} from "../autocomplete/autocomplete.component";
 import {Router, ActivatedRoute} from "@angular/router";
+import {ThemeService} from "../services/theme.service";
 
 @Component({
     selector: 'app-theme-search',
-    templateUrl: 'theme-search.component.html',
-    providers: [ThemeSearchService]
+    templateUrl: 'theme-search.component.html'
 })
 export class ThemeSearchComponent implements OnInit {
     searchTerm = "";
     themes: Theme[] = [];
 
-    constructor(private searchService: ThemeSearchService, private router: Router, private route: ActivatedRoute) {}
+    constructor(private themeService: ThemeService, private router: Router, private route: ActivatedRoute) {}
 
     ngOnInit(): void {
         //TODO: refactor - create separate classes to override the 2 cases implementation
@@ -43,7 +42,7 @@ export class ThemeSearchComponent implements OnInit {
 
     searchThemes(searchTerm: any) {
         //TODO: consider separate APIs for getting all themes vs. searching
-        this.searchService.searchThemes(searchTerm)
+        this.themeService.searchThemes(searchTerm)
             .subscribe(
                 data => {
                     this.themes = [];
