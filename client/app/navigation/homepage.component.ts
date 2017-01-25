@@ -4,4 +4,6 @@ import {Component} from '@angular/core';
     templateUrl: 'homepage.component.html'
 })
 export class HomepageComponent {
+    title = "Welcome";
+    subtitle = "Thematicum";
 }
