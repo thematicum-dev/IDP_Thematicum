@@ -15,7 +15,9 @@ var stockAllocationRoutes = require('./server/routes/stockAllocations.routes');
 var adminRoutes = require('./server/routes/admin.routes');
 
 var app = express();
-mongoose.connect('localhost:27017/thematicum');
+let mongodbPath = 'mongodb://admin:ru!#05#2Gud4Bndj@ds129179.mlab.com:29179/thematicum-test';
+let mongodbPathDev = 'localhost:27017/thematicum';
+mongoose.connect(mongodbPath);
 
 // view engine setup
 app.set('views', path.join(__dirname, './server/views'));
