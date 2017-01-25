@@ -45,7 +45,7 @@ app.use('/api/stocks', stockRoutes);
 app.use('/api/stockallocations', stockAllocationRoutes);
 app.use('/api/admin', adminRoutes);
 
-app.route('/', function (req, res, next) {
+app.use(function (req, res, next) {
     return res.render('index');
 });
 
