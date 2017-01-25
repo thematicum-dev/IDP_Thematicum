@@ -8,8 +8,8 @@ var schema = new Schema({
     exposure: {
         type: Number,
         required: true,
-        minlength: constants.MIN_EXPOSURE,
-        maxlength: constants.MAX_EXPOSURE
+        min: constants.MIN_EXPOSURE,
+        max: constants.MAX_EXPOSURE
     }
 });
 

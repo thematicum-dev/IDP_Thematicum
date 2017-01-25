@@ -32,7 +32,7 @@
                                *ngFor="let timeHorizon of themePropertiesAggregation.timeHorizon; let i = index"
                                (click)="themeProperties.setTimeHorizon(timeHorizon.value)">
 
-                            <input type="radio" disabled="disabled" id="timeHorizon" name="timeHorizon" [value]="timeHorizonValues[i].value">{{timeHorizonValues[i].description}}
+                            <input type="radio" disabled="disabled" id="timeHorizon" name="timeHorizon" [value]="timeHorizon.value">{{timeHorizonValues[i].description}}
                         </label>
 
                     </div>
@@ -59,7 +59,7 @@
                                [style.backgroundColor]="setPropertyBackgroundColor('maturity', i)"
                                *ngFor="let maturity of themePropertiesAggregation.maturity; let i = index"
                                (click)="themeProperties.setMaturity(maturity.value)">
-                            <input type="radio" disabled="disabled" id="maturity" name="maturity" [value]="maturityValues[i].value" >{{maturityValues[i].description}}
+                            <input type="radio" disabled="disabled" id="maturity" name="maturity" [value]="i" >{{maturityValues[i].description}}
                         </label>
                     </div>
                 </div>
@@ -85,7 +85,7 @@
                                [class.inactive-element]="!isEditMode"
                                *ngFor="let category of themePropertiesAggregation.categories; let i=index"
                                (click)="themeProperties.toggleCheckedCategory(category.value)">
-                            <input type="checkbox" disabled="disabled" id="categories" name="categories" [value]="categoryValues[i].value">{{categoryValues[i].description}}
+                            <input type="checkbox" disabled="disabled" id="categories" name="categories" [value]="i">{{categoryValues[i].description}}
                         </label>
                     </div>
                 </div>
@@ -97,15 +97,14 @@
                         </label>
                     </div>
                 </div>
-
             </div>
 
         </div>
-
+        ThemeProperties: {{themeProperties | json}}
         <div *ngIf="isEditMode" class="text-right">
             <button class="btn btn-default" type="button" (click)="clearEditing(propertiesContainer)">Cancel</button>
             <button class="btn btn-primary" type="submit"
-                    [disabled]="!form.form.valid || themeProperties?.timeHorizon == null || themeProperties?.timeHorizon == null || themeProperties?.getCheckedCategories().length == 0">Save</button>
+                    [disabled]="!form.form.valid || themeProperties.hasNoUserInputs()">Save</button>
         </div>
     </form>
 </div>

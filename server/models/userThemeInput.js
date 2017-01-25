@@ -9,20 +9,20 @@ var schema = new Schema({
         timeHorizon: {
             type: Number,
             required: true,
-            minlength: constants.MIN_TIME_HORIZON,
-            maxlength: constants.MAX_TIME_HORIZON
+            min: constants.MIN_TIME_HORIZON,
+            max: constants.MAX_TIME_HORIZON
         },
         maturity: {
             type: Number,
             required: true,
-            minlength: constants.MIN_MATURITY,
-            maxlength: constants.MAX_MATURITY
+            min: constants.MIN_MATURITY,
+            max: constants.MAX_MATURITY
         },
         categories: [{
             type: Number,
             required: true,
-            minlength: constants.MIN_CATEGORY,
-            maxlength: constants.MAX_CATEGORY
+            min: constants.MIN_CATEGORY,
+            max: constants.MAX_CATEGORY
         }]
     }
 });

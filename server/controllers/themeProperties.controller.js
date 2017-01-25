@@ -74,11 +74,11 @@ exports.listByThemeAndUser = function(req, res, next) {
 exports.update = function(req, res, next) {
     var themeProperty = req.themeProperty;
 
-    if (req.body.timeHorizon)
+    if (req.body.timeHorizon != null)
         themeProperty.themeProperties.timeHorizon = req.body.timeHorizon;
-    if (req.body.maturity)
+    if (req.body.maturity != null)
         themeProperty.themeProperties.maturity = req.body.maturity;
-    if (req.body.categories)
+    if (req.body.categories != null)
         themeProperty.themeProperties.categories = req.body.categories;
 
     themeProperty.save(function(err, result) {

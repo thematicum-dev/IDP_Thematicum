@@ -41,4 +41,8 @@ export class ThemeProperties {
         this.categories = null;
         this.uncheckAllCategories();
     }
+
+    hasNoUserInputs() {
+        return this.timeHorizon == null || this.maturity == null || this.getCheckedCategories().length == 0;
+    }
 }
