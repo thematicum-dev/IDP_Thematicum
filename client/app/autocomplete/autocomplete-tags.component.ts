@@ -10,8 +10,9 @@ import {AutocompleteDatasourceService} from "./autocomplete-datasource.service";
 })
 export class AutoCompleteTagsComponent extends AutoCompleteContainerComponent implements OnChanges {
     @Input() themeTags: any[];
+    baseAPI = 'https://thematicum.herokuapp.com/api/';
     constructor(private dataSource: AutocompleteDatasourceService) {
-        this.dataSourceAPI = 'http://localhost:3000/api/themes/tags' + '?token=' + localStorage.getItem('token');
+        this.dataSourceAPI = this.baseAPI + 'themes/tags' + '?token=' + localStorage.getItem('token');
         this.autocompletePlaceholder = 'Keyword';
         this.allowCustomValues = true;
         this.allowEnterKey = true;

@@ -31,9 +31,9 @@ export class AutoCompleteStockAllocationComponent extends AutoCompleteContainerC
     @Input() preFilterStockIds: string[];
     stockExposures = ['Strong Positive', 'Weak Positive', 'Neutral', 'Weak Negative', 'Strong Negative'];
     currentlySelectedStock: Stock;
-
+    baseAPI = 'https://thematicum.herokuapp.com/api/';
     constructor(private dataSource: AutocompleteDatasourceService) {
-        this.dataSourceAPI = 'http://localhost:3000/api/stocks' + '?token=' + localStorage.getItem('token');
+        this.dataSourceAPI = this.baseAPI + 'stocks' + '?token=' + localStorage.getItem('token');
         this.autocompletePlaceholder = 'Search by company name';
         this.allowCustomValues = false;
         this.allowEnterKey = false;

@@ -12,7 +12,8 @@ import {ErrorService} from "../error-handling/error.service";
 @Injectable()
 export class ThemeService {
     constructor(private http: Http, private errorService: ErrorService) {}
-    baseAPI: string = 'http://localhost:3000/api/';
+    //baseAPI: string = 'http://localhost:3000/api/';
+    baseAPI: string = 'https://thematicum.herokuapp.com/api/';
     headers = new Headers({'Content-Type': 'application/json'});
 
     //TODO: delegate/refactor
