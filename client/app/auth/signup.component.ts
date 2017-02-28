@@ -20,6 +20,7 @@ export class SignupComponent {
         'Other'
     ];
 
+    user: User = new User();
     selectedPersonalRole = this.personalRoles[0]; //default value
     registrationAccessCode: String = "";
 

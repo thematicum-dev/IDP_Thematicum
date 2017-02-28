@@ -22,7 +22,7 @@ export class AutoCompleteTagsComponent extends AutoCompleteContainerComponent im
     }
 
     ngOnChanges(changes: SimpleChanges): void {
-        var themeTagsInputChange: any[] = changes.themeTags.currentValue;
+        var themeTagsInputChange: any[] = changes['themeTags'].currentValue;
         if (themeTagsInputChange) {
             this.selectedItems = this.themeTags;
         }

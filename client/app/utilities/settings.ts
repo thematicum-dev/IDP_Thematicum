@@ -1,4 +1,4 @@
-let isDev: boolean = false;
+let isDev: boolean = true;
 export function getBaseApi() {
     if (isDev) {
         return 'http://localhost:3000/api/';

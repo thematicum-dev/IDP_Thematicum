@@ -10,7 +10,7 @@
                         type="text"
                         id="name"
                         class="form-control col-xs-10"
-                        [ngModel]="user?.name"
+                        [(ngModel)]="user.name"
                         name="name"
                         #name="ngModel"
                         required
@@ -26,7 +26,7 @@
                         type="email"
                         id="email"
                         class="form-control col-xs-10"
-                        [ngModel]="user?.email"
+                        [(ngModel)]="user.email"
                         name="email"
                         #email="ngModel"
                         required
@@ -42,7 +42,7 @@
                         type="password"
                         id="password"
                         class="form-control col-xs-10"
-                        [ngModel]="user?.password"
+                        [(ngModel)]="user.password"
                         name="password"
                         #password="ngModel"
                         required
@@ -90,3 +90,5 @@
 
     </div>
 </div>
+
+<p>User: {{user | json}}</p>

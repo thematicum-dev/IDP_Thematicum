@@ -17,10 +17,10 @@ export class ThemeCharacteristicsEditingComponent implements OnChanges {
     constructor(private themeService: ThemeService) {}
 
     ngOnChanges(changes: SimpleChanges): void {
-        if(changes.theme.currentValue && changes.themeTags.currentValue) {
+        if(changes['theme'].currentValue && changes['themeTags'].currentValue) {
             //make a shallow copy of theme, in case the changes to the model need to be canceled
-            this.themeCopy = Object.assign({}, changes.theme.currentValue)
-            let themeTagsCopy = Object.assign([], changes.themeTags.currentValue);
+            this.themeCopy = Object.assign({}, changes['theme'].currentValue)
+            let themeTagsCopy = Object.assign([], changes['themeTags'].currentValue);
             this.themeCopy.tags = themeTagsCopy;
         }
     }

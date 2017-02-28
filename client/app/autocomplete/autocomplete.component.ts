@@ -16,9 +16,9 @@ import {NgModel} from "@angular/forms";
      }
 })
 export class AutoCompleteComponent implements OnChanges {
-    const KEY_ARROW_UP = 38;
-    const KEY_ARROW_DOWN = 40;
-    const KEY_ENTER = 13;
+    readonly KEY_ARROW_UP = 38;
+    readonly KEY_ARROW_DOWN = 40;
+    readonly KEY_ENTER = 13;
 
     position: number = -1;
     autocompleteList: AutocompleteList = new AutocompleteList();
@@ -39,7 +39,7 @@ export class AutoCompleteComponent implements OnChanges {
     constructor(private elementRef: ElementRef) {}
 
     ngOnChanges(changes: SimpleChanges): void {
-        var autocompleteItemsChange: AutocompleteItem[] = changes.dataSource.currentValue;
+        var autocompleteItemsChange: AutocompleteItem[] = changes['dataSource'].currentValue;
         if (autocompleteItemsChange) {
             this.autocompleteList.list = this.dataSource;
         }

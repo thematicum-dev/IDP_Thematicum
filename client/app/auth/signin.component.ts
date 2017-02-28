@@ -3,13 +3,11 @@ import {User} from "../models/user";
 import {NgForm} from "@angular/forms";
 import {AuthService} from "./auth.service";
 import {Router} from "@angular/router";
-import {ErrorComponent} from "../error-handling/error.component";
 
 @Component({
     selector: 'app-signin',
     templateUrl: 'signin.component.html',
-    styleUrls: [`.well { padding-top: 0px}`],
-    directives: [ErrorComponent]
+    styleUrls: [`.well { padding-top: 0px}`]
 })
 export class SigninComponent {
     user: User;
