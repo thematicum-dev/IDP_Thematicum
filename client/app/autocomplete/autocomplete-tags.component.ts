@@ -2,6 +2,7 @@ import {Component, Input, OnChanges, SimpleChanges} from '@angular/core';
 import {AutoCompleteContainerComponent} from "./autocomplete-container.component";
 import {AutocompleteItem} from "./autocomplete-item";
 import {AutocompleteDatasourceService} from "./autocomplete-datasource.service";
+import * as Settings from '../utilities/settings';
 
 @Component({
     selector: 'app-autocomplete-tags',
@@ -10,7 +11,7 @@ import {AutocompleteDatasourceService} from "./autocomplete-datasource.service";
 })
 export class AutoCompleteTagsComponent extends AutoCompleteContainerComponent implements OnChanges {
     @Input() themeTags: any[];
-    baseAPI = 'https://thematicum.herokuapp.com/api/';
+    baseAPI: string = Settings.getBaseApi();
     constructor(private dataSource: AutocompleteDatasourceService) {
         this.dataSourceAPI = this.baseAPI + 'themes/tags' + '?token=' + localStorage.getItem('token');
         this.autocompletePlaceholder = 'Keyword';

@@ -1,6 +1,7 @@
 /.idea/
 .idea/workspace.xml
 /db/
+.env
 
 /node_modules/
 /public/bower_components/

@@ -6,11 +6,11 @@ import {Observable} from "rxjs";
 import {SignupModel} from "./signup-model";
 import {Router} from "@angular/router";
 import {ErrorService} from "../error-handling/error.service";
+import * as Settings from '../utilities/settings';
 
 @Injectable()
 export class AuthService {
-    //baseAPI: string = 'http://localhost:3000/api/';
-    baseAPI: string = 'https://thematicum.herokuapp.com/api/';
+    baseAPI: string = Settings.getBaseApi();
     headers = new Headers({'Content-Type': 'application/json'});
     redirectUrl: string;
     constructor(private http: Http, private router: Router, private errorService: ErrorService) {}

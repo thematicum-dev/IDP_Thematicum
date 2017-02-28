@@ -8,12 +8,12 @@ import {ThemeProperties} from "../models/themeProperties";
 import {Theme} from "../models/theme";
 import {StockAllocationModel} from "../models/stockAllocationModel";
 import {ErrorService} from "../error-handling/error.service";
+import * as Settings from '../utilities/settings';
 
 @Injectable()
 export class ThemeService {
     constructor(private http: Http, private errorService: ErrorService) {}
-    //baseAPI: string = 'http://localhost:3000/api/';
-    baseAPI: string = 'https://thematicum.herokuapp.com/api/';
+    baseAPI: string = Settings.getBaseApi();
     headers = new Headers({'Content-Type': 'application/json'});
 
     //TODO: delegate/refactor

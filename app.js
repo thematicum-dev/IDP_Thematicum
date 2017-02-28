@@ -5,6 +5,7 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var mongoose = require('mongoose');
+var dotenv = require('dotenv');
 
 //routes
 var authRoutes = require('./server/routes/auth.routes');
@@ -13,10 +14,12 @@ var stockRoutes = require('./server/routes/stock.routes');
 var themePropertiesRoutes = require('./server/routes/themeProperties.routes');
 var stockAllocationRoutes = require('./server/routes/stockAllocations.routes');
 var adminRoutes = require('./server/routes/admin.routes');
+var settings = require('./server/utilities/settings');
 
+var config = dotenv.config();
 var app = express();
-let mongodbPath = 'mongodb://admin:ru!#05#2Gud4Bndj@ds129179.mlab.com:29179/thematicum-test';
-let mongodbPathDev = 'localhost:27017/thematicum';
+
+var mongodbPath = settings.getDBConnectionString();
 mongoose.connect(mongodbPath);
 
 // view engine setup
@@ -34,7 +37,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(function (req, res, next) {
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
-    res.setHeader('Access-Control-Allow-Methods', 'POST, GET, PATCH, DELETE, OPTIONS');
+    res.setHeader('Access-Control-Allow-Methods', 'POST, GET, PATCH, PUT, DELETE, OPTIONS');
     next();
 });
 
