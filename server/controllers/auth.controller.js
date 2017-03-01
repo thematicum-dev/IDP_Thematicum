@@ -5,6 +5,7 @@ var AppError = require('../utilities/appError');
 var AppAuthError = require('../utilities/appAuthError');
 var AppResponse = require('../utilities/appResponse');
 var User = require('../models/user');
+var authUtilities = require('../utilities/authUtilities');
 
 //TODO: abstract data in settings
 exports.signup = function (req, res, next) {
@@ -56,8 +57,7 @@ exports.signin = function (req, res, next) {
             return next(new AppError('Invalid login credentials', 401));
         }
 
-        //valid login credentials (valid for 7200sec = 2hr)
-        var token = jwt.sign({user: user}, 'secret', {expiresIn: 7200});
+        var token = authUtilities.jwtSign({user: user});
         res.status(200).json({
             message: 'Successful login',
             token: token,
@@ -67,13 +67,13 @@ exports.signin = function (req, res, next) {
 }
 
 exports.isAuthenticated = function (req, res, next) {
-    jwt.verify(req.query.token, 'secret', function (err, decoded) {
-        if (err) {
+    authUtilities.jwtVerify(req.query.token)
+        .then(decoded => {
+            return res.status(200).json(new AppResponse('User is authenticated', null));
+        })
+        .catch(err => {
             return next(new AppAuthError(err.name, 401));
-        }
-
-        return res.status(200).json(new AppResponse('User is authenticated', null));
-    });
+        });
 }
 
 function isAccessCodeValid(code, currentTime, callback) {

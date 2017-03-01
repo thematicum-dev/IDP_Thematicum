@@ -2,21 +2,39 @@ var jwt = require('jsonwebtoken');
 var AppAuthError = require('./appAuthError');
 
 module.exports = {
-    authenticationMiddleware: jwtVerify
+    authenticationMiddleware: jwtVerifyReq,
+    jwtVerify: jwtVerify,
+    jwtSign: jwtSign
 }
 
-function jwtVerify(req, res, next) {
-    //TODO: non-hardcoded value
-    var token = req.query.token;
-    jwt.verify(token, 'secret', function(err, decoded) {
-        if(err) {
-            //invalid token
-            return next(new AppAuthError(err.name, 401));
-        }
+let expiration = {expiresIn: 7200}; //token expires in 7200 sec (2 hr)
+let jwtSecret = process.env.JWT_SECRET || 'secret';
 
-        //var decodedToken = jwt.decode(token); //TODO: redundant?
-        res.locals.user = decoded.user; //TODO: consistency
-        //TODO: check if user exists in the db?
-        next();
+function jwtVerifyReq(req, res, next) {
+    var token = req.query.token;
+    jwtVerify(token)
+        .then(decoded => {
+            //var decodedToken = jwt.decode(token); //TODO: redundant?
+            res.locals.user = decoded.user; //TODO: consistency
+            //TODO: check if user exists in the db?
+            next();
+        })
+        .catch(err => next(new AppAuthError(err.name, 401)));
+}
+
+function jwtVerify(token) {
+    return new Promise((resolve, reject) => {
+        jwt.verify(token, jwtSecret, function (err, decoded) {
+            if (err) {
+                //invalid token
+                reject(err);
+            }
+
+            resolve(decoded);
+        });
     });
+}
+
+function jwtSign(payload) {
+    return jwt.sign(payload, jwtSecret, expiration);
 }
