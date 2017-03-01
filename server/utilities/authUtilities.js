@@ -15,9 +15,6 @@ function jwtVerify(req, res, next) {
         }
 
         //var decodedToken = jwt.decode(token); //TODO: redundant?
-        console.log('Decoded token: ', decoded)
-        //TODO: Cannot read property 'user' of undefined
-        //e.g. refresh a page (today)
         res.locals.user = decoded.user; //TODO: consistency
         //TODO: check if user exists in the db?
         next();

@@ -27,7 +27,7 @@ exports.signup = function (req, res, next) {
         var user = new User({
             name: req.body.user.name,
             email: req.body.user.email,
-            password: bcrypt.hashSync(String(req.body.user.password), 10),
+            password: req.body.user.password,
             personalRole: req.body.user.personalRole
         });
 
@@ -52,7 +52,7 @@ exports.signin = function (req, res, next) {
         }
 
         //check password
-        if (!bcrypt.compareSync(req.body.password, user.password)) {
+        if (!user.passwordIsValid(req.body.password)) {
             return next(new AppError('Invalid login credentials', 401));
         }
 
