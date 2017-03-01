@@ -5,18 +5,19 @@ import {AutocompleteDatasourceService} from "./autocomplete-datasource.service";
 import {Input} from "@angular/core/src/metadata/directives";
 
 export class AutoCompleteContainerComponent implements AutocompleteItemSelectionInterface, OnInit {
-    dataSourceAPI: string;
-    autocompletePlaceholder: string;
-    allowCustomValues: boolean;
-    allowEnterKey: boolean;
-    allowDirectClick: boolean;
-
     error: string = '';
     itemList: AutocompleteItem[] = []; //data source (all items)
     selectedItems: any[] = [];
     duplicateChosenErrorStr = 'This item has already been selected. Please choose another one';
 
-    constructor(private dataSource: AutocompleteDatasourceService) {}
+    constructor(
+        protected dataSource: AutocompleteDatasourceService,
+        protected dataSourceAPI: string,
+        protected autocompletePlaceholder: string,
+        protected allowCustomValues: boolean,
+        protected allowEnterKey: boolean,
+        protected allowDirectClick: boolean
+    ) {}
 
     ngOnInit(): void {
         this.dataSource.getAutocompleteList(this.dataSourceAPI).subscribe(data => {

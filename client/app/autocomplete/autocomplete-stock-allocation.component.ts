@@ -32,14 +32,13 @@ export class AutoCompleteStockAllocationComponent extends AutoCompleteContainerC
     @Input() preFilterStockIds: string[];
     stockExposures = ['Strong Positive', 'Weak Positive', 'Neutral', 'Weak Negative', 'Strong Negative'];
     currentlySelectedStock: Stock;
-    baseAPI: string = Settings.getBaseApi();
-    constructor(private dataSource: AutocompleteDatasourceService) {
-        this.dataSourceAPI = this.baseAPI + 'stocks' + '?token=' + localStorage.getItem('token');
-        this.autocompletePlaceholder = 'Search by company name';
-        this.allowCustomValues = false;
-        this.allowEnterKey = false;
-        this.allowDirectClick = false;
-        super(dataSource);
+
+    constructor(protected dataSource: AutocompleteDatasourceService) {
+        super(dataSource,
+            Settings.getBaseApi() + 'stocks' + '?token=' + localStorage.getItem('token'),
+            'Search by company name',
+            false, false, false
+        );
     }
 
     initializeAutocompleteData(data: any) {

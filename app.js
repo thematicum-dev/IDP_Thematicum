@@ -20,8 +20,9 @@ var config = dotenv.config();
 var app = express();
 
 var mongodbPath = settings.getDBConnectionString();
-console.log(mongodbPath);
-mongoose.connect(mongodbPath);
+mongoose.connect(mongodbPath)
+    .then(() => console.log('Connected to MongoDb'))
+    .catch(error => console.log('Error connecting to MongoDb'));
 
 // view engine setup
 app.set('views', path.join(__dirname, './server/views'));

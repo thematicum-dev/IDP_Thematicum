@@ -11,14 +11,13 @@ import * as Settings from '../utilities/settings';
 })
 export class AutoCompleteTagsComponent extends AutoCompleteContainerComponent implements OnChanges {
     @Input() themeTags: any[];
-    baseAPI: string = Settings.getBaseApi();
-    constructor(private dataSource: AutocompleteDatasourceService) {
-        this.dataSourceAPI = this.baseAPI + 'themes/tags' + '?token=' + localStorage.getItem('token');
-        this.autocompletePlaceholder = 'Keyword';
-        this.allowCustomValues = true;
-        this.allowEnterKey = true;
-        this.allowDirectClick = true;
-        super(dataSource);
+
+    constructor(protected dataSource: AutocompleteDatasourceService) {
+        super(dataSource,
+              Settings.getBaseApi() + 'themes/tags' + '?token=' + localStorage.getItem('token'),
+                'Keyword',
+                true, true, true
+        );
     }
 
     ngOnChanges(changes: SimpleChanges): void {
