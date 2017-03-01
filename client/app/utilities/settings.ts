@@ -4,5 +4,6 @@ export function getBaseApi() {
         return 'http://localhost:3000/api/';
     } else {
         return 'https://thematicum.herokuapp.com/api/';
+        //return 'http://localhost:3000/api/';
     }
 }
