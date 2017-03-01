@@ -37,6 +37,24 @@ export default class DataRepository extends BaseRepository {
         });
     }
 
+    getThemePropertyById(id) {
+        return new Promise((resolve, reject) => {
+            if (!mongoose.Types.ObjectId.isValid(id)) {
+                reject(new AppError('Invalid Object Id', 400));
+            }
+
+            resolve(UserThemeInput.findById(id).populate('user', '_id').exec());
+        });
+    }
+
+    getThemePropertyByThemeAndUser(themeId, userId) {
+        return UserThemeInput.findOne({theme: themeId, user: userId}).exec();
+    }
+
+    getThemePropertiesByTheme(themeId) {
+        return UserThemeInput.find({theme: themeId}, 'themeProperties').exec();
+    }
+
     deleteThemeData(theme) {
         let deleteThemePromise = this.remove(theme); //delete theme
         let deleteUserThemeInputsPromise = UserThemeInput.remove({theme: theme._id}).exec(); //delete user theme inputs
@@ -51,6 +69,4 @@ export default class DataRepository extends BaseRepository {
 
         return Promise.all([deleteThemePromise, deleteUserThemeInputsPromise, deleteStocksPromise]);
     }
-
-
 }

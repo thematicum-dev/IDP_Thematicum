@@ -1,9 +1,4 @@
 var Theme = require('../models/theme');
-var UserThemeInput = require('../models/userThemeInput');
-var ThemeStockComposition = require('../models/themeStockComposition');
-var UserThemeStockAllocation = require('../models/userThemeStockAllocation');
-var mongoose = require('mongoose');
-var _ = require('underscore');
 var AppError = require('../utilities/appError');
 var AppResponse = require('../utilities/appResponse');
 import DataRepository from '../data_access/dataRepository';
@@ -40,6 +35,7 @@ function read(req, res, next) {
 }
 
 function update(req, res, next) {
+    //TODO: authorization check
     var theme = req.theme;
 
     if (req.body.name)
@@ -56,7 +52,7 @@ function update(req, res, next) {
 }
 
 function deleteThemeData(req, res, next) {
-    //TODO: delete related theme data, when deleting a theme, or not?
+    //TODO: authorization check
     var theme = req.theme;
 
     repo.deleteThemeData(theme)

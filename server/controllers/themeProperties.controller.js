@@ -1,43 +1,32 @@
 var Theme = require('../models/theme');
 var UserThemeInput = require('../models/userThemeInput');
 var mongoose = require('mongoose');
-var userInputAggregation = require('../utilities/userInputAggregation');
-var _ = require('underscore');
 var AppError = require('../utilities/appError');
 var AppResponse = require('../utilities/appResponse');
 var constants = require('../utilities/constants');
+import DataRepository from '../data_access/dataRepository';
+import ThemePropertiesAggregation from '../utilities/userInputAggregation';
+
+let repo = new DataRepository();
 
 exports.listByTheme = function(req, res, next) {
     //get theme properties aggregation
-    UserThemeInput.find({theme: req.theme._id}, function(err, results) {
-        if (err) {
-            return next(err);
-        }
+    repo.getThemePropertiesByTheme(req.theme._id)
+        .then(results => {
+            if (!results) {
+                return next(new AppError('No theme property found for the theme', 404));
+            }
 
-        if (!results) {
-            return next(new AppError('No theme property found for the theme', 404));
-        }
+            let aggregation = new ThemePropertiesAggregation();
+            var themeProperties = aggregation.getThemePropertiesAggregation(results);
 
-        var props = [{
-            propertyName: 'timeHorizon',
-            nrValuesRequired: constants.TOTAL_TIME_HORIZON_VALUES
-        }, {
-            propertyName: 'maturity',
-            nrValuesRequired: constants.TOTAL_MATURITY_VALUES
-        }, {
-            propertyName: 'categories',
-            nrValuesRequired: constants.TOTAL_CATEGORY_VALUES
-        }];
-
-        var themeProperties = userInputAggregation.getThemePropertiesAggregation(results, props);
-
-        return res.status(200).json(new AppResponse('Theme properties retrieved', {properties: themeProperties}));
-    });
+            return res.status(200).json(new AppResponse('Theme properties retrieved', {properties: themeProperties}));
+        })
+        .catch(err => next(err));
 }
 
 exports.create = function(req, res, next) {
     //TODO: createOrUpdate - check in frontend?
-    //new UserThemeInput
     var themeProperty = new UserThemeInput({
         user: res.locals.user,
         theme: req.theme,
@@ -48,27 +37,21 @@ exports.create = function(req, res, next) {
         }
     });
 
-    themeProperty.save(function(err, result) {
-        if(err) {
-            return next(err);
-        }
-
-        return res.status(201).json(new AppResponse('Theme property created', result));
-    });
+    repo.save(themeProperty)
+        .then(result => res.status(201).json(new AppResponse('Theme property created', result)))
+        .catch(err => next(err));
 }
 
 exports.listByThemeAndUser = function(req, res, next) {
-    UserThemeInput.findOne({theme: req.theme._id, user: res.locals.user._id}, function(err, results) {
-        if (err) {
-            return next(err);
-        }
+    repo.getThemePropertyByThemeAndUser(req.theme._id, res.locals.user._id)
+        .then(results => {
+            if(!results) {
+                return next(new AppError('No theme property from the user', 404));
+            }
 
-        if(!results) {
-            return next(new AppError('No theme property from the user', 404));
-        }
-
-        return res.status(200).json(new AppResponse('User theme properties retrieved', results));
-    });
+            return res.status(200).json(new AppResponse('User theme properties retrieved', results));
+        })
+        .catch(err => next(err));
 }
 
 exports.update = function(req, res, next) {
@@ -81,66 +64,35 @@ exports.update = function(req, res, next) {
     if (req.body.categories != null)
         themeProperty.themeProperties.categories = req.body.categories;
 
-    themeProperty.save(function(err, result) {
-        if (err) {
-            return next(err);
-        }
-
-        return res.status(201).json({
-            message: 'Theme property updated',
-            obj: result
-        });
-
-    });
+    repo.save(themeProperty)
+        .then(result => res.status(201).json(new AppResponse('Theme property updated', result)))
+        .catch(err => next(err));
 }
 
 exports.delete = function(req, res, next) {
-    var themeProperty = req.themeProperty;
-
-    themeProperty.remove(function(err) {
-        if(err) {
-            return next(err);
-        }
-
-        return res.status(200).json({
+    repo.remove(req.themeProperty)
+        .then((result) => res.status(200).json({
             message: 'Theme property deleted'
-        });
-    });
+        }))
+        .catch(err => next(err));
 }
 
-//TODO: extract this separately
 exports.themeById = function(req, res, next, id) {
-    if (!mongoose.Types.ObjectId.isValid(id)) {
-        return next(new AppError('Invalid Object Id', 400));
-    }
-
-    Theme.findById(id).populate('creator', 'name personalRole')
-        .exec(function (err, result) {
-            if (err) {
-                return next(err);
-            }
-
+    repo.getThemeById(id)
+        .then(result => {
             if (!result) {
-                return next(new AppError('No theme found for the given Id', 404));
+                return next(new AppError('No theme found for the given Id', 404))
             }
 
             req.theme = result;
             next();
-        });
+        })
+        .catch(err => next(err));
 }
 
 exports.themePropertyById = function(req, res, next, id) {
-    if (!mongoose.Types.ObjectId.isValid(id)) {
-        return next(new AppError('Invalid Object Id', 400));
-    }
-
-    UserThemeInput.findById(id)
-        .populate('user', '_id')
-        .exec(function (err, result) {
-            if (err) {
-                return next(err);
-            }
-
+    repo.getThemePropertyById(id)
+        .then(result => {
             if (!result) {
                 return next(new AppError('No theme property found for the given Id', 404));
             }
@@ -152,5 +104,6 @@ exports.themePropertyById = function(req, res, next, id) {
             }
 
             return next(new AppError('Not authorized', 403));
-        });
+        })
+        .catch(err => next(err));
 }
