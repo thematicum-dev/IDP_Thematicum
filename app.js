@@ -6,6 +6,7 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var mongoose = require('mongoose');
 var dotenv = require('dotenv');
+var settings = require('./server/utilities/settings');
 
 //routes
 var authRoutes = require('./server/routes/auth.routes');
@@ -14,10 +15,9 @@ var stockRoutes = require('./server/routes/stock.routes');
 var themePropertiesRoutes = require('./server/routes/themeProperties.routes');
 var stockAllocationRoutes = require('./server/routes/stockAllocations.routes');
 var adminRoutes = require('./server/routes/admin.routes');
-var settings = require('./server/utilities/settings');
 
-var config = dotenv.config();
-var app = express();
+dotenv.config();
+let app = express();
 
 var mongodbPath = settings.getDBConnectionString();
 mongoose.connect(mongodbPath)

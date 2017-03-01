@@ -1,10 +1,10 @@
 var _ = require('underscore');
 
-module.exports = {
-    getThemePropertiesAggregation: getThemePropertiesAggregation
-}
+// module.exports = {
+//     getThemePropertiesAggregation: getThemePropertiesAggregation
+// }
 
-function getThemePropertiesAggregation(collection, propertyList) {
+export function getThemePropertiesAggregation(collection, propertyList) {
     var aggregation = {};
     _.each(propertyList, function(prop) {
         let countByProp = getCountByProperty(collection, prop.propertyName)

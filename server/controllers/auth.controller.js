@@ -1,5 +1,3 @@
-var bcrypt = require('bcryptjs');
-var jwt = require('jsonwebtoken');
 var RegistrationAccessCode = require('../models/accessCode');
 var AppError = require('../utilities/appError');
 var AppAuthError = require('../utilities/appAuthError');
@@ -7,7 +5,6 @@ var AppResponse = require('../utilities/appResponse');
 var User = require('../models/user');
 var authUtilities = require('../utilities/authUtilities');
 
-//TODO: abstract data in settings
 exports.signup = function (req, res, next) {
     //check accessCode validity
     isAccessCodeValid(req.body.accessCode, req.body.currentTime, function(err, results) {
