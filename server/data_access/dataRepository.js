@@ -6,10 +6,20 @@ var AppError = require('../utilities/appError');
 var UserThemeInput = require('../models/userThemeInput');
 var ThemeStockComposition = require('../models/themeStockComposition');
 var UserThemeStockAllocation = require('../models/userThemeStockAllocation');
+var RegistrationAccessCode = require('../models/accessCode');
 
 export default class DataRepository extends BaseRepository {
     constructor() {
         super();
+    }
+
+    getValidAccessCodes() {
+        let timeInMillis = new Date().getTime();
+        return RegistrationAccessCode.find({validFrom: {'$lte': timeInMillis}, validUntil: {'$gte': timeInMillis}}).exec();
+    }
+
+    isAccessCodeValid(code, currentTime) {
+        return RegistrationAccessCode.findOne({code: code, validFrom: {'$lte': currentTime}, validUntil: {'$gte': currentTime}}).exec();
     }
 
     getUserByEmail(email) {

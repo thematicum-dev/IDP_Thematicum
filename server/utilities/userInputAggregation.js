@@ -41,32 +41,19 @@ export default class ThemePropertiesAggregation {
     }
 
     getAggregationByProperty(collection, sum, nrValuesRequired) {
-        //this also guarantees sorting by property value
-        var valuesArray = new Array(nrValuesRequired);
+        //create array with dummy values
+        let valuesArray = Array.from({length: nrValuesRequired}, (v, k) => {return {value: k, count: 0, percentage: 0}});
 
+        //update properties with count and percentage
         for (let [key, val] of Object.entries(collection)) {
             let value = { value: key, count: val, percentage: this.roundUp(100*val/sum, 10) };
             valuesArray[key] = value;
         }
 
-        this.fixupValuesArray(valuesArray);
         return valuesArray;
     }
 
     roundUp(num, precision) {
         return Math.ceil(num * precision) / precision
-    }
-
-    fixupValuesArray(array) {
-        //add dummy object representing a property not yet selected by users
-        for (var i =0; i<array.length; i++) {
-            if (!array[i]) {
-                array[i] = {
-                    value: i,
-                    count: 0,
-                    percentage: 0
-                };
-            }
-        }
     }
 }
