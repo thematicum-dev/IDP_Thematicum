@@ -10,7 +10,7 @@ export default class BaseRepository {
                 reject(new AppError('Invalid Object Id', 400));
             }
 
-            resolve(collection.findById(id).exec())
+            resolve(collection.findById(id).exec());
         });
     }
 
@@ -24,5 +24,15 @@ export default class BaseRepository {
 
     remove(document) {
         return document.remove();
+    }
+
+    removeById(collection, id) {
+        return new Promise((resolve, reject) => {
+            if (!mongoose.Types.ObjectId.isValid(id)) {
+                reject(new AppError('Invalid Object Id', 400));
+            }
+
+            resolve(collection.findByIdAndRemove(id).exec());
+        });
     }
 }

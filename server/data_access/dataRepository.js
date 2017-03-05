@@ -7,6 +7,9 @@ var UserThemeInput = require('../models/userThemeInput');
 var ThemeStockComposition = require('../models/themeStockComposition');
 var UserThemeStockAllocation = require('../models/userThemeStockAllocation');
 var RegistrationAccessCode = require('../models/accessCode');
+var Stock = require('../models/stock');
+var _ = require('underscore');
+import StockAllocationAggregation from '../utilities/test';
 
 export default class DataRepository extends BaseRepository {
     constructor() {
@@ -42,8 +45,9 @@ export default class DataRepository extends BaseRepository {
         return new Promise((resolve, reject) => {
             if (!mongoose.Types.ObjectId.isValid(id)) {
                 reject(new AppError('Invalid Object Id', 400));
+            } else {
+                resolve(Theme.findById(id).populate('creator', 'name personalRole').exec());
             }
-            resolve(Theme.findById(id).populate('creator', 'name personalRole').exec());
         });
     }
 
@@ -51,9 +55,9 @@ export default class DataRepository extends BaseRepository {
         return new Promise((resolve, reject) => {
             if (!mongoose.Types.ObjectId.isValid(id)) {
                 reject(new AppError('Invalid Object Id', 400));
+            } else{
+                resolve(UserThemeInput.findById(id).populate('user', '_id').exec());
             }
-
-            resolve(UserThemeInput.findById(id).populate('user', '_id').exec());
         });
     }
 
@@ -63,6 +67,43 @@ export default class DataRepository extends BaseRepository {
 
     getThemePropertiesByTheme(themeId) {
         return UserThemeInput.find({theme: themeId}, 'themeProperties').exec();
+    }
+
+    notExistStockAllocationsForThemeStockComposition(compositionId) {
+        return new Promise((resolve, reject) => {
+            UserThemeStockAllocation.find({themeStockComposition: compositionId}).exec()
+                .then(results => {
+                    resolve(!results || results.length == 0);
+                })
+                .catch(err => reject(err));
+        });
+    }
+
+    getThemeStockCompositionsByTheme(themeId) {
+        return ThemeStockComposition.find({theme: themeId})
+            .populate('stock', 'companyName country')
+            .exec();
+    }
+
+    getStockAllocationsByThemeStockComposition(themeStockComposition, currentUserId) {
+        return new Promise((resolve, reject) => {
+            UserThemeStockAllocation.find({themeStockComposition: themeStockComposition._id}).exec()
+                .then(allocations => {
+                    //aggregation
+                    let stockAllocationAggregation = new StockAllocationAggregation();
+                    let aggregation = stockAllocationAggregation.getThemePropertiesAggregation(allocations);
+
+                    let stockAllocationByCurrentUser = this.getStockAllocationByUser(allocations, currentUserId);
+
+                    let obj = {themeStockComposition: themeStockComposition, exposures: aggregation.exposure, userStockAllocation: stockAllocationByCurrentUser};
+                    resolve(obj);
+                })
+                .catch(err => reject(err));
+        });
+    }
+
+    getStockAllocationByUser(allocations, userId) {
+        return allocations.find(allocation => allocation.user == userId);
     }
 
     deleteThemeData(theme) {
@@ -78,5 +119,37 @@ export default class DataRepository extends BaseRepository {
             });
 
         return Promise.all([deleteThemePromise, deleteUserThemeInputsPromise, deleteStocksPromise]);
+    }
+
+    createStockCompositionAndAllocation(allocationData, theme, user) {
+        return this.getById(Stock, allocationData.stockId)
+            .then(stock => {
+                return this.createThemeStockComposition(theme, stock, user);
+            })
+            .then(themeStockComposition => {
+                return this.createStockAllocation(themeStockComposition, user, allocationData.exposure)
+            });
+
+        //TODO: add .catch?
+    }
+
+    createThemeStockComposition(theme, stock, user) {
+        const themeStockComposition = new ThemeStockComposition({
+            theme: theme,
+            stock: stock,
+            addedBy: user
+        });
+
+        return this.save(themeStockComposition);
+    }
+
+    createStockAllocation(themeStockComposition, user, exposure) {
+        const stockAllocation = new UserThemeStockAllocation({
+            user: user,
+            themeStockComposition: themeStockComposition,
+            exposure: exposure
+        });
+
+        return this.save(stockAllocation);
     }
 }
