@@ -11,12 +11,6 @@ router.route('/theme/:themeId')
     .get(stockAllocationsController.listByTheme)
     .post(stockAllocationsController.createMany);
 
-router.route('/theme/:themeId/user')
-    .get(stockAllocationsController.listByThemeAndUser);
-
-router.route('/theme/:themeId/themestockcompositions')
-    .get(stockAllocationsController.listStockCompositions);
-
 router.route('/themestockcomposition/:themestockcompositionId')
     .post(stockAllocationsController.create);
 

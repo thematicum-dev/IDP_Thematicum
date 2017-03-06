@@ -135,48 +135,8 @@ export class ThemeService {
             });
     }
 
-    getThemePropertiesByUser(themeId: string) {
-        let apiPath = this.baseAPI + 'themeproperties/theme/' + themeId + '/user' +  this.setTokenQueryParam();
-        return this.http.get(apiPath)
-            .map((response: Response) => {
-                return response.json().obj;
-            })
-            .catch((error: Response) =>  {
-                this.errorService.handleError(error);
-                return Observable.throw(error.json())
-            });
-    }
-
-    getThemeStockCompositions(themeId: string) {
-        //TODO: delete
-        let apiPath = this.baseAPI + 'stockallocations/theme/' + themeId + '/themestockcompositions' + this.setTokenQueryParam();
-        return this.http.get(apiPath)
-            .map((response: Response) => {
-                return response.json().obj;
-            })
-            .catch((error: Response) =>  {
-                console.log(error)
-                this.errorService.handleError(error);
-                return Observable.throw(error.json())
-            });
-    }
-
     getThemeStockAllocationDistribution(themeId: string) {
         let apiPath = this.baseAPI + 'stockallocations/theme/' + themeId + this.setTokenQueryParam();
-        return this.http.get(apiPath)
-            .map((response: Response) => {
-                return response.json().obj;
-            })
-            .catch((error: Response) =>  {
-                console.log(error)
-                this.errorService.handleError(error);
-                return Observable.throw(error.json())
-            });
-    }
-
-    getThemeStockAllocationByUser(themeId: string) {
-        //TODO: delete
-        let apiPath = this.baseAPI + 'stockallocations/theme/' + themeId + '/user' + this.setTokenQueryParam();
         return this.http.get(apiPath)
             .map((response: Response) => {
                 return response.json().obj;

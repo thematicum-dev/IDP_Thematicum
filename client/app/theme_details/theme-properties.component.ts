@@ -82,12 +82,6 @@ export class ThemePropertiesComponent implements OnInit {
                 if (data.userInputs) {
                     this.userThemeInputsId = data.userInputs._id;
                 }
-
-                // if(data.isDataByUser) {
-                //     this.onNextThemePropertiesByUser(data);
-                // } else {
-                //     this.onNextThemeProperties(data);
-                // }
             },
             error => {
                 console.log('error: ', error);
@@ -95,30 +89,8 @@ export class ThemePropertiesComponent implements OnInit {
         )
     }
 
-    // onNextThemeProperties(data: any) {
-    //     this.themePropertiesAggregation = data.properties;
-    // }
-    //
-    // onNextThemePropertiesByUser(data: any) {
-    //     if (data.themeProperties) {
-    //         //TODO: maybe wrap everything in a single object
-    //         this.userThemeInputs = data.themeProperties;
-    //         this.userThemeInputsId = data._id;
-    //     }
-    // }
-
     getJoinedObservable() {
         return this.themeService.getThemeProperties(this.themeId);
-
-        // let themeProperties = this.themeService.getThemeProperties(this.themeId).map(themeProperty => {
-        //     themeProperty.isDataByUser = false; //to distinguish between Observables' results
-        //     return themeProperty;
-        // });
-        // let themePropertiesByUser =  this.themeService.getThemePropertiesByUser(this.themeId).map(propertyByUser => {
-        //     propertyByUser.isDataByUser = true;
-        //     return propertyByUser;
-        // });
-        // return Observable.concat(themeProperties, themePropertiesByUser);
     }
 
     getPropertyVoteDistributionStr(percentage: number, nrUsers: number) {
@@ -191,14 +163,6 @@ export class ThemePropertiesComponent implements OnInit {
 
         Observable.concat(themePropertyChangedObservable, this.getJoinedObservable()).subscribe(
             data => {
-                // if (data.isCreateOrUpdate) {
-                //     console.log('Created or Updated: ', data);
-                // } else if(data.isDataByUser) {
-                //     this.onNextThemePropertiesByUser(data);
-                // } else {
-                //     this.onNextThemeProperties(data);
-                // }
-
                 this.themePropertiesAggregation = data.properties;
                 this.userThemeInputs = data.userInputs;
                 if (data.userInputs) {
@@ -226,14 +190,6 @@ export class ThemePropertiesComponent implements OnInit {
 
         Observable.concat(themePropertyDeletedObservable, this.getJoinedObservable()).subscribe(
             data => {
-                // if (data.isDelete) {
-                //     console.log('Deleted: ', data);
-                // } else if(data.isDataByUser) {
-                //     this.onNextThemePropertiesByUser(data);
-                // } else {
-                //     this.onNextThemeProperties(data);
-                // }
-
                 this.themePropertiesAggregation = data.properties;
                 this.userThemeInputs = data.userInputs;
                 if (data.userInputs) {

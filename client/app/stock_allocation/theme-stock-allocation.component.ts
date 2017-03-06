@@ -73,15 +73,6 @@ export class ThemeStockAllocationComponent implements OnInit {
                 console.log(data);
                 this.stockAllocationData = data; //TODO: define model
             }, error => console.log(error));
-
-
-        // this.getJoinedObservable()
-        //     .subscribe(
-        //         (results: any) => {
-        //             this.handleResults(results);
-        //         },
-        //         (error) => console.log(error)
-        //     );
     }
 
     setExposureBackgroundColor(index: number) {
@@ -118,14 +109,6 @@ export class ThemeStockAllocationComponent implements OnInit {
                 console.log(data)
                 //reload model
                 //TODO: other/better way to do this
-                // this.getJoinedObservable()
-                //     .subscribe(
-                //         (results: any) => {
-                //             this.handleResults(results);
-                //         },
-                //         (error) => console.log(error)
-                //     );
-
                 this.themeService.getThemeStockAllocationDistribution(this.themeId)
                     .subscribe(results => {
                         console.log('Stock Allocation Data');
@@ -148,14 +131,6 @@ export class ThemeStockAllocationComponent implements OnInit {
 
                 //reload model
                 //TODO: other/better way to do this
-                // this.getJoinedObservable()
-                //     .subscribe(
-                //         (results: any) => {
-                //             this.handleResults(results);
-                //         },
-                //         (error) => console.log(error)
-                //     );
-
                 this.themeService.getThemeStockAllocationDistribution(this.themeId)
                     .subscribe(data => {
                         console.log('Stock Allocation Data');
@@ -195,41 +170,6 @@ export class ThemeStockAllocationComponent implements OnInit {
             }
         );
     }
-
-    // handleResults(results: any) {
-    //     console.log('results: ', results);
-    //     let _stockCompositions = results[0];
-    //     let _allocationDistribution = results[1];
-    //     let _userAllocations = results[2];
-    //
-    //     //expected equal length
-    //     if (_stockCompositions.length != _allocationDistribution.length) {
-    //         return;
-    //     }
-    //
-    //     this.stockAllocationModel = _stockCompositions.map(function (composition, index, array) {
-    //         let model = new ThemeStockCompositionAllocationModel(
-    //             composition._id,
-    //             composition.stock._id,
-    //             composition.stock.companyName,
-    //             composition.stock.country,
-    //             composition.addedAt,
-    //             composition.isValidated);
-    //         model.exposureDistribution = _allocationDistribution[index].exposureDistribution;
-    //
-    //         let userInputForStockComposition = _userAllocations.filter(function (item) {
-    //             return item.themeStockComposition._id == composition._id;
-    //         });
-    //
-    //         if (userInputForStockComposition && userInputForStockComposition.length > 0) {
-    //             model.currentUserAllocation = userInputForStockComposition[0];
-    //         }
-    //         return model;
-    //     });
-    //
-    //     //set selected stock IDs
-    //     this.stockIds = this.stockAllocationModel.map(allocation => allocation.stockId);
-    // }
 
     getJoinedObservable() {
         let stockCompositions =  this.themeService.getThemeStockCompositions(this.themeId);

@@ -10,9 +10,6 @@ router.route('/theme/:themeId')
     .get(themePropertiesController.listByTheme)
     .post(themePropertiesController.create);
 
-router.route('/theme/:themeId/user')
-    .get(themePropertiesController.listByThemeAndUser)
-
 router.route('/:themepropertyId')
     .put(themePropertiesController.update)
     .delete(themePropertiesController.delete);

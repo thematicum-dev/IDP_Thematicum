@@ -5,23 +5,15 @@ var AppError = require('../utilities/appError');
 var AppResponse = require('../utilities/appResponse');
 var constants = require('../utilities/constants');
 import DataRepository from '../data_access/dataRepository';
-import { ThemePropertiesAggregation } from '../utilities/dataAggregation';
 
 let repo = new DataRepository();
 
 exports.listByTheme = function(req, res, next) {
-    //get theme properties aggregation
     repo.getThemePropertiesByTheme(req.theme._id, res.locals.user._id)
         .then(results => {
             if (!results) {
                 return next(new AppError('No theme property found for the theme', 404));
             }
-
-            // let aggregation = new ThemePropertiesAggregation();
-            // var themeProperties = aggregation.getDataAggregation(results);
-
-            console.log('Theme properties');
-            console.log(results);
 
             return res.status(200).json(new AppResponse('Theme properties retrieved', results));
         })
@@ -40,18 +32,6 @@ exports.create = function(req, res, next) {
 
     repo.save(themeProperty)
         .then(result => res.status(201).json(new AppResponse('Theme property created', result)))
-        .catch(err => next(err));
-}
-
-exports.listByThemeAndUser = function(req, res, next) {
-    repo.getThemePropertyByThemeAndUser(req.theme._id, res.locals.user._id)
-        .then(results => {
-            if(!results) {
-                return next(new AppError('No theme property from the user', 404));
-            }
-
-            return res.status(200).json(new AppResponse('User theme properties retrieved', results));
-        })
         .catch(err => next(err));
 }
 
