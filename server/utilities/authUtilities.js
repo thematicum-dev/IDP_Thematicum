@@ -1,21 +1,15 @@
-var jwt = require('jsonwebtoken');
-var AppAuthError = require('./appAuthError');
+import jwt from 'jsonwebtoken';
+import {AppAuthError} from './appError';
 
-module.exports = {
-    authenticationMiddleware: jwtVerifyReq,
-    jwtVerify: jwtVerify,
-    jwtSign: jwtSign
-}
-
-let expiration = {expiresIn: 7200}; //token expires in 7200 sec (2 hr)
-let jwtSecret = process.env.JWT_SECRET || 'secret';
+const expiration = {expiresIn: 7200}; //token expires in 7200 sec (2 hr)
+const jwtSecret = process.env.JWT_SECRET || 'secret';
 
 function jwtVerifyReq(req, res, next) {
-    var token = req.query.token;
+    const token = req.query.token;
     jwtVerify(token)
         .then(decoded => {
-            //var decodedToken = jwt.decode(token); //TODO: redundant?
-            res.locals.user = decoded.user; //TODO: consistency
+            //const decodedToken = jwt.decode(token); //TODO: redundant?
+            res.locals.user = decoded.user;
             //TODO: check if user exists in the db?
             next();
         })
@@ -38,3 +32,5 @@ function jwtVerify(token) {
 function jwtSign(payload) {
     return jwt.sign(payload, jwtSecret, expiration);
 }
+
+export {jwtVerifyReq as authenticationMiddleware, jwtVerify, jwtSign}

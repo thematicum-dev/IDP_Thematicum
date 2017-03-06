@@ -1,15 +1,12 @@
-var Theme = require('../models/theme');
-var ThemeStockComposition = require('../models/themeStockComposition');
-var UserThemeStockAllocation = require('../models/userThemeStockAllocation');
-var Stock = require('../models/stock');
-var mongoose = require('mongoose');
-var AppError = require('../utilities/appError');
-var AppResponse = require('../utilities/appResponse');
+import ThemeStockComposition from '../models/themeStockComposition';
+import UserThemeStockAllocation from '../models/userThemeStockAllocation';
+import {AppError} from '../utilities/appError';
+import {AppResponse} from '../utilities/appResponse';
 import DataRepository from '../data_access/dataRepository';
 
-let repo = new DataRepository();
+const repo = new DataRepository();
 
-exports.createMany = function (req, res, next) {
+export function createMany(req, res, next) {
     //add many stocks
     Promise.all(req.body.stockAllocation.map(allocationData =>
             repo.createStockCompositionAndAllocation(allocationData, req.theme, res.locals.user)))
@@ -19,7 +16,7 @@ exports.createMany = function (req, res, next) {
         .catch(error => { next(error) });
 }
 
-exports.create = function(req, res, next) {
+export function create(req, res, next) {
     repo.createStockAllocation(req.themeStockComposition, res.locals.user, req.body.exposure)
         .then(result => {
             return res.status(201).json(new AppResponse('Stock allocation created', result));
@@ -27,7 +24,7 @@ exports.create = function(req, res, next) {
         .catch(error => { next(error) });
 }
 
-exports.update = function(req, res, next) {
+export function update(req, res, next) {
     //TODO: check implementation
     let stockAllocation = req.stockAllocation;
     stockAllocation.exposure = req.body.exposure;
@@ -37,7 +34,7 @@ exports.update = function(req, res, next) {
         .catch(err => next(err));
 }
 
-exports.listByTheme = function(req, res, next) {
+export function listByTheme(req, res, next) {
     repo.getThemeStockCompositionsByTheme(req.theme._id)
         .then(results => Promise.all(results.map(composition => repo.getStockAllocationsByThemeStockComposition(composition, res.locals.user._id))))
         .then(results => {
@@ -46,9 +43,9 @@ exports.listByTheme = function(req, res, next) {
         .catch(err => next(err));
 }
 
-exports.delete = function(req, res, next) {
-    let stockAllocation = req.stockAllocation;
-    let compositionId = stockAllocation.themeStockComposition;
+export function deleteStockAllocation(req, res, next) {
+    const stockAllocation = req.stockAllocation;
+    const compositionId = stockAllocation.themeStockComposition;
 
     repo.remove(stockAllocation)
         .then(() => {
@@ -65,7 +62,7 @@ exports.delete = function(req, res, next) {
         .catch(err => next(err));
 }
 
-exports.themeById = function(req, res, next, id) {
+export function themeById(req, res, next, id) {
     repo.getThemeById(id)
         .then(result => {
             if (!result) {
@@ -78,7 +75,7 @@ exports.themeById = function(req, res, next, id) {
         .catch(err => next(err));
 }
 
-exports.themeStockCompositionById = function(req, res, next, id) {
+export function themeStockCompositionById(req, res, next, id) {
     repo.getById(ThemeStockComposition, id)
         .then(result => {
             if (!result) {
@@ -91,7 +88,7 @@ exports.themeStockCompositionById = function(req, res, next, id) {
         .catch(err => next(err));
 }
 
-exports.stockAllocationById = function(req, res, next, id) {
+export function stockAllocationById(req, res, next, id) {
     repo.getById(UserThemeStockAllocation, id)
         .then(result => {
             if (!result) {

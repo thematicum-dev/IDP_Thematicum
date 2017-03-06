@@ -1,25 +1,25 @@
-var express = require('express');
-var path = require('path');
-var favicon = require('serve-favicon');
-var logger = require('morgan');
-var cookieParser = require('cookie-parser');
-var bodyParser = require('body-parser');
-var mongoose = require('mongoose');
-var dotenv = require('dotenv');
-var settings = require('./server/utilities/settings');
+import express from 'express';
+import path from 'path';
+import favicon from 'serve-favicon';
+import logger from 'morgan';
+import cookieParser from 'cookie-parser';
+import bodyParser from 'body-parser';
+import mongoose from 'mongoose';
+import dotenv from 'dotenv';
+import * as settings from './server/utilities/settings';
 
 //routes
-var authRoutes = require('./server/routes/auth.routes');
-var themeRoutes = require('./server/routes/theme.routes');
-var stockRoutes = require('./server/routes/stock.routes');
-var themePropertiesRoutes = require('./server/routes/themeProperties.routes');
-var stockAllocationRoutes = require('./server/routes/stockAllocations.routes');
-var adminRoutes = require('./server/routes/admin.routes');
+import authRoutes from './server/routes/auth.routes';
+import themeRoutes from './server/routes/theme.routes';
+import stockRoutes from './server/routes/stock.routes';
+import themePropertiesRoutes from './server/routes/themeProperties.routes';
+import stockAllocationRoutes from './server/routes/stockAllocations.routes';
+import adminRoutes from './server/routes/admin.routes';
 
 dotenv.config();
-let app = express();
+const app = express();
 
-var mongodbPath = settings.getDBConnectionString();
+const mongodbPath = settings.getDBConnectionString();
 mongoose.connect(mongodbPath)
     .then(() => console.log('Connected to MongoDb'))
     .catch(error => console.log('Error connecting to MongoDb'));
@@ -60,4 +60,4 @@ app.use(function (err, req, res, next) {
     return res.status(err.status || 500).json(err);
 });
 
-module.exports = app;
+export default app;

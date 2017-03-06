@@ -1,11 +1,11 @@
-var Stock = require('../models/stock');
-var AppError = require('../utilities/appError');
-var AppResponse = require('../utilities/appResponse');
+import Stock from '../models/stock';
+import {AppError} from '../utilities/appError';
+import {AppResponse} from '../utilities/appResponse';
 import DataRepository from '../data_access/dataRepository';
 
-let repo = new DataRepository();
+const repo = new DataRepository();
 
-exports.list = function (req, res, next) {
+export function list(req, res, next) {
     repo.getAll(Stock)
         .then(results => {
             if(!results) {

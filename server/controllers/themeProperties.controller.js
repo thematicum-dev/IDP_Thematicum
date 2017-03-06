@@ -1,14 +1,11 @@
-var Theme = require('../models/theme');
-var UserThemeInput = require('../models/userThemeInput');
-var mongoose = require('mongoose');
-var AppError = require('../utilities/appError');
-var AppResponse = require('../utilities/appResponse');
-var constants = require('../utilities/constants');
+import UserThemeInput from '../models/userThemeInput';
+import {AppError} from '../utilities/appError';
+import {AppResponse} from '../utilities/appResponse';
 import DataRepository from '../data_access/dataRepository';
 
-let repo = new DataRepository();
+const repo = new DataRepository();
 
-exports.listByTheme = function(req, res, next) {
+export function listByTheme(req, res, next) {
     repo.getThemePropertiesByTheme(req.theme._id, res.locals.user._id)
         .then(results => {
             if (!results) {
@@ -20,9 +17,9 @@ exports.listByTheme = function(req, res, next) {
         .catch(err => next(err));
 }
 
-exports.create = function(req, res, next) {
+export function create(req, res, next) {
     //TODO: createOrUpdate - check in frontend?
-    var themeProperty = new UserThemeInput({
+    const themeProperty = new UserThemeInput({
         user: res.locals.user,
         theme: req.theme,
         timeHorizon: req.body.timeHorizon,
@@ -35,8 +32,8 @@ exports.create = function(req, res, next) {
         .catch(err => next(err));
 }
 
-exports.update = function(req, res, next) {
-    var themeProperty = req.themeProperty;
+export function update(req, res, next) {
+    let themeProperty = req.themeProperty;
 
     if (req.body.timeHorizon != null)
         themeProperty.timeHorizon = req.body.timeHorizon;
@@ -50,7 +47,7 @@ exports.update = function(req, res, next) {
         .catch(err => next(err));
 }
 
-exports.delete = function(req, res, next) {
+export function deleteThemeProperty(req, res, next) {
     repo.remove(req.themeProperty)
         .then((result) => res.status(200).json({
             message: 'Theme property deleted'
@@ -58,7 +55,7 @@ exports.delete = function(req, res, next) {
         .catch(err => next(err));
 }
 
-exports.themeById = function(req, res, next, id) {
+export function themeById(req, res, next, id) {
     repo.getThemeById(id)
         .then(result => {
             if (!result) {
@@ -71,7 +68,7 @@ exports.themeById = function(req, res, next, id) {
         .catch(err => next(err));
 }
 
-exports.themePropertyById = function(req, res, next, id) {
+export function themePropertyById(req, res, next, id) {
     repo.getThemePropertyById(id)
         .then(result => {
             if (!result) {

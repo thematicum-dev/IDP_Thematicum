@@ -1,8 +1,8 @@
-var express = require('express');
-var router = express.Router();
-var themePropertiesController = require('../controllers/themeProperties.controller');
-var authUtilities = require('../utilities/authUtilities');
+import Router from 'express';
+import * as themePropertiesController from '../controllers/themeProperties.controller';
+import * as authUtilities from '../utilities/authUtilities';
 
+const router = Router();
 //auth middleware
 router.use('/', authUtilities.authenticationMiddleware);
 
@@ -12,9 +12,9 @@ router.route('/theme/:themeId')
 
 router.route('/:themepropertyId')
     .put(themePropertiesController.update)
-    .delete(themePropertiesController.delete);
+    .delete(themePropertiesController.deleteThemeProperty);
 
 router.param('themeId', themePropertiesController.themeById);
 router.param('themepropertyId', themePropertiesController.themePropertyById);
 
-module.exports = router;
+export default router;

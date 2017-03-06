@@ -1,13 +1,12 @@
-var AppError = require('../utilities/appError');
-var AppAuthError = require('../utilities/appAuthError');
-var AppResponse = require('../utilities/appResponse');
-var User = require('../models/user');
-var authUtilities = require('../utilities/authUtilities');
+import {AppError, AppAuthError} from '../utilities/appError';
+import {AppResponse} from '../utilities/appResponse';
+import User from '../models/user';
+import * as authUtilities from '../utilities/authUtilities';
 import DataRepository from '../data_access/dataRepository';
 
-let repo = new DataRepository();
+const repo = new DataRepository();
 
-exports.signup = function (req, res, next) {
+export function signup(req, res, next) {
     repo.isAccessCodeValid(req.body.accessCode, req.body.currentTime)
         .then(results => {
             if(!results) {
@@ -19,7 +18,7 @@ exports.signup = function (req, res, next) {
                 return next(new AppError('Validation error: password must be no shorter than 8 characters', 500));
             }
 
-            var user = new User({
+            const user = new User({
                 name: req.body.user.name,
                 email: req.body.user.email,
                 password: req.body.user.password,
@@ -32,7 +31,7 @@ exports.signup = function (req, res, next) {
         .catch(err => next(err));
 }
 
-exports.signin = function (req, res, next) {
+export function signin(req, res, next) {
     repo.getUserByEmail(req.body.email)
         .then(user => {
             if(!user) {
@@ -44,7 +43,7 @@ exports.signin = function (req, res, next) {
                 return next(new AppError('Invalid login credentials', 401));
             }
 
-            var token = authUtilities.jwtSign({user: user});
+            const token = authUtilities.jwtSign({user: user});
             res.status(200).json({
                 message: 'Successful login',
                 token: token,
@@ -54,7 +53,7 @@ exports.signin = function (req, res, next) {
         .catch(err => next(err));
 }
 
-exports.isAuthenticated = function (req, res, next) {
+export function isAuthenticated(req, res, next) {
     authUtilities.jwtVerify(req.query.token)
         .then(decoded => {
             return res.status(200).json(new AppResponse('User is authenticated', null));

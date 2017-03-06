@@ -172,10 +172,11 @@ export class ThemeStockAllocationComponent implements OnInit {
     }
 
     getJoinedObservable() {
-        let stockCompositions =  this.themeService.getThemeStockCompositions(this.themeId);
+        // let stockCompositions =  this.themeService.getThemeStockCompositions(this.themeId);
         let allocationDistribution = this.themeService.getThemeStockAllocationDistribution(this.themeId);
-        let userAllocations = this.themeService.getThemeStockAllocationByUser(this.themeId);
+        // let userAllocations = this.themeService.getThemeStockAllocationByUser(this.themeId);
 
-        return Observable.forkJoin([stockCompositions, allocationDistribution, userAllocations]);
+        // return Observable.forkJoin([stockCompositions, allocationDistribution, userAllocations]);
+        return allocationDistribution;
     }
 }

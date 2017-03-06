@@ -1,8 +1,8 @@
-var express = require('express');
-var router = express.Router();
-var adminController = require('../controllers/admin.controller');
+import Router from 'express';
+import * as adminController from '../controllers/admin.controller';
 
+const router = Router();
 router.route('/accesscodes')
     .get(adminController.listAccessCodes);
 
-module.exports = router;
+export default router;

@@ -1,22 +1,12 @@
-var Theme = require('../models/theme');
-var AppError = require('../utilities/appError');
-var AppResponse = require('../utilities/appResponse');
+import Theme from '../models/theme';
+import {AppError} from '../utilities/appError';
+import {AppResponse} from '../utilities/appResponse';
 import DataRepository from '../data_access/dataRepository';
 
-module.exports = {
-    create: create,
-    read: read,
-    update: update,
-    deleteThemeData: deleteThemeData,
-    getTags: getTags,
-    list: list,
-    themeById: themeById
-}
+const repo = new DataRepository();
 
-let repo = new DataRepository();
-
-function create(req, res, next) {
-    var theme = new Theme({
+export function create(req, res, next) {
+    const theme = new Theme({
         name: req.body.name,
         tags: req.body.tags,
         description: req.body.description,
@@ -28,15 +18,15 @@ function create(req, res, next) {
         .catch(err => next(err));
 }
 
-function read(req, res, next) {
+export function read(req, res, next) {
     // convert mongoose document to JSON
-    var theme = req.theme ? req.theme.toJSON() : {};
+    const theme = req.theme ? req.theme.toJSON() : {};
     return res.status(200).json(new AppResponse('Theme retrieved', theme));
 }
 
-function update(req, res, next) {
+export function update(req, res, next) {
     //TODO: authorization check
-    var theme = req.theme;
+    let theme = req.theme;
 
     if (req.body.name)
         theme.name = req.body.name;
@@ -51,9 +41,9 @@ function update(req, res, next) {
         .catch(err => next(err));
 }
 
-function deleteThemeData(req, res, next) {
+export function deleteThemeData(req, res, next) {
     //TODO: authorization check
-    var theme = req.theme;
+    const theme = req.theme;
 
     repo.deleteThemeData(theme)
         .then(result => {
@@ -62,13 +52,13 @@ function deleteThemeData(req, res, next) {
         .catch(error => { next(error) });
 }
 
-function getTags(req, res, next) {
+export function getTags(req, res, next) {
     repo.getThemeTags()
         .then(tags => res.status(200).json(new AppResponse('Theme tags retrieved', Array.from(tags))))
         .catch(err => next(err));
 }
 
-function list(req, res, next) {
+export function list(req, res, next) {
     if(req.query.searchQuery) {
         repo.getThemeBySearchQuery(req.query.searchQuery)
             .then(results => res.status(200).json(new AppResponse('Investment themes retrieved', results)))
@@ -81,7 +71,7 @@ function list(req, res, next) {
     }
 }
 
-function themeById(req, res, next, id) {
+export function themeById(req, res, next, id) {
     repo.getThemeById(id)
         .then(result => {
             if (!result) {

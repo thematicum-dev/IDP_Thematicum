@@ -1,5 +1,5 @@
-var mongoose = require('mongoose');
-var AppError = require('../utilities/appError');
+import mongoose from 'mongoose';
+import {AppError} from '../utilities/appError';
 
 export default class BaseRepository {
     constructor() {}

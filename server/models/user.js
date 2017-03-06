@@ -1,10 +1,10 @@
-var mongoose = require('mongoose');
-var Schema = mongoose.Schema;
-var mongooseUniqueValidator = require('mongoose-unique-validator');
-var validator = require('validator');
-var bcrypt = require('bcryptjs');
+import mongoose from 'mongoose';
+import mongooseUniqueValidator from 'mongoose-unique-validator';
+import validator from 'validator';
+import bcrypt from 'bcryptjs';
 
-var schema = new Schema({
+const Schema = mongoose.Schema;
+const schema = new Schema({
     name: {
         type: String,
         required: [true, 'The user name field is required'],
@@ -32,7 +32,7 @@ schema.pre('save', function(next) {
         return next();
     }
 
-    let saltRounds = 10;
+    const saltRounds = 10;
     this.password = bcrypt.hashSync(this.password, saltRounds);
     next();
 });
@@ -42,4 +42,5 @@ schema.methods.passwordIsValid = function(password) {
 }
 
 schema.plugin(mongooseUniqueValidator, { message: 'The {PATH} {VALUE} already exists' });
-module.exports = mongoose.model('User', schema);
+
+export default mongoose.model('User', schema);

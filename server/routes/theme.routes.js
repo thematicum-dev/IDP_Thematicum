@@ -1,8 +1,8 @@
-var express = require('express');
-var router = express.Router();
-var themeController = require('../controllers/themes.controller');
-var authUtilities = require('../utilities/authUtilities');
+import Router from 'express';
+import * as themeController from '../controllers/themes.controller';
+import * as authUtilities from '../utilities/authUtilities';
 
+const router = Router();
 //auth middleware
 router.use('/', authUtilities.authenticationMiddleware);
 
@@ -20,4 +20,4 @@ router.route('/:themeId')
 
 router.param('themeId', themeController.themeById);
 
-module.exports = router;
+export default router;

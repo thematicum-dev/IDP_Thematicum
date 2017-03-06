@@ -1,16 +1,16 @@
-var _ = require('underscore');
-var constants = require('./constants');
+import _ from 'underscore';
+import constants from '../utilities/constants';
 
 class DataAggregation {
     constructor() {}
 
     getDataAggregation(collection) {
-        var aggregation = {};
+        let aggregation = {};
 
-        for (let prop of this.propertyList) {
-            let countByProp = this.getCountByProperty(collection, prop.propertyName)
-            let sumByProp = this.getSumByProperty(countByProp)
-            let aggregationByProp = this.getAggregationByProperty(countByProp, sumByProp, prop.nrValuesRequired);
+        for (const prop of this.propertyList) {
+            const countByProp = this.getCountByProperty(collection, prop.propertyName)
+            const sumByProp = this.getSumByProperty(countByProp)
+            const aggregationByProp = this.getAggregationByProperty(countByProp, sumByProp, prop.nrValuesRequired);
             aggregation[prop.propertyName] = aggregationByProp;
         }
 
@@ -34,8 +34,8 @@ class DataAggregation {
         let valuesArray = Array.from({length: nrValuesRequired}, (v, k) => {return {value: k, count: 0, percentage: 0}});
 
         //update properties with count and percentage
-        for (let [key, val] of Object.entries(collection)) {
-            let value = { value: key, count: val, percentage: this.roundUp(100*val/sum, 10) };
+        for (const [key, val] of Object.entries(collection)) {
+            const value = { value: key, count: val, percentage: this.roundUp(100*val/sum, 10) };
             valuesArray[key] = value;
         }
 

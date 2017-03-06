@@ -1,8 +1,4 @@
-module.exports = {
-    getDBConnectionString: getDBConnectionString
-}
-
-function getDBConnectionString() {
+export function getDBConnectionString() {
     if (process.env.ENV == 'development') {
         return process.env.LOCAL_HOST + ':' + process.env.LOCAL_MONGODB_PORT + '/' + process.env.LOCAL_MONGODB_DBNAME;
     } else if (process.env.ENV == 'production') {

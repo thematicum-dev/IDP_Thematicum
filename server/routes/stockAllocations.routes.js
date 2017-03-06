@@ -1,8 +1,8 @@
-var express = require('express');
-var router = express.Router();
-var stockAllocationsController = require('../controllers/stockAllocations.controller.js');
-var authUtilities = require('../utilities/authUtilities');
+import Router from 'express';
+import * as stockAllocationsController from '../controllers/stockAllocations.controller';
+import * as authUtilities from '../utilities/authUtilities';
 
+const router = Router();
 //auth middleware
 router.use('/', authUtilities.authenticationMiddleware);
 
@@ -16,10 +16,10 @@ router.route('/themestockcomposition/:themestockcompositionId')
 
 router.route('/:stockallocationId')
     .put(stockAllocationsController.update)
-    .delete(stockAllocationsController.delete);
+    .delete(stockAllocationsController.deleteStockAllocation);
 
 router.param('themeId', stockAllocationsController.themeById);
 router.param('themestockcompositionId', stockAllocationsController.themeStockCompositionById);
 router.param('stockallocationId', stockAllocationsController.stockAllocationById);
 
-module.exports = router;
+export default router;

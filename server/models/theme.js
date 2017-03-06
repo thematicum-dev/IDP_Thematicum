@@ -1,9 +1,8 @@
-var mongoose = require('mongoose');
-var Schema = mongoose.Schema;
-var mongooseUniqueValidator = require('mongoose-unique-validator');
-var validator = require('validator');
+import mongoose from 'mongoose';
+import mongooseUniqueValidator from 'mongoose-unique-validator';
 
-var schema = new Schema({
+const Schema = mongoose.Schema;
+const schema = new Schema({
     name: {
         type: String,
         required: true,
@@ -31,4 +30,4 @@ var schema = new Schema({
 
 schema.index({ name: 'text' });
 schema.plugin(mongooseUniqueValidator, { message: 'The {PATH} \'{VALUE}\' already exists' });
-module.exports = mongoose.model('Theme', schema);
+export default mongoose.model('Theme', schema);

@@ -1,12 +1,12 @@
-var express = require('express');
-var router = express.Router();
-var stocksController = require('../controllers/stocks.controller');
-var authUtilities = require('../utilities/authUtilities');
+import Router from 'express';
+import * as stocksController from '../controllers/stocks.controller';
+import * as authUtilities from '../utilities/authUtilities';
 
+const router = Router();
 //auth middleware
 router.use('/', authUtilities.authenticationMiddleware);
 
 router.route('/')
     .get(stocksController.list);
 
-module.exports = router;
+export default router;

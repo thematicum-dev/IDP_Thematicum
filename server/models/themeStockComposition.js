@@ -1,7 +1,7 @@
-var mongoose = require('mongoose');
-var Schema = mongoose.Schema;
+import mongoose from 'mongoose';
 
-var schema = new Schema({
+const Schema = mongoose.Schema;
+const schema = new Schema({
     theme: { type: Schema.Types.ObjectId, ref: 'Theme' },
     stock: { type: Schema.Types.ObjectId, ref: 'Stock' },
     addedBy: { type: Schema.Types.ObjectId, ref: 'User' },
@@ -11,4 +11,4 @@ var schema = new Schema({
     timestamps: { createdAt: 'addedAt'}
 });
 
-module.exports = mongoose.model('ThemeStockComposition', schema);
+export default mongoose.model('ThemeStockComposition', schema);

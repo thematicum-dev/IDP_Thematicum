@@ -1,4 +1,4 @@
-var themes = [
+const themes = [
     {
         name: 'Precision agriculture',
         tags: ['agriculture', 'growing population', 'arable land', 'climate change', 'green'],

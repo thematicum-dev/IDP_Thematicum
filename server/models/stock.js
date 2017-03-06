@@ -1,8 +1,8 @@
-var mongoose = require('mongoose');
-var Schema = mongoose.Schema;
-var mongooseUniqueValidator = require('mongoose-unique-validator');
+import mongoose from 'mongoose';
+import mongooseUniqueValidator from 'mongoose-unique-validator';
 
-var schema = new Schema({
+const Schema = mongoose.Schema;
+const schema = new Schema({
     seqNr: {
         type: Number,
         required: true,
@@ -50,4 +50,4 @@ var schema = new Schema({
 });
 
 schema.plugin(mongooseUniqueValidator);
-module.exports = mongoose.model('Stock', schema);
+export default mongoose.model('Stock', schema);

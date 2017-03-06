@@ -1,10 +1,10 @@
-var AppError = require('../utilities/appError');
-var AppResponse = require('../utilities/appResponse');
+import {AppError} from '../utilities/appError';
+import {AppResponse} from '../utilities/appResponse';
 import DataRepository from '../data_access/dataRepository';
 
-let repo = new DataRepository();
+const repo = new DataRepository();
 
-exports.listAccessCodes = function (req, res, next) {
+export function listAccessCodes(req, res, next) {
     repo.getValidAccessCodes()
         .then(results => {
             if (!results) {

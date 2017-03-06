@@ -1,4 +1,4 @@
-module.exports = {
+const constants = {
     MIN_TIME_HORIZON: 0,
     MAX_TIME_HORIZON: 2,
     TOTAL_TIME_HORIZON_VALUES: 3,
@@ -12,3 +12,5 @@ module.exports = {
     MAX_EXPOSURE: 4,
     TOTAL_EXPOSURE_VALUES: 5
 }
+
+export default constants;

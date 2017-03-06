@@ -1,14 +1,13 @@
+import mongoose from 'mongoose';
 import BaseRepository from './baseRepository';
-var User = require('../models/user');
-var Theme = require('../models/theme');
-var mongoose = require('mongoose');
-var AppError = require('../utilities/appError');
-var UserThemeInput = require('../models/userThemeInput');
-var ThemeStockComposition = require('../models/themeStockComposition');
-var UserThemeStockAllocation = require('../models/userThemeStockAllocation');
-var RegistrationAccessCode = require('../models/accessCode');
-var Stock = require('../models/stock');
-var _ = require('underscore');
+import User from '../models/user';
+import Theme from '../models/theme';
+import {AppError} from '../utilities/appError';
+import UserThemeInput from '../models/userThemeInput';
+import ThemeStockComposition from '../models/themeStockComposition';
+import UserThemeStockAllocation from '../models/userThemeStockAllocation';
+import RegistrationAccessCode from '../models/accessCode';
+import Stock from '../models/stock';
 import { ThemePropertiesAggregation, StockAllocationAggregation } from '../utilities/dataAggregation';
 
 export default class DataRepository extends BaseRepository {
@@ -17,7 +16,7 @@ export default class DataRepository extends BaseRepository {
     }
 
     getValidAccessCodes() {
-        let timeInMillis = new Date().getTime();
+        const timeInMillis = new Date().getTime();
         return RegistrationAccessCode.find({validFrom: {'$lte': timeInMillis}, validUntil: {'$gte': timeInMillis}}).exec();
     }
 
@@ -61,19 +60,15 @@ export default class DataRepository extends BaseRepository {
         });
     }
 
-    getThemePropertyByThemeAndUser(themeId, userId) {
-        return UserThemeInput.findOne({theme: themeId, user: userId}).exec();
-    }
-
     getThemePropertiesByTheme(themeId, userId) {
         return new Promise((resolve, reject) => {
             UserThemeInput.find({theme: themeId}).exec()
                 .then(results => {
-                    let aggregation = new ThemePropertiesAggregation();
-                    let themeProperties = aggregation.getDataAggregation(results);
+                    const aggregation = new ThemePropertiesAggregation();
+                    const themeProperties = aggregation.getDataAggregation(results);
 
-                    let themePropertiesByCurrentUser = this.getThemePropertiesByUser(results, userId);
-                    let obj = {properties: themeProperties, userInputs: themePropertiesByCurrentUser};
+                    const themePropertiesByCurrentUser = this.getThemePropertiesByUser(results, userId);
+                    const obj = {properties: themeProperties, userInputs: themePropertiesByCurrentUser};
 
                     resolve(obj);
                 })
@@ -106,12 +101,12 @@ export default class DataRepository extends BaseRepository {
             UserThemeStockAllocation.find({themeStockComposition: themeStockComposition._id}).exec()
                 .then(allocations => {
                     //aggregation
-                    let stockAllocationAggregation = new StockAllocationAggregation();
-                    let aggregation = stockAllocationAggregation.getDataAggregation(allocations);
+                    const stockAllocationAggregation = new StockAllocationAggregation();
+                    const aggregation = stockAllocationAggregation.getDataAggregation(allocations);
 
-                    let stockAllocationByCurrentUser = this.getStockAllocationByUser(allocations, currentUserId);
+                    const stockAllocationByCurrentUser = this.getStockAllocationByUser(allocations, currentUserId);
 
-                    let obj = {themeStockComposition: themeStockComposition, exposures: aggregation.exposure, userStockAllocation: stockAllocationByCurrentUser};
+                    const obj = {themeStockComposition: themeStockComposition, exposures: aggregation.exposure, userStockAllocation: stockAllocationByCurrentUser};
                     resolve(obj);
                 })
                 .catch(err => reject(err));
@@ -123,11 +118,11 @@ export default class DataRepository extends BaseRepository {
     }
 
     deleteThemeData(theme) {
-        let deleteThemePromise = this.remove(theme); //delete theme
-        let deleteUserThemeInputsPromise = UserThemeInput.remove({theme: theme._id}).exec(); //delete user theme inputs
+        const deleteThemePromise = this.remove(theme); //delete theme
+        const deleteUserThemeInputsPromise = UserThemeInput.remove({theme: theme._id}).exec(); //delete user theme inputs
 
         //delete theme-stock compositions and their related stock allocations
-        let deleteStocksPromise = ThemeStockComposition.find({theme: theme._id}).exec()
+        const deleteStocksPromise = ThemeStockComposition.find({theme: theme._id}).exec()
             .then(compositions => {
                 compositions.map(composition => {
                     return Promise.all([this.remove(composition), UserThemeStockAllocation.remove({themeStockComposition: composition._id}).exec()]);

@@ -1,8 +1,8 @@
-var mongoose = require('mongoose');
-var Schema = mongoose.Schema;
-var constants = require('../utilities/constants');
+import mongoose from 'mongoose';
+import constants from '../utilities/constants';
 
-var schema = new Schema({
+const Schema = mongoose.Schema;
+const schema = new Schema({
     user: { type: Schema.Types.ObjectId, ref: 'User' },
     themeStockComposition: { type: Schema.Types.ObjectId, ref: 'ThemeStockComposition' },
     exposure: {
@@ -13,4 +13,4 @@ var schema = new Schema({
     }
 });
 
-module.exports = mongoose.model('UserThemeStockAllocation', schema);
+export default mongoose.model('UserThemeStockAllocation', schema);
