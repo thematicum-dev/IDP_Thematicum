@@ -9,7 +9,7 @@ var UserThemeStockAllocation = require('../models/userThemeStockAllocation');
 var RegistrationAccessCode = require('../models/accessCode');
 var Stock = require('../models/stock');
 var _ = require('underscore');
-import StockAllocationAggregation from '../utilities/test';
+import { ThemePropertiesAggregation, StockAllocationAggregation } from '../utilities/dataAggregation';
 
 export default class DataRepository extends BaseRepository {
     constructor() {
@@ -65,8 +65,20 @@ export default class DataRepository extends BaseRepository {
         return UserThemeInput.findOne({theme: themeId, user: userId}).exec();
     }
 
-    getThemePropertiesByTheme(themeId) {
-        return UserThemeInput.find({theme: themeId}, 'themeProperties').exec();
+    getThemePropertiesByTheme(themeId, userId) {
+        return new Promise((resolve, reject) => {
+            UserThemeInput.find({theme: themeId}).exec()
+                .then(results => {
+                    let aggregation = new ThemePropertiesAggregation();
+                    let themeProperties = aggregation.getDataAggregation(results);
+
+                    let themePropertiesByCurrentUser = this.getThemePropertiesByUser(results, userId);
+                    let obj = {properties: themeProperties, userInputs: themePropertiesByCurrentUser};
+
+                    resolve(obj);
+                })
+                .catch(err => reject(err))
+        });
     }
 
     notExistStockAllocationsForThemeStockComposition(compositionId) {
@@ -77,6 +89,10 @@ export default class DataRepository extends BaseRepository {
                 })
                 .catch(err => reject(err));
         });
+    }
+
+    getThemePropertiesByUser(properties, userId) {
+        return properties.find(property => property.user == userId);
     }
 
     getThemeStockCompositionsByTheme(themeId) {
@@ -91,7 +107,7 @@ export default class DataRepository extends BaseRepository {
                 .then(allocations => {
                     //aggregation
                     let stockAllocationAggregation = new StockAllocationAggregation();
-                    let aggregation = stockAllocationAggregation.getThemePropertiesAggregation(allocations);
+                    let aggregation = stockAllocationAggregation.getDataAggregation(allocations);
 
                     let stockAllocationByCurrentUser = this.getStockAllocationByUser(allocations, currentUserId);
 

@@ -5,22 +5,25 @@ var AppError = require('../utilities/appError');
 var AppResponse = require('../utilities/appResponse');
 var constants = require('../utilities/constants');
 import DataRepository from '../data_access/dataRepository';
-import ThemePropertiesAggregation from '../utilities/userInputAggregation';
+import { ThemePropertiesAggregation } from '../utilities/dataAggregation';
 
 let repo = new DataRepository();
 
 exports.listByTheme = function(req, res, next) {
     //get theme properties aggregation
-    repo.getThemePropertiesByTheme(req.theme._id)
+    repo.getThemePropertiesByTheme(req.theme._id, res.locals.user._id)
         .then(results => {
             if (!results) {
                 return next(new AppError('No theme property found for the theme', 404));
             }
 
-            let aggregation = new ThemePropertiesAggregation();
-            var themeProperties = aggregation.getThemePropertiesAggregation(results);
+            // let aggregation = new ThemePropertiesAggregation();
+            // var themeProperties = aggregation.getDataAggregation(results);
 
-            return res.status(200).json(new AppResponse('Theme properties retrieved', {properties: themeProperties}));
+            console.log('Theme properties');
+            console.log(results);
+
+            return res.status(200).json(new AppResponse('Theme properties retrieved', results));
         })
         .catch(err => next(err));
 }
@@ -30,11 +33,9 @@ exports.create = function(req, res, next) {
     var themeProperty = new UserThemeInput({
         user: res.locals.user,
         theme: req.theme,
-        themeProperties: {
-            timeHorizon: req.body.timeHorizon,
-            maturity: req.body.maturity,
-            categories: req.body.categories
-        }
+        timeHorizon: req.body.timeHorizon,
+        maturity: req.body.maturity,
+        categories: req.body.categories
     });
 
     repo.save(themeProperty)
@@ -58,11 +59,11 @@ exports.update = function(req, res, next) {
     var themeProperty = req.themeProperty;
 
     if (req.body.timeHorizon != null)
-        themeProperty.themeProperties.timeHorizon = req.body.timeHorizon;
+        themeProperty.timeHorizon = req.body.timeHorizon;
     if (req.body.maturity != null)
-        themeProperty.themeProperties.maturity = req.body.maturity;
+        themeProperty.maturity = req.body.maturity;
     if (req.body.categories != null)
-        themeProperty.themeProperties.categories = req.body.categories;
+        themeProperty.categories = req.body.categories;
 
     repo.save(themeProperty)
         .then(result => res.status(201).json(new AppResponse('Theme property updated', result)))
