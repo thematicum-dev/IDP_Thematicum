@@ -1,7 +1,5 @@
 <div class="row">
-    <div class="col-xs-10">
-        <label>Stock Allocation</label>
-    </div>
+    <label>Stock Allocation</label>
 </div>
 <hr>
 
@@ -17,13 +15,14 @@
     <div class="col-xs-6 text-center" style="padding:0;">
         <label>Exposure</label>
         <div class="btn-group btn-group-justified">
-            <label class="btn btn-default no-decoration-element borderless default-cursor" style="padding: 0" *ngFor="let exposure of exposures; let i=index">
+            <label class="btn btn-default no-decoration-element borderless default-cursor" style="padding: 0" *ngFor="let exposure of exposures">
                 {{exposure}}
             </label>
         </div>
     </div>
 </div>
 
+<!-- Allocations -->
 <div *ngIf="stockAllocationData.length > 0">
     <div *ngFor="let allocationModel of stockAllocationData; let idx=index;">
         <div class="row" >
@@ -45,6 +44,7 @@
             </div>
         </div>
 
+        <!-- Form to edit/add stock allocation-->
         <div class="row" >
             <div class="col-xs-6 col-xs-offset-6" *ngIf="allocationModel.isAllocationEditable">
                 <form #form="ngForm" (ngSubmit)="createOrUpdateStockAllocation(allocationModel, exposureSelect.selectedIndex.valueOf())">
@@ -71,7 +71,7 @@
 
         <div class="row" >
             <div class="col-xs-5 text-center" >
-                {{allocationModel.stockCountry}}
+                {{allocationModel?.themeStockComposition?.stock?.country}}
             </div>
 
             <div class="col-xs-1 text-center" >
@@ -113,13 +113,13 @@
 </div>
 <hr>
 
-<button class="btn btn-primary" *ngIf="!addOtherStocks" (click)="toggleAddOtherStocks()">Add Other Stocks</button>
-<div *ngIf="addOtherStocks">
+<button class="btn btn-primary" *ngIf="!showAddOtherStocksButton" (click)="toggleShowAddOtherStocksButton()">Add Other Stocks</button>
+<div *ngIf="showAddOtherStocksButton">
     <form #stockForm="ngForm" (ngSubmit)="createStockCompositionAndAllocation(themeStockAllocation.selectedItems)">
-        <app-autocomplete-stock-allocation [preFilterStockIds]="stockIds" #themeStockAllocation></app-autocomplete-stock-allocation>
+        <app-autocomplete-stock-allocation [preFilterStockIds]="allocatedStockIds" #themeStockAllocation></app-autocomplete-stock-allocation>
 
         <div class="text-right">
-            <button class="btn btn-default" type="button" (click)="toggleAddOtherStocks()">Cancel</button>
+            <button class="btn btn-default" type="button" (click)="toggleShowAddOtherStocksButton()">Cancel</button>
             <button class="btn btn-primary" type="submit"
                     formnovalidate
                     [disabled]="!stockForm.form.valid || !themeStockAllocation.selectedItems || themeStockAllocation.selectedItems.length == 0">Save</button>

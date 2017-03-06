@@ -55,11 +55,9 @@ import {ThemeService} from "../services/theme.service";
 export class ThemeStockAllocationComponent implements OnInit {
     @Input() themeId: string;
     exposures = ['Strongly Positive', 'Weakly Positive', 'Neutral', 'Weakly Negative', 'Strongly Negative'];
-    stockAllocationModel: ThemeStockCompositionAllocationModel[] = [];
-    stockIds: string[]; //to prefilter stocks available in autocomplete
-    addOtherStocks: boolean = false;
-
-    stockAllocationData: any = [];
+    allocatedStockIds: string[]; //to prefilter stocks available in autocomplete
+    showAddOtherStocksButton: boolean = false; //to show/hide "Add Other Stocks" button
+    stockAllocationData: any = []; //to hold data received from the service
 
     @ViewChild(ModalComponent)
     public readonly modal: ModalComponent;
@@ -67,12 +65,8 @@ export class ThemeStockAllocationComponent implements OnInit {
     constructor(private themeService: ThemeService) {}
 
     ngOnInit(): void {
-        this.themeService.getThemeStockAllocationDistribution(this.themeId)
-            .subscribe(data => {
-                console.log('Stock Allocation Data');
-                console.log(data);
-                this.stockAllocationData = data; //TODO: define model
-            }, error => console.log(error));
+        this.getComponentDataObservable()
+            .subscribe(this.handleResults, this.handleError);
     }
 
     setExposureBackgroundColor(index: number) {
@@ -85,98 +79,65 @@ export class ThemeStockAllocationComponent implements OnInit {
     }
 
     toggleStockAllocationEditable(allocationModel: ThemeStockCompositionAllocationModel) {
+        //TODO: delegate
         allocationModel.isAllocationEditable = !allocationModel.isAllocationEditable;
     }
 
-    toggleAddOtherStocks() {
-        this.addOtherStocks = !this.addOtherStocks;
+    toggleShowAddOtherStocksButton() {
+        this.showAddOtherStocksButton = !this.showAddOtherStocksButton;
     }
 
     getExposureDistributionStr(nrUsers: number) {
-        let trailingS = nrUsers != 1 ? 's' : '';
+        const trailingS = nrUsers != 1 ? 's' : '';
         return `(${nrUsers} user${trailingS})`;
     }
 
     createOrUpdateStockAllocation(allocationModel: any, exposure: number) {
-        console.log('Selected exposure: ', exposure)
         //create or update, depending on whether the user has an existing allocation for the given theme-stock composition
-        let modelChangedObservable: Observable<any> = allocationModel.userStockAllocation ?
+        const modelChangedObservable: Observable<any> = allocationModel.userStockAllocation ?
             this.themeService.updateUserStockAllocation(allocationModel.userStockAllocation._id, exposure) :
             this.themeService.createUserStockAllocation(allocationModel.themeStockComposition._id, exposure);
 
-        modelChangedObservable.subscribe(
-            data => {
-                console.log(data)
-                //reload model
-                //TODO: other/better way to do this
-                this.themeService.getThemeStockAllocationDistribution(this.themeId)
-                    .subscribe(results => {
-                        console.log('Stock Allocation Data');
-                        console.log(results);
-                        this.stockAllocationData = results; //TODO: define model
-                    }, error => console.log(error));
-
-
-            },
-            error => console.log(error)
-        );
+        modelChangedObservable.flatMap(data => {
+            console.log(data);
+            return this.getComponentDataObservable(); //reload model
+        }).subscribe(this.handleResults, this.handleError);
     }
 
     deleteUserStockAllocation(modal: ModalComponent) {
-        let allocationId = modal.getData();
-        console.log('allocationId', allocationId);
-        this.themeService.deleteUserStockAllocation(allocationId).subscribe(
-            data => {
-                console.log(data)
-
-                //reload model
-                //TODO: other/better way to do this
-                this.themeService.getThemeStockAllocationDistribution(this.themeId)
-                    .subscribe(data => {
-                        console.log('Stock Allocation Data');
-                        console.log(data);
-                        this.stockAllocationData = data; //TODO: define model
-                    }, error => console.log(error));
-            },
-            error => console.log(error)
-        );
+        const allocationId = modal.getData();
         modal.hide();
+        this.themeService.deleteUserStockAllocation(allocationId)
+            .flatMap(data => {
+                console.log(data);
+                return this.getComponentDataObservable(); //reload model
+            })
+            .subscribe(this.handleResults, this.handleError);
     }
 
     createStockCompositionAndAllocation(allocations: any[]) {
-        let allocationsArray = allocations.map(allocation => new StockAllocationModel(allocation.stock.id, allocation.exposure));
-        this.themeService.createManyStockCompositionsAndAllocations(this.themeId, allocationsArray).subscribe(
-            data => {
-                console.log(data)
-                this.toggleAddOtherStocks();
-                this.getJoinedObservable()
-                    .subscribe(
-                        (results: any) => {
-                            //this.handleResults(results);
-
-                            //TODO: refactor
-                            this.themeService.getThemeStockAllocationDistribution(this.themeId)
-                                .subscribe(data => {
-                                    console.log('Stock Allocation Data');
-                                    console.log(data);
-                                    this.stockAllocationData = data; //TODO: define model
-                                }, error => console.log(error));
-                        },
-                        (error) => console.log(error)
-                    );
-            },
-            error => {
-                console.log(error)
-            }
-        );
+        const allocationsArray = allocations.map(allocation => new StockAllocationModel(allocation.stock.id, allocation.exposure));
+        this.toggleShowAddOtherStocksButton();
+        this.themeService.createManyStockCompositionsAndAllocations(this.themeId, allocationsArray)
+            .flatMap(data => {
+                console.log(data);
+                return this.getComponentDataObservable(); //reload model
+            })
+            .subscribe(this.handleResults, this.handleError);
     }
 
-    getJoinedObservable() {
-        // let stockCompositions =  this.themeService.getThemeStockCompositions(this.themeId);
-        let allocationDistribution = this.themeService.getThemeStockAllocationDistribution(this.themeId);
-        // let userAllocations = this.themeService.getThemeStockAllocationByUser(this.themeId);
+    getComponentDataObservable() {
+        return this.themeService.getThemeStockAllocationDistribution(this.themeId);
+    }
 
-        // return Observable.forkJoin([stockCompositions, allocationDistribution, userAllocations]);
-        return allocationDistribution;
+    handleResults = (data: any) => {
+        console.log('Stock Allocations');
+        console.log(data);
+        this.stockAllocationData = data;
+        this.allocatedStockIds = data.map(allocation => allocation.themeStockComposition.stock._id); //set allocated stock Ids
+    }
+
+    handleError = (error: any) => {
+        console.log('Error: ' + error);
     }
 }

@@ -6,9 +6,4 @@ import {Component} from '@angular/core';
 export class HomepageComponent {
     title = "Welcome";
     subtitle = "Thematicum";
-
-    constructor() {
-        console.log('local host: ');
-        console.log(process.env);
-    }
 }
