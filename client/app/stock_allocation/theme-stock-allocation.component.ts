@@ -59,19 +59,29 @@ export class ThemeStockAllocationComponent implements OnInit {
     stockIds: string[]; //to prefilter stocks available in autocomplete
     addOtherStocks: boolean = false;
 
+    stockAllocationData: any = [];
+
     @ViewChild(ModalComponent)
     public readonly modal: ModalComponent;
 
     constructor(private themeService: ThemeService) {}
 
     ngOnInit(): void {
-        this.getJoinedObservable()
-            .subscribe(
-                (results: any) => {
-                    this.handleResults(results);
-                },
-                (error) => console.log(error)
-            );
+        this.themeService.getThemeStockAllocationDistribution(this.themeId)
+            .subscribe(data => {
+                console.log('Stock Allocation Data');
+                console.log(data);
+                this.stockAllocationData = data; //TODO: define model
+            }, error => console.log(error));
+
+
+        // this.getJoinedObservable()
+        //     .subscribe(
+        //         (results: any) => {
+        //             this.handleResults(results);
+        //         },
+        //         (error) => console.log(error)
+        //     );
     }
 
     setExposureBackgroundColor(index: number) {
@@ -96,25 +106,34 @@ export class ThemeStockAllocationComponent implements OnInit {
         return `(${nrUsers} user${trailingS})`;
     }
 
-    createOrUpdateStockAllocation(allocationModel: ThemeStockCompositionAllocationModel, exposure: number) {
+    createOrUpdateStockAllocation(allocationModel: any, exposure: number) {
         console.log('Selected exposure: ', exposure)
         //create or update, depending on whether the user has an existing allocation for the given theme-stock composition
-        let modelChangedObservable: Observable<any> = allocationModel.currentUserAllocation ?
-            this.themeService.updateUserStockAllocation(allocationModel.currentUserAllocation._id, exposure) :
-            this.themeService.createUserStockAllocation(allocationModel.themeStockCompositionId, exposure);
+        let modelChangedObservable: Observable<any> = allocationModel.userStockAllocation ?
+            this.themeService.updateUserStockAllocation(allocationModel.userStockAllocation._id, exposure) :
+            this.themeService.createUserStockAllocation(allocationModel.themeStockComposition._id, exposure);
 
         modelChangedObservable.subscribe(
             data => {
                 console.log(data)
                 //reload model
                 //TODO: other/better way to do this
-                this.getJoinedObservable()
-                    .subscribe(
-                        (results: any) => {
-                            this.handleResults(results);
-                        },
-                        (error) => console.log(error)
-                    );
+                // this.getJoinedObservable()
+                //     .subscribe(
+                //         (results: any) => {
+                //             this.handleResults(results);
+                //         },
+                //         (error) => console.log(error)
+                //     );
+
+                this.themeService.getThemeStockAllocationDistribution(this.themeId)
+                    .subscribe(results => {
+                        console.log('Stock Allocation Data');
+                        console.log(results);
+                        this.stockAllocationData = results; //TODO: define model
+                    }, error => console.log(error));
+
+
             },
             error => console.log(error)
         );
@@ -129,13 +148,20 @@ export class ThemeStockAllocationComponent implements OnInit {
 
                 //reload model
                 //TODO: other/better way to do this
-                this.getJoinedObservable()
-                    .subscribe(
-                        (results: any) => {
-                            this.handleResults(results);
-                        },
-                        (error) => console.log(error)
-                    );
+                // this.getJoinedObservable()
+                //     .subscribe(
+                //         (results: any) => {
+                //             this.handleResults(results);
+                //         },
+                //         (error) => console.log(error)
+                //     );
+
+                this.themeService.getThemeStockAllocationDistribution(this.themeId)
+                    .subscribe(data => {
+                        console.log('Stock Allocation Data');
+                        console.log(data);
+                        this.stockAllocationData = data; //TODO: define model
+                    }, error => console.log(error));
             },
             error => console.log(error)
         );
@@ -151,7 +177,15 @@ export class ThemeStockAllocationComponent implements OnInit {
                 this.getJoinedObservable()
                     .subscribe(
                         (results: any) => {
-                            this.handleResults(results);
+                            //this.handleResults(results);
+
+                            //TODO: refactor
+                            this.themeService.getThemeStockAllocationDistribution(this.themeId)
+                                .subscribe(data => {
+                                    console.log('Stock Allocation Data');
+                                    console.log(data);
+                                    this.stockAllocationData = data; //TODO: define model
+                                }, error => console.log(error));
                         },
                         (error) => console.log(error)
                     );
@@ -162,40 +196,40 @@ export class ThemeStockAllocationComponent implements OnInit {
         );
     }
 
-    handleResults(results: any) {
-        console.log('results: ', results);
-        let _stockCompositions = results[0];
-        let _allocationDistribution = results[1];
-        let _userAllocations = results[2];
-
-        //expected equal length
-        if (_stockCompositions.length != _allocationDistribution.length) {
-            return;
-        }
-
-        this.stockAllocationModel = _stockCompositions.map(function (composition, index, array) {
-            let model = new ThemeStockCompositionAllocationModel(
-                composition._id,
-                composition.stock._id,
-                composition.stock.companyName,
-                composition.stock.country,
-                composition.addedAt,
-                composition.isValidated);
-            model.exposureDistribution = _allocationDistribution[index].exposureDistribution;
-
-            let userInputForStockComposition = _userAllocations.filter(function (item) {
-                return item.themeStockComposition._id == composition._id;
-            });
-
-            if (userInputForStockComposition && userInputForStockComposition.length > 0) {
-                model.currentUserAllocation = userInputForStockComposition[0];
-            }
-            return model;
-        });
-
-        //set selected stock IDs
-        this.stockIds = this.stockAllocationModel.map(allocation => allocation.stockId);
-    }
+    // handleResults(results: any) {
+    //     console.log('results: ', results);
+    //     let _stockCompositions = results[0];
+    //     let _allocationDistribution = results[1];
+    //     let _userAllocations = results[2];
+    //
+    //     //expected equal length
+    //     if (_stockCompositions.length != _allocationDistribution.length) {
+    //         return;
+    //     }
+    //
+    //     this.stockAllocationModel = _stockCompositions.map(function (composition, index, array) {
+    //         let model = new ThemeStockCompositionAllocationModel(
+    //             composition._id,
+    //             composition.stock._id,
+    //             composition.stock.companyName,
+    //             composition.stock.country,
+    //             composition.addedAt,
+    //             composition.isValidated);
+    //         model.exposureDistribution = _allocationDistribution[index].exposureDistribution;
+    //
+    //         let userInputForStockComposition = _userAllocations.filter(function (item) {
+    //             return item.themeStockComposition._id == composition._id;
+    //         });
+    //
+    //         if (userInputForStockComposition && userInputForStockComposition.length > 0) {
+    //             model.currentUserAllocation = userInputForStockComposition[0];
+    //         }
+    //         return model;
+    //     });
+    //
+    //     //set selected stock IDs
+    //     this.stockIds = this.stockAllocationModel.map(allocation => allocation.stockId);
+    // }
 
     getJoinedObservable() {
         let stockCompositions =  this.themeService.getThemeStockCompositions(this.themeId);

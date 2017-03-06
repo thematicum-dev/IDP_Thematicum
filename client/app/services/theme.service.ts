@@ -148,6 +148,7 @@ export class ThemeService {
     }
 
     getThemeStockCompositions(themeId: string) {
+        //TODO: delete
         let apiPath = this.baseAPI + 'stockallocations/theme/' + themeId + '/themestockcompositions' + this.setTokenQueryParam();
         return this.http.get(apiPath)
             .map((response: Response) => {
@@ -174,6 +175,7 @@ export class ThemeService {
     }
 
     getThemeStockAllocationByUser(themeId: string) {
+        //TODO: delete
         let apiPath = this.baseAPI + 'stockallocations/theme/' + themeId + '/user' + this.setTokenQueryParam();
         return this.http.get(apiPath)
             .map((response: Response) => {

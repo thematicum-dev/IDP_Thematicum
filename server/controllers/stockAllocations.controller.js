@@ -48,40 +48,50 @@ exports.update = function(req, res, next) {
 }
 
 exports.listByTheme = function(req, res, next) {
-    UserThemeStockAllocation
-        .find()
-        .populate({
-            path: 'themeStockComposition',
-            match: { theme: req.theme._id },
-            populate: {
-                path: 'stock',
-                model: 'Stock'
-            }
-        }).exec(function(err, results) {
-        if (err) {
-            return next(err);
-        }
+    repo.getThemeStockCompositionsByTheme(req.theme._id)
+        .then(results => Promise.all(results.map(composition => repo.getStockAllocationsByThemeStockComposition(composition, res.locals.user._id))))
+        .then(results => {
+            console.log('Stock Allocations')
+            console.log(results);
+            return res.status(200).json(new AppResponse('Stock allocation data retrieved', results));
+        })
+        .catch(err => next(err));
 
 
-        // console.log('All entries')
-        // console.log(results);
-        //filter non-null entries
-        var nonNullEntries = _.filter(results, function(input) {
-            return input.themeStockComposition != null;
-        });
-
-        // console.log('Nonnull');
-        // console.log(nonNullEntries);
-        // if (nonNullEntries.length > 0 ) {
-        //     console.log(nonNullEntries[0].themeStockComposition.stock)
-        // }
-
-        var stockExposureDistribution = nonNullEntries != undefined && nonNullEntries.length > 0 ?
-            stockAllocationAggregation.groupByStockAndExposure(nonNullEntries)
-            : [];
-
-        return res.status(201).json(new AppResponse('Stock exposure distribution by theme', stockExposureDistribution));
-    });
+    // UserThemeStockAllocation
+    //     .find()
+    //     .populate({
+    //         path: 'themeStockComposition',
+    //         match: { theme: req.theme._id },
+    //         populate: {
+    //             path: 'stock',
+    //             model: 'Stock'
+    //         }
+    //     }).exec(function(err, results) {
+    //     if (err) {
+    //         return next(err);
+    //     }
+    //
+    //
+    //     // console.log('All entries')
+    //     // console.log(results);
+    //     //filter non-null entries
+    //     var nonNullEntries = _.filter(results, function(input) {
+    //         return input.themeStockComposition != null;
+    //     });
+    //
+    //     // console.log('Nonnull');
+    //     // console.log(nonNullEntries);
+    //     // if (nonNullEntries.length > 0 ) {
+    //     //     console.log(nonNullEntries[0].themeStockComposition.stock)
+    //     // }
+    //
+    //     var stockExposureDistribution = nonNullEntries != undefined && nonNullEntries.length > 0 ?
+    //         stockAllocationAggregation.groupByStockAndExposure(nonNullEntries)
+    //         : [];
+    //
+    //     return res.status(201).json(new AppResponse('Stock exposure distribution by theme', stockExposureDistribution));
+    // });
 }
 
 exports.listByThemeAndUser = function(req, res, next) {
@@ -110,23 +120,24 @@ exports.listStockCompositions = function(req, res, next) {
         .then(results => {
             console.log('Stock Allocations')
             console.log(results);
+            return res.status(200).json(new AppResponse('Stock allocation data retrieved', results));
         })
         .catch(err => next(err));
 
 
-    ThemeStockComposition.find({theme: req.theme._id})
-        .populate('stock', 'companyName country')
-        .exec(function(err, results) {
-        if(err) {
-            return next(err);
-        }
-
-        if(!results) {
-            return next(new AppError('No theme-stock compositions for the given theme', 404));
-        }
-
-        return res.status(200).json(new AppResponse('Theme-stock compositions retrieved', results));
-    });
+    // ThemeStockComposition.find({theme: req.theme._id})
+    //     .populate('stock', 'companyName country')
+    //     .exec(function(err, results) {
+    //     if(err) {
+    //         return next(err);
+    //     }
+    //
+    //     if(!results) {
+    //         return next(new AppError('No theme-stock compositions for the given theme', 404));
+    //     }
+    //
+    //     return res.status(200).json(new AppResponse('Theme-stock compositions retrieved', results));
+    // });
 }
 
 exports.delete = function(req, res, next) {
