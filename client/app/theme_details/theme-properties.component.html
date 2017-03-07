@@ -25,52 +25,35 @@
 
             <div class="col-xs-10">
                 <div class="btn-group btn-group-justified" [attr.data-toggle]="setDataToggleAttribute()">
-                    <label class="btn btn-default"
-                           [style.backgroundColor]="setPropertyBackgroundColor('timeHorizon', i)"
-                           [class.inactive-element]="!isEditMode"
-                           *ngFor="let timeHorizon of timeHorizonValues; let i = index"
-                           (click)="themeProperties.setTimeHorizon(timeHorizon.value)">
-
-                        <input type="radio" disabled="disabled" id="timeHorizon" name="timeHorizon" [value]="timeHorizon.value">{{timeHorizonValues[i].description}}
-                    </label>
+                    <div class="btn-group" *ngFor="let timeHorizon of themePropertiesData.properties.timeHorizon; let i = index">
+                        <label class="btn btn-default"
+                               [style.backgroundColor]="setPropertyBackgroundColor('timeHorizon', i)"
+                               [class.inactive-element]="!isEditMode"
+                               (click)="themeProperties.setTimeHorizon(i)">
+                            <input type="radio" disabled="disabled" id="timeHorizon" name="timeHorizon" [value]="i">{{timeHorizonValues[i].description}}
+                        </label>
+                        <p class="text-center">{{getPropertyVoteDistributionStr(timeHorizon.percentage, timeHorizon.count)}}</p>
+                    </div>
                 </div>
             </div>
-
-
-            <div class="col-xs-offset-2 col-xs-10">
-                <div class="btn-group btn-group-justified" data-toggle="buttons">
-                    <label class="btn btn-default no-decoration-element borderless default-cursor" *ngFor="let timeHorizon of themePropertiesData.properties.timeHorizon; let i = index">
-                        {{getPropertyVoteDistributionStr(timeHorizon.percentage, timeHorizon.count)}}
-                    </label>
-                </div>
-            </div>
-
-
         </div>
 
         <div class="form-group row">
             <label class="col-xs-2 col-form-label">Current theme maturity</label>
 
             <div class="col-xs-10">
-                <div class="btn-group btn-group-justified" data-toggle="buttons">
-                    <label class="btn btn-default" [class.inactive-element]="!isEditMode"
-                           [style.backgroundColor]="setPropertyBackgroundColor('maturity', i)"
-                           *ngFor="let maturity of maturityValues; let i = index"
-                           (click)="themeProperties.setMaturity(maturity.value)">
-                        <input type="radio" disabled="disabled" id="maturity" name="maturity" [value]="i" >{{maturityValues[i].description}}
-                    </label>
+                <div class="btn-group btn-group-justified" [attr.data-toggle]="setDataToggleAttribute()">
+                    <div class="btn-group" *ngFor="let maturity of themePropertiesData.properties.maturity; let i = index">
+                        <label class="btn btn-default"
+                               [style.backgroundColor]="setPropertyBackgroundColor('maturity', i)"
+                               [class.inactive-element]="!isEditMode"
+                               (click)="themeProperties.setMaturity(i)">
+                            <input type="radio" disabled="disabled" id="maturity" name="maturity" [value]="i">{{maturityValues[i].description}}
+                        </label>
+                        <p class="text-center">{{getPropertyVoteDistributionStr(maturity.percentage, maturity.count)}}</p>
+                    </div>
                 </div>
             </div>
-
-            <div class="col-xs-offset-2 col-xs-10">
-                <div class="btn-group btn-group-justified" data-toggle="buttons">
-                    <label class="btn btn-default no-decoration-element borderless default-cursor" *ngFor="let maturity of themePropertiesData.properties.maturity; let i = index">
-                        {{getPropertyVoteDistributionStr(maturity.percentage, maturity.count)}}
-                    </label>
-                </div>
-            </div>
-
-
         </div>
 
         <div class="form-group row">
@@ -78,21 +61,15 @@
 
             <div class="col-xs-10">
                 <div class="btn-group btn-group-justified" [attr.data-toggle]="setDataToggleAttribute()">
-                    <label class="btn btn-default"
-                           [style.backgroundColor]="setPropertyBackgroundColor('categories', i)"
-                           [class.inactive-element]="!isEditMode"
-                           *ngFor="let category of categoryValues; let i=index"
-                           (click)="themeProperties.toggleCheckedCategory(category.value)">
-                        <input type="checkbox" disabled="disabled" id="categories" name="categories" [value]="i">{{categoryValues[i].description}}
-                    </label>
-                </div>
-            </div>
-
-            <div class="col-xs-offset-2 col-xs-10">
-                <div class="btn-group btn-group-justified" data-toggle="buttons">
-                    <label class="btn btn-default no-decoration-element borderless default-cursor" *ngFor="let category of themePropertiesData.properties.categories; let i = index">
-                        {{getPropertyVoteDistributionStr(category.percentage, category.count)}}
-                    </label>
+                    <div class="btn-group" *ngFor="let category of themePropertiesData.properties.categories; let i = index">
+                        <label class="btn btn-default"
+                               [style.backgroundColor]="setPropertyBackgroundColor('categories', i)"
+                               [class.inactive-element]="!isEditMode"
+                               (click)="themeProperties.toggleCheckedCategory(i)">
+                            <input type="checkbox" disabled="disabled" id="categories" name="categories" [value]="i">{{categoryValues[i].description}}
+                        </label>
+                        <p class="text-center">{{getPropertyVoteDistributionStr(category.percentage, category.count)}}</p>
+                    </div>
                 </div>
             </div>
         </div>
