@@ -54,13 +54,11 @@ import {Observable} from "rxjs";
 })
 export class ThemePropertiesComponent implements OnInit {
     @Input() themeId: string;
-    themePropertiesAggregation: any;
-    userThemeInputs: any;
-    userThemeInputsId: any;
-    isEditMode: boolean = false;
-    //theme properties data - for user editing
-    themeProperties: ThemeProperties = new ThemeProperties();
+    themePropertiesData: any; //to hold data received from the service
+    isEditMode: boolean = false; //to indicate display/edit mode
+    themeProperties: ThemeProperties = new ThemeProperties(); //for user editing data
 
+    //property values needed for display
     timeHorizonValues = timeHorizonValues;
     maturityValues = maturityValues;
     categoryValues = categoryValues;
@@ -74,23 +72,21 @@ export class ThemePropertiesComponent implements OnInit {
     constructor(private themeService: ThemeService) { }
 
     ngOnInit(): void {
-        this.getJoinedObservable().subscribe(
-            data => {
-                console.log('data: ', data)
-                this.themePropertiesAggregation = data.properties;
-                this.userThemeInputs = data.userInputs;
-                if (data.userInputs) {
-                    this.userThemeInputsId = data.userInputs._id;
-                }
-            },
-            error => {
-                console.log('error: ', error);
-            }
-        )
+        this.getComponentDataObservable().subscribe(this.handleResults, this.handleError);
     }
 
-    getJoinedObservable() {
+    getComponentDataObservable() {
         return this.themeService.getThemeProperties(this.themeId);
+    }
+
+    handleResults = (data: any) => {
+        console.log('Theme properties');
+        console.log(data);
+        this.themePropertiesData = data;
+    }
+
+    handleError = (error: any) => {
+        console.log('Error: ' + error);
     }
 
     getPropertyVoteDistributionStr(percentage: number, nrUsers: number) {
@@ -120,14 +116,14 @@ export class ThemePropertiesComponent implements OnInit {
         }
 
         //TODO: 1st condition is not really needed
-        if (!this.isEditMode && !this.userThemeInputs) {
+        if (!this.isEditMode && !this.themePropertiesData.userInputs) {
             return this.WHITE_COLOR;
         }
 
         if (propertyName == "categories") {
-            return this.userThemeInputs[propertyName].indexOf(index) < 0 ? this.WHITE_COLOR : this.YELLOW_USER_THEME_INPUT;
+            return this.themePropertiesData.userInputs[propertyName].indexOf(index) < 0 ? this.WHITE_COLOR : this.YELLOW_USER_THEME_INPUT;
         } else {
-            return this.userThemeInputs[propertyName] != index ? this.WHITE_COLOR : this.YELLOW_USER_THEME_INPUT;
+            return this.themePropertiesData.userInputs[propertyName] != index ? this.WHITE_COLOR : this.YELLOW_USER_THEME_INPUT;
         }
     }
 
@@ -136,8 +132,8 @@ export class ThemePropertiesComponent implements OnInit {
     }
 
     clearUserInputs() {
-        this.userThemeInputs = null;
-        this.userThemeInputsId = null;
+        // this.userThemeInputs = null;
+        // this.userThemeInputsId = null;
         this.isEditMode = false;
         this.themeProperties.clearProperties();
     }
@@ -147,59 +143,30 @@ export class ThemePropertiesComponent implements OnInit {
         /*if there isn't any existing user input for this theme, create new
          otherwise, update existing
          */
-        let themePropertyChangedObservable: Observable<any> = this.userThemeInputs ?
-            this.themeService.updateUserThemeInput(this.userThemeInputsId, this.themeProperties)
-                .map(input => {
-                    input.isCreateOrUpdate = true;
-                    return input;
-                }) :
-            this.themeService.createUserThemeImput(this.themeId, this.themeProperties)
-                .map(input => {
-                    input.isCreateOrUpdate = true;
-                    return input;
-                });
-
+        let themePropertyChangedObservable: Observable<any> = this.themePropertiesData.userInputs ?
+            this.themeService.updateUserThemeInput(this.themePropertiesData.userInputs._id, this.themeProperties) :
+            this.themeService.createUserThemeImput(this.themeId, this.themeProperties);
         this.clearUserInputs();
 
-        Observable.concat(themePropertyChangedObservable, this.getJoinedObservable()).subscribe(
-            data => {
-                this.themePropertiesAggregation = data.properties;
-                this.userThemeInputs = data.userInputs;
-                if (data.userInputs) {
-                    this.userThemeInputsId = data.userInputs._id;
-                }
-            },
-            error => {
-                error => console.log(error)
-            }
-        );
+        themePropertyChangedObservable.flatMap(data => {
+            console.log(data);
+            return this.getComponentDataObservable(); //reload model
+        }).subscribe(this.handleResults, this.handleError);
     }
 
     deleteUserThemeInput(modal: any) {
         modal.hide();
-        if(!this.userThemeInputsId) {
+        if(!this.themePropertiesData.userInputs) {
             return;
         }
 
-        let themePropertyDeletedObservable: Observable<any> = this.themeService.deleteUserThemeInput(this.userThemeInputsId).map(input => {
-                input.isDelete = true;
-                return input;
-            });
+        let themePropertyDeletedObservable: Observable<any> = this.themeService.deleteUserThemeInput(this.themePropertiesData.userInputs._id);
 
         this.clearUserInputs();
 
-        Observable.concat(themePropertyDeletedObservable, this.getJoinedObservable()).subscribe(
-            data => {
-                this.themePropertiesAggregation = data.properties;
-                this.userThemeInputs = data.userInputs;
-                if (data.userInputs) {
-                    this.userThemeInputsId = data.userInputs._id;
-                }
-            },
-            error => {
-                //TODO: handle error
-                error => console.log(error)
-            }
-        );
+        themePropertyDeletedObservable.flatMap(data => {
+            console.log(data);
+            return this.getComponentDataObservable();
+        }).subscribe(this.handleResults, this.handleError);
     }
 }

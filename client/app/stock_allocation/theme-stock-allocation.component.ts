@@ -3,9 +3,9 @@ import {ModalComponent} from "../theme_details/modal.component";
 import {ViewChild} from "@angular/core/src/metadata/di";
 import {Input} from "@angular/core/src/metadata/directives";
 import {Observable, Observer} from "rxjs";
-import {ThemeStockCompositionAllocationModel} from "./theme-stock-composition-allocation-model";
 import {StockAllocationModel} from "../models/stockAllocationModel";
 import {ThemeService} from "../services/theme.service";
+import {ThemeStockCompositionAllocationModel} from "../models/themeStockCompositionAllocationModel";
 
 @Component({
     selector: 'app-theme-stock-allocation',
@@ -57,7 +57,7 @@ export class ThemeStockAllocationComponent implements OnInit {
     exposures = ['Strongly Positive', 'Weakly Positive', 'Neutral', 'Weakly Negative', 'Strongly Negative'];
     allocatedStockIds: string[]; //to prefilter stocks available in autocomplete
     showAddOtherStocksButton: boolean = false; //to show/hide "Add Other Stocks" button
-    stockAllocationData: any = []; //to hold data received from the service
+    stockAllocationData: ThemeStockCompositionAllocationModel[] = []; //to hold data received from the service
 
     @ViewChild(ModalComponent)
     public readonly modal: ModalComponent;
@@ -79,7 +79,7 @@ export class ThemeStockAllocationComponent implements OnInit {
     }
 
     toggleStockAllocationEditable(allocationModel: ThemeStockCompositionAllocationModel) {
-        //TODO: delegate
+        //TODO: delegation causes errors
         allocationModel.isAllocationEditable = !allocationModel.isAllocationEditable;
     }
 
@@ -92,7 +92,7 @@ export class ThemeStockAllocationComponent implements OnInit {
         return `(${nrUsers} user${trailingS})`;
     }
 
-    createOrUpdateStockAllocation(allocationModel: any, exposure: number) {
+    createOrUpdateStockAllocation(allocationModel: ThemeStockCompositionAllocationModel, exposure: number) {
         //create or update, depending on whether the user has an existing allocation for the given theme-stock composition
         const modelChangedObservable: Observable<any> = allocationModel.userStockAllocation ?
             this.themeService.updateUserStockAllocation(allocationModel.userStockAllocation._id, exposure) :
@@ -130,7 +130,7 @@ export class ThemeStockAllocationComponent implements OnInit {
         return this.themeService.getThemeStockAllocationDistribution(this.themeId);
     }
 
-    handleResults = (data: any) => {
+    handleResults = (data: ThemeStockCompositionAllocationModel[]) => {
         console.log('Stock Allocations');
         console.log(data);
         this.stockAllocationData = data;
