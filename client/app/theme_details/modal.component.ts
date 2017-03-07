@@ -8,27 +8,25 @@ import {Component} from '@angular/core';
         }`]
 })
 export class ModalComponent {
-    public visible = false;
+    private visible = false;
     private visibleAnimate = false;
     private data: any; //a variable to allow the modal to carry context data
 
-    public setData(contextData: any) {
+    setData(contextData: any) {
         this.data = contextData;
     }
 
-    public getData() {
+    getData(): any {
         return this.data;
     }
 
-    public show(): void {
+    show(): void {
         this.visible = true;
         setTimeout(() => this.visibleAnimate = true);
     }
 
-    public hide(): void {
+    hide(): void {
         this.visibleAnimate = false;
         this.visible = false;
-        //TODO: timetout causes issues
-        //setTimeout(() => this.visible = false, 300);
     }
 }

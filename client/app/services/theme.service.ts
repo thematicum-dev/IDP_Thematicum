@@ -49,7 +49,7 @@ export class ThemeService {
             });
     }
 
-    createUserThemeImput(themeId: any, themeProperties: ThemeProperties) {
+    createUserThemeInput(themeId: any, themeProperties: ThemeProperties) {
         const body = JSON.stringify(themeProperties);
         let apiPath = this.baseAPI + 'themeproperties/theme/' + themeId + this.setTokenQueryParam();
 

@@ -1,4 +1,4 @@
-import {Component, OnInit, OnChanges, SimpleChanges, ElementRef, AfterViewInit} from '@angular/core';
+import {Component, OnInit, OnChanges, SimpleChanges} from '@angular/core';
 import {Theme} from "../models/theme";
 import {ActivatedRoute, Router} from '@angular/router';
 import 'rxjs/add/operator/switchMap';
@@ -26,20 +26,15 @@ import {ViewChild} from "@angular/core/src/metadata/di";
         `]
 })
 export class ThemeDetailsComponent implements OnInit, OnChanges {
-    //theme existing data
-    theme: Theme;
-    selectedThemeId: string;
-    isCreator = true;
-    isEditable = false;
+    theme: Theme; //theme retrieved from the service
+    selectedThemeId: string; //theme Id retrieved from the url
+    isCurrentUserCreator = true;
+    isEditMode = false; //to show/hide theme-editing form
 
     @ViewChild(ModalComponent)
     public readonly modal: ModalComponent;
 
-    constructor(
-        private route: ActivatedRoute,
-        private router: Router,
-        private themeServie: ThemeService,
-        private themeService: ThemeService) { }
+    constructor(private route: ActivatedRoute, private router: Router, private themeService: ThemeService) { }
 
     ngOnInit(): void {
         if(!this.route.snapshot.params['id']) {
@@ -49,45 +44,31 @@ export class ThemeDetailsComponent implements OnInit, OnChanges {
         this.selectedThemeId = this.route.snapshot.params['id'];
         this.themeService.getThemeById(this.selectedThemeId).subscribe(
             data => {
+                console.log('Theme:');
+                console.log(data);
                 this.theme = data;
-                this.theme.createdAt = new Date(data.createdAt);
             },
-            error => {
-                //TODO: handle error by displaying message
-                console.log('Error getting theme data: ', error);
-            });
+            error => console.log('Error: ', error));
     }
 
-    ngOnChanges(changes: SimpleChanges): void {
-        //TODO: is this needed?
-        // var themeChange: Theme = changes.theme.currentValue;
-        // if (themeChange) {
-        //     //this.autocompleteList.list = this.dataSource;
-        // }
-    }
+    ngOnChanges(changes: SimpleChanges): void {}
 
-    toggleEditable() {
-        this.isEditable = !this.isEditable;
+    toggleEditMode() {
+        this.isEditMode = !this.isEditMode;
     }
 
     onThemeChanged(theme: Theme) {
-        //cancel changes made to Theme, by restoring previous model
         this.theme = theme;
-
-        //TODO: problem with date.toDateString() when updating theme
-
-        //set isThemeCharacteristicsEditable to false
-        this.isEditable = false;
+        this.isEditMode = false;
     }
 
     deleteTheme(modal: any) {
+        modal.hide();
         this.themeService.deleteTheme(this.selectedThemeId).subscribe(
             data => {
                 console.log(data);
                 this.router.navigate(['/search']);
             },
-            error => console.log(error)
-        )
-        modal.hide();
+            error => console.log(error));
     }
 }

@@ -115,7 +115,6 @@ export class ThemePropertiesComponent implements OnInit {
             return;
         }
 
-        //TODO: 1st condition is not really needed
         if (!this.isEditMode && !this.themePropertiesData.userInputs) {
             return this.WHITE_COLOR;
         }
@@ -132,8 +131,6 @@ export class ThemePropertiesComponent implements OnInit {
     }
 
     clearUserInputs() {
-        // this.userThemeInputs = null;
-        // this.userThemeInputsId = null;
         this.isEditMode = false;
         this.themeProperties.clearProperties();
     }
@@ -145,7 +142,7 @@ export class ThemePropertiesComponent implements OnInit {
          */
         let themePropertyChangedObservable: Observable<any> = this.themePropertiesData.userInputs ?
             this.themeService.updateUserThemeInput(this.themePropertiesData.userInputs._id, this.themeProperties) :
-            this.themeService.createUserThemeImput(this.themeId, this.themeProperties);
+            this.themeService.createUserThemeInput(this.themeId, this.themeProperties);
         this.clearUserInputs();
 
         themePropertyChangedObservable.flatMap(data => {
@@ -166,7 +163,7 @@ export class ThemePropertiesComponent implements OnInit {
 
         themePropertyDeletedObservable.flatMap(data => {
             console.log(data);
-            return this.getComponentDataObservable();
+            return this.getComponentDataObservable(); //reload model
         }).subscribe(this.handleResults, this.handleError);
     }
 }

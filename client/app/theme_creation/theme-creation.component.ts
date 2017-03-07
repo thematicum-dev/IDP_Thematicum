@@ -38,7 +38,7 @@ export class ThemeCreationComponent {
 
         this.themeService.createTheme(this.themeCreation.theme).subscribe(
             theme => {
-                let propertiesObservable = this.themeService.createUserThemeImput(theme._id, this.themeCreation.themeProperties);
+                let propertiesObservable = this.themeService.createUserThemeInput(theme._id, this.themeCreation.themeProperties);
                 let stockAllocationObservable = this.themeService.createManyStockCompositionsAndAllocations(theme._id, this.themeCreation.stockAllocation);
 
                 Observable.forkJoin([propertiesObservable, stockAllocationObservable]).subscribe(

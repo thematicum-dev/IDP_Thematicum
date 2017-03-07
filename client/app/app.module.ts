@@ -23,7 +23,7 @@ import {AutoCompleteStockAllocationComponent} from "./autocomplete/autocomplete-
 import {AuthGuard} from "./auth/auth-guard.service";
 import {ThemePropertiesComponent} from "./theme_details/theme-properties.component";
 import {Ng2Bs3ModalModule} from "ng2-bs3-modal/ng2-bs3-modal";
-import {ThemeCharacteristicsEditingComponent} from "./theme_creation/theme-characteristics-editing.component";
+import {ThemeCharacteristicsEditing} from "./theme_creation/theme-characteristics-editing.component";
 import {ModalComponent} from "./theme_details/modal.component";
 import {ThemeStockAllocationComponent} from "./stock_allocation/theme-stock-allocation.component";
 import {UserProfileComponent} from "./user_profile/user-profile.component";
@@ -43,7 +43,7 @@ import {UserProfileComponent} from "./user_profile/user-profile.component";
         AutoCompleteComponent,
         ThemeCreationComponent,
         ThemeDetailsComponent,
-        ThemeCharacteristicsEditingComponent,
+        ThemeCharacteristicsEditing,
         ThemePropertiesComponent,
         ThemeStockAllocationComponent,
         AutoCompleteTagsComponent,

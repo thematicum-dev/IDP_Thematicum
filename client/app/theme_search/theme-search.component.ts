@@ -1,7 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {NgForm} from "@angular/forms";
 import {Theme} from "../models/theme";
-import {AutoCompleteComponent} from "../autocomplete/autocomplete.component";
 import {Router, ActivatedRoute} from "@angular/router";
 import {ThemeService} from "../services/theme.service";
 
@@ -19,10 +18,10 @@ export class ThemeSearchComponent implements OnInit {
         //TODO: refactor - create separate classes to override the 2 cases implementation
         if(this.route.snapshot.queryParams['query']) {
             this.searchTerm = this.route.snapshot.queryParams['query'].trim();
-            this.searchThemes(this.searchTerm)
+            this.searchThemes(this.searchTerm);
         }
         if(this.route.snapshot.queryParams['all'] && this.route.snapshot.queryParams['all'] === 'true') {
-            this.searchThemes(null)
+            this.searchThemes(null);
         }
     }
 
@@ -41,21 +40,6 @@ export class ThemeSearchComponent implements OnInit {
     }
 
     searchThemes(searchTerm: any) {
-        //TODO: consider separate APIs for getting all themes vs. searching
-        this.themeService.searchThemes(searchTerm)
-            .subscribe(
-                data => {
-                    this.themes = [];
-                    for (var i = 0; i < data.length; i++) {
-                        this.themes.push(new Theme(
-                            data[i]._id,
-                            data[i].name,
-                            data[i].description));
-                    }
-                },
-                error => {
-                    console.log(error)
-                }
-            );
+        this.themeService.searchThemes(searchTerm).subscribe(data => this.themes = data, error => console.log(error));
     }
 }
