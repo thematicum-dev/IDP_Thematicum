@@ -12,6 +12,7 @@ export class ThemeCharacteristicsEditing implements OnChanges {
     @Input() themeTags: string[];
     @Output() themeEmitter: EventEmitter<Theme> = new EventEmitter<Theme>();
     themeCopy: Theme;
+    maxDescriptionLength: number = 500;
 
     constructor(private themeService: ThemeService) {}
 
@@ -34,5 +35,10 @@ export class ThemeCharacteristicsEditing implements OnChanges {
     notifyCancelEditing() {
         //theme properties are no longer editable
         this.themeEmitter.emit(this.themeCopy);
+    }
+
+    getDescriptionCharactersRemaining(): string {
+        const descriptionLength = this.theme.description ? this.theme.description.length : 0;
+        return `${this.maxDescriptionLength - descriptionLength} characters remaining`;
     }
 }

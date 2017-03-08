@@ -19,9 +19,6 @@ import {ThemeStockCompositionAllocationModel} from "../models/themeStockComposit
             border-width: 2px;
             border-color: black;
         }
-        .default-cursor {
-            cursor: default;
-        }
         button.no-decoration-element, label.no-decoration-element:hover, label.no-decoration-element:focus {
             background-color: white;
             text-decoration: none;

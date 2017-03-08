@@ -23,6 +23,7 @@ export class ThemeCreationComponent {
     timeHorizonValues = timeHorizonValues;
     maturityValues = maturityValues;
     categoryValues = categoryValues;
+    maxDescriptionLength: number = 500;
 
     constructor(private themeService: ThemeService, private router: Router) {}
 
@@ -47,5 +48,10 @@ export class ThemeCreationComponent {
 
     handleError = (error: any) => {
         console.log('Error: ' + error);
+    }
+
+    getDescriptionCharactersRemaining(): string {
+        const descriptionLength = this.theme.description ? this.theme.description.length : 0;
+        return `${this.maxDescriptionLength - descriptionLength} characters remaining`;
     }
 }

@@ -32,7 +32,7 @@
             <div class="col-xs-10">
                 <textarea
                         id="description"
-                        placeholder="Please enter a description (min 140 characters, maximum 500 characters)"
+                        placeholder="Please enter a description (min 4 characters, maximum 500 characters)"
                         class="form-control"
                         [(ngModel)]="theme.description"
                         name="description"
@@ -40,7 +40,8 @@
                         rows="7"
                         required
                         minlength="4"
-                        maxlength="500"></textarea>
+                        [maxlength]="maxDescriptionLength"></textarea>
+                <p>{{getDescriptionCharactersRemaining()}}</p>
                 <div *ngIf="description.dirty && !description.valid" class="data-validation-message">
                     Description is required and between 4 to 500 characters
                 </div>

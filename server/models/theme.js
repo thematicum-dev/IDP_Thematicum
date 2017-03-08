@@ -28,6 +28,6 @@ const schema = new Schema({
         type: Schema.Types.ObjectId, ref: 'User'
     }}, { timestamps: true }) ;
 
-schema.index({ name: 'text' });
+schema.index({ name: 'text', description: 'text', tags: 'text' });
 schema.plugin(mongooseUniqueValidator, { message: 'The {PATH} \'{VALUE}\' already exists' });
 export default mongoose.model('Theme', schema);

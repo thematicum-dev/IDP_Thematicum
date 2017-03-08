@@ -12,11 +12,7 @@ import {Observable} from "rxjs";
     selector: 'app-theme-properties',
     templateUrl: 'theme-properties.component.html',
     styles: [
-        `
-        .default-cursor {
-            cursor: default;
-        }
-        button.no-decoration-element, label.no-decoration-element:hover, label.no-decoration-element:focus {
+        `button.no-decoration-element, label.no-decoration-element:hover, label.no-decoration-element:focus {
             background-color: white;
             text-decoration: none;
             outline:none;
@@ -48,9 +44,7 @@ import {Observable} from "rxjs";
         .open>.dropdown-toggle {
             background: white;
             box-shadow: none;
-        }
-        `
-    ]
+        }`]
 })
 export class ThemePropertiesComponent implements OnInit {
     @Input() themeId: string;
