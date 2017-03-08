@@ -80,7 +80,6 @@ export class AuthService {
 
     redirectToUrlAfterLogin() {
         if (this.redirectUrl) {
-            console.log('Redirect to ', this.redirectUrl)
             this.router.navigate([this.redirectUrl]);
         } else {
             this.router.navigate(['/home']);

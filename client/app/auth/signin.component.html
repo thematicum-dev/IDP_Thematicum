@@ -9,8 +9,8 @@
                 <input
                         type="email"
                         id="email"
-                        class="form-control col-xs-10"
-                        [ngModel]="user?.email"
+                        class="form-control"
+                        [(ngModel)]="user.email"
                         name="email"
                         #email="ngModel"
                         required
@@ -25,8 +25,8 @@
                 <input
                         type="password"
                         id="password"
-                        class="form-control col-xs-10"
-                        [ngModel]="user?.password"
+                        class="form-control"
+                        [(ngModel)]="user.password"
                         name="password"
                         #password="ngModel"
                         required>

@@ -11,7 +11,8 @@ import {SignupModel} from "./signup-model";
     styleUrls: [`.well { padding-top: 0px}`]
 })
 export class SignupComponent {
-    //TODO: fetch personal roles from backend
+    user: User = new User();
+    registrationAccessCode: string;
     personalRoles = [
         'Financial professional (buy side)',
         'Financial professional (sell side)',
@@ -20,34 +21,13 @@ export class SignupComponent {
         'Other'
     ];
 
-    user: User = new User();
-    selectedPersonalRole = this.personalRoles[0]; //default value
-    registrationAccessCode: String = "";
-
-    constructor(private authService: AuthService, private router: Router) {}
+    constructor(private authService: AuthService, private router: Router) {
+        this.user.personalRole = this.personalRoles[0]; //default value
+    }
 
     onSubmit(form: NgForm) {
-        //or selectedPersonalRole as last argument
-        const user = new User(form.value.email, form.value.password, form.value.name, form.value.personalRole);
-        const signupModel = new SignupModel(user, form.value.accessCode);
+        const signupModel = new SignupModel(this.user, this.registrationAccessCode);
 
-        this.resetForm(form);
-
-        this.authService.signup(signupModel)
-            .subscribe(
-                data => {
-                    console.log(data);
-                    this.router.navigateByUrl('/signin');
-                },
-                error =>  {
-                    console.log(error)
-                }
-            );
+        this.authService.signup(signupModel).subscribe(data => this.router.navigateByUrl('/signin'), error => form.reset());
     }
-
-    resetForm(form: NgForm) {
-        form.reset();
-        this.selectedPersonalRole = this.personalRoles[0];
-    }
-
 }

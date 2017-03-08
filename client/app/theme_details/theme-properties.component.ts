@@ -1,6 +1,6 @@
 import {Component, OnInit, EventEmitter} from '@angular/core';
 import {ThemeService} from "../services/theme.service";
-import {ThemeProperties} from "../models/themeProperties";
+import {ThemePropertiesEditModel} from "../models/themePropertiesEditModel";
 import {ModalComponent} from "./modal.component";
 import {ViewChild} from "@angular/core/src/metadata/di";
 import {NgForm} from "@angular/forms";
@@ -56,7 +56,7 @@ export class ThemePropertiesComponent implements OnInit {
     @Input() themeId: string;
     themePropertiesData: any; //to hold data received from the service
     isEditMode: boolean = false; //to indicate display/edit mode
-    themeProperties: ThemeProperties = new ThemeProperties(); //for user editing data
+    themeProperties: ThemePropertiesEditModel = new ThemePropertiesEditModel(); //for user editing data
 
     //property values needed for display
     timeHorizonValues = timeHorizonValues;

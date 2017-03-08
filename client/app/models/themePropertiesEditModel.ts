@@ -1,6 +1,6 @@
 import {categoryValues} from "../models/themePropertyValues";
 
-export class ThemeProperties {
+export class ThemePropertiesEditModel {
     categoryValues = categoryValues;
 
     public timeHorizon: number = null;

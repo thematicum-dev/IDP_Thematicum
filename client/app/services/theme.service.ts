@@ -3,8 +3,7 @@ import {Injectable} from "@angular/core";
 import {Http, Headers, Response} from "@angular/http";
 import 'rxjs/Rx';
 import {Observable} from "rxjs";
-import {ThemeCreationModel} from "../models/themeCreationModel";
-import {ThemeProperties} from "../models/themeProperties";
+import {ThemePropertiesEditModel} from "../models/themePropertiesEditModel";
 import {Theme} from "../models/theme";
 import {StockAllocationModel} from "../models/stockAllocationModel";
 import {ErrorService} from "../error-handling/error.service";
@@ -49,7 +48,7 @@ export class ThemeService {
             });
     }
 
-    createUserThemeInput(themeId: any, themeProperties: ThemeProperties) {
+    createUserThemeInput(themeId: any, themeProperties: ThemePropertiesEditModel) {
         const body = JSON.stringify(themeProperties);
         let apiPath = this.baseAPI + 'themeproperties/theme/' + themeId + this.setTokenQueryParam();
 
@@ -61,7 +60,7 @@ export class ThemeService {
             });
     }
 
-    updateUserThemeInput(userThemeInputId: any, themeProperties: ThemeProperties) {
+    updateUserThemeInput(userThemeInputId: any, themeProperties: ThemePropertiesEditModel) {
         const body = JSON.stringify(themeProperties);
         let apiPath = this.baseAPI + 'themeproperties/' + userThemeInputId + this.setTokenQueryParam();
 

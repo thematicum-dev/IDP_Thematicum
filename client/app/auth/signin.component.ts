@@ -2,7 +2,6 @@ import { Component } from '@angular/core';
 import {User} from "../models/user";
 import {NgForm} from "@angular/forms";
 import {AuthService} from "./auth.service";
-import {Router} from "@angular/router";
 
 @Component({
     selector: 'app-signin',
@@ -10,28 +9,15 @@ import {Router} from "@angular/router";
     styleUrls: [`.well { padding-top: 0px}`]
 })
 export class SigninComponent {
-    user: User;
-    constructor(private authService: AuthService, private router: Router) {}
+    user: User = new User();
+    constructor(private authService: AuthService) {}
 
     onSubmit(form: NgForm) {
-        const user = new User(form.value.email, form.value.password);
-
-        //reset form
-        this.resetForm(form);
-
-        this.authService.signin(user)
-            .subscribe(
-                data => {
-                    //store the token in the local storage
-                    localStorage.setItem('token', data.token);
-                    localStorage.setItem('username', data.username);
-                    //this.router.navigateByUrl('/');
-                },
-                error => {console.log(error)}
-            );
-    }
-
-    resetForm(form: NgForm) {
-        form.reset();
+        this.authService.signin(this.user).subscribe(data => {
+            //store auth data in local storage
+            localStorage.setItem('token', data.token);
+            localStorage.setItem('username', data.username);
+        },
+        error => form.reset());
     }
 }
