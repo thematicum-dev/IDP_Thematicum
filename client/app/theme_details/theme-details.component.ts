@@ -10,19 +10,19 @@ import {ViewChild} from "@angular/core/src/metadata/di";
     selector: 'app-theme-details',
     templateUrl: 'theme-details.component.html',
     styles: [`
-        h3 {
-                margin-top: 0;
-            }
-            .well button.btn-default {
-                background-color: #f5f5f5;
-                text-decoration: none;
-                outline:none;
-                border: none;
-                box-shadow: none;
-            },
-            .modal {
-              background: rgba(0,0,0,0.6);
-            }
+        h1 {
+            margin-top: 0;
+        }
+        .well button.btn-default {
+            background-color: #f5f5f5;
+            text-decoration: none;
+            outline:none;
+            border: none;
+            box-shadow: none;
+        }
+        .modal {
+          background: rgba(0,0,0,0.6);
+        }
         `]
 })
 export class ThemeDetailsComponent implements OnInit, OnChanges {

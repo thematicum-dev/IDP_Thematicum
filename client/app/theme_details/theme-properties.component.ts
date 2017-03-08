@@ -57,8 +57,8 @@ export class ThemePropertiesComponent implements OnInit {
     maturityValues = maturityValues;
     categoryValues = categoryValues;
 
-    readonly WHITE_COLOR = '#ffffff';
-    readonly YELLOW_USER_THEME_INPUT = '#fcf8e3';
+    readonly BLUE_THEME_PROPERTY_COLOR = {r: 41, g: 128, b: 185};
+    readonly BORDER_THEME_PROPERTY = 'solid 2px #34495e';
 
     @ViewChild(ModalComponent)
     public modal: ModalComponent;
@@ -104,24 +104,24 @@ export class ThemePropertiesComponent implements OnInit {
         }
     }
 
-    setPropertyBackgroundColor(propertyName, index) {
+    setDataToggleAttribute() {
+        return this.isEditMode ? 'buttons' : '';
+    }
+
+    setBackgroundColor(percentage: number) {
         if (this.isEditMode) {
             return;
         }
 
-        if (!this.isEditMode && !this.themePropertiesData.userInputs) {
-            return this.WHITE_COLOR;
-        }
-
-        if (propertyName == "categories") {
-            return this.themePropertiesData.userInputs[propertyName].indexOf(index) < 0 ? this.WHITE_COLOR : this.YELLOW_USER_THEME_INPUT;
-        } else {
-            return this.themePropertiesData.userInputs[propertyName] != index ? this.WHITE_COLOR : this.YELLOW_USER_THEME_INPUT;
-        }
+        return `rgba(${this.BLUE_THEME_PROPERTY_COLOR.r}, ${this.BLUE_THEME_PROPERTY_COLOR.g}, ${this.BLUE_THEME_PROPERTY_COLOR.b}, ${percentage/100})`;
     }
 
-    setDataToggleAttribute() {
-        return this.isEditMode ? 'buttons' : '';
+    setBorder(propertyName: string, value: number) {
+        if (propertyName !== 'categories') {
+            return this.themePropertiesData.userInputs[propertyName] == value ? this.BORDER_THEME_PROPERTY : '';
+        } else {
+            return this.themePropertiesData.userInputs[propertyName].indexOf(value) >= 0 ? this.BORDER_THEME_PROPERTY : '';
+        }
     }
 
     clearUserInputs() {

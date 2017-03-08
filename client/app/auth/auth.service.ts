@@ -5,7 +5,7 @@ import 'rxjs/Rx';
 import {Observable} from "rxjs";
 import {SignupModel} from "./signup-model";
 import {Router} from "@angular/router";
-import {ErrorService} from "../error-handling/error.service";
+import {ErrorService} from "../error_handling/error.service";
 import * as Settings from '../utilities/settings';
 
 @Injectable()

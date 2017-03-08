@@ -1,7 +1,7 @@
 import {Http, Response} from "@angular/http";
 import {Injectable} from "@angular/core";
 import {Observable} from "rxjs";
-import {ErrorService} from "../error-handling/error.service";
+import {ErrorService} from "../error_handling/error.service";
 
 @Injectable()
 export class AutocompleteDatasourceService {

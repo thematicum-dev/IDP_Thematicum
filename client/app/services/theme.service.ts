@@ -6,7 +6,7 @@ import {Observable} from "rxjs";
 import {ThemePropertiesEditModel} from "../models/themePropertiesEditModel";
 import {Theme} from "../models/theme";
 import {StockAllocationModel} from "../models/stockAllocationModel";
-import {ErrorService} from "../error-handling/error.service";
+import {ErrorService} from "../error_handling/error.service";
 import * as Settings from '../utilities/settings';
 
 @Injectable()

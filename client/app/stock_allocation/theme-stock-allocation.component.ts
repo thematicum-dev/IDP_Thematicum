@@ -59,6 +59,16 @@ export class ThemeStockAllocationComponent implements OnInit {
     @ViewChild(ModalComponent)
     public modal: ModalComponent;
 
+    //colors listed from strongly-positive to strongly-negative exposures
+    readonly exposureBackgroundColors = [
+        {name: 'STRONGLY_POSITIVE_EXPOSURE_COLOR', r:39, g:174, b:96},
+        {name: 'WEAKLY_POSTIVE_EXPOSURE_COLOR', r: 26, g:188, b:156},
+        {name: 'NETURAL_EXPOSURE_COLOR', r:41, g:128, b:185},
+        {name: 'WEAKLY_NEGATIVE_EXPOSURE_COLOR', r:155, g:89, b:182},
+        {name: 'STRONGLY_NEGATIVE_EXPOSURE_COLOR', r:192, g:57, b:43}];
+
+    readonly BORDER_EXPOSURE = 'solid 2px #34495e';
+
     constructor(private themeService: ThemeService) {}
 
     ngOnInit(): void {
@@ -66,9 +76,13 @@ export class ThemeStockAllocationComponent implements OnInit {
             .subscribe(this.handleResults, this.handleError);
     }
 
-    setExposureBackgroundColor(index: number) {
-        let exposureBackgroundColors = ['#52BE80', '#ABEBC6', '#FFFFFF', '#F2D7D5', '#D98880']
-        return exposureBackgroundColors[index];
+    setExposureBackgroundColor(exposureIndex: number, percentage: number) {
+        const backgroundColor = this.exposureBackgroundColors[exposureIndex];
+        return `rgba(${backgroundColor.r}, ${backgroundColor.g}, ${backgroundColor.b}, ${percentage/100})`;
+    }
+
+    setBorder(allocationModel: ThemeStockCompositionAllocationModel, exposureIndex: number) {
+        return allocationModel.userStockAllocation && allocationModel.userStockAllocation.exposure == exposureIndex ? this.BORDER_EXPOSURE : '';
     }
 
     toggleStockAllocationEditable(allocationModel: ThemeStockCompositionAllocationModel) {
