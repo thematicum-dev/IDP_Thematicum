@@ -12,7 +12,7 @@ import * as Settings from '../utilities/settings';
 export class AutoCompleteTagsComponent extends AutoCompleteContainerComponent implements OnChanges {
     @Input() themeTags: any[];
 
-    constructor(protected dataSource: AutocompleteDatasourceService) {
+    constructor(public dataSource: AutocompleteDatasourceService) {
         super(dataSource,
             Settings.getBaseApi() + 'themes/tags' + '?token=' + localStorage.getItem('token'),
             'Keyword',

@@ -9,7 +9,7 @@ import {Component} from '@angular/core';
 })
 export class ModalComponent {
     private visible = false;
-    private visibleAnimate = false;
+    public visibleAnimate = false;
     private data: any; //a variable to allow the modal to carry context data
 
     setData(contextData: any) {

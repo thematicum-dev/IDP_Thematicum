@@ -10,12 +10,12 @@ export class AutoCompleteContainerComponent implements AutocompleteItemSelection
     duplicateChosenErrorStr: string = 'This item has already been selected. Please choose another one';
 
     constructor(
-        protected dataSource: AutocompleteDatasourceService,
-        protected dataSourceAPI: string,
-        protected autocompletePlaceholder: string,
-        protected allowCustomValues: boolean,
-        protected allowEnterKey: boolean,
-        protected allowDirectClick: boolean
+        public dataSource: AutocompleteDatasourceService,
+        public dataSourceAPI: string,
+        public autocompletePlaceholder: string,
+        public allowCustomValues: boolean,
+        public allowEnterKey: boolean,
+        public allowDirectClick: boolean
     ) {}
 
     ngOnInit(): void {

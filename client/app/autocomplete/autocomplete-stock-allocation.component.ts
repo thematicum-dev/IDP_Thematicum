@@ -33,7 +33,7 @@ export class AutoCompleteStockAllocationComponent extends AutoCompleteContainerC
     stockExposures = ['Strong Positive', 'Weak Positive', 'Neutral', 'Weak Negative', 'Strong Negative'];
     currentlySelectedStock: StockModel;
 
-    constructor(protected dataSource: AutocompleteDatasourceService) {
+    constructor(public dataSource: AutocompleteDatasourceService) {
         super(dataSource,
             Settings.getBaseApi() + 'stocks' + '?token=' + localStorage.getItem('token'),
             'Search by company name',

@@ -57,8 +57,8 @@ export class ThemePropertiesComponent implements OnInit {
     maturityValues = maturityValues;
     categoryValues = categoryValues;
 
-    WHITE_COLOR = '#ffffff';
-    YELLOW_USER_THEME_INPUT = '#fcf8e3';
+    readonly WHITE_COLOR = '#ffffff';
+    readonly YELLOW_USER_THEME_INPUT = '#fcf8e3';
 
     @ViewChild(ModalComponent)
     public readonly modal: ModalComponent;
