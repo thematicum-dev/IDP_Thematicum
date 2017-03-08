@@ -19,6 +19,7 @@ export class AutoCompleteContainerComponent implements AutocompleteItemSelection
     ) {}
 
     ngOnInit(): void {
+        console.log('ngOnInit at AutoCompleteContainerComponent');
         this.dataSource.getAutocompleteList(this.dataSourceAPI).subscribe(data => {
             this.initializeAutocompleteData(data);
             this.preFilter();
