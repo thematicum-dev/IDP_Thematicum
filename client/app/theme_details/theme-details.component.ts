@@ -32,7 +32,7 @@ export class ThemeDetailsComponent implements OnInit, OnChanges {
     isEditMode = false; //to show/hide theme-editing form
 
     @ViewChild(ModalComponent)
-    public readonly modal: ModalComponent;
+    public modal: ModalComponent;
 
     constructor(private route: ActivatedRoute, private router: Router, private themeService: ThemeService) { }
 

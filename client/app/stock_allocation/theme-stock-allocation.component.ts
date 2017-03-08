@@ -57,7 +57,7 @@ export class ThemeStockAllocationComponent implements OnInit {
     stockAllocationData: ThemeStockCompositionAllocationModel[] = []; //to hold data received from the service
 
     @ViewChild(ModalComponent)
-    public readonly modal: ModalComponent;
+    public modal: ModalComponent;
 
     constructor(private themeService: ThemeService) {}
 

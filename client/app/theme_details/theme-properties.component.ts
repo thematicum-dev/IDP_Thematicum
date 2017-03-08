@@ -61,7 +61,7 @@ export class ThemePropertiesComponent implements OnInit {
     readonly YELLOW_USER_THEME_INPUT = '#fcf8e3';
 
     @ViewChild(ModalComponent)
-    public readonly modal: ModalComponent;
+    public modal: ModalComponent;
 
     constructor(private themeService: ThemeService) { }
 
