@@ -1,7 +1,4 @@
-import {
-    Component, ElementRef, OnInit, EventEmitter, OnChanges, SimpleChanges, SimpleChange,
-    DoCheck
-} from '@angular/core';
+import {Component, ElementRef, EventEmitter, OnChanges, SimpleChanges} from '@angular/core';
 import {AutocompleteList} from "./autocomplete-list";
 import {Input, Output} from "@angular/core/src/metadata/directives";
 import {AutocompleteItem} from "./autocomplete-item";
@@ -27,9 +24,9 @@ export class AutoCompleteComponent implements OnChanges {
     @Input() allowEnterKey: boolean;
     @Input() dataSource: AutocompleteItem[];
     @Input() placeholderTerm: string;
-    @Output() notifySelectedItem: EventEmitter<any> = new EventEmitter<any>();
+    @Output() notifySelectedItem: EventEmitter<AutocompleteItem> = new EventEmitter<AutocompleteItem>();
     @Output() clearErrorStr: EventEmitter<any> = new EventEmitter<any>();
-    @Output() notifyError: EventEmitter<any> = new EventEmitter<any>();
+    @Output() notifyError: EventEmitter<string> = new EventEmitter<string>();
     @Input() allowDirectClick: boolean;
     @Input() queryRequired: boolean;
     @Input() queryMinLength: number;
@@ -39,7 +36,7 @@ export class AutoCompleteComponent implements OnChanges {
     constructor(private elementRef: ElementRef) {}
 
     ngOnChanges(changes: SimpleChanges): void {
-        var autocompleteItemsChange: AutocompleteItem[] = changes['dataSource'].currentValue;
+        let autocompleteItemsChange: AutocompleteItem[] = changes['dataSource'].currentValue;
         if (autocompleteItemsChange) {
             this.autocompleteList.list = this.dataSource;
         }
@@ -50,9 +47,8 @@ export class AutoCompleteComponent implements OnChanges {
         this.autocompleteList.filterList();
     }
 
-    /** input keyup event handler */
+    /** input key-press event handler */
     filter(event: any, queryModel: NgModel) {
-        console.log('filter')
         //set 'selected' to false for all items in the filteredList
         this.clearCurrentlySelectedItem();
         this.autocompleteList.deselectAll();
@@ -72,7 +68,7 @@ export class AutoCompleteComponent implements OnChanges {
                 this.filterQuery();
         }
 
-        // Handle scroll position of item (Not convinced)
+        //TODO: handle scroll position of item
         // let listGroup = document.getElementById('list-group');
         // let listItem = document.getElementById('true');
         // if (listItem) {
@@ -91,7 +87,6 @@ export class AutoCompleteComponent implements OnChanges {
         if (this.position + 1 != this.autocompleteList.filteredList.length)
             this.position++;
         this.autocompleteList.selectItem(this.position);
-
     }
 
     handleKeyEnter(isQueryModelValid: boolean) {
@@ -111,15 +106,15 @@ export class AutoCompleteComponent implements OnChanges {
             this.autocompleteList.selectItem(this.position);
             this.addSelectedItem(itemToAdd);
         } else if (this.allowUserEnteredValues) {
-            this.addSelectedItem({name: this.autocompleteList.query});
+            this.addSelectedItem(new AutocompleteItem(this.autocompleteList.query));
         }
     }
 
-    getValidationErrorMsg() {
-        return !this.queryRequired ? '' : 'Query is required (' + this.queryMinLength + ' - ' + this.queryMaxLength + ' characters)';
+    getValidationErrorMsg(): string {
+        return !this.queryRequired ? '' : `Query is required (${this.queryMinLength} - ${this.queryMaxLength} characters)`;
     }
 
-    addSelectedItem(item: any) {
+    addSelectedItem(item: AutocompleteItem) {
         this.notifySelectedItem.emit(item);
 
         if (!this.allowDirectClick) {
@@ -127,7 +122,7 @@ export class AutoCompleteComponent implements OnChanges {
             this.autocompleteList.query = this.currentlySelectedItem.name;
         }
 
-        this.cleanup(!this.allowDirectClick)
+        this.cleanup(!this.allowDirectClick);
     }
 
     handleKeyDown(event: any) {

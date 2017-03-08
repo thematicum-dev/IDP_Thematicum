@@ -14,10 +14,9 @@ export class AutoCompleteTagsComponent extends AutoCompleteContainerComponent im
 
     constructor(protected dataSource: AutocompleteDatasourceService) {
         super(dataSource,
-              Settings.getBaseApi() + 'themes/tags' + '?token=' + localStorage.getItem('token'),
-                'Keyword',
-                true, true, true
-        );
+            Settings.getBaseApi() + 'themes/tags' + '?token=' + localStorage.getItem('token'),
+            'Keyword',
+            true, true, true);
     }
 
     ngOnChanges(changes: SimpleChanges): void {
@@ -42,8 +41,6 @@ export class AutoCompleteTagsComponent extends AutoCompleteContainerComponent im
     }
 
     initializeAutocompleteData(data: any) {
-        for (let tag of data) {
-            this.itemList.push(new AutocompleteItem(tag));
-        }
+        this.itemList = data.map(tag => new AutocompleteItem(tag));
     }
 }

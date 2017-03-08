@@ -55,5 +55,4 @@ import {UserProfileComponent} from "./user_profile/user-profile.component";
     bootstrap: [AppComponent]
 })
 export class AppModule {
-
 }

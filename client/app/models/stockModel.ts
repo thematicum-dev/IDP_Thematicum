@@ -1,5 +1,5 @@
 import {AutocompleteItem} from "../autocomplete/autocomplete-item";
-export class Stock extends AutocompleteItem {
+export class StockModel extends AutocompleteItem {
     constructor(
         public name: string,
         public alias: string,

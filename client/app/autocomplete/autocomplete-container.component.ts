@@ -2,13 +2,12 @@ import {AutocompleteItem} from "./autocomplete-item";
 import {AutocompleteItemSelectionInterface} from "./autocomplete-item-selection-interface";
 import {OnInit} from "@angular/core";
 import {AutocompleteDatasourceService} from "./autocomplete-datasource.service";
-import {Input} from "@angular/core/src/metadata/directives";
 
 export class AutoCompleteContainerComponent implements AutocompleteItemSelectionInterface, OnInit {
     error: string = '';
     itemList: AutocompleteItem[] = []; //data source (all items)
     selectedItems: any[] = [];
-    duplicateChosenErrorStr = 'This item has already been selected. Please choose another one';
+    duplicateChosenErrorStr: string = 'This item has already been selected. Please choose another one';
 
     constructor(
         protected dataSource: AutocompleteDatasourceService,

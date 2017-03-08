@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import {User} from "../models/user";
+import {UserModel} from "../models/userModel";
 import {NgForm} from "@angular/forms";
 import {AuthService} from "./auth.service";
 import {Router} from "@angular/router";
@@ -11,7 +11,7 @@ import {SignupModel} from "./signup-model";
     styleUrls: [`.well { padding-top: 0px}`]
 })
 export class SignupComponent {
-    user: User = new User();
+    user: UserModel = new UserModel();
     registrationAccessCode: string;
     personalRoles = [
         'Financial professional (buy side)',

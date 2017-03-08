@@ -3,12 +3,13 @@ import {AutocompleteItem} from "./autocomplete-item";
 export class AutocompleteList {
     filteredList: AutocompleteItem[] = [];
     query: string = '';
-    list: AutocompleteItem[]
+    list: AutocompleteItem[];
 
     filterList() {
+        //filter list by elements containing the query
         this.filteredList =  this.query !== '' ?
-            this.list.filter((el: any) => {
-                return el.name.toLowerCase().indexOf(this.query.toLowerCase()) > -1;
+            this.list.filter((element: AutocompleteItem) => {
+                return element.name.toLowerCase().indexOf(this.query.toLowerCase()) > -1;
             }) :
             [];
 

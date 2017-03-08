@@ -1,6 +1,6 @@
 import {Component} from '@angular/core';
 import {AutoCompleteContainerComponent} from "./autocomplete-container.component";
-import {Stock} from "../models/stock";
+import {StockModel} from "../models/stockModel";
 import {AutocompleteDatasourceService} from "./autocomplete-datasource.service";
 import {Input} from "@angular/core/src/metadata/directives";
 import {AutocompleteItem} from "./autocomplete-item";
@@ -31,29 +31,24 @@ import {StockAllocationModel} from "../models/stockAllocationModel";
 export class AutoCompleteStockAllocationComponent extends AutoCompleteContainerComponent {
     @Input() preFilterStockIds: string[];
     stockExposures = ['Strong Positive', 'Weak Positive', 'Neutral', 'Weak Negative', 'Strong Negative'];
-    currentlySelectedStock: Stock;
+    currentlySelectedStock: StockModel;
 
     constructor(protected dataSource: AutocompleteDatasourceService) {
         super(dataSource,
             Settings.getBaseApi() + 'stocks' + '?token=' + localStorage.getItem('token'),
             'Search by company name',
-            false, false, false
-        );
+            false, false, false);
     }
 
-    initializeAutocompleteData(data: any) {
-        for (let item of data) {
-            var stock = new Stock(
-                item.companyName,
-                item.ticker,
-                item._id,
-                item.businessDescription,
-                item.country,
-                item.website,
-                item.exchange,
-                item.reportingCurrency);
-            this.itemList.push(stock);
-        }
+    initializeAutocompleteData(data: any[]) {
+        this.itemList = data.map(item => new StockModel(item.companyName,
+                                item.ticker,
+                                item._id,
+                                item.businessDescription,
+                                item.country,
+                                item.website,
+                                item.exchange,
+                                item.reportingCurrency));
     }
 
     preFilter() {
@@ -65,11 +60,12 @@ export class AutoCompleteStockAllocationComponent extends AutoCompleteContainerC
     }
 
     selectItem(item: any) {
-        //TODO: can refactor this
+        //TODO: refactor
         /*
             on selecting item: remove that item from the list of suggested stocks
             on removing item: add that item back to the list
          */
+
         //search by name (assume unique name)
         let existingItem = this.selectedItems.find((el: StockAllocationModel) => {
             return el.stockName == item.name
@@ -88,7 +84,6 @@ export class AutoCompleteStockAllocationComponent extends AutoCompleteContainerC
         if (this.currentlySelectedStock) {
             this.selectedItems.push(new StockAllocationModel(this.currentlySelectedStock._id, index, this.currentlySelectedStock.name));
             this.currentlySelectedStock = null;
-            //TODO: refactor this call to child component
             stocksAutocomplete.clearCurrentlySelectedItem();
         }
     }

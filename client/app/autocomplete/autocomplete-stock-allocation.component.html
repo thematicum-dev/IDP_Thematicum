@@ -1,10 +1,6 @@
-<div class="form-group row">
+<div class="form-group row" style="margin:0">
     <label class="col-xs-2 col-form-label">Stock Name</label>
 
-    <div class="col-xs-10">
-        <p *ngIf="error" style="color:red">{{error}}</p>
-
-        <div class="input-group">
             <app-autocomplete [placeholderTerm]="autocompletePlaceholder"
                               [allowCustomValues]="allowCustomValues"
                               [allowEnterKey]="allowEnterKey"
@@ -12,11 +8,13 @@
                               [dataSource]="itemList"
                               (notifySelectedItem)='selectItem($event)'
                               (clearErrorStr)="clearErrorStr()"
-                              #stocksAutocomplete>
+                              #stocksAutocomplete
+                              class="col-xs-8"
+                              style="padding:0">
             </app-autocomplete>
 
-            <span class="input-group-btn">
-                <div class="btn-group">
+            <span class="input-group-btn col-xs-2" style="padding:0">
+                <div class="btn-group" style="padding:0">
                     <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         Select Exposure<span class="caret"></span>
                     </button>
@@ -25,14 +23,15 @@
                     </ul>
                 </div>
             </span>
-        </div>
-    </div>
-</div>
 
-<div class="form-group row" *ngIf="selectedItems && selectedItems.length > 0">
+</div>
+<p *ngIf="error" class="col-xs-offset-2" style="color:red">{{error}}</p>
+
+<br>
+
+<div class="form-group row" *ngIf="selectedItems && selectedItems.length > 0" style="margin:0">
     <label class="col-xs-2 col-form-label">Allocated Stocks</label>
-    <div class="col-xs-6">
-        <!--<label *ngIf="allocatedStocks && allocatedStocks.length > 0">Allocated Stocks</label>-->
+    <div class="col-xs-6" style="padding:0">
         <div class="panel panel-default">
             <table class="table">
                 <tbody>
@@ -40,11 +39,8 @@
                     <td scope="row"><label>{{stockAllocation.stockName | lowercase}}</label></td>
 
                     <td>
-                        <select
-                                class="form-control"
-                                id=""
+                        <select class="form-control"
                                 [(ngModel)]="stockAllocation.exposure"
-                                name=""
                                 required>
                             <option *ngFor="let exposure of stockExposures; let i = index" [ngValue]="i">{{ exposure }}</option>
                         </select>
@@ -58,5 +54,3 @@
         </div>
     </div>
 </div>
-
-{{selectedItems | json}}

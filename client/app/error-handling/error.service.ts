@@ -2,7 +2,6 @@ import {EventEmitter, Injectable} from "@angular/core";
 import {Error} from './error';
 import {Router} from "@angular/router";
 import {Response} from "@angular/http";
-import {Observable} from "rxjs";
 
 @Injectable()
 export class ErrorService {
@@ -12,7 +11,7 @@ export class ErrorService {
 
     public handleError (error: Response | any) {
         let errorJson = error.json();
-        var errMsg = errorJson.message ? errorJson.message : 'An error occurred';
+        let errMsg = errorJson.message ? errorJson.message : 'An error occurred';
 
         console.log('errJson: ', errorJson);
         if (error.status == 401) {
@@ -27,9 +26,8 @@ export class ErrorService {
         }
     }
 
-
     getValidationError(errors: any): Error {
-        var validationErrorMessages = [];
+        let validationErrorMessages = [];
         Object.entries(errors).forEach(
             ([key, value]) => {
                 validationErrorMessages.push(value.message)
@@ -38,5 +36,4 @@ export class ErrorService {
 
         return new Error(validationErrorMessages);
     }
-
 }

@@ -13,7 +13,7 @@ export class AutocompleteDatasourceService {
             })
             .catch((error: Response) =>  {
                 this.errorService.handleError(error);
-                return Observable.throw(error.json())
+                return Observable.throw(error.json());
             });
     }
 }

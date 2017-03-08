@@ -1,5 +1,5 @@
 import {Theme} from "./theme";
-import {Stock} from "./stock";
+import {StockModel} from "./stockModel";
 export class ThemeStockCompositionModel {
-    constructor(public _id: string, public theme: Theme, public stock: Stock) {}
+    constructor(public _id: string, public theme: Theme, public stock: StockModel) {}
 }

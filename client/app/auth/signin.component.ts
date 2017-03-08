@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import {User} from "../models/user";
+import {UserModel} from "../models/userModel";
 import {NgForm} from "@angular/forms";
 import {AuthService} from "./auth.service";
 
@@ -9,7 +9,7 @@ import {AuthService} from "./auth.service";
     styleUrls: [`.well { padding-top: 0px}`]
 })
 export class SigninComponent {
-    user: User = new User();
+    user: UserModel = new UserModel();
     constructor(private authService: AuthService) {}
 
     onSubmit(form: NgForm) {

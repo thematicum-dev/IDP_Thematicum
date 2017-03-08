@@ -1,4 +1,4 @@
-import {User} from "../models/user";
+import {UserModel} from "../models/userModel";
 import {Injectable} from "@angular/core";
 import {Http, Headers, Response} from "@angular/http";
 import 'rxjs/Rx';
@@ -31,7 +31,7 @@ export class AuthService {
             });
     }
 
-    signin(user: User) {
+    signin(user: UserModel) {
         const body = JSON.stringify(user);
 
         let apiPath = this.baseAPI + 'auth/signin';
