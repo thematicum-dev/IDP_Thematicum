@@ -1,11 +1,11 @@
 import {Component} from '@angular/core';
 import {AutoCompleteContainerComponent} from "./autocomplete-container.component";
 import {Stock} from "../models/stock";
-import {StockAllocation} from "../models/stockAllocation";
 import {AutocompleteDatasourceService} from "./autocomplete-datasource.service";
 import {Input} from "@angular/core/src/metadata/directives";
 import {AutocompleteItem} from "./autocomplete-item";
 import * as Settings from '../utilities/settings';
+import {StockAllocationModel} from "../models/stockAllocationModel";
 
 @Component({
     selector: 'app-autocomplete-stock-allocation',
@@ -61,7 +61,7 @@ export class AutoCompleteStockAllocationComponent extends AutoCompleteContainerC
             return;
         }
         //filter stocks already allocated to theme from being displayed in the autocomplete
-        this.itemList = this.itemList.filter((item: AutocompleteItem) => this.preFilterStockIds.indexOf(item.id) < 0);
+        this.itemList = this.itemList.filter((item: AutocompleteItem) => this.preFilterStockIds.indexOf(item._id) < 0);
     }
 
     selectItem(item: any) {
@@ -71,8 +71,8 @@ export class AutoCompleteStockAllocationComponent extends AutoCompleteContainerC
             on removing item: add that item back to the list
          */
         //search by name (assume unique name)
-        let existingItem = this.selectedItems.find((el: StockAllocation) => {
-            return el.stock.name == item.name
+        let existingItem = this.selectedItems.find((el: StockAllocationModel) => {
+            return el.stockName == item.name
         });
 
         //do not add an item if it was already selected
@@ -86,8 +86,7 @@ export class AutoCompleteStockAllocationComponent extends AutoCompleteContainerC
     onSelectExposure(index: number, stocksAutocomplete: any) {
         //add allocated stock
         if (this.currentlySelectedStock) {
-            //TODO: can add a StockAllocationModel instead, or another object, having fewer properties
-            this.selectedItems.push(new StockAllocation(this.currentlySelectedStock, index));
+            this.selectedItems.push(new StockAllocationModel(this.currentlySelectedStock._id, index, this.currentlySelectedStock.name));
             this.currentlySelectedStock = null;
             //TODO: refactor this call to child component
             stocksAutocomplete.clearCurrentlySelectedItem();

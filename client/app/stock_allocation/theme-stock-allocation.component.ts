@@ -115,10 +115,9 @@ export class ThemeStockAllocationComponent implements OnInit {
             .subscribe(this.handleResults, this.handleError);
     }
 
-    createStockCompositionAndAllocation(allocations: any[]) {
-        const allocationsArray = allocations.map(allocation => new StockAllocationModel(allocation.stock.id, allocation.exposure));
+    createStockCompositionAndAllocation(allocations: StockAllocationModel[]) {
         this.toggleShowAddOtherStocksButton();
-        this.themeService.createManyStockCompositionsAndAllocations(this.themeId, allocationsArray)
+        this.themeService.createManyStockCompositionsAndAllocations(this.themeId, allocations)
             .flatMap(data => {
                 console.log(data);
                 return this.getComponentDataObservable(); //reload model

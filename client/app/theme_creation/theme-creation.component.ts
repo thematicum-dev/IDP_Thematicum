@@ -4,8 +4,6 @@ import {NgForm} from "@angular/forms";
 import {ThemeService} from "../services/theme.service";
 import {Router} from "@angular/router";
 import {ThemePropertiesEditModel} from "../models/themePropertiesEditModel";
-import {StockAllocation} from "../models/stockAllocation";
-import {StockAllocationModel} from "../models/stockAllocationModel";
 import {AutoCompleteContainerComponent} from "../autocomplete/autocomplete-container.component";
 import {timeHorizonValues, maturityValues, categoryValues} from "../models/themePropertyValues";
 import {Observable} from "rxjs";
@@ -32,10 +30,7 @@ export class ThemeCreationComponent {
         //update model with data from child components
         this.theme.tags = themeTags.selectedItems;
         this.themeProperties.setCheckedCategories();
-        const stockAllocation = themeStockAllocation.selectedItems
-            .map(function(item: StockAllocation) {
-                return new StockAllocationModel(item.stock.id, item.exposure);
-            });
+        const stockAllocation = themeStockAllocation.selectedItems;
 
         this.themeService.createTheme(this.theme).flatMap(theme => {
             this.createdThemeId = theme._id;

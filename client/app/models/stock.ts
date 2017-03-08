@@ -3,11 +3,11 @@ export class Stock extends AutocompleteItem {
     constructor(
         public name: string,
         public alias: string,
-        public id: string,
+        public _id: string,
         public businessDescription: string,
         public country: string,
         public website: string,
         public exchange: string,
         public reportingCurrency: string,
-    ) { super(name, alias, id); }
+    ) { super(name, alias, _id); }
 }

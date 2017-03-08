@@ -1,3 +1,3 @@
 export class StockAllocationModel {
-    constructor(public stockId: any, public exposure: number) {}
+    constructor(public stockId: string, public exposure: number, public stockName?: string) {}
 }

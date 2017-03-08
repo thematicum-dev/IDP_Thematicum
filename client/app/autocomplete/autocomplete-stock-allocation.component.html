@@ -37,7 +37,7 @@
             <table class="table">
                 <tbody>
                 <tr *ngFor="let stockAllocation of selectedItems; let stockIdx = index">
-                    <td scope="row"><label>{{stockAllocation.stock.name | lowercase}}</label></td>
+                    <td scope="row"><label>{{stockAllocation.stockName | lowercase}}</label></td>
 
                     <td>
                         <select
@@ -58,3 +58,5 @@
         </div>
     </div>
 </div>
+
+{{selectedItems | json}}
