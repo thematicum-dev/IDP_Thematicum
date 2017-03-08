@@ -74,10 +74,6 @@ export class ThemeStockAllocationComponent implements OnInit {
         return exposureBackgroundColors[index];
     }
 
-    setStockBackground(index: number) {
-        return index % 2 == 0 ? '#F8F9F9' : 'white';
-    }
-
     toggleStockAllocationEditable(allocationModel: ThemeStockCompositionAllocationModel) {
         //TODO: delegation causes errors
         allocationModel.isAllocationEditable = !allocationModel.isAllocationEditable;
