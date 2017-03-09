@@ -20,30 +20,42 @@ export function create(req, res, next) {
 
 export function read(req, res, next) {
     // convert mongoose document to JSON
-    const theme = req.theme ? req.theme.toJSON() : {};
+    let theme = req.theme ? req.theme.toJSON() : {};
+    theme.isCurrentUserCreator = req.isCurrentUserCreator;
     return res.status(200).json(new AppResponse('Theme retrieved', theme));
 }
 
 export function update(req, res, next) {
-    //TODO: authorization check
     let theme = req.theme;
+
+    //authorization check
+    if(!req.isCurrentUserCreator) {
+        return next(new AppError('Not authorized', 403));
+    }
 
     if (req.body.name)
         theme.name = req.body.name;
     if (req.body.description)
         theme.description = req.body.description;
-    //TODO: allow empty tags or not?
     if (req.body.tags)
         theme.tags = req.body.tags;
 
     repo.save(theme)
-        .then(result => res.status(201).json(new AppResponse('Theme updated', result)))
+        .then(result => {
+            let updatedTheme = result.toJSON();
+            updatedTheme.isCurrentUserCreator = req.isCurrentUserCreator;
+            return res.status(201).json(new AppResponse('Theme updated', updatedTheme));
+        })
         .catch(err => next(err));
 }
 
 export function deleteThemeData(req, res, next) {
-    //TODO: authorization check
     const theme = req.theme;
+
+    //authorization check
+    if(!req.isCurrentUserCreator) {
+        return next(new AppError('Not authorized', 403));
+    }
 
     repo.deleteThemeData(theme)
         .then(result => {
@@ -70,7 +82,6 @@ export function list(req, res, next) {
             .catch(err => next(err));
     }
 }
-
 export function themeById(req, res, next, id) {
     repo.getThemeById(id)
         .then(result => {
@@ -79,7 +90,13 @@ export function themeById(req, res, next, id) {
             }
 
             req.theme = result;
+            req.isCurrentUserCreator = isCurrentUserThemeCreator(result, res);
             next();
         })
         .catch(err => next(err));
 };
+
+
+function isCurrentUserThemeCreator(theme, res) {
+    return res.locals.user && theme.creator._id.equals(res.locals.user._id);
+}

@@ -25,7 +25,6 @@ import {ViewChild} from "@angular/core/src/metadata/di";
 export class ThemeDetailsComponent implements OnInit, OnChanges {
     theme: Theme; //theme retrieved from the service
     selectedThemeId: string; //theme Id retrieved from the url
-    isCurrentUserCreator = true;
     isEditMode = false; //to show/hide theme-editing form
 
     @ViewChild(ModalComponent)

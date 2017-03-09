@@ -6,6 +6,7 @@ export class Theme {
         public tags?: string[],
         public creator?: any,
         public createdAt?: Date,
-        public updatedAt?: Date
+        public updatedAt?: Date,
+        public isCurrentUserCreator?: boolean
     ) {}
 }
