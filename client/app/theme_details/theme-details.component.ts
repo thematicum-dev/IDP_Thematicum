@@ -10,9 +10,6 @@ import {ViewChild} from "@angular/core/src/metadata/di";
     selector: 'app-theme-details',
     templateUrl: 'theme-details.component.html',
     styles: [`
-        h1 {
-            margin-top: 0;
-        }
         .well button.btn-default {
             background-color: #f5f5f5;
             text-decoration: none;

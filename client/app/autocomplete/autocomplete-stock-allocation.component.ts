@@ -26,6 +26,12 @@ import {StockAllocationModel} from "../models/stockAllocationModel";
             padding: 6px 12px; 
             margin-bottom: 0px;
         }
+        span.input-group-btn {
+            padding:0;
+        }
+        #stocksAutocomplete {
+            padding-right: 0;
+        }
     `]
 })
 export class AutoCompleteStockAllocationComponent extends AutoCompleteContainerComponent {

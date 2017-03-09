@@ -15,14 +15,6 @@ body {
   padding-top: 50px; /* Required padding for .navbar-fixed-top. Remove if using .navbar-static-top. Change if height of navigation changes. */
 }
 
-.img-portfolio {
-  margin-bottom: 30px;
-}
-
-.img-hover:hover {
-  opacity: 0.8;
-}
-
 /* Home Page Carousel */
 
 header.carousel {
@@ -48,25 +40,6 @@ header.carousel .fill {
   font-size: 100px;
 }
 
-/* Pricing Page Styles */
-
-.price {
-  display: block;
-  font-size: 50px;
-  line-height: 50px;
-}
-
-.price sup {
-  top: -20px;
-  left: 2px;
-  font-size: 20px;
-}
-
-.period {
-  display: block;
-  font-style: italic;
-}
-
 /* Footer Styles */
 
 footer {
@@ -74,60 +47,13 @@ footer {
 }
 
 /* Responsive Styles */
-
-@media(max-width:991px) {
-  .customer-img,
-  .img-related {
-    margin-bottom: 30px;
-  }
-}
-
 @media(max-width:767px) {
-  .img-portfolio {
-    margin-bottom: 15px;
-  }
-
   header.carousel .carousel {
     height: 70%;
   }
 }
 
-/*
-body {
-  padding: 50px;
-  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
-}
-
-a {
-  color: #00B7FF;
-  cursor: pointer;
-}
-
-a:hover,
-a:active {
-  color: #00B7FF;
-  text-decoration: underline;
-}
-
-a.danger {
-  color: red;
-}
-
-.spacing {
-  margin-bottom: 20px;
-}
-
-input.ng-invalid.ng-touched {
-  border: 1px solid red;
-}
-
-*/
-
-/* validation */
-/*.ng-invalid:not(form) {*/
-  /*border-left: 5px solid #a94442; !* red *!*/
-/*}*/
-
+/* custom styles */
 
 .data-validation-message {
   padding-top: 30px;
@@ -140,16 +66,16 @@ input.ng-invalid.ng-touched {
   color: red;
   font-size: medium;
 }
-/*.ng-valid:not(form) {*/
-  /*border-left: 5px solid #42A948; !* red *!*/
-/*}*/
+
+.error-red-front {
+  color: red;
+}
 
 .borderless {
   border: 0 none;
 }
 
-
-/*for autocomplete*/
+/* for autocomplete */
 .input-list {
   width:100%;
   float: left;

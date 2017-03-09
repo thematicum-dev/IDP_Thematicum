@@ -1,9 +1,9 @@
 <div class="row">
-    <div class="col-xs-10 text-center">
-        <h3 style="margin:0">Theme properties</h3>
+    <div class="text-center">
+        <h3>Theme properties</h3>
         <p *ngIf="themePropertiesData">Total votes: {{themePropertiesData.totalCount}}</p>
     </div>
-    <div class="col-xs-2 text-right" *ngIf="!isEditMode">
+    <div class="text-right" *ngIf="!isEditMode">
         <div class="btn-group">
             <button type="button" class="btn btn-default dropdown-toggle borderless no-decoration-element"
                     data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -65,7 +65,7 @@
                            [style.borderBottom]="setBorder('categories', i)"
                            [class.inactive-element]="!isEditMode"
                            (click)="themeProperties.toggleCheckedCategory(i)">
-                        <input type="checkbox" disabled="disabled" id="categories" name="categories" [value]="i">{{category?.percentage}}%
+                        <input type="checkbox" disabled="disabled" required id="categories" name="categories" [value]="i">{{category?.percentage}}%
                     </label>
                     <p class="text-center">{{categoryValues[i].description}}</p>
                 </div>

@@ -1,37 +1,37 @@
-<div class="form-group row" style="margin:0">
+<div class="form-group row">
     <label class="col-xs-2 col-form-label">Stock Name</label>
 
-            <app-autocomplete [placeholderTerm]="autocompletePlaceholder"
-                              [allowCustomValues]="allowCustomValues"
-                              [allowEnterKey]="allowEnterKey"
-                              [allowDirectClick]="allowDirectClick"
-                              [dataSource]="itemList"
-                              (notifySelectedItem)='selectItem($event)'
-                              (clearErrorStr)="clearErrorStr()"
-                              #stocksAutocomplete
-                              class="col-xs-8"
-                              style="padding:0">
-            </app-autocomplete>
+    <app-autocomplete [placeholderTerm]="autocompletePlaceholder"
+                      [allowCustomValues]="allowCustomValues"
+                      [allowEnterKey]="allowEnterKey"
+                      [allowDirectClick]="allowDirectClick"
+                      [dataSource]="itemList"
+                      (notifySelectedItem)='selectItem($event)'
+                      (clearErrorStr)="clearErrorStr()"
+                      id="stocksAutocomplete"
+                      #stocksAutocomplete
+                      class="col-xs-8">
+    </app-autocomplete>
 
-            <span class="input-group-btn col-xs-2" style="padding:0">
-                <div class="btn-group" style="padding:0">
-                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        Select Exposure<span class="caret"></span>
-                    </button>
-                    <ul class="dropdown-menu">
-                        <li *ngFor="let exposure of stockExposures; let i = index;" (click)="onSelectExposure(i, stocksAutocomplete)"><a>{{exposure}}</a></li>
-                    </ul>
-                </div>
-            </span>
+    <span class="input-group-btn col-xs-2">
+        <div class="btn-group">
+            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Select Exposure<span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu">
+                <li *ngFor="let exposure of stockExposures; let i = index;" (click)="onSelectExposure(i, stocksAutocomplete)"><a>{{exposure}}</a></li>
+            </ul>
+        </div>
+    </span>
 
 </div>
-<p *ngIf="error" class="col-xs-offset-2" style="color:red">{{error}}</p>
+<p *ngIf="error" class="col-xs-offset-2 error-red-front">{{error}}</p>
 
 <br>
 
-<div class="form-group row" *ngIf="selectedItems && selectedItems.length > 0" style="margin:0">
+<div class="form-group row" *ngIf="selectedItems && selectedItems.length > 0">
     <label class="col-xs-2 col-form-label">Allocated Stocks</label>
-    <div class="col-xs-6" style="padding:0">
+    <div class="col-xs-6">
         <div class="panel panel-default">
             <table class="table">
                 <tbody>

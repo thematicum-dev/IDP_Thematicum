@@ -1,7 +1,5 @@
-<div class="row">
-    <div class="col-xs-10 text-center">
-        <h3 style="margin:0">Stock allocation</h3>
-    </div>
+<div class="row text-center">
+    <h3>Stock allocation</h3>
 </div>
 
 <!-- Allocations -->
@@ -12,7 +10,7 @@
                 <h5>{{allocationModel?.themeStockComposition?.stock?.companyName}}, {{allocationModel?.themeStockComposition?.stock?.country}}</h5>
                 <p>Total votes: {{allocationModel.totalCount}}</p>
             </div>
-            <div class="col-xs-7 text-right">
+            <div class="col-xs-7 text-right" *ngIf="!allocationModel.isAllocationEditable">
                 <div class="btn-group">
                     <button type="button" class="btn btn-default dropdown-toggle borderless no-decoration-element"
                             data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -39,7 +37,7 @@
                                [style.borderBottom]="setBorder(allocationModel, exposureIdx)"
                                [class.inactive-element]="!allocationModel.isAllocationEditable"
                                (click)="selectExposure(exposureSelect.value)">
-                            <input type="radio" disabled="disabled" #exposureSelect [value]="exposureIdx">
+                            <input type="radio" disabled="disabled" #exposureSelect required [value]="exposureIdx">
                             {{allocationModel.exposures[exposureIdx].percentage}}%
                         </label>
                         <p class="text-center">{{exposures[exposureIdx]}}</p>
@@ -48,7 +46,7 @@
             </div>
             <div class="row text-right" *ngIf="allocationModel.isAllocationEditable">
                 <button class="btn btn-default" type="button" (click)="clearEditing(allocationModel, exposuresContainer)">Cancel</button>
-                <button class="btn btn-primary" type="submit" [disabled]="!form.form.valid">Save</button>
+                <button class="btn btn-primary" type="submit" [disabled]="!form.form.valid || !selectedExposure">Save</button>
             </div>
             </form>
         </div>
@@ -57,10 +55,8 @@
 
 <!-- New Allocations -->
 <br>
-<div class="row">
-    <div class="col-xs-10 text-center">
-        <button class="btn btn-primary" *ngIf="!showAddOtherStocksButton" (click)="toggleShowAddOtherStocksButton()">Add Other Stocks</button>
-    </div>
+<div class="row text-center" *ngIf="!showAddOtherStocksButton">
+    <button class="btn btn-md btn-primary" (click)="toggleShowAddOtherStocksButton()">Add Other Stocks</button>
 </div>
 
 <div *ngIf="showAddOtherStocksButton">

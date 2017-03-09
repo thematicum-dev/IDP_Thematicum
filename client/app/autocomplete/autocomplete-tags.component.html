@@ -1,7 +1,7 @@
 <div class="form-group row">
     <label class="col-xs-2 col-form-label">Tags</label>
     <div class="col-xs-10">
-        <p *ngIf="error" style="color:red">{{error}}</p>
+        <p *ngIf="error" class="error-red-front">{{error}}</p>
         <app-autocomplete [placeholderTerm]="autocompletePlaceholder"
                           [allowCustomValues]="allowCustomValues"
                           [allowEnterKey]="allowEnterKey"

@@ -1,12 +1,12 @@
 <div *ngIf="theme">
     <div class="well well-lg">
         <div class="row">
-            <div class="col-xs-10 text-center">
+            <div class="text-center">
                 <h1>{{theme.name}}</h1>
                 <p>By {{theme.creator?.name}}, {{theme.createdAt | date:mediumDate}}</p>
             </div>
 
-            <div class="col-xs-2 text-right">
+            <div class="text-right" *ngIf="!isEditMode">
                 <div class="btn-group-vertical" role="group">
                     <div class="btn-group" *ngIf="isCurrentUserCreator">
                         <button type="button"
@@ -33,8 +33,8 @@
 
         <app-theme-characteristics-editing *ngIf="isEditMode" [theme]="theme" [themeTags]="theme.tags" (themeEmitter)="onThemeChanged($event)">
         </app-theme-characteristics-editing>
-
     </div>
+
 
     <!--Theme time horizon, maturity and categories -->
     <app-theme-properties [themeId]="selectedThemeId"></app-theme-properties>
