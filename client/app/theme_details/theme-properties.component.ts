@@ -117,6 +117,9 @@ export class ThemePropertiesComponent implements OnInit {
     }
 
     setBorder(propertyName: string, value: number) {
+        if (!this.themePropertiesData.userInputs) {
+            return;
+        }
         if (propertyName !== 'categories') {
             return this.themePropertiesData.userInputs[propertyName] == value ? this.BORDER_THEME_PROPERTY : '';
         } else {

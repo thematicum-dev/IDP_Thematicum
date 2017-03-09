@@ -10,6 +10,7 @@
         <div class="row" >
             <div class="col-xs-5">
                 <h5>{{allocationModel?.themeStockComposition?.stock?.companyName}}, {{allocationModel?.themeStockComposition?.stock?.country}}</h5>
+                <p>Total votes: 10</p>
             </div>
             <div class="col-xs-7 text-right">
                 <div class="btn-group">
@@ -27,42 +28,29 @@
             </div>
         </div>
 
-        <!-- Form to edit/add stock allocation-->
-        <div class="row" >
-            <div class="col-xs-6 col-xs-offset-6" *ngIf="allocationModel.isAllocationEditable">
-                <form #form="ngForm" (ngSubmit)="createOrUpdateStockAllocation(allocationModel, exposureSelect.selectedIndex.valueOf())">
-                    <div class="form-group row">
-                        <label class="col-xs-3 col-form-label" for="exposure">Select Exposure</label>
-                        <div class="col-xs-5">
-                            <select
-                                    class="form-control"
-                                    id="exposure"
-                                    name="exposure"
-                                    #exposureSelect
-                                    required>
-                                <option *ngFor="let exposure of exposures; let i = index" [ngValue]="i">{{ exposure }}</option>
-                            </select>
-                        </div>
-                        <div class="col-xs-4">
-                            <button class="btn btn-default" type="button" (click)="toggleStockAllocationEditable(allocationModel)">Cancel</button>
-                            <button class="btn btn-primary" type="submit" [disabled]="!form.form.valid">Save</button>
-                        </div>
-                    </div>
-                </form>
-            </div>
-        </div>
+        <div #exposuresContainer>
+            <form #form="ngForm" (ngSubmit)="createOrUpdateStockAllocation(allocationModel)">
 
-        <div class="row" >
-            <div class="btn-group btn-group-justified">
-                <div class="btn-group" *ngFor="let exposure of exposures; let exposureIdx=index">
-                    <label class="btn btn-default inactive-element"
-                           [style.backgroundColor]="setExposureBackgroundColor(exposureIdx, allocationModel.exposures[exposureIdx].percentage)"
-                           [style.borderBottom]="setBorder(allocationModel, exposureIdx)">
-                        {{allocationModel.exposures[exposureIdx].percentage}}%
-                    </label>
-                    <p class="text-center">{{exposures[exposureIdx]}}</p>
+            <div class="row" >
+                <div class="btn-group btn-group-justified" [attr.data-toggle]="setDataToggleAttribute(allocationModel.isAllocationEditable)">
+                    <div class="btn-group" *ngFor="let exposure of exposures; let exposureIdx=index">
+                        <label class="btn btn-default"
+                               [style.backgroundColor]="setExposureBackgroundColor(allocationModel.isAllocationEditable, exposureIdx, allocationModel.exposures[exposureIdx].percentage)"
+                               [style.borderBottom]="setBorder(allocationModel, exposureIdx)"
+                               [class.inactive-element]="!allocationModel.isAllocationEditable"
+                               (click)="selectExposure(exposureSelect.value)">
+                            <input type="radio" disabled="disabled" #exposureSelect [value]="exposureIdx">
+                            {{allocationModel.exposures[exposureIdx].percentage}}%
+                        </label>
+                        <p class="text-center">{{exposures[exposureIdx]}}</p>
+                    </div>
                 </div>
             </div>
+            <div class="row text-right" *ngIf="allocationModel.isAllocationEditable">
+                <button class="btn btn-default" type="button" (click)="clearEditing(allocationModel, exposuresContainer)">Cancel</button>
+                <button class="btn btn-primary" type="submit" [disabled]="!form.form.valid">Save</button>
+            </div>
+            </form>
         </div>
     </div>
 </div>

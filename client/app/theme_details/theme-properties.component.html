@@ -25,13 +25,13 @@
             <h5>Expected Time Horizon</h5>
 
             <div class="btn-group btn-group-justified" [attr.data-toggle]="setDataToggleAttribute()">
-                <div class="btn-group" *ngFor="let timeHorizon of themePropertiesData.properties.timeHorizon; let i = index">
+                <div class="btn-group" *ngFor="let timeHorizon of themePropertiesData?.properties?.timeHorizon; let i = index">
                     <label class="btn btn-default"
-                           [style.backgroundColor]="setBackgroundColor(timeHorizon.percentage)"
+                           [style.backgroundColor]="setBackgroundColor(timeHorizon?.percentage)"
                            [style.borderBottom]="setBorder('timeHorizon', i)"
                            [class.inactive-element]="!isEditMode"
                            (click)="themeProperties.setTimeHorizon(i)">
-                        <input type="radio" disabled="disabled" id="timeHorizon" name="timeHorizon" [value]="i">{{timeHorizon.percentage}}%
+                        <input type="radio" disabled="disabled" id="timeHorizon" name="timeHorizon" [value]="i">{{timeHorizon?.percentage}}%
                     </label>
                     <p class="text-center">{{timeHorizonValues[i].description}}</p>
                 </div>
@@ -42,13 +42,13 @@
             <h5>Current theme maturity</h5>
 
             <div class="btn-group btn-group-justified" [attr.data-toggle]="setDataToggleAttribute()">
-                <div class="btn-group" *ngFor="let maturity of themePropertiesData.properties.maturity; let i = index">
+                <div class="btn-group" *ngFor="let maturity of themePropertiesData?.properties?.maturity; let i = index">
                     <label class="btn btn-default"
-                           [style.backgroundColor]="setBackgroundColor(maturity.percentage)"
+                           [style.backgroundColor]="setBackgroundColor(maturity?.percentage)"
                            [style.borderBottom]="setBorder('maturity', i)"
                            [class.inactive-element]="!isEditMode"
                            (click)="themeProperties.setMaturity(i)">
-                        <input type="radio" disabled="disabled" id="maturity" name="maturity" [value]="i">{{maturity.percentage}}%
+                        <input type="radio" disabled="disabled" id="maturity" name="maturity" [value]="i">{{maturity?.percentage}}%
                     </label>
                     <p class="text-center">{{maturityValues[i].description}}</p>
                 </div>
@@ -59,17 +59,17 @@
             <h5>Theme category</h5>
 
             <div class="btn-group btn-group-justified" [attr.data-toggle]="setDataToggleAttribute()">
-                    <div class="btn-group" *ngFor="let category of themePropertiesData.properties.categories; let i = index">
-                        <label class="btn btn-default"
-                               [style.backgroundColor]="setBackgroundColor(category.percentage)"
-                               [style.borderBottom]="setBorder('categories', i)"
-                               [class.inactive-element]="!isEditMode"
-                               (click)="themeProperties.toggleCheckedCategory(i)">
-                            <input type="checkbox" disabled="disabled" id="categories" name="categories" [value]="i">{{category.percentage}}%
-                        </label>
-                        <p class="text-center">{{categoryValues[i].description}}</p>
-                    </div>
+                <div class="btn-group" *ngFor="let category of themePropertiesData?.properties?.categories; let i = index">
+                    <label class="btn btn-default"
+                           [style.backgroundColor]="setBackgroundColor(category?.percentage)"
+                           [style.borderBottom]="setBorder('categories', i)"
+                           [class.inactive-element]="!isEditMode"
+                           (click)="themeProperties.toggleCheckedCategory(i)">
+                        <input type="checkbox" disabled="disabled" id="categories" name="categories" [value]="i">{{category?.percentage}}%
+                    </label>
+                    <p class="text-center">{{categoryValues[i].description}}</p>
                 </div>
+            </div>
         </div>
 
     <div *ngIf="isEditMode" class="text-right">

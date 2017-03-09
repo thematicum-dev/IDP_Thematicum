@@ -26,6 +26,9 @@ import {ThemeStockCompositionAllocationModel} from "../models/themeStockComposit
             border: none;
             box-shadow: none;
         }
+        .btn.active {
+            background-color: #d9edf7;
+        }
         label.inactive-element:hover, label.inactive-element:not(:hover), label.inactive-element:focus {
             text-decoration: none;
             outline:none;
@@ -55,6 +58,7 @@ export class ThemeStockAllocationComponent implements OnInit {
     allocatedStockIds: string[]; //to prefilter stocks available in autocomplete
     showAddOtherStocksButton: boolean = false; //to show/hide "Add Other Stocks" button
     stockAllocationData: ThemeStockCompositionAllocationModel[] = []; //to hold data received from the service
+    selectedExposure: number; //to hold the exposure value edited by the user
 
     @ViewChild(ModalComponent)
     public modal: ModalComponent;
@@ -76,7 +80,11 @@ export class ThemeStockAllocationComponent implements OnInit {
             .subscribe(this.handleResults, this.handleError);
     }
 
-    setExposureBackgroundColor(exposureIndex: number, percentage: number) {
+    setExposureBackgroundColor(isAllocationEditable: boolean, exposureIndex: number, percentage: number) {
+        if (isAllocationEditable) {
+            return;
+        }
+
         const backgroundColor = this.exposureBackgroundColors[exposureIndex];
         return `rgba(${backgroundColor.r}, ${backgroundColor.g}, ${backgroundColor.b}, ${percentage/100})`;
     }
@@ -85,9 +93,32 @@ export class ThemeStockAllocationComponent implements OnInit {
         return allocationModel.userStockAllocation && allocationModel.userStockAllocation.exposure == exposureIndex ? this.BORDER_EXPOSURE : '';
     }
 
+    setDataToggleAttribute(isAllocationEditable: boolean) {
+        return isAllocationEditable ? 'buttons' : '';
+    }
+
     toggleStockAllocationEditable(allocationModel: ThemeStockCompositionAllocationModel) {
         //TODO: delegation causes errors
         allocationModel.isAllocationEditable = !allocationModel.isAllocationEditable;
+    }
+
+    clearEditing(allocationModel: ThemeStockCompositionAllocationModel, containerDiv: Element) {
+        this.toggleStockAllocationEditable(allocationModel);
+        this.selectedExposure = null;
+
+        if(!containerDiv) {
+            return;
+        }
+
+        //remove active class from labels
+        let labels = containerDiv.querySelectorAll('label.active');
+        for (let i = 0; i<labels.length; i++) {
+            labels[i].classList.remove('active');
+        }
+    }
+
+    selectExposure(exposure: number) {
+        this.selectedExposure = exposure;
     }
 
     toggleShowAddOtherStocksButton() {
@@ -99,11 +130,13 @@ export class ThemeStockAllocationComponent implements OnInit {
         return `(${nrUsers} user${trailingS})`;
     }
 
-    createOrUpdateStockAllocation(allocationModel: ThemeStockCompositionAllocationModel, exposure: number) {
+    createOrUpdateStockAllocation(allocationModel: ThemeStockCompositionAllocationModel) {
+        if (!this.selectedExposure) return;
+
         //create or update, depending on whether the user has an existing allocation for the given theme-stock composition
         const modelChangedObservable: Observable<any> = allocationModel.userStockAllocation ?
-            this.themeService.updateUserStockAllocation(allocationModel.userStockAllocation._id, exposure) :
-            this.themeService.createUserStockAllocation(allocationModel.themeStockComposition._id, exposure);
+            this.themeService.updateUserStockAllocation(allocationModel.userStockAllocation._id, this.selectedExposure) :
+            this.themeService.createUserStockAllocation(allocationModel.themeStockComposition._id, this.selectedExposure);
 
         modelChangedObservable.flatMap(data => {
             console.log(data);
