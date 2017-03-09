@@ -66,9 +66,10 @@ export default class DataRepository extends BaseRepository {
                 .then(results => {
                     const aggregation = new ThemePropertiesAggregation();
                     const themeProperties = aggregation.getDataAggregation(results);
+                    const totalCount = results ? results.length : 0;
 
                     const themePropertiesByCurrentUser = this.getThemePropertiesByUser(results, userId);
-                    const obj = {properties: themeProperties, userInputs: themePropertiesByCurrentUser};
+                    const obj = {properties: themeProperties, userInputs: themePropertiesByCurrentUser, totalCount: totalCount};
 
                     resolve(obj);
                 })
@@ -103,10 +104,11 @@ export default class DataRepository extends BaseRepository {
                     //aggregation
                     const stockAllocationAggregation = new StockAllocationAggregation();
                     const aggregation = stockAllocationAggregation.getDataAggregation(allocations);
+                    const totalCount = allocations ? allocations.length : 0;
 
                     const stockAllocationByCurrentUser = this.getStockAllocationByUser(allocations, currentUserId);
 
-                    const obj = {themeStockComposition: themeStockComposition, exposures: aggregation.exposure, userStockAllocation: stockAllocationByCurrentUser};
+                    const obj = {themeStockComposition: themeStockComposition, exposures: aggregation.exposure, userStockAllocation: stockAllocationByCurrentUser, totalCount: totalCount};
                     resolve(obj);
                 })
                 .catch(err => reject(err));

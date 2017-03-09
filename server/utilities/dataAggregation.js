@@ -8,8 +8,8 @@ class DataAggregation {
         let aggregation = {};
 
         for (const prop of this.propertyList) {
-            const countByProp = this.getCountByProperty(collection, prop.propertyName)
-            const sumByProp = this.getSumByProperty(countByProp)
+            const countByProp = this.getCountByProperty(collection, prop.propertyName);
+            const sumByProp = this.getSumByProperty(countByProp);
             const aggregationByProp = this.getAggregationByProperty(countByProp, sumByProp, prop.nrValuesRequired);
             aggregation[prop.propertyName] = aggregationByProp;
         }

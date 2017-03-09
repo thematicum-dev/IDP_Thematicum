@@ -91,7 +91,6 @@ export class ThemePropertiesComponent implements OnInit {
     clearEditing(containerDiv: Element) {
         this.isEditMode = !this.isEditMode;
         this.themeProperties.clearProperties();
-        console.log('Container div: ', containerDiv)
 
         if(!containerDiv) {
             return;

@@ -1,7 +1,7 @@
 <div class="row">
     <div class="col-xs-10 text-center">
         <h3 style="margin:0">Theme properties</h3>
-        <p>Total users: 50</p>
+        <p *ngIf="themePropertiesData">Total votes: {{themePropertiesData.totalCount}}</p>
     </div>
     <div class="col-xs-2 text-right" *ngIf="!isEditMode">
         <div class="btn-group">

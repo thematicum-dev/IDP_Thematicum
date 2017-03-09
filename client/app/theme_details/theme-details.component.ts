@@ -44,7 +44,7 @@ export class ThemeDetailsComponent implements OnInit, OnChanges {
         this.selectedThemeId = this.route.snapshot.params['id'];
         this.themeService.getThemeById(this.selectedThemeId).subscribe(
             data => {
-                console.log('Theme:');
+                console.log('Theme');
                 console.log(data);
                 this.theme = data;
             },

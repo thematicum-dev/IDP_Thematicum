@@ -7,7 +7,8 @@ export class ThemeStockCompositionAllocationModel {
     constructor(
         public exposures: DataDistributionModel[],
         public userStockAllocation: UserStockAllocationModel,
-        public themeStockComposition: ThemeStockCompositionModel) {
+        public themeStockComposition: ThemeStockCompositionModel,
+        public totalCount: number) {
         this.isAllocationEditable = false;
     }
 

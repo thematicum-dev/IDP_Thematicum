@@ -73,7 +73,6 @@ export class ThemeService {
     }
 
     deleteUserThemeInput(userThemeInputId: string) {
-        console.log('Service theme input id: ', userThemeInputId)
         let apiPath = this.baseAPI + 'themeproperties/' + userThemeInputId + this.setTokenQueryParam();
         return this.http.delete(apiPath)
             .map((response: Response) => response.json())
@@ -110,7 +109,6 @@ export class ThemeService {
     }
 
     getThemeById(id: string) {
-        console.log('getThemeById: ', id)
         let apiPath = this.baseAPI + 'themes/' + id + this.setTokenQueryParam();
         return this.http.get(apiPath)
             .map((response: Response) => {
@@ -141,7 +139,6 @@ export class ThemeService {
                 return response.json().obj;
             })
             .catch((error: Response) =>  {
-                console.log(error)
                 this.errorService.handleError(error);
                 return Observable.throw(error.json())
             });
