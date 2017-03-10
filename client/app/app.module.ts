@@ -22,9 +22,9 @@ import {AutoCompleteTagsComponent} from "./autocomplete/autocomplete-tags.compon
 import {AutoCompleteStockAllocationComponent} from "./autocomplete/autocomplete-stock-allocation.component";
 import {AuthGuard} from "./auth/auth-guard.service";
 import {ThemePropertiesComponent} from "./theme_details/theme-properties.component";
-import {ThemeCharacteristicsEditing} from "./theme_creation/theme-characteristics-editing.component";
+import {ThemeCharacteristicsEditing} from "./theme_details/theme-characteristics-editing.component";
 import {ModalComponent} from "./theme_details/modal.component";
-import {ThemeStockAllocationComponent} from "./stock_allocation/theme-stock-allocation.component";
+import {ThemeStockAllocationComponent} from "./theme_details/theme-stock-allocation.component";
 import {UserProfileComponent} from "./user_profile/user-profile.component";
 
 @NgModule({

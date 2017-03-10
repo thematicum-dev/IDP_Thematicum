@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {ModalComponent} from "../theme_details/modal.component";
+import {ModalComponent} from "./modal.component";
 import {ViewChild} from "@angular/core/src/metadata/di";
 import {Input} from "@angular/core/src/metadata/directives";
 import {Observable, Observer} from "rxjs";

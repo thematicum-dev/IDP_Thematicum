@@ -25,10 +25,10 @@ export function signup(req, res, next) {
                 personalRole: req.body.user.personalRole
             });
 
-            return repo.save(user);
-        })
-        .then(() => res.status(201).json(new AppResponse('User created', null)))
-        .catch(err => next(err));
+            repo.save(user).then(() => {
+                return res.status(201).json(new AppResponse('User created', null))
+            }).catch(err => next(err));
+        });
 }
 
 export function signin(req, res, next) {

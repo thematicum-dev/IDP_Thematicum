@@ -14,7 +14,7 @@ export class AutoCompleteTagsComponent extends AutoCompleteContainerComponent im
 
     constructor(public dataSource: AutocompleteDatasourceService) {
         super(dataSource,
-            Settings.getBaseApi() + 'themes/tags' + '?token=' + localStorage.getItem('token'),
+            Settings.getBaseApi() + 'themes/tags',
             'Keyword',
             true, true, true);
     }
