@@ -94,8 +94,7 @@ export function themeById(req, res, next, id) {
             next();
         })
         .catch(err => next(err));
-};
-
+}
 
 function isCurrentUserThemeCreator(theme, res) {
     return res.locals.user && theme.creator._id.equals(res.locals.user._id);

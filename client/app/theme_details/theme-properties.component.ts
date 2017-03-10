@@ -1,10 +1,10 @@
-import {Component, OnInit, EventEmitter} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {ThemeService} from "../services/theme.service";
 import {ThemePropertiesEditModel} from "../models/themePropertiesEditModel";
 import {ModalComponent} from "./modal.component";
 import {ViewChild} from "@angular/core/src/metadata/di";
 import {NgForm} from "@angular/forms";
-import {Input, Output} from "@angular/core/src/metadata/directives";
+import {Input} from "@angular/core/src/metadata/directives";
 import {timeHorizonValues, maturityValues, categoryValues} from "../models/themePropertyValues";
 import {Observable} from "rxjs";
 

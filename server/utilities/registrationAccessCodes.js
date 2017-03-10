@@ -9,4 +9,4 @@ db.registrationaccesscodes.insert([
 	validFrom: new Date().getTime(),
 	validUntil: new Date(2017, 4, 1).getTime()
 }
-])
+]);

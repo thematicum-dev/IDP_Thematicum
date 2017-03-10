@@ -13,7 +13,6 @@ export class ErrorService {
         let errorJson = error.json();
         let errMsg = errorJson.message ? errorJson.message : 'An error occurred';
 
-        console.log('errJson: ', errorJson);
         if (error.status == 401) {
             localStorage.clear();
             this.router.navigate(['/signin']);

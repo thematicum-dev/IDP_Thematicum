@@ -31,4 +31,4 @@ const themes = [
         description: "The ‘Internet of Things’ (IoT) is the name given to the growing range of internet-connected objects with embedded sensors that can process and share\ " +
         "complex information without human involvement."
     }
-]
+];

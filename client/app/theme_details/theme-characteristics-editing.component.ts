@@ -1,4 +1,4 @@
-import {Component, EventEmitter, OnChanges, SimpleChanges, ElementRef} from '@angular/core';
+import {Component, EventEmitter, OnChanges, SimpleChanges} from '@angular/core';
 import {Theme} from "../models/theme";
 import {Input, Output} from "@angular/core/src/metadata/directives";
 import {ThemeService} from "../services/theme.service";

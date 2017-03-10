@@ -24,7 +24,7 @@ import {StockAllocationModel} from "../models/stockAllocationModel";
         }
         td>label {
             padding: 6px 12px; 
-            margin-bottom: 0px;
+            margin-bottom: 0;
         }
         span.input-group-btn {
             padding:0;

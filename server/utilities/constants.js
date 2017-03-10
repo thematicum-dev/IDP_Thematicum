@@ -11,6 +11,6 @@ const constants = {
     MIN_EXPOSURE: 0,
     MAX_EXPOSURE: 4,
     TOTAL_EXPOSURE_VALUES: 5
-}
+};
 
 export default constants;

@@ -2,7 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {ModalComponent} from "./modal.component";
 import {ViewChild} from "@angular/core/src/metadata/di";
 import {Input} from "@angular/core/src/metadata/directives";
-import {Observable, Observer} from "rxjs";
+import {Observable} from "rxjs";
 import {StockAllocationModel} from "../models/stockAllocationModel";
 import {ThemeService} from "../services/theme.service";
 import {ThemeStockCompositionAllocationModel} from "../models/themeStockCompositionAllocationModel";
