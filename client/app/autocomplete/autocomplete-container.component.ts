@@ -3,7 +3,7 @@ import {AutocompleteItemSelectionInterface} from "./autocomplete-item-selection-
 import {OnInit} from "@angular/core";
 import {AutocompleteDatasourceService} from "./autocomplete-datasource.service";
 
-export class AutoCompleteContainerComponent implements AutocompleteItemSelectionInterface, OnInit {
+export class AutoCompleteContainerComponent implements AutocompleteItemSelectionInterface {
     error: string = '';
     itemList: AutocompleteItem[] = []; //data source (all items)
     selectedItems: any[] = [];
@@ -17,17 +17,6 @@ export class AutoCompleteContainerComponent implements AutocompleteItemSelection
         public allowEnterKey: boolean,
         public allowDirectClick: boolean
     ) {}
-
-    ngOnInit(): void {
-        console.log('ngOnInit at AutoCompleteContainerComponent');
-        this.dataSource.getAutocompleteList(this.dataSourceAPI).subscribe(data => {
-            this.initializeAutocompleteData(data);
-            this.preFilter();
-        },
-        error => {
-            console.log(error)
-        });
-    }
 
     clearErrorStr() {
         this.error = '';
@@ -48,4 +37,13 @@ export class AutoCompleteContainerComponent implements AutocompleteItemSelection
     preFilter() {}
 
     initializeAutocompleteData(data: any) {}
+
+    handleResults = (data: any) => {
+        this.initializeAutocompleteData(data);
+        this.preFilter();
+    }
+
+    handleError = (error: any) => {
+        console.log('Error: ' + error);
+    }
 }

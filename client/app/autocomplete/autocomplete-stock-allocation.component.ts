@@ -1,4 +1,4 @@
-import {Component} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {AutoCompleteContainerComponent} from "./autocomplete-container.component";
 import {StockModel} from "../models/stockModel";
 import {AutocompleteDatasourceService} from "./autocomplete-datasource.service";
@@ -34,7 +34,7 @@ import {StockAllocationModel} from "../models/stockAllocationModel";
         }
     `]
 })
-export class AutoCompleteStockAllocationComponent extends AutoCompleteContainerComponent {
+export class AutoCompleteStockAllocationComponent extends AutoCompleteContainerComponent implements OnInit {
     @Input() preFilterStockIds: string[];
     stockExposures = ['Strong Positive', 'Weak Positive', 'Neutral', 'Weak Negative', 'Strong Negative'];
     currentlySelectedStock: StockModel;
@@ -44,6 +44,11 @@ export class AutoCompleteStockAllocationComponent extends AutoCompleteContainerC
             Settings.getBaseApi() + 'stocks',
             'Search by company name',
             false, false, false);
+    }
+
+    ngOnInit(): void {
+        console.log('ngOnInit at AutoCompleteContainerComponent');
+        this.dataSource.getAutocompleteList(this.dataSourceAPI).subscribe(this.handleResults, this.handleError);
     }
 
     initializeAutocompleteData(data: any[]) {

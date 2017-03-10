@@ -9,7 +9,7 @@ import * as Settings from '../utilities/settings';
     templateUrl: 'autocomplete-tags.component.html',
     providers: [AutocompleteDatasourceService]
 })
-export class AutoCompleteTagsComponent extends AutoCompleteContainerComponent implements OnChanges {
+export class AutoCompleteTagsComponent extends AutoCompleteContainerComponent implements OnInit, OnChanges {
     @Input() themeTags: any[];
 
     constructor(public dataSource: AutocompleteDatasourceService) {
@@ -17,6 +17,11 @@ export class AutoCompleteTagsComponent extends AutoCompleteContainerComponent im
             Settings.getBaseApi() + 'themes/tags',
             'Keyword',
             true, true, true);
+    }
+
+    ngOnInit(): void {
+        console.log('ngOnInit at AutoCompleteContainerComponent');
+        this.dataSource.getAutocompleteList(this.dataSourceAPI).subscribe(this.handleResults, this.handleError);
     }
 
     ngOnChanges(changes: SimpleChanges): void {
