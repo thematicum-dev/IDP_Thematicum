@@ -19,8 +19,7 @@ export class ThemeSearchComponent implements OnInit {
         if(this.route.snapshot.queryParams['query']) {
             this.searchTerm = this.route.snapshot.queryParams['query'].trim();
             this.searchThemes(this.searchTerm);
-        }
-        if(this.route.snapshot.queryParams['all'] && this.route.snapshot.queryParams['all'] === 'true') {
+        } else if(this.route.snapshot.queryParams['all'] && this.route.snapshot.queryParams['all'] === 'true') {
             this.searchThemes(null);
         }
     }

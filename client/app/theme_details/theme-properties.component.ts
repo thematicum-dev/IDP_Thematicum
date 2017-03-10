@@ -19,9 +19,6 @@ import {Observable} from "rxjs";
             border: none;
             box-shadow: none;
         }
-        hr {
-            margin-top: 0;
-        }
         label.inactive-element:hover, label.inactive-element:not(:hover), label.inactive-element:focus {
             text-decoration: none;
             outline:none;

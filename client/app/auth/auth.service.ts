@@ -7,9 +7,10 @@ import {SignupModel} from "./signup-model";
 import {Router} from "@angular/router";
 import {ErrorService} from "../error_handling/error.service";
 import * as Settings from '../utilities/settings';
+import {AuthServiceInterface} from "./auth-service-interface";
 
 @Injectable()
-export class AuthService {
+export class AuthService implements AuthServiceInterface {
     baseAPI: string = Settings.getBaseApi();
     contentTypeHeaders = new Headers({'Content-Type': 'application/json'});
     redirectUrl: string;
@@ -21,10 +22,7 @@ export class AuthService {
         let apiPath = this.baseAPI + 'auth/signup';
         return this.http.post(apiPath, body, {headers: this.contentTypeHeaders})
             .map((response: Response) => response.json())
-            .catch((error: Response) =>  {
-                this.errorService.handleError(error);
-                return Observable.throw(error.json())
-            });
+            .catch(this.handleError);
     }
 
     signin(user: UserModel) {
@@ -36,10 +34,7 @@ export class AuthService {
                 this.redirectToUrlAfterLogin();
                 return response.json();
             })
-            .catch((error: Response) =>  {
-                this.errorService.handleError(error);
-                return Observable.throw(error.json());
-            });
+            .catch(this.handleError);
     }
 
     logout() {
@@ -57,10 +52,7 @@ export class AuthService {
         const apiPath = this.baseAPI + 'auth/isAuthenticated';
         const authHeaders = new Headers({'Authorization': token});
         return this.http.get(apiPath, {headers: authHeaders})
-            .map((response: Response) => {
-                    return Observable.of(response.status == 200);
-                }
-            )
+            .map((response: Response) => Observable.of(response.status == 200))
             .catch((error: Response) =>  {
                 this.errorService.handleError(error);
                 return Observable.of(false);
@@ -81,5 +73,10 @@ export class AuthService {
         } else {
             this.router.navigate(['/home']);
         }
+    }
+
+    handleError = (error: Response) => {
+        this.errorService.handleError(error);
+        return Observable.throw(error.json());
     }
 }
