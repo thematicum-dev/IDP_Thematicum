@@ -5,8 +5,7 @@ const expiration = {expiresIn: 7200}; //token expires in 7200 sec (2 hr)
 const jwtSecret = process.env.JWT_SECRET || 'secret';
 
 function jwtVerifyReq(req, res, next) {
-    const token = req.query.token;
-    jwtVerify(token)
+    jwtVerify(req.headers['authorization'])
         .then(decoded => {
             //const decodedToken = jwt.decode(token); //TODO: redundant?
             res.locals.user = decoded.user;

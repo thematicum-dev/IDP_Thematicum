@@ -54,7 +54,7 @@ export function signin(req, res, next) {
 }
 
 export function isAuthenticated(req, res, next) {
-    authUtilities.jwtVerify(req.query.token)
+    authUtilities.jwtVerify(req.headers['authorization'])
         .then(decoded => {
             return res.status(200).json(new AppResponse('User is authenticated', null));
         })

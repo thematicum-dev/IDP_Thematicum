@@ -1,4 +1,4 @@
-import {Http, Response} from "@angular/http";
+import {Http, Response, Headers} from "@angular/http";
 import {Injectable} from "@angular/core";
 import {Observable} from "rxjs";
 import {ErrorService} from "../error_handling/error.service";
@@ -7,7 +7,8 @@ import {ErrorService} from "../error_handling/error.service";
 export class AutocompleteDatasourceService {
     constructor(private http: Http, private errorService: ErrorService) {}
     getAutocompleteList(apiPath: string) {
-        return this.http.get(apiPath)
+        const headers = new Headers({'Authorization': localStorage.getItem('token')});
+        return this.http.get(apiPath, {headers: headers})
             .map((response: Response) => {
                 return response.json().obj;
             })

@@ -11,19 +11,15 @@ import * as Settings from '../utilities/settings';
 @Injectable()
 export class AuthService {
     baseAPI: string = Settings.getBaseApi();
-    headers = new Headers({'Content-Type': 'application/json'});
+    contentTypeHeaders = new Headers({'Content-Type': 'application/json'});
     redirectUrl: string;
     constructor(private http: Http, private router: Router, private errorService: ErrorService) {}
-
-    setTokenQueryParam() {
-        return localStorage.getItem('token') ? '?token=' + localStorage.getItem('token') : '';
-    }
     
     signup(signupModel: SignupModel) {
         const body = JSON.stringify(signupModel);
 
         let apiPath = this.baseAPI + 'auth/signup';
-        return this.http.post(apiPath, body, {headers: this.headers})
+        return this.http.post(apiPath, body, {headers: this.contentTypeHeaders})
             .map((response: Response) => response.json())
             .catch((error: Response) =>  {
                 this.errorService.handleError(error);
@@ -33,9 +29,9 @@ export class AuthService {
 
     signin(user: UserModel) {
         const body = JSON.stringify(user);
-
         let apiPath = this.baseAPI + 'auth/signin';
-        return this.http.post(apiPath, body, {headers: this.headers})
+
+        return this.http.post(apiPath, body, {headers: this.contentTypeHeaders})
             .map((response: Response) => {
                 this.redirectToUrlAfterLogin();
                 return response.json();
@@ -53,13 +49,14 @@ export class AuthService {
     }
 
     isLoggedIn(): Observable<boolean> {
-        var token = this.getStoredToken();
+        const token = this.getStoredToken();
         if (!token) {
             return Observable.of(false);
         }
 
-        let apiPath = this.baseAPI + 'auth/isAuthenticated' + this.setTokenQueryParam();
-        return this.http.get(apiPath)
+        const apiPath = this.baseAPI + 'auth/isAuthenticated';
+        const authHeaders = new Headers({'Authorization': token});
+        return this.http.get(apiPath, {headers: authHeaders})
             .map((response: Response) => {
                     return Observable.of(response.status == 200);
                 }

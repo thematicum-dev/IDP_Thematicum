@@ -1,4 +1,3 @@
-import {UserModel} from "../models/userModel";
 import {Injectable} from "@angular/core";
 import {Http, Headers, Response} from "@angular/http";
 import 'rxjs/Rx';
@@ -13,20 +12,16 @@ import * as Settings from '../utilities/settings';
 export class ThemeService {
     constructor(private http: Http, private errorService: ErrorService) {}
     baseAPI: string = Settings.getBaseApi();
-    headers = new Headers({'Content-Type': 'application/json'});
+    headers = new Headers({'Content-Type': 'application/json', 'Authorization': localStorage.getItem('token')});
 
     //TODO: delegate/refactor
     /*
      e.g. apiCall(apiPath: string): Observable<any> {}
      */
 
-    setTokenQueryParam() {
-        return localStorage.getItem('token') ? '?token=' + localStorage.getItem('token') : '';
-    }
-
     createTheme(theme: Theme) {
         const body = JSON.stringify(theme);
-        let apiPath = this.baseAPI + 'themes/' + this.setTokenQueryParam();
+        let apiPath = this.baseAPI + 'themes/';
         return this.http.post(apiPath, body, {headers: this.headers})
             .map((response: Response) => response.json().obj)
             .catch((error: Response) =>  {
@@ -38,7 +33,7 @@ export class ThemeService {
     createManyStockCompositionsAndAllocations(themeId: any, stockAllocation: StockAllocationModel[]) {
         const stockAllocationBody = {stockAllocation: stockAllocation};
         const body = JSON.stringify(stockAllocationBody);
-        let apiPath = this.baseAPI + 'stockallocations/theme/' + themeId + this.setTokenQueryParam();
+        let apiPath = this.baseAPI + 'stockallocations/theme/' + themeId;
 
         return this.http.post(apiPath, body, {headers: this.headers})
             .map((response: Response) => response.json())
@@ -50,7 +45,7 @@ export class ThemeService {
 
     createUserThemeInput(themeId: any, themeProperties: ThemePropertiesEditModel) {
         const body = JSON.stringify(themeProperties);
-        let apiPath = this.baseAPI + 'themeproperties/theme/' + themeId + this.setTokenQueryParam();
+        let apiPath = this.baseAPI + 'themeproperties/theme/' + themeId;
 
         return this.http.post(apiPath, body, {headers: this.headers})
             .map((response: Response) => response.json())
@@ -62,7 +57,7 @@ export class ThemeService {
 
     updateUserThemeInput(userThemeInputId: any, themeProperties: ThemePropertiesEditModel) {
         const body = JSON.stringify(themeProperties);
-        let apiPath = this.baseAPI + 'themeproperties/' + userThemeInputId + this.setTokenQueryParam();
+        let apiPath = this.baseAPI + 'themeproperties/' + userThemeInputId;
 
         return this.http.put(apiPath, body, {headers: this.headers})
             .map((response: Response) => response.json())
@@ -73,8 +68,8 @@ export class ThemeService {
     }
 
     deleteUserThemeInput(userThemeInputId: string) {
-        let apiPath = this.baseAPI + 'themeproperties/' + userThemeInputId + this.setTokenQueryParam();
-        return this.http.delete(apiPath)
+        let apiPath = this.baseAPI + 'themeproperties/' + userThemeInputId;
+        return this.http.delete(apiPath, {headers: this.headers})
             .map((response: Response) => response.json())
             .catch((error: Response) =>  {
                 this.errorService.handleError(error);
@@ -84,7 +79,7 @@ export class ThemeService {
 
     updateTheme(theme: Theme) {
         const body = JSON.stringify(theme);
-        let apiPath = this.baseAPI + 'themes/' + theme._id + this.setTokenQueryParam();
+        let apiPath = this.baseAPI + 'themes/' + theme._id;
 
         return this.http.put(apiPath, body, {headers: this.headers})
             .map((response: Response) => response.json().obj)
@@ -95,10 +90,10 @@ export class ThemeService {
     }
 
     searchThemes(searchTerm: string) {
-        let searchQuery = searchTerm ? "&searchQuery=" + searchTerm : '';
-        let apiPath = this.baseAPI + 'themes' + this.setTokenQueryParam() + searchQuery;
+        let searchQuery = searchTerm ? "?searchQuery=" + searchTerm : '';
+        let apiPath = this.baseAPI + 'themes' + searchQuery;
 
-        return this.http.get(apiPath)
+        return this.http.get(apiPath, {headers: this.headers})
             .map((response: Response) => {
                 return response.json().obj;
             })
@@ -109,8 +104,8 @@ export class ThemeService {
     }
 
     getThemeById(id: string) {
-        let apiPath = this.baseAPI + 'themes/' + id + this.setTokenQueryParam();
-        return this.http.get(apiPath)
+        let apiPath = this.baseAPI + 'themes/' + id;
+        return this.http.get(apiPath, {headers: this.headers})
             .map((response: Response) => {
                 return response.json().obj;
             })
@@ -121,8 +116,8 @@ export class ThemeService {
     }
 
     getThemeProperties(themeId: string) {
-        let apiPath = this.baseAPI + 'themeproperties/theme/' + themeId + this.setTokenQueryParam();
-        return this.http.get(apiPath)
+        let apiPath = this.baseAPI + 'themeproperties/theme/' + themeId;
+        return this.http.get(apiPath, {headers: this.headers})
             .map((response: Response) => {
                 return response.json().obj;
             })
@@ -133,8 +128,8 @@ export class ThemeService {
     }
 
     getThemeStockAllocationDistribution(themeId: string) {
-        let apiPath = this.baseAPI + 'stockallocations/theme/' + themeId + this.setTokenQueryParam();
-        return this.http.get(apiPath)
+        let apiPath = this.baseAPI + 'stockallocations/theme/' + themeId;
+        return this.http.get(apiPath, {headers: this.headers})
             .map((response: Response) => {
                 return response.json().obj;
             })
@@ -145,7 +140,7 @@ export class ThemeService {
     }
 
     updateUserStockAllocation(allocationId: string, exposure: number) {
-        let apiPath = this.baseAPI + 'stockallocations/' + allocationId + this.setTokenQueryParam();
+        let apiPath = this.baseAPI + 'stockallocations/' + allocationId;
         const body = {exposure: exposure};
 
         return this.http.put(apiPath, body, {headers: this.headers})
@@ -157,10 +152,10 @@ export class ThemeService {
     }
 
     createUserStockAllocation(themeStockCompositionId: string, exposure: number) {
-        let apiPath = this.baseAPI + 'stockallocations/themestockcomposition/' + themeStockCompositionId + this.setTokenQueryParam();
+        let apiPath = this.baseAPI + 'stockallocations/themestockcomposition/' + themeStockCompositionId;
         const body = {exposure: exposure};
 
-        return this.http.post(apiPath, body, this.headers)
+        return this.http.post(apiPath, body, {headers: this.headers})
             .map((response: Response) => response.json())
             .catch((error: Response) =>  {
                 this.errorService.handleError(error);
@@ -169,8 +164,8 @@ export class ThemeService {
     }
 
     deleteUserStockAllocation(allocationId: string) {
-        let apiPath = this.baseAPI + 'stockallocations/' + allocationId + this.setTokenQueryParam();
-        return this.http.delete(apiPath)
+        let apiPath = this.baseAPI + 'stockallocations/' + allocationId;
+        return this.http.delete(apiPath, {headers: this.headers})
             .map((response: Response) => response.json())
             .catch((error: Response) =>  {
                 this.errorService.handleError(error);
@@ -179,8 +174,8 @@ export class ThemeService {
     }
 
     deleteTheme(themeId: string) {
-        let apiPath = this.baseAPI + 'themes/' + themeId + this.setTokenQueryParam();
-        return this.http.delete(apiPath)
+        let apiPath = this.baseAPI + 'themes/' + themeId;
+        return this.http.delete(apiPath, {headers: this.headers})
             .map((response: Response) => response.json())
             .catch((error: Response) =>  {
                 this.errorService.handleError(error);
