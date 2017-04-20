@@ -1,4 +1,5 @@
-<div class="jumbotron">
-    <div class="text-center font-banner">{{title}}</div>
-    <p><a routerLinkActive="active" [routerLink]="['/search']" class="btn btn-primary btn-md" role="button">Start Searching</a></p>
+<div class="jumbotron text-center">
+    <div class=" font-banner">{{title}}</div> <br/>
+    <p *ngIf="isLoggedIn()"><a routerLinkActive="active" [routerLink]="['/search']" class="btn btn-primary btn-md" role="button">Start Searching</a></p>
+    <p *ngIf="!isLoggedIn()"><a routerLinkActive="active" [routerLink]="['/signin']" class="btn btn-primary btn-md" role="button">Sign in</a></p>
 </div>
