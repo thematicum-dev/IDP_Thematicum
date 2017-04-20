@@ -4,5 +4,5 @@ import {Component} from '@angular/core';
     templateUrl: 'homepage.component.html'
 })
 export class HomepageComponent {
-    title = "Thematic investing research";
+    title = "Thematic risk research";
 }

@@ -84,3 +84,11 @@ footer {
 textarea {
   resize: none;
 }
+
+.text-center {
+    text-align: center;
+}
+
+.font-banner {
+    font-size: 41px;
+}
