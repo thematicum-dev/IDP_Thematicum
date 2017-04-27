@@ -18,8 +18,13 @@ export default class BaseRepository {
         return collection.find({}).exec(); //returns promise
     }
 
+    // .skip is slow for large values
+    getRange(collection, start, end){
+        return collection.find().skip(start - 1).limit(end - start + 1).exec(); //returns promise
+    }
+
     save(document) {
-        return document.save(); //returns a promise
+        return document.save(); //returns promise
     }
 
     remove(document) {
