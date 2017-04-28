@@ -7,8 +7,9 @@ import {AuthService} from "../auth/auth.service";
 })
 export class HomepageComponent {
     title = "Thematic risk research";
+    constructor(private authService: AuthService) {}
 
     isLoggedIn() {
-        return true;
+        return this.authService.getStoredToken() != null;
     }
 }
