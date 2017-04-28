@@ -3,9 +3,10 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "start": "babel-node ./bin/www",
-    "build": "del-cli public/js/app && webpack --config webpack.config.dev.js --progress --profile --watch",
-    "build:prod": "del-cli public/js/app && ngc -p tsconfig.aot.json && ngc -p tsconfig.aot.json && webpack --config webpack.config.prod.js --progress --profile --bail && del-cli 'public/js/app/**/*.js' 'public/js/app/**/*.js.map' '!public/js/app/bundle.js' '!public/js/app/*.chunk.js' 'assets/app/**/*.ngfactory.ts' 'assets/app/**/*.shim.ts'"
+	"start": "babel-node ./bin/www",
+	"dev": "nodemon ./bin/www --config nodemon.json --exec babel-node --inspect",
+  "build": "del-cli public/js/app && webpack --config webpack.config.dev.js --progress --profile --watch",
+	"build:prod": "del-cli public/js/app && ngc -p tsconfig.aot.json && ngc -p tsconfig.aot.json && webpack --config webpack.config.prod.js --progress --profile --bail && del-cli 'public/js/app/**/*.js' 'public/js/app/**/*.js.map' '!public/js/app/bundle.js' '!public/js/app/*.chunk.js' 'assets/app/**/*.ngfactory.ts' 'assets/app/**/*.shim.ts'"
   },
   "dependencies": {
     "@angular/common": "2.0.1",
@@ -46,17 +47,18 @@
     "zone.js": "^0.6.23"
   },
   "devDependencies": {
-    "@types/core-js": "^0.9.34",
+    "@types/core-js": "0.9.35",
     "@types/jquery": "^2.0.39",
     "@types/node": "^6.0.45",
     "angular2-router-loader": "^0.3.2",
     "angular2-template-loader": "^0.5.0",
-    "awesome-typescript-loader": "^2.2.4",
+    "awesome-typescript-loader": "^3.1.2",
     "del-cli": "^0.2.0",
     "html-loader": "^0.4.4",
+    "nodemon": "^1.11.0",
     "raw-loader": "^0.5.1",
     "typescript": "^2.0.3",
-    "webpack": "^2.1.0-beta.21",
+    "webpack": "2.2.1",
     "webpack-merge": "^0.14.1"
   }
 }
