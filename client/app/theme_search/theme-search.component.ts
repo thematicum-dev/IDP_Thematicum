@@ -11,7 +11,8 @@ import {ThemeService} from "../services/theme.service";
 export class ThemeSearchComponent implements OnInit {
     searchTerm = "";
     themes: Theme[] = [];
-
+    pageSizes = [1, 2, 3, 4];
+    pageSize = 4;
     constructor(private themeService: ThemeService, private router: Router, private route: ActivatedRoute) {}
 
     ngOnInit(): void {
@@ -22,6 +23,10 @@ export class ThemeSearchComponent implements OnInit {
         } else if(this.route.snapshot.queryParams['all'] && this.route.snapshot.queryParams['all'] === 'true') {
             this.searchThemes(null);
         }
+    }
+
+    onSelectPageSize(index: number){
+        this.pageSize = this.pageSizes[index]; 
     }
 
     onSubmit(form: NgForm) {
@@ -38,7 +43,11 @@ export class ThemeSearchComponent implements OnInit {
         this.router.navigate(['/theme', themeId]);
     }
 
-    searchThemes(searchTerm: any) {
-        this.themeService.searchThemes(searchTerm).subscribe(data => this.themes = data, error => console.log(error));
+    updateView(data: any){
+        this.themes = data.result;
     }
+
+    searchThemes(searchTerm: any) {
+        this.themeService.searchThemes(searchTerm, this.pageSize).subscribe(data => this.updateView(data), error => console.log(error));
+    }  
 }

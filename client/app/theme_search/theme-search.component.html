@@ -25,6 +25,19 @@
     <app-error></app-error>
 </div>
 
+<div class="col-xs-12">
+    <div class="input-group-btn col-xs-offset-10 col-xs-2">
+        <div class="btn-group">
+            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+           <label>Page Size:</label>  {{pageSize}} <span class="caret"></span>
+        </button>
+            <ul class="dropdown-menu">
+                <li *ngFor="let pageSize of pageSizes; let i = index;" (click)="onSelectPageSize(i)"><a>{{pageSize}}</a></li>
+            </ul>
+        </div>
+    </div>
+</div>
+
 <div class="alert alert-info text-center" role="alert" *ngIf="form.submitted && themes.length == 0">No relevant themes found</div>
 
 <div class="list-group" *ngIf="themes.length>0">

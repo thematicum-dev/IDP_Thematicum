@@ -71,17 +71,28 @@ export function getTags(req, res, next) {
 }
 
 export function list(req, res, next) {
+    
+    if(!req.query.start || isNaN(req.query.start) || req.query.start <= 0){
+        req.query.start = 1;
+    }
+    req.query.start = parseInt(req.query.start, 10);
+
+    if(!req.query.limit || isNaN(req.query.limit) || req.query.limit <= 0 || req.query.limit > 1000){ 
+        req.query.limit = 10;
+    }
+    req.query.limit = parseInt(req.query.limit, 10);
+
     if(req.query.searchQuery) {
-        repo.getThemeBySearchQuery(req.query.searchQuery)
-            .then(results => res.status(200).json(new AppResponse('Investment themes retrieved', results)))
-            .catch(err => next(err));
-    } else {
-        //TODO: sorting criteria
-        repo.getAll(Theme)
-            .then(results => res.status(200).json(new AppResponse('Investment themes retrieved', results)))
-            .catch(err => next(err));
+        repo.getThemeRangeBySearchQuery(req.query.searchQuery, req.query.start, req.query.limit)
+        .then(results => res.status(200).json(new AppResponse('Investment themes retrieved', results)))
+        .catch(err => next(err));
+    } else{
+        repo.getRange(Theme, req.query.start, req.query.limit)
+        .then(results => res.status(200).json(new AppResponse('Investment themes retrieved', results)))
+        .catch(err => next(err));
     }
 }
+
 export function themeById(req, res, next, id) {
     repo.getThemeById(id)
         .then(result => {

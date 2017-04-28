@@ -8,7 +8,7 @@ export interface ThemeServiceInterface {
     updateUserThemeInput(userThemeInputId: any, themeProperties: ThemePropertiesEditModel);
     deleteUserThemeInput(userThemeInputId: string);
     updateTheme(theme: Theme);
-    searchThemes(searchTerm: string);
+    searchThemes(searchTerm: string, limit: number);
     getThemeById(id: string);
     getThemeProperties(themeId: string);
     getThemeStockAllocationDistribution(themeId: string);

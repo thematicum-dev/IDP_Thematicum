@@ -68,10 +68,20 @@ export class ThemeService implements ThemeServiceInterface{
             .catch(this.handleError);
     }
 
-    searchThemes(searchTerm: string) {
-        let searchQuery = searchTerm ? "?searchQuery=" + searchTerm : '';
-        let apiPath = this.baseAPI + 'themes' + searchQuery;
+    encodeQueryData(data: any) {
+        let ret = [];
+        for (let d in data)
+            if(typeof data[d] !== 'undefined' && data[d] !== null)
+                ret.push(encodeURIComponent(d) + '=' + encodeURIComponent(data[d]));
+        return "?" + ret.join('&');
+    }
 
+    searchThemes(searchTerm: string, limit: number) {        
+        let start: number = 1;
+        let params = { 'searchQuery': searchTerm, 'start': start, 'limit': limit };
+        let searchQuery = this.encodeQueryData(params);
+        let apiPath = this.baseAPI + 'themes' + searchQuery;
+        
         return this.http.get(apiPath, {headers: this.headers})
             .map((response: Response) => response.json().obj)
             .catch(this.handleError);

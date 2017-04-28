@@ -36,8 +36,28 @@ export default class DataRepository extends BaseRepository {
         return Theme.find(
             {$text: {$search: searchQuery}},
             {score: {$meta: 'textScore'}})
-            .sort({score: {$meta: "textScore"}})
-            .exec();
+            .sort({score: {$meta: "textScore"}}).exec();
+    }
+
+    // .skip is slow for large values
+    getThemeRangeBySearchQuery(searchQuery, start, limit){
+        return new Promise((resolve, reject) => {
+           Theme.find(
+            {$text: {$search: searchQuery}},
+            {score: {$meta: 'textScore'}})
+            .count().exec().then(count => {
+                Theme.find(
+                {$text: {$search: searchQuery}},
+                {score: {$meta: 'textScore'}})
+                .sort({score: {$meta: "textScore"}})
+                .skip(start - 1).limit(limit).exec().then(result => {
+                    const obj = { result: result, count: count};
+                    resolve(obj);
+                })
+                .catch(err => reject(err));
+            })
+            .catch(err => reject(err));
+        });
     }
 
     getThemeById(id) {

@@ -19,8 +19,20 @@ export default class BaseRepository {
     }
 
     // .skip is slow for large values
-    getRange(collection, start, end){
-        return collection.find().skip(start - 1).limit(end - start + 1).exec(); //returns promise
+    getRange(collection, start, limit){
+          return new Promise((resolve, reject) => {
+           collection.find().count().exec().then(count => {
+                collection.find()
+                .sort([['_id', -1]])
+                .skip(start - 1).limit(limit).exec().then(result => {
+                    const obj = { result: result, count: count};
+                    resolve(obj);
+                })
+                .catch(err => reject(err));
+            })
+            .catch(err => reject(err));
+        });
+        return collection.find().skip(start - 1).limit(limit).exec(); //returns promise
     }
 
     save(document) {
