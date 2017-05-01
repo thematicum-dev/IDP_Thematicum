@@ -4,7 +4,7 @@ var commonConfig = require('./webpack.config.common.js');
 
 module.exports = webpackMerge.smart(commonConfig, {
     entry: {
-        'app': './client/app/main.aot.ts'
+        'app': './client/app/main.ts'
     },
 
     output: {
@@ -21,7 +21,7 @@ module.exports = webpackMerge.smart(commonConfig, {
                 loaders: [
                     'awesome-typescript-loader',
                     'angular2-template-loader',
-                    'angular2-router-loader?aot=true&genDir=public/js/app'
+                    'angular2-router-loader'
                 ]
             }
         ]

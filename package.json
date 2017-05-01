@@ -5,8 +5,8 @@
   "scripts": {
 	"start": "babel-node ./bin/www",
 	"dev": "nodemon ./bin/www --config nodemon.json --exec babel-node --inspect",
-  "build": "del-cli public/js/app && webpack --config webpack.config.dev.js --progress --profile --watch",
-	"build:prod": "del-cli public/js/app && ngc -p tsconfig.aot.json && ngc -p tsconfig.aot.json && webpack --config webpack.config.prod.js --progress --profile --bail && del-cli 'public/js/app/**/*.js' 'public/js/app/**/*.js.map' '!public/js/app/bundle.js' '!public/js/app/*.chunk.js' 'assets/app/**/*.ngfactory.ts' 'assets/app/**/*.shim.ts'"
+    "build": "del-cli public/js/app && webpack --config webpack.config.dev.js --progress --profile --watch",
+	"build:prod": "del-cli public/js/app && webpack --config webpack.config.prod.js --progress --profile --bail && del-cli 'public/js/app/**/*.js' 'public/js/app/**/*.js.map' '!public/js/app/bundle.js' '!public/js/app/*.chunk.js' 'assets/app/**/*.shim.ts'"
   },
   "dependencies": {
     "@angular/common": "2.0.1",
