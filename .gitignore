@@ -2,6 +2,7 @@
 .idea/workspace.xml
 /db/
 *.env
+.vscode/*
 
 /node_modules/
 /public/bower_components/
