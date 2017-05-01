@@ -16,7 +16,7 @@ import themePropertiesRoutes from './server/routes/themeProperties.routes';
 import stockAllocationRoutes from './server/routes/stockAllocations.routes';
 import adminRoutes from './server/routes/admin.routes';
 
-dotenv.config();
+dotenv.config({path: "dot.env"});
 const app = express();
 
 const mongodbPath = settings.getDBConnectionString();

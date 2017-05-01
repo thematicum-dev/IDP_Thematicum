@@ -15,10 +15,22 @@ export class AuthService implements AuthServiceInterface {
     contentTypeHeaders = new Headers({'Content-Type': 'application/json'});
     redirectUrl: string;
     constructor(private http: Http, private router: Router, private errorService: ErrorService) {}
+
+    captcha_check(captcha: String){
+	    
+	let apiPath = "/api/auth/captcha";
+	let body = JSON.stringify({
+		'secret': '6LerPh4UAAAAAJt5ZhaHiz2NWX8kLnZu9S9TLghN',
+		'response': captcha
+	});
+	return this.http.post(apiPath, body, {headers: this.contentTypeHeaders})
+		.map((response: Response) => response.json())
+            	.catch(this.handleError);    
+    }
     
     signup(signupModel: SignupModel) {
         const body = JSON.stringify(signupModel);
-
+        
         let apiPath = this.baseAPI + 'auth/signup';
         return this.http.post(apiPath, body, {headers: this.contentTypeHeaders})
             .map((response: Response) => response.json())
