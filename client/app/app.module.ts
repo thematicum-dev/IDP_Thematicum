@@ -27,6 +27,7 @@ import {ModalComponent} from "./theme_details/modal.component";
 import {ThemeStockAllocationComponent} from "./theme_details/theme-stock-allocation.component";
 import {UserProfileComponent} from "./user_profile/user-profile.component";
 
+
 @NgModule({
     declarations: [
         AppComponent,
