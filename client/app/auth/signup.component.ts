@@ -41,7 +41,6 @@ export class SignupComponent implements OnInit{
   }
 
   displayRecaptcha(){
-	  console.log("inside display recaptcha");
 	var doc = <HTMLDivElement>document.getElementById('recapthadiv');
 	var script = <HTMLScriptElement>document.createElement('script');
 	script.innerHTML = '';
@@ -63,7 +62,5 @@ export class SignupComponent implements OnInit{
 			throw Error("Captcha not correct");
 	         }
         }, error => form.reset());
-
-        //this.authService.signup(signupModel).subscribe(data => this.router.navigateByUrl('/signin'), error => form.reset());
     }
 }

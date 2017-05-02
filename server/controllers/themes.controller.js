@@ -76,11 +76,7 @@ export function list(req, res, next) {
         req.query.start = 1;
     }
     req.query.start = parseInt(req.query.start, 10);
-
-    if(!req.query.limit || isNaN(req.query.limit) || req.query.limit <= 0 || req.query.limit > 1000){ 
-        req.query.limit = 10;
-    }
-    req.query.limit = parseInt(req.query.limit, 10);
+    req.query.limit = 10;
 
     if(req.query.searchQuery) {
         repo.getThemeRangeBySearchQuery(req.query.searchQuery, req.query.start, req.query.limit)
