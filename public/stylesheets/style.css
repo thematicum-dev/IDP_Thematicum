@@ -7,6 +7,31 @@ body {
   padding-top: 50px; /* Required padding for .navbar-fixed-top. Remove if using .navbar-static-top. Change if height of navigation changes. */
 }
 
+.thematicum-navbar-color {
+  background-color: #2980b9;
+  border-color: #2980b9;
+}
+
+.thematicum-navbar-text {
+  width: 674px;
+  height: 58px;
+  font-family: DroidSerif;
+  font-size: 32px;
+  text-align: center;
+  color: #ffffff;
+}
+
+.thematicum-navbar-text:hover, .thematicum-navbar-text:visited, .thematicum-navbar-text:link, .thematicum-navbar-text:active{
+  color: #ffffff;
+  text-decoration: none;
+}
+
+.thematicum-navbar-nav-text {
+  font-family: DroidSans;
+  font-size: 16px;
+  color: #ffffff;
+}
+
 /* Footer Styles */
 
 footer {

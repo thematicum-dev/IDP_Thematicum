@@ -26,14 +26,11 @@ export class SignupComponent implements OnInit{
     ];
 
     constructor(private authService: AuthService, private router: Router) {
-	    console.log("constructor");
         this.user.personalRole = this.personalRoles[0]; //default value
         window['verifyCallback'] = this.verifyCallback.bind(this);
     }
 
     ngOnInit(){
-	    //this.displayRecaptcha();
-	    console.log(grecaptcha);
 	    grecaptcha.render(document.getElementById('html_element'),{
 		    'sitekey':'6LerPh4UAAAAAL6-PPaN6-w2JX4wcJSjkQp2MAxl'
 	    });
@@ -57,7 +54,7 @@ export class SignupComponent implements OnInit{
 
     onSubmit(form: NgForm) {
         const signupModel = new SignupModel(this.user, this.registrationAccessCode);
-       // console.log(window['grecaptcha'].getResponse());
+
         this.authService.captcha_check(window['grecaptcha'].getResponse()).subscribe(data => {
 	         var obj = JSON.parse(data);
 	         if(obj.success == true){
