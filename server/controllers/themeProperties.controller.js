@@ -5,8 +5,8 @@ import DataRepository from '../data_access/dataRepository';
 
 const repo = new DataRepository();
 
-export function listByTheme(req, res, next) {
-    repo.getThemePropertiesByTheme(req.theme._id, res.locals.user._id)
+export function listByThemeId(req, res, next) {
+    repo.getThemePropertiesByThemeId(req.theme._id, res.locals.user._id)
         .then(results => {
             if (!results) {
                 return next(new AppError('No theme property found for the theme', 404));

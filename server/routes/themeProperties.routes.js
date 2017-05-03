@@ -7,7 +7,7 @@ const router = Router();
 router.use('/', authUtilities.authenticationMiddleware);
 
 router.route('/theme/:themeId')
-    .get(themePropertiesController.listByTheme)
+    .get(themePropertiesController.listByThemeId)
     .post(themePropertiesController.create);
 
 router.route('/:themepropertyId')

@@ -1,5 +1,7 @@
 import _ from 'underscore';
+import UserThemeInputAggregation from '../models/userThemeInputAggregation';
 import constants from '../utilities/constants';
+import DataRepository from '../data_access/dataRepository';
 
 class DataAggregation {
     constructor() {}
@@ -48,8 +50,9 @@ class DataAggregation {
 }
 
 export class ThemePropertiesAggregation extends DataAggregation {
+
     constructor() {
-        super();
+        super();        
         this.propertyList = [{
             propertyName: 'timeHorizon',
             nrValuesRequired: constants.TOTAL_TIME_HORIZON_VALUES
@@ -59,7 +62,41 @@ export class ThemePropertiesAggregation extends DataAggregation {
         }, {
             propertyName: 'categories',
             nrValuesRequired: constants.TOTAL_CATEGORY_VALUES
-        }];
+        }];        
+    }
+    
+    getThemeDataAggregation(collection) {
+        const themeAggregation = this.getDataAggregation(collection);
+        this.setThemeDataAggregation(themeAggregation);
+        return themeAggregation;
+    }
+
+    setThemeDataAggregation(themeAggregation){
+        let userThemeInputAggregation = {};
+
+        for (const prop of this.propertyList) {
+            userThemeInputAggregation[prop.propertyName] = [];
+            let maxValue = Math.max.apply(Math,themeAggregation[prop.propertyName].map(function(o){return o.percentage;}))
+            let results = themeAggregation[prop.propertyName].filter(function(o){ return o.percentage == maxValue; })
+            for(const result of results){
+                userThemeInputAggregation[prop.propertyName].push(parseInt(result.value));
+            }
+            console.log(userThemeInputAggregation);
+        }
+        this.create(userThemeInputAggregation);
+    }
+
+    create(userThemeInputAggregation) {        
+        const repo = new DataRepository();
+        const themeAggregation = new UserThemeInputAggregation({
+            timeHorizon: userThemeInputAggregation.timeHorizon,
+            maturity: userThemeInputAggregation.maturity,
+            categories: userThemeInputAggregation.categories
+        });
+
+        repo.save(themeAggregation)
+            .then(() => console.log("User Theme Aggregated"))
+            .catch(err => next(err));
     }
 }
 

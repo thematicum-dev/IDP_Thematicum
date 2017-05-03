@@ -32,7 +32,6 @@ export default class BaseRepository {
             })
             .catch(err => reject(err));
         });
-        return collection.find().skip(start - 1).limit(limit).exec(); //returns promise
     }
 
     save(document) {

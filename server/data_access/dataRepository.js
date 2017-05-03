@@ -1,5 +1,6 @@
 import mongoose from 'mongoose';
 import BaseRepository from './baseRepository';
+import QueryBuilder from './queryBuilder';
 import User from '../models/user';
 import Theme from '../models/theme';
 import {AppError} from '../utilities/appError';
@@ -41,17 +42,11 @@ export default class DataRepository extends BaseRepository {
 
     // .skip is slow for large values
     getThemeRangeBySearchQuery(searchQuery, start, limit){
+
         return new Promise((resolve, reject) => {
-           Theme.find(
-            {$text: {$search: searchQuery}},
-            {score: {$meta: 'textScore'}})
-            .count().exec().then(count => {
-                Theme.find(
-                {$text: {$search: searchQuery}},
-                {score: {$meta: 'textScore'}})
-                .sort({score: {$meta: "textScore"}})
-                .skip(start - 1).limit(limit).exec().then(result => {
-                    const obj = { result: result, count: count};
+            (new QueryBuilder()).selectModel(Theme).textSearch(searchQuery).count().exec().then(count => {
+                (new QueryBuilder()).selectModel(Theme).textSearch(searchQuery).skip(start, limit).exec().then(result => {
+                    const obj = { result: result, count: count };
                     resolve(obj);
                 })
                 .catch(err => reject(err));
@@ -80,14 +75,16 @@ export default class DataRepository extends BaseRepository {
         });
     }
 
-    getThemePropertiesByTheme(themeId, userId) {
+    getThemePropertiesByThemeId(themeId, userId) {
+        // aggregates all user theme inputs
         return new Promise((resolve, reject) => {
             UserThemeInput.find({theme: themeId}).exec()
                 .then(results => {
-                    const aggregation = new ThemePropertiesAggregation();
-                    const themeProperties = aggregation.getDataAggregation(results);
-                    const totalCount = results ? results.length : 0;
 
+                    const aggregation = new ThemePropertiesAggregation();
+                    const themeProperties = aggregation.getThemeDataAggregation(results);
+
+                    const totalCount = results ? results.length : 0;
                     const themePropertiesByCurrentUser = this.getThemePropertiesByUser(results, userId);
                     const obj = {properties: themeProperties, userInputs: themePropertiesByCurrentUser, totalCount: totalCount};
 
