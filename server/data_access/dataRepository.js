@@ -3,6 +3,7 @@ import BaseRepository from './baseRepository';
 import QueryBuilder from './queryBuilder';
 import User from '../models/user';
 import Theme from '../models/theme';
+import UserThemeInputAggregation from '../models/userThemeInputAggregation';
 import {AppError} from '../utilities/appError';
 import UserThemeInput from '../models/userThemeInput';
 import ThemeStockComposition from '../models/themeStockComposition';
@@ -10,6 +11,7 @@ import UserThemeStockAllocation from '../models/userThemeStockAllocation';
 import RegistrationAccessCode from '../models/accessCode';
 import Stock from '../models/stock';
 import { ThemePropertiesAggregation, StockAllocationAggregation } from '../utilities/dataAggregation';
+import constants from '../utilities/constants';
 
 export default class DataRepository extends BaseRepository {
     constructor() {
@@ -34,15 +36,10 @@ export default class DataRepository extends BaseRepository {
     }
 
     getThemeBySearchQuery(searchQuery) {
-        return Theme.find(
-            {$text: {$search: searchQuery}},
-            {score: {$meta: 'textScore'}})
-            .sort({score: {$meta: "textScore"}}).exec();
+        return (new QueryBuilder()).selectModel(Theme).textSearch(searchQuery).exec();
     }
 
-    // .skip is slow for large values
     getThemeRangeBySearchQuery(searchQuery, start, limit){
-
         return new Promise((resolve, reject) => {
             (new QueryBuilder()).selectModel(Theme).textSearch(searchQuery).count().exec().then(count => {
                 (new QueryBuilder()).selectModel(Theme).textSearch(searchQuery).skip(start, limit).exec().then(result => {
@@ -53,6 +50,46 @@ export default class DataRepository extends BaseRepository {
             })
             .catch(err => reject(err));
         });
+    }
+
+    // parameter is array of strings
+    getThemeByTags(tags){
+        return new Promise((resolve,reject) => {
+            if (tags.length > 0) {
+                Theme.find({ tags: { $in: tags } }).exec()
+                    .then(results => resolve(results))
+                    .catch(err => reject(err));
+            } else {
+                Theme.find({ tags: { $nin: [] } }).exec()
+                    .then(results => resolve(results))
+                    .catch(err => reject(err));
+            }
+        });
+    }
+
+    // parameters are array of numbers
+    getFilteredUserThemeInputAggregations(categories, maturity, timeHorizon) {
+        return new Promise((resolve, reject) => {
+            
+            if(categories.length == 0)
+                categories = Array.from(Array(constants.TOTAL_CATEGORY_VALUES).keys())
+
+            if(maturity.length == 0)
+                maturity = Array.from(Array(constants.TOTAL_MATURITY_VALUES).keys())
+
+            if(timeHorizon.length == 0)
+                timeHorizon = Array.from(Array(constants.TOTAL_TIME_HORIZON_VALUES).keys())
+            
+            UserThemeInputAggregation.find({ $and: [{ categories: { "$in": categories } }, { maturity: { "$in": maturity } }, { timeHorizon: { "$in": timeHorizon } }] }, { theme: 1, _id: 0 }).exec()
+                .then(results => {
+                    resolve(results);
+                })
+                .catch(err => reject(err));
+        });
+    }
+
+    getThemeAggregationByThemeId(themeId){
+        return UserThemeInputAggregation.find({ theme: themeId }).exec();
     }
 
     getThemeById(id) {
@@ -82,7 +119,7 @@ export default class DataRepository extends BaseRepository {
                 .then(results => {
 
                     const aggregation = new ThemePropertiesAggregation();
-                    const themeProperties = aggregation.getThemeDataAggregation(results);
+                    const themeProperties = aggregation.getThemeDataAggregation(themeId, results);
 
                     const totalCount = results ? results.length : 0;
                     const themePropertiesByCurrentUser = this.getThemePropertiesByUser(results, userId);

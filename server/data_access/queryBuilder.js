@@ -27,6 +27,17 @@ export default class QueryBuilder {
         return this;
     }
 
+    findAll(){
+        this.model = this.model.find();
+        return this;
+    }
+
+    sortDescending(){
+        this.model = this.model.sort([['_id', -1]]);
+        return this;
+    }
+
+    // .skip is slow for large values
     skip(start, limit){
         this.model = this.model.skip(start - 1).limit(limit);
         return this;

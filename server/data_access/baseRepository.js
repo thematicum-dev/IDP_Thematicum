@@ -1,5 +1,6 @@
 import mongoose from 'mongoose';
 import {AppError} from '../utilities/appError';
+import QueryBuilder from './queryBuilder';
 
 export default class BaseRepository {
     constructor() {}
@@ -15,27 +16,29 @@ export default class BaseRepository {
     }
 
     getAll(collection) {
-        return collection.find({}).exec(); //returns promise
+        return collection.find({}).exec();
     }
 
-    // .skip is slow for large values
     getRange(collection, start, limit){
-          return new Promise((resolve, reject) => {
-           collection.find().count().exec().then(count => {
-                collection.find()
-                .sort([['_id', -1]])
-                .skip(start - 1).limit(limit).exec().then(result => {
+          return new Promise((resolve, reject) => {        
+            (new QueryBuilder()).selectModel(collection).findAll().count().exec().then(count => {
+                (new QueryBuilder()).selectModel(collection).findAll().sortDescending().skip(start, limit).exec().then(result => {
                     const obj = { result: result, count: count};
                     resolve(obj);
                 })
-                .catch(err => reject(err));
+                .catch(err => reject (err));
             })
-            .catch(err => reject(err));
+            .catch(err => reject (err)); 
         });
     }
 
     save(document) {
-        return document.save(); //returns promise
+        return document.save(); 
+    }
+
+    // adds a new document if none is found because of upsert:true
+    update(collection, query, update) {
+        return collection.update(query, update,  {upsert: true}); 
     }
 
     remove(document) {

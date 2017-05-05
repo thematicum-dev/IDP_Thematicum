@@ -65,13 +65,13 @@ export class ThemePropertiesAggregation extends DataAggregation {
         }];        
     }
     
-    getThemeDataAggregation(collection) {
+    getThemeDataAggregation(themeId, collection) {
         const themeAggregation = this.getDataAggregation(collection);
-        this.setThemeDataAggregation(themeAggregation);
+        this.setThemeDataAggregation(themeId, themeAggregation);
         return themeAggregation;
     }
 
-    setThemeDataAggregation(themeAggregation){
+    setThemeDataAggregation(themeId, themeAggregation){
         let userThemeInputAggregation = {};
 
         for (const prop of this.propertyList) {
@@ -81,22 +81,21 @@ export class ThemePropertiesAggregation extends DataAggregation {
             for(const result of results){
                 userThemeInputAggregation[prop.propertyName].push(parseInt(result.value));
             }
-            console.log(userThemeInputAggregation);
         }
-        this.create(userThemeInputAggregation);
+        this.updateUserThemeInputAggregation(themeId, userThemeInputAggregation);
     }
 
-    create(userThemeInputAggregation) {        
+    // TODO: Throw error at client if this fails
+    updateUserThemeInputAggregation(themeId, userThemeInputAggregation) {        
         const repo = new DataRepository();
-        const themeAggregation = new UserThemeInputAggregation({
+        const themeAggregation = {
             timeHorizon: userThemeInputAggregation.timeHorizon,
             maturity: userThemeInputAggregation.maturity,
             categories: userThemeInputAggregation.categories
-        });
-
-        repo.save(themeAggregation)
-            .then(() => console.log("User Theme Aggregated"))
-            .catch(err => next(err));
+        };
+        repo.update(UserThemeInputAggregation, { theme: themeId }, themeAggregation)
+            .then(() => console.log("User Theme Aggregation Added"))
+            .catch(err => console.log(err));
     }
 }
 

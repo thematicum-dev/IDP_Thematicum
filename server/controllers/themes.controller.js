@@ -2,6 +2,7 @@ import Theme from '../models/theme';
 import {AppError} from '../utilities/appError';
 import {AppResponse} from '../utilities/appResponse';
 import DataRepository from '../data_access/dataRepository';
+import UserThemeInputAggregation from '../models/userThemeInputAggregation';
 
 const repo = new DataRepository();
 
@@ -72,21 +73,29 @@ export function getTags(req, res, next) {
 
 export function list(req, res, next) {
     
-    if(!req.query.start || isNaN(req.query.start) || req.query.start <= 0){
+    if (!req.query.start || isNaN(req.query.start) || req.query.start <= 0) {
         req.query.start = 1;
     }
     req.query.start = parseInt(req.query.start, 10);
     req.query.limit = 10;
 
+    let aggregationPromise = repo.getFilteredUserThemeInputAggregations([], [], []);
+
+    let searchQueryPromise = null;
     if(req.query.searchQuery) {
-        repo.getThemeRangeBySearchQuery(req.query.searchQuery, req.query.start, req.query.limit)
-        .then(results => res.status(200).json(new AppResponse('Investment themes retrieved', results)))
-        .catch(err => next(err));
+        searchQueryPromise = repo.getThemeRangeBySearchQuery(req.query.searchQuery, req.query.start, req.query.limit);
     } else{
-        repo.getRange(Theme, req.query.start, req.query.limit)
-        .then(results => res.status(200).json(new AppResponse('Investment themes retrieved', results)))
-        .catch(err => next(err));
+        searchQueryPromise = repo.getRange(Theme, req.query.start, req.query.limit);
     }
+
+    let tagsPromise = repo.getThemeByTags([]);
+
+    Promise.all([aggregationPromise, searchQueryPromise, tagsPromise]).then(results => {
+        console.log(results[0]);
+        res.status(200).json(new AppResponse('Investment themes retrieved', results[1]));
+        console.log(results[2]);
+    })
+    .catch(err => next(err));
 }
 
 export function themeById(req, res, next, id) {
