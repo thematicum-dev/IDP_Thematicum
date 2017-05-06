@@ -27,29 +27,25 @@ export class SignupComponent implements AfterViewInit{
 
     constructor(private authService: AuthService, private router: Router) {
         this.user.personalRole = this.personalRoles[0]; //default value
-        window['verifyCallback'] = this.verifyCallback.bind(this);
     }
 
     ngAfterViewInit(){
-	    grecaptcha.render(document.getElementById('html_element'),{
-		    'sitekey':'6LerPh4UAAAAAL6-PPaN6-w2JX4wcJSjkQp2MAxl'
-	    });
+	    if (window['grecaptcha'] == undefined){
+		   window.onload =function(){
+			grecaptcha.render(document.getElementById('captcha_signup'),{
+		    		'sitekey':'6LerPh4UAAAAAL6-PPaN6-w2JX4wcJSjkQp2MAxl'
+			});
+		   }
+	    }else{
+		   grecaptcha.render(document.getElementById('captcha_signup'),{
+		    		'sitekey':'6LerPh4UAAAAAL6-PPaN6-w2JX4wcJSjkQp2MAxl'
+		});
+	    }
     }
 
-    verifyCallback(response){
-    	alert(response);
-  }
-
-  displayRecaptcha(){
-	var doc = <HTMLDivElement>document.getElementById('recapthadiv');
-	var script = <HTMLScriptElement>document.createElement('script');
-	script.innerHTML = '';
-	script.src = 'https://www.google.com/recaptcha/api.js';
-	script.async = true;
-	script.defer = true;
-	console.log(script);
-	doc.appendChild(script);
-  }
+    onReset(){
+	    window['grecaptcha'].reset('captcha_signup');
+    }
 
     onSubmit(form: NgForm) {
         const signupModel = new SignupModel(this.user, this.registrationAccessCode);
