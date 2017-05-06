@@ -1,4 +1,4 @@
-import { Component, OnInit} from '@angular/core';
+import { Component, AfterViewInit} from '@angular/core';
 import {UserModel} from "../models/userModel";
 import {NgForm} from "@angular/forms";
 import {AuthService} from "./auth.service";
@@ -14,7 +14,7 @@ declare var grecaptcha: any;
     templateUrl: 'signup.component.html',
     styleUrls: [`.well { padding-top: 0px}`]
 })
-export class SignupComponent implements OnInit{
+export class SignupComponent implements AfterViewInit{
     user: UserModel = new UserModel();
     registrationAccessCode: string;
     personalRoles = [
@@ -30,7 +30,7 @@ export class SignupComponent implements OnInit{
         window['verifyCallback'] = this.verifyCallback.bind(this);
     }
 
-    ngOnInit(){
+    ngAfterViewInit(){
 	    grecaptcha.render(document.getElementById('html_element'),{
 		    'sitekey':'6LerPh4UAAAAAL6-PPaN6-w2JX4wcJSjkQp2MAxl'
 	    });
