@@ -2,8 +2,7 @@ import { Component, AfterViewInit } from '@angular/core';
 import {UserModel} from "../models/userModel";
 import {NgForm} from "@angular/forms";
 import {AuthService} from "./auth.service";
-
-declare var grecaptcha: any;
+import {CaptchaComponent} from "./captcha.component";
 
 @Component({
     selector: 'app-signin',
@@ -12,25 +11,11 @@ declare var grecaptcha: any;
 })
 export class SigninComponent implements AfterViewInit {
     user: UserModel = new UserModel();
+    captcha: CaptchaComponent = new CaptchaComponent('captcha_signin');
     constructor(private authService: AuthService) {}
 
     ngAfterViewInit(){
-	    if (window['grecaptcha'] == undefined){
-		   window.onload =function(){
-			grecaptcha.render(document.getElementById('captcha_signin'),{
-		    		'sitekey':'6LerPh4UAAAAAL6-PPaN6-w2JX4wcJSjkQp2MAxl'
-			});
-		   }
-	    }else{
-		   grecaptcha.render(document.getElementById('captcha_signin'),{
-		    		'sitekey':'6LerPh4UAAAAAL6-PPaN6-w2JX4wcJSjkQp2MAxl'
-		});
-	    }
-    }
-
-    onReset(){
-	    console.log("form getting reset");
-	    window['grecaptcha'].reset('captcha_signin');
+	    this.captcha.render();
     }
 
     onSubmit(form: NgForm) {
@@ -42,7 +27,10 @@ export class SigninComponent implements AfterViewInit {
 			localStorage.setItem('token', data.token);
 			localStorage.setItem('username', data.username);
 		},
-		error => form.reset());
+		error => {
+			form.reset();
+			 this.captcha.reset();
+		});
 	         }else{
 			throw Error("Captcha not correct");
 	         }

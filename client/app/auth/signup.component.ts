@@ -6,8 +6,7 @@ import {Router} from "@angular/router";
 import {SignupModel} from "./signup-model";
 import { Http,Headers } from '@angular/http';
 import {Observable} from 'rxjs/Rx';
-
-declare var grecaptcha: any;
+import {CaptchaComponent} from "./captcha.component";
 
 @Component({
     selector: 'app-signup',
@@ -16,6 +15,7 @@ declare var grecaptcha: any;
 })
 export class SignupComponent implements AfterViewInit{
     user: UserModel = new UserModel();
+    captcha: CaptchaComponent = new CaptchaComponent('captcha_signup');
     registrationAccessCode: string;
     personalRoles = [
         'Financial professional (buy side)',
@@ -30,22 +30,9 @@ export class SignupComponent implements AfterViewInit{
     }
 
     ngAfterViewInit(){
-	    if (window['grecaptcha'] == undefined){
-		   window.onload =function(){
-			grecaptcha.render(document.getElementById('captcha_signup'),{
-		    		'sitekey':'6LerPh4UAAAAAL6-PPaN6-w2JX4wcJSjkQp2MAxl'
-			});
-		   }
-	    }else{
-		   grecaptcha.render(document.getElementById('captcha_signup'),{
-		    		'sitekey':'6LerPh4UAAAAAL6-PPaN6-w2JX4wcJSjkQp2MAxl'
-		});
-	    }
+	    this.captcha.render();
     }
 
-    onReset(){
-	    window['grecaptcha'].reset('captcha_signup');
-    }
 
     onSubmit(form: NgForm) {
         const signupModel = new SignupModel(this.user, this.registrationAccessCode);
@@ -53,7 +40,10 @@ export class SignupComponent implements AfterViewInit{
         this.authService.captcha_check(window['grecaptcha'].getResponse()).subscribe(data => {
 	         var obj = JSON.parse(data);
 	         if(obj.success == true){
-			 this.authService.signup(signupModel).subscribe(data => this.router.navigateByUrl('/signin'), error => form.reset());
+			 this.authService.signup(signupModel).subscribe(data => this.router.navigateByUrl('/signin'), error => {
+				 form.reset();
+			 	this.captcha.reset();
+			 });
 	         }else{
 			throw Error("Captcha not correct");
 	         }
