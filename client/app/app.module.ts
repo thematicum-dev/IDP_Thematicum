@@ -26,7 +26,7 @@ import {ThemeCharacteristicsEditing} from "./theme_details/theme-characteristics
 import {ModalComponent} from "./theme_details/modal.component";
 import {ThemeStockAllocationComponent} from "./theme_details/theme-stock-allocation.component";
 import {UserProfileComponent} from "./user_profile/user-profile.component";
-
+import { MultiselectDropdownModule } from 'angular-2-dropdown-multiselect'; 
 
 @NgModule({
     declarations: [
@@ -50,7 +50,7 @@ import {UserProfileComponent} from "./user_profile/user-profile.component";
         AutoCompleteStockAllocationComponent,
         ModalComponent
     ],
-    imports: [BrowserModule, routing, FormsModule, ReactiveFormsModule, HttpModule],
+    imports: [BrowserModule, routing, FormsModule, ReactiveFormsModule, HttpModule, MultiselectDropdownModule],
     providers: [ AuthService, ErrorService, ThemeService, AuthGuard ],
     bootstrap: [AppComponent]
 })

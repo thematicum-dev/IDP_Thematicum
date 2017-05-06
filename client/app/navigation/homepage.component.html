@@ -1,5 +1,9 @@
-<div class="jumbotron text-center">
-    <div class=" font-banner">{{title}}</div> <br/>
-    <p *ngIf="isLoggedIn()"><a routerLinkActive="active" [routerLink]="['/search']" class="btn btn-primary btn-md" role="button">Start Searching</a></p>
-    <p *ngIf="!isLoggedIn()"><a routerLinkActive="active" [routerLink]="['/signin']" class="btn btn-primary btn-md" role="button">Sign in</a></p>
+<div class="text-center">
+    <br/><br/><br/><br/><br/><br/><br/><br/>
+    <div class=" font-banner"><strong>them</strong>aticum</div>
+    <h2>Thematic risk research</h2> <br/>
+
+    <p *ngIf="isLoggedIn()"><a routerLinkActive="active" [routerLink]="['/search']" class="btn btn-primary btn-md" role="button">Enter</a></p>
+    <p *ngIf="!isLoggedIn()"><a routerLinkActive="active" [routerLink]="['/signin']" class="btn btn-primary btn-md" role="button">Login</a></p>
+    <br/><br/><br/><br/>
 </div>

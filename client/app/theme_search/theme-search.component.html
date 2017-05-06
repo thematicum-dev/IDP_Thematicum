@@ -1,16 +1,11 @@
-<div class="well">
-    <h1 class="text-center">Theme Search</h1>
-
+<div>
+    <br/><br/><br/>
+    <h1 class="text-center">Theme Explorer</h1>
+    <br/>
     <form (ngSubmit)="onSubmit(form)" #form="ngForm">
         <div class="form-group row">
             <div class="col-xs-8 col-xs-offset-2">
-                <input
-                        type="text"
-                        id="searchTerm"
-                        class="form-control"
-                        [(ngModel)]="searchTerm"
-                        name="searchTerm"
-                        #name="ngModel">
+                <input type="text" id="searchTerm" class="form-control" [(ngModel)]="searchTerm" name="searchTerm" #name="ngModel">
             </div>
         </div>
 
@@ -23,16 +18,33 @@
 
     </form>
     <app-error></app-error>
+
 </div>
-
-
-<div class="alert alert-info text-center" role="alert" *ngIf="form.submitted && themes.length == 0">No relevant themes found</div>
-
-<div class="list-group" *ngIf="themes.length>0">
-    <a class="list-group-item list-group-item-action borderless" *ngFor="let theme of themes" (click)="goToThemeDetails(theme._id)">
-        <h4 class="list-group-item-heading">{{theme.name}}</h4>
-        <h5 class="list-group-item-text">{{theme.description}}</h5>
-        <p *ngIf="theme.tags"><i>Tags: {{theme.tags}}</i></p>
-        <hr>
-    </a>
+<div class="col-xs-12">
+    <span class="col-xs-3">
+        <ss-multiselect-dropdown [options]="categoryOptions" [texts]="categoryTextOptions" [settings]="noSearchDropdownSettings" [(ngModel)]="categoryOptionsModel"></ss-multiselect-dropdown>
+    </span>
+    <span class="col-xs-3">
+        <ss-multiselect-dropdown [options]="timeHorizonOptions" [texts]="timeHorizonTextOptions" [settings]="noSearchDropdownSettings" [(ngModel)]="timeHorizonOptionsModel"></ss-multiselect-dropdown>
+    </span>
+    <span class="col-xs-3">
+        <ss-multiselect-dropdown [options]="maturityOptions" [texts]="maturityTextOptions" [settings]="noSearchDropdownSettings" [(ngModel)]="maturityOptionsModel"></ss-multiselect-dropdown>
+    </span>
+    <span class="col-xs-3">
+        <ss-multiselect-dropdown [options]="tagOptions" [texts]="tagTextOptions" [settings]="searchDropdownSettings" [(ngModel)]="tagOptionsModel"></ss-multiselect-dropdown>
+    </span>
 </div>
+<div class="col-xs-12"> <br/><br/> </div>
+<div class="col-xs-12">
+    <div class="alert alert-info text-center" role="alert" *ngIf="form.submitted && themes.length == 0">No relevant themes found</div>
+
+    <div class="list-group" *ngIf="themes.length>0">
+        <a class="list-group-item list-group-item-action borderless" *ngFor="let theme of themes" (click)="goToThemeDetails(theme._id)">
+            <h4 class="list-group-item-heading">{{theme.name}}</h4>
+            <h5 class="list-group-item-text">{{theme.description}}</h5>
+            <p *ngIf="theme.tags"><i>Tags: {{theme.tags}}</i></p>
+            <hr>
+        </a>
+    </div>
+</div>
+<br/><br/>
