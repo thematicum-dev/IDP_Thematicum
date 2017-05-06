@@ -1,6 +1,5 @@
-import {Component, ElementRef, EventEmitter, OnChanges, SimpleChanges} from '@angular/core';
+import {Component, ElementRef, EventEmitter, OnChanges, SimpleChanges, Input, Output} from '@angular/core';
 import {AutocompleteList} from "./autocomplete-list";
-import {Input, Output} from "@angular/core/src/metadata/directives";
 import {AutocompleteItem} from "./autocomplete-item";
 import {NgModel} from "@angular/forms";
 

@@ -1,8 +1,7 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, Input} from '@angular/core';
 import {AutoCompleteContainerComponent} from "./autocomplete-container.component";
 import {StockModel} from "../models/stockModel";
 import {AutocompleteDatasourceService} from "./autocomplete-datasource.service";
-import {Input} from "@angular/core/src/metadata/directives";
 import {AutocompleteItem} from "./autocomplete-item";
 import * as Settings from '../utilities/settings';
 import {StockAllocationModel} from "../models/stockAllocationModel";

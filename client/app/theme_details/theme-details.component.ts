@@ -1,10 +1,9 @@
-import {Component, OnInit, OnChanges, SimpleChanges} from '@angular/core';
+import {Component, OnInit, OnChanges, SimpleChanges, ViewChild} from '@angular/core';
 import {Theme} from "../models/theme";
 import {ActivatedRoute, Router} from '@angular/router';
 import 'rxjs/add/operator/switchMap';
 import {ThemeService} from "../services/theme.service";
 import {ModalComponent} from "./modal.component";
-import {ViewChild} from "@angular/core/src/metadata/di";
 
 @Component({
     selector: 'app-theme-details',
