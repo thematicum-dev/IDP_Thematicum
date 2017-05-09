@@ -1,7 +1,7 @@
 import _ from 'underscore';
-import UserThemeInputAggregation from '../models/userThemeInputAggregation';
 import constants from '../utilities/constants';
 import DataRepository from '../data_access/dataRepository';
+import Theme from '../models/theme';
 
 class DataAggregation {
     constructor() {}
@@ -66,37 +66,34 @@ export class ThemePropertiesAggregation extends DataAggregation {
     }
     
     getThemeDataAggregation(themeId, collection) {
-        const themeAggregation = this.getDataAggregation(collection);
-        this.setThemeDataAggregation(themeId, themeAggregation);
-        return themeAggregation;
+        const themeUserInputAggregation = this.getDataAggregation(collection);
+        this.updateThemeDataAggregation(themeId, themeUserInputAggregation);
+        return themeUserInputAggregation;
     }
 
-    setThemeDataAggregation(themeId, themeAggregation){
-        let userThemeInputAggregation = {};
+    updateThemeDataAggregation(themeId, themeUserInputAggregation){
+        let themeType = {}; // e.g. a theme category type is 1 if type 1 has most percentage of user input votes
 
         for (const prop of this.propertyList) {
-            userThemeInputAggregation[prop.propertyName] = [];
-            let maxValue = Math.max.apply(Math,themeAggregation[prop.propertyName].map(function(o){return o.percentage;}))
-            let results = themeAggregation[prop.propertyName].filter(function(o){ return o.percentage == maxValue; })
+            themeType[prop.propertyName] = [];
+            let maxValue = Math.max.apply(Math,themeUserInputAggregation[prop.propertyName].map(function(o){return o.percentage;}))
+            let results = themeUserInputAggregation[prop.propertyName].filter(function(o){ return o.percentage == maxValue; })
             for(const result of results){
-                userThemeInputAggregation[prop.propertyName].push(parseInt(result.value));
+                themeType[prop.propertyName].push(parseInt(result.value));
             }
         }
-        this.updateUserThemeInputAggregation(themeId, userThemeInputAggregation);
-    }
 
-    // TODO: Throw error at client if this fails
-    updateUserThemeInputAggregation(themeId, userThemeInputAggregation) {        
         const repo = new DataRepository();
-        const themeAggregation = {
-            timeHorizon: userThemeInputAggregation.timeHorizon,
-            maturity: userThemeInputAggregation.maturity,
-            categories: userThemeInputAggregation.categories
+        const themeTypeObject = {
+            timeHorizon: themeType.timeHorizon,
+            maturity: themeType.maturity,
+            categories: themeType.categories
         };
-        repo.update(UserThemeInputAggregation, { theme: themeId }, themeAggregation)
-            .then(() => console.log("User Theme Aggregation Added"))
+
+        repo.update(Theme, { _id: themeId }, themeTypeObject)
+            .then(() => console.log("Theme Type Updated."))
             .catch(err => console.log(err));
-    }
+    }   
 }
 
 export class StockAllocationAggregation extends DataAggregation {

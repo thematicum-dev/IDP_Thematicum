@@ -3,7 +3,6 @@ import BaseRepository from './baseRepository';
 import QueryBuilder from './queryBuilder';
 import User from '../models/user';
 import Theme from '../models/theme';
-import UserThemeInputAggregation from '../models/userThemeInputAggregation';
 import {AppError} from '../utilities/appError';
 import UserThemeInput from '../models/userThemeInput';
 import ThemeStockComposition from '../models/themeStockComposition';
@@ -68,7 +67,7 @@ export default class DataRepository extends BaseRepository {
     }
 
     // parameters are array of numbers
-    getFilteredUserThemeInputAggregations(categories, maturity, timeHorizon) {
+    getThemeByCMT(categories, maturity, timeHorizon) {
         return new Promise((resolve, reject) => {
             
             if(categories.length == 0)
@@ -80,16 +79,12 @@ export default class DataRepository extends BaseRepository {
             if(timeHorizon.length == 0)
                 timeHorizon = Array.from(Array(constants.TOTAL_TIME_HORIZON_VALUES).keys())
             
-            UserThemeInputAggregation.find({ $and: [{ categories: { "$in": categories } }, { maturity: { "$in": maturity } }, { timeHorizon: { "$in": timeHorizon } }] }, { theme: 1, _id: 0 }).exec()
+            Theme.find({ $and: [{ categories: { "$in": categories } }, { maturity: { "$in": maturity } }, { timeHorizon: { "$in": timeHorizon } }] }, { theme: 1, _id: 0 }).exec()
                 .then(results => {
                     resolve(results);
                 })
                 .catch(err => reject(err));
         });
-    }
-
-    getThemeAggregationByThemeId(themeId){
-        return UserThemeInputAggregation.find({ theme: themeId }).exec();
     }
 
     getThemeById(id) {

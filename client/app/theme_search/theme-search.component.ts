@@ -18,20 +18,19 @@ export class ThemeSearchComponent implements OnInit {
         //TODO: refactor - create separate classes to override the 2 cases implementation
         if(this.route.snapshot.queryParams['query']) {
             this.searchTerm = this.route.snapshot.queryParams['query'].trim();
-            this.searchThemes(this.searchTerm);
+            this.searchThemes(this.searchTerm, [], [], [], []);
         } else if(this.route.snapshot.queryParams['all'] && this.route.snapshot.queryParams['all'] === 'true') {
-            this.searchThemes(null);
+            this.searchThemes(null, [], [], [], []);
         }
     }
-
 
     onSubmit(form: NgForm) {
         if(this.searchTerm) {
             this.router.navigate([], {queryParams:{query: this.searchTerm}});
-            this.searchThemes(this.searchTerm);
+            this.searchThemes(this.searchTerm, this.categoryOptionsModel, this.maturityOptionsModel, this.timeHorizonOptionsModel, this.tagOptionsModel);
         } else {
             this.router.navigate([], {queryParams:{all: 'true'}});
-            this.searchThemes(null);
+            this.searchThemes(null, this.categoryOptionsModel, this.maturityOptionsModel, this.timeHorizonOptionsModel, this.tagOptionsModel);
         }
     }
 
@@ -43,8 +42,8 @@ export class ThemeSearchComponent implements OnInit {
         this.themes = data.result;
     }
 
-    searchThemes(searchTerm: any) {
-        this.themeService.searchThemes(searchTerm).subscribe(data => this.updateView(data), error => console.log(error));
+    searchThemes(searchTerm: any, categoryOptionsModel: number[], maturityOptionsModel: number[], timeHorizonOptionsModel: number[], tagOptionsModel: string[]) {
+        this.themeService.searchThemes(searchTerm, categoryOptionsModel, maturityOptionsModel, timeHorizonOptionsModel, tagOptionsModel).subscribe(data => this.updateView(data), error => console.log(error));
     }  
 
     // TODO: Find a way to reuse code for settings and options
@@ -77,12 +76,12 @@ export class ThemeSearchComponent implements OnInit {
     };
     categoryOptionsModel: number[] = []; 
     categoryOptions: IMultiSelectOption[] = [
-        { id: 1, name: 'Economic'},
-        { id: 2, name: 'Technologic' },
-        { id: 3, name: 'Environmental'},
-        { id: 4, name: 'Political'},
-        { id: 5, name: 'Regulatory'},
-        { id: 6, name: 'Sociologic'}
+        { id: 0, name: 'Economic'},
+        { id: 1, name: 'Technologic' },
+        { id: 2, name: 'Environmental'},
+        { id: 3, name: 'Political'},
+        { id: 4, name: 'Regulatory'},
+        { id: 5, name: 'Sociologic'}
     ];
 
 
@@ -97,9 +96,9 @@ export class ThemeSearchComponent implements OnInit {
         allSelected: 'All Selected'
     };
     timeHorizonOptions: IMultiSelectOption[] = [
-        { id: 1, name: 'Short Term'},
-        { id: 2, name: 'Medium Term'},
-        { id: 3, name: 'Long Term'}
+        { id: 0, name: 'Short Term'},
+        { id: 1, name: 'Medium Term'},
+        { id: 2, name: 'Long Term'}
     ];
 
     maturityOptionsModel: number[] = [];
@@ -113,14 +112,14 @@ export class ThemeSearchComponent implements OnInit {
         allSelected: 'All Selected'
     }; 
     maturityOptions: IMultiSelectOption[] = [
-        { id: 1, name: 'Upcoming'},
-        { id: 2, name: 'Nascent'},
-        { id: 3, name: 'Accelerating'},
-        { id: 4, name: 'Mature'},
-        { id: 5, name: 'Declining'}
+        { id: 0, name: 'Upcoming'},
+        { id: 1, name: 'Nascent'},
+        { id: 2, name: 'Accelerating'},
+        { id: 3, name: 'Mature'},
+        { id: 4, name: 'Declining'}
     ];
 
-    tagOptionsModel: number[] = []; 
+    tagOptionsModel: string[] = []; 
     tagTextOptions: IMultiSelectTexts = {
         checkAll: 'Select all',
         uncheckAll: 'Unselect all',
@@ -131,16 +130,16 @@ export class ThemeSearchComponent implements OnInit {
         allSelected: 'All Selected'
     }; 
     tagOptions: IMultiSelectOption[] = [
-        { id: 1, name: 'aTag 1'},
-        { id: 2, name: 'bTag 2'},
-        { id: 3, name: 'aTag 3'},
-        { id: 4, name: 'cTag 4'},
-        { id: 5, name: 'fTag 5'},
-        { id: 6, name: 'cTag 6'},
-        { id: 7, name: 'dTag 7'},
-        { id: 8, name: 'tTag 8'},
-        { id: 9, name: 'eTag 9'},
-        { id: 10, name: 'dTag 10'},
-        { id: 11, name: 'aTag 11'}
+        { id: 'aTag 1', name: 'aTag 1'},
+        { id: 'bTag 2', name: 'bTag 2'},
+        { id: 'aTag 3', name: 'aTag 3'},
+        { id: 'cTag 4', name: 'cTag 4'},
+        { id: 'fTag 5', name: 'fTag 5'},
+        { id: 'cTag 6', name: 'cTag 6'},
+        { id: 'dTag 7', name: 'dTag 7'},
+        { id: 'tTag 8', name: 'tTag 8'},
+        { id: 'eTag 9', name: 'eTag 9'},
+        { id: 'dTag 10', name: 'dTag 10'},
+        { id: 'aTag 11', name: 'aTag 11'}
     ];
 }

@@ -1,7 +1,6 @@
 import mongoose from 'mongoose';
 import constants from '../utilities/constants';
 
-// Note: changes made here should be made likewise in UserThemeInputAggregation
 const Schema = mongoose.Schema;
 const schema = new Schema({
     user: { type: Schema.Types.ObjectId, ref: 'User' },

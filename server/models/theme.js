@@ -1,5 +1,6 @@
 import mongoose from 'mongoose';
 import mongooseUniqueValidator from 'mongoose-unique-validator';
+import constants from '../utilities/constants';
 
 const Schema = mongoose.Schema;
 const schema = new Schema({
@@ -24,6 +25,27 @@ const schema = new Schema({
         minlength: 4,
         maxlength: 500
     },
+    categories:[{
+        type: Number,
+        minlength: 4,
+        maxlength: 32,
+        min: constants.MIN_CATEGORY,
+        max: constants.MAX_CATEGORY
+    }],  
+    timeHorizon:[{
+        type: Number,
+        minlength: 4,
+        maxlength: 32,
+        min: constants.MIN_TIME_HORIZON,
+        max: constants.MAX_TIME_HORIZON
+    }],
+    maturity:[{
+        type: Number,
+        minlength: 4,
+        maxlength: 32,
+        min: constants.MIN_MATURITY,
+        max: constants.MAX_MATURITY
+    }],  
     creator: {
         type: Schema.Types.ObjectId, ref: 'User'
     }}, { timestamps: true }) ;

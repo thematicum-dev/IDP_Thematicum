@@ -2,7 +2,6 @@ import Theme from '../models/theme';
 import {AppError} from '../utilities/appError';
 import {AppResponse} from '../utilities/appResponse';
 import DataRepository from '../data_access/dataRepository';
-import UserThemeInputAggregation from '../models/userThemeInputAggregation';
 
 const repo = new DataRepository();
 
@@ -79,13 +78,30 @@ export function list(req, res, next) {
     req.query.start = parseInt(req.query.start, 10);
     req.query.limit = 10;
 
-    let aggregationPromise = repo.getFilteredUserThemeInputAggregations([], [], []);
+    var concatenatedNumberStringToArray = function (concatenatedString) {
+        if (!concatenatedString || concatenatedString.length == 0) {
+            return [];
+        } else if(concatenatedString.length > 0){
+            concatenatedString = concatenatedString.split(",");
+            concatenatedString.forEach(function (value, i) {
+                concatenatedString[i] = parseInt(value, 10);
+            });
+            return concatenatedString;
+        }
+        else return [];
+    }
+    
+    req.query.categories = concatenatedNumberStringToArray(req.query.categories);  
+    req.query.maturity = concatenatedNumberStringToArray(req.query.maturity); 
+    req.query.timeHorizon = concatenatedNumberStringToArray(req.query.timeHorizon);    
+    
+    let aggregationPromise = repo.getThemeByCMT(req.query.categories, req.query.maturity, req.query.timeHorizon);
 
     let searchQueryPromise = null;
     if(req.query.searchQuery) {
-        searchQueryPromise = repo.getThemeRangeBySearchQuery(req.query.searchQuery, req.query.start, req.query.limit);
+        searchQueryPromise = repo.getThemeBySearchQuery(req.query.searchQuery);
     } else{
-        searchQueryPromise = repo.getRange(Theme, req.query.start, req.query.limit);
+        searchQueryPromise = repo.getRange(Theme);
     }
 
     let tagsPromise = repo.getThemeByTags([]);
