@@ -41,7 +41,7 @@ export class ThemeSearchComponent implements OnInit {
     }
 
     updateView(data: any){
-        this.themes = data;
+        this.themes = data[1];
     }
 
     searchThemes(searchTerm: any, categoryOptionsModel: number[], maturityOptionsModel: number[], timeHorizonOptionsModel: number[], tagOptionsModel: string[]) {

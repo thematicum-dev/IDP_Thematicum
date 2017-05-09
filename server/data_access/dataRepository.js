@@ -66,6 +66,22 @@ export default class DataRepository extends BaseRepository {
         });
     }
 
+    getThemeByUserQueryPagination(start, limit, searchQuery, categories, maturity, timeHorizon, tags) {
+        let countPromise = this.getThemeByUserQuery(searchQuery, categories, maturity, timeHorizon, tags)
+            .count().exec();
+
+        let resultPromise = this.getThemeByUserQuery(searchQuery, categories, maturity, timeHorizon, tags)
+            .skip(start - 1).limit(limit).exec();
+
+        return new Promise((resolve, reject) => {
+            Promise.all([countPromise, resultPromise])
+                .then(results => {
+                    resolve(results);
+                })
+                .catch(err => reject(err));
+        }).catch(err => reject(err));
+    }
+
     getThemeByUserQuery(searchQuery, categories, maturity, timeHorizon, tags) {
         let andQuery = [];
 
@@ -84,17 +100,11 @@ export default class DataRepository extends BaseRepository {
         if (tags !== undefined && tags.length > 0)
             andQuery.push({ tags: { "$in": tags } });
 
-        return new Promise((resolve, reject) => {
-            if (andQuery.length != 0) {
-                Theme.find({ $and: andQuery }).exec()
-                    .then(results => resolve(results))
-                    .catch(err => reject(err));
-            } else {
-                Theme.find({}).exec()
-                    .then(results => resolve(results))
-                    .catch(err => reject(err));
-            }
-        });
+        if (andQuery.length != 0) {
+            return Theme.find({ $and: andQuery });
+        } else {
+            return Theme.find({});
+        }
     }
 
     getThemeById(id) {

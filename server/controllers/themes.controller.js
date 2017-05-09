@@ -106,7 +106,7 @@ export function list(req, res, next) {
     req.query.timeHorizon = concatenatedNumberStringToArray(req.query.timeHorizon);
     req.query.tags = concatenatedStringToArray(req.query.tags);
 
-    repo.getThemeByUserQuery(req.query.searchQuery, req.query.categories, req.query.maturity, req.query.timeHorizon, req.query.tags)
+    repo.getThemeByUserQueryPagination(req.query.start, req.query.limit, req.query.searchQuery, req.query.categories, req.query.maturity, req.query.timeHorizon, req.query.tags)
         .then(results => {
             res.status(200).json(new AppResponse('Investment themes retrieved', results));
         }).catch(err => next(err));
