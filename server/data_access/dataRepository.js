@@ -66,24 +66,34 @@ export default class DataRepository extends BaseRepository {
         });
     }
 
-    // parameters are array of numbers
-    getThemeByCMT(categories, maturity, timeHorizon) {
+    getThemeByUserQuery(searchQuery, categories, maturity, timeHorizon, tags) {
+        let andQuery = [];
+
+        if (searchQuery !== undefined && searchQuery.length > 0)
+            andQuery.push({ $text: { $search: searchQuery } });
+
+        if (categories !== undefined && categories.length > 0)
+            andQuery.push({ categories: { "$in": categories } });
+
+        if (maturity !== undefined && maturity.length > 0)
+            andQuery.push({ maturity: { "$in": maturity } });
+
+        if (timeHorizon !== undefined && timeHorizon.length > 0)
+            andQuery.push({ timeHorizon: { "$in": timeHorizon } });
+
+        if (tags !== undefined && tags.length > 0)
+            andQuery.push({ tags: { "$in": tags } });
+
         return new Promise((resolve, reject) => {
-            
-            if(categories.length == 0)
-                categories = Array.from(Array(constants.TOTAL_CATEGORY_VALUES).keys())
-
-            if(maturity.length == 0)
-                maturity = Array.from(Array(constants.TOTAL_MATURITY_VALUES).keys())
-
-            if(timeHorizon.length == 0)
-                timeHorizon = Array.from(Array(constants.TOTAL_TIME_HORIZON_VALUES).keys())
-            
-            Theme.find({ $and: [{ categories: { "$in": categories } }, { maturity: { "$in": maturity } }, { timeHorizon: { "$in": timeHorizon } }] }, { theme: 1, _id: 0 }).exec()
-                .then(results => {
-                    resolve(results);
-                })
-                .catch(err => reject(err));
+            if (andQuery.length != 0) {
+                Theme.find({ $and: andQuery }).exec()
+                    .then(results => resolve(results))
+                    .catch(err => reject(err));
+            } else {
+                Theme.find({}).exec()
+                    .then(results => resolve(results))
+                    .catch(err => reject(err));
+            }
         });
     }
 

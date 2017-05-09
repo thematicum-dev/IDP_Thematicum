@@ -91,27 +91,15 @@ export function list(req, res, next) {
         else return [];
     }
     
-    req.query.categories = concatenatedNumberStringToArray(req.query.categories);  
-    req.query.maturity = concatenatedNumberStringToArray(req.query.maturity); 
-    req.query.timeHorizon = concatenatedNumberStringToArray(req.query.timeHorizon);    
-    
-    let aggregationPromise = repo.getThemeByCMT(req.query.categories, req.query.maturity, req.query.timeHorizon);
+    req.query.categories = concatenatedNumberStringToArray(req.query.categories);
+    req.query.maturity = concatenatedNumberStringToArray(req.query.maturity);
+    req.query.timeHorizon = concatenatedNumberStringToArray(req.query.timeHorizon);
 
-    let searchQueryPromise = null;
-    if(req.query.searchQuery) {
-        searchQueryPromise = repo.getThemeBySearchQuery(req.query.searchQuery);
-    } else{
-        searchQueryPromise = repo.getRange(Theme);
-    }
-
-    let tagsPromise = repo.getThemeByTags([]);
-
-    Promise.all([aggregationPromise, searchQueryPromise, tagsPromise]).then(results => {
-        console.log(results[0]);
-        res.status(200).json(new AppResponse('Investment themes retrieved', results[1]));
-        console.log(results[2]);
-    })
-    .catch(err => next(err));
+    repo.getThemeByUserQuery(req.query.searchQuery, req.query.categories, req.query.maturity, req.query.timeHorizon)
+        .then(results => {
+            console.log(results);
+            res.status(200).json(new AppResponse('Investment themes retrieved', results));
+        }).catch(err => next(err));
 }
 
 export function themeById(req, res, next, id) {
