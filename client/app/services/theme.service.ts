@@ -108,6 +108,13 @@ export class ThemeService implements ThemeServiceInterface{
             .catch(this.handleError);
     }
 
+    getAllThemeTags() {
+        let apiPath = this.baseAPI + 'themes/tags';
+        return this.http.get(apiPath, { headers: this.headers })
+            .map((response: Response) => response.json().obj)
+            .catch(this.handleError);
+    }
+
     updateUserStockAllocation(allocationId: string, exposure: number) {
         let apiPath = this.baseAPI + 'stockallocations/' + allocationId;
         const body = {exposure: exposure};

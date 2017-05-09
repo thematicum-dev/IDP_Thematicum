@@ -71,7 +71,7 @@ export function getTags(req, res, next) {
 }
 
 export function list(req, res, next) {
-    
+
     if (!req.query.start || isNaN(req.query.start) || req.query.start <= 0) {
         req.query.start = 1;
     }
@@ -81,7 +81,7 @@ export function list(req, res, next) {
     var concatenatedNumberStringToArray = function (concatenatedString) {
         if (!concatenatedString || concatenatedString.length == 0) {
             return [];
-        } else if(concatenatedString.length > 0){
+        } else if (concatenatedString.length > 0) {
             concatenatedString = concatenatedString.split(",");
             concatenatedString.forEach(function (value, i) {
                 concatenatedString[i] = parseInt(value, 10);
@@ -90,14 +90,24 @@ export function list(req, res, next) {
         }
         else return [];
     }
-    
+
+    var concatenatedStringToArray = function (concatenatedString) {
+        if (!concatenatedString || concatenatedString.length == 0) {
+            return [];
+        } else if (concatenatedString.length > 0) {
+            concatenatedString = concatenatedString.split(",");
+            return concatenatedString;
+        }
+        else return [];
+    }
+
     req.query.categories = concatenatedNumberStringToArray(req.query.categories);
     req.query.maturity = concatenatedNumberStringToArray(req.query.maturity);
     req.query.timeHorizon = concatenatedNumberStringToArray(req.query.timeHorizon);
+    req.query.tags = concatenatedStringToArray(req.query.tags);
 
-    repo.getThemeByUserQuery(req.query.searchQuery, req.query.categories, req.query.maturity, req.query.timeHorizon)
+    repo.getThemeByUserQuery(req.query.searchQuery, req.query.categories, req.query.maturity, req.query.timeHorizon, req.query.tags)
         .then(results => {
-            console.log(results);
             res.status(200).json(new AppResponse('Investment themes retrieved', results));
         }).catch(err => next(err));
 }

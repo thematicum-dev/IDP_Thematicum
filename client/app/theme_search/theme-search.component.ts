@@ -12,6 +12,7 @@ import { IMultiSelectOption, IMultiSelectTexts, IMultiSelectSettings} from 'angu
 export class ThemeSearchComponent implements OnInit {
     searchTerm = "";
     themes: Theme[] = [];
+
     constructor(private themeService: ThemeService, private router: Router, private route: ActivatedRoute) {}
 
     ngOnInit(): void {
@@ -22,6 +23,7 @@ export class ThemeSearchComponent implements OnInit {
         } else if(this.route.snapshot.queryParams['all'] && this.route.snapshot.queryParams['all'] === 'true') {
             this.searchThemes(null, [], [], [], []);
         }
+        this.themeService.getAllThemeTags().subscribe(data => this.updateTagList(data), error => console.log(error));
     }
 
     onSubmit(form: NgForm) {
@@ -120,6 +122,12 @@ export class ThemeSearchComponent implements OnInit {
     ];
 
     tagOptionsModel: string[] = []; 
+    tagOptions: IMultiSelectOption[] = [];
+    updateTagList(tags){
+        for(let tag of tags){
+            this.tagOptions.push({id: tag, name: tag});
+        }
+    }
     tagTextOptions: IMultiSelectTexts = {
         checkAll: 'Select all',
         uncheckAll: 'Unselect all',
@@ -129,17 +137,4 @@ export class ThemeSearchComponent implements OnInit {
         defaultTitle: 'Tags',
         allSelected: 'All Selected'
     }; 
-    tagOptions: IMultiSelectOption[] = [
-        { id: 'aTag 1', name: 'aTag 1'},
-        { id: 'bTag 2', name: 'bTag 2'},
-        { id: 'aTag 3', name: 'aTag 3'},
-        { id: 'cTag 4', name: 'cTag 4'},
-        { id: 'fTag 5', name: 'fTag 5'},
-        { id: 'cTag 6', name: 'cTag 6'},
-        { id: 'dTag 7', name: 'dTag 7'},
-        { id: 'tTag 8', name: 'tTag 8'},
-        { id: 'eTag 9', name: 'eTag 9'},
-        { id: 'dTag 10', name: 'dTag 10'},
-        { id: 'aTag 11', name: 'aTag 11'}
-    ];
 }
