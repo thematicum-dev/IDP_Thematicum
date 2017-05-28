@@ -1,11 +1,12 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, ViewChild} from '@angular/core';
 import {NgForm} from "@angular/forms";
 import {Theme} from "../models/theme";
-import { NavigationModel } from "../models/NavigationModel";
+import { NavigationModel } from "../models/navigationModel";
 import {Router, ActivatedRoute, Params} from "@angular/router";
 import {ThemeService} from "../services/theme.service";
 import { IMultiSelectOption, IMultiSelectTexts, IMultiSelectSettings} from 'angular-2-dropdown-multiselect';
 import * as _ from 'underscore';
+import { PaginationComponent } from '../utilities/pagination/pagination.component';
 
 @Component({
     selector: 'app-theme-search',
@@ -15,6 +16,9 @@ export class ThemeSearchComponent implements OnInit {
     searchTerm = "";
     themes: Theme[] = [];
     searchResultsCount: number = 0;
+    currentPage: number = 1;
+    initialPage: number;
+    @ViewChild('searchPagePagination') searchPagePaginationComponent: PaginationComponent;
 
     generalTextOptions: IMultiSelectTexts = {
         checkAll: 'Select all',
@@ -77,15 +81,15 @@ export class ThemeSearchComponent implements OnInit {
     constructor(private themeService: ThemeService, private router: Router, private route: ActivatedRoute) { }
 
     ngOnInit(): void {
-        this.route.queryParams.subscribe((queryParams: Params) => {
-            // this method works with browser back and forward button
-            this.searchThemeOnRouteChange(queryParams);
-        });
         this.categoryTextOptions.defaultTitle = 'Category';
         this.timeHorizonTextOptions.defaultTitle = 'Time Horizon';
         this.maturityTextOptions.defaultTitle = 'Maturity';
         this.tagTextOptions.defaultTitle = 'Tags';
         this.themeService.getAllThemeTags().subscribe(data => this.updateTagList(data), error => console.log(error));
+        this.route.queryParams.subscribe((queryParams: Params) => {
+            // this method works with browser back and forward button
+            this.searchThemeOnRouteChange(queryParams);
+        });
     }
 
     searchThemeOnRouteChange(queryParams) {
@@ -93,6 +97,13 @@ export class ThemeSearchComponent implements OnInit {
             this.searchTerm = queryParams['query'].trim()
         else
             this.searchTerm = '';
+
+        if (queryParams['currentPage']){
+            this.currentPage = parseInt(queryParams['currentPage'], 10);
+            this.initialPage = this.currentPage; // by default component will set value to 1
+        }
+        else
+            this.currentPage = 1;
 
         var getParamNumberModel = function (param) {
             if (queryParams[param])
@@ -109,11 +120,13 @@ export class ThemeSearchComponent implements OnInit {
         this.maturityOptionsModel = getParamNumberModel('maturity');
 
         var getParamStringModel = function (param) {
-            if (queryParams[param])
-                if (Array.isArray(queryParams[param]))
-                    return queryParams[param];
+            if (queryParams[param]){
+                let tags = JSON.parse(queryParams[param]);
+                if (Array.isArray(tags))
+                    return tags;
                 else
-                    return [queryParams[param]];
+                    return [tags];
+            }
             else
                 return [];
         }
@@ -121,10 +134,14 @@ export class ThemeSearchComponent implements OnInit {
         this.tagOptionsModel = getParamStringModel('tags');
 
         if (!(Object.keys(queryParams).length === 0 && queryParams.constructor === Object))
-            this.searchThemes(this.searchTerm, 1, this.categoryOptionsModel, this.maturityOptionsModel, this.timeHorizonOptionsModel, this.tagOptionsModel);
+            this.searchThemes(this.searchTerm, this.categoryOptionsModel, this.maturityOptionsModel, this.timeHorizonOptionsModel, this.tagOptionsModel);
     }
 
     onSubmit(form: NgForm) {
+        this.routeChange(1);
+    }
+
+    routeChange(currentPage: number) {
         // Calls searchThemeOnRouteChange
         this.router.navigate([], {
             queryParams: {
@@ -132,9 +149,11 @@ export class ThemeSearchComponent implements OnInit {
                 categories: this.categoryOptionsModel,
                 timeHorizon: this.timeHorizonOptionsModel,
                 maturity: this.maturityOptionsModel,
-                tags: this.tagOptionsModel
+                tags: JSON.stringify(this.tagOptionsModel),
+                currentPage: currentPage
             }
         });
+    
     }
 
     goToThemeDetails(themeId: string) {
@@ -146,7 +165,8 @@ export class ThemeSearchComponent implements OnInit {
         this.themes = data[1];
     }
 
-    searchThemes(searchTerm: any, start: number, categoryOptionsModel: number[], maturityOptionsModel: number[], timeHorizonOptionsModel: number[], tagOptionsModel: string[]) {
+    searchThemes(searchTerm: any, categoryOptionsModel: number[], maturityOptionsModel: number[], timeHorizonOptionsModel: number[], tagOptionsModel: string[]) {
+        let start: number = this.searchPagePaginationComponent.nextResultStartsFrom();
         this.themeService.searchThemes(searchTerm, start, categoryOptionsModel, maturityOptionsModel, timeHorizonOptionsModel, tagOptionsModel).subscribe(data => this.updateView(data), error => console.log(error));
     }
 
@@ -156,9 +176,8 @@ export class ThemeSearchComponent implements OnInit {
         }
     }
 
-    navigatePage(page: NavigationModel){
-        let start: number = ((page.pageNumber - 1) * page.pageLength) + 1;
-        this.searchThemes(this.searchTerm, start, this.categoryOptionsModel, this.maturityOptionsModel, this.timeHorizonOptionsModel, this.tagOptionsModel);
+    navigatePage(page: NavigationModel) {
+        this.routeChange(page.pageNumber);
     }
 
 }

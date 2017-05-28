@@ -52,6 +52,6 @@
 <br/><br/>
 
 
-<div class="col-xs-12">
-    <app-pagination [totalResults]="searchResultsCount" (navigate)="navigatePage($event)"> </app-pagination>
+<div class="col-xs-12" style="text-align: center;">
+    <app-pagination #searchPagePagination [totalResults]="searchResultsCount" [initialPage]="initialPage" (navigate)="navigatePage($event)"> </app-pagination>
 </div>
