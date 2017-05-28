@@ -1,0 +1,24 @@
+<nav>
+    <ul class="pagination">
+        <li *ngIf="totalResults > 0" 
+            class="page-item" 
+            (click)="previousPage()"
+            [class.disabled]="currentPage == 1">
+            <a class="page-link">Previous</a>
+        </li>
+
+        <li class="page-item" 
+            *ngFor="let page of pages; let i = index" 
+            (click)="directPageNavigation(i + 1)"
+            [class.active]="currentPage == (i + 1)">             
+             <a class="page-link">{{i + 1}}</a>
+        </li>
+
+        <li *ngIf="totalResults > 0" 
+            class="page-item" 
+            (click)="nextPage()"
+            [class.disabled]="currentPage == pages.length">
+            <a class="page-link">Next</a>
+        </li>
+    </ul>
+</nav>

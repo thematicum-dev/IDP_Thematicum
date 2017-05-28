@@ -10,6 +10,21 @@
         </div>
 
         <div class="form-group row">
+            <span class="col-xs-3">
+                <ss-multiselect-dropdown name="categories" [options]="categoryOptions" [texts]="categoryTextOptions" [settings]="noSearchDropdownSettings" [(ngModel)]="categoryOptionsModel"></ss-multiselect-dropdown>
+            </span>
+            <span class="col-xs-3">
+                <ss-multiselect-dropdown name="timeHorizon" [options]="timeHorizonOptions" [texts]="timeHorizonTextOptions" [settings]="noSearchDropdownSettings" [(ngModel)]="timeHorizonOptionsModel"></ss-multiselect-dropdown>
+            </span>
+            <span class="col-xs-3">
+                <ss-multiselect-dropdown name="maturity" [options]="maturityOptions" [texts]="maturityTextOptions" [settings]="noSearchDropdownSettings" [(ngModel)]="maturityOptionsModel"></ss-multiselect-dropdown>
+            </span>
+            <span class="col-xs-3">
+                <ss-multiselect-dropdown  name="tags" [options]="tagOptions" [texts]="tagTextOptions" [settings]="searchDropdownSettings" [(ngModel)]="tagOptionsModel"></ss-multiselect-dropdown>
+            </span>
+        </div>
+
+        <div class="form-group row">
             <div class="text-center">
                 <button class="btn btn-md btn-primary" type="submit">{{searchTerm.length == 0 ? "Explore Themes" : "Search"}}</button>
                 <a routerLinkActive="active" class="btn btn-md btn-primary" [routerLink]="['/theme/create']">Add New</a>
@@ -20,20 +35,7 @@
     <app-error></app-error>
 
 </div>
-<div class="col-xs-12">
-    <span class="col-xs-3">
-        <ss-multiselect-dropdown [options]="categoryOptions" [texts]="categoryTextOptions" [settings]="noSearchDropdownSettings" [(ngModel)]="categoryOptionsModel"></ss-multiselect-dropdown>
-    </span>
-    <span class="col-xs-3">
-        <ss-multiselect-dropdown [options]="timeHorizonOptions" [texts]="timeHorizonTextOptions" [settings]="noSearchDropdownSettings" [(ngModel)]="timeHorizonOptionsModel"></ss-multiselect-dropdown>
-    </span>
-    <span class="col-xs-3">
-        <ss-multiselect-dropdown [options]="maturityOptions" [texts]="maturityTextOptions" [settings]="noSearchDropdownSettings" [(ngModel)]="maturityOptionsModel"></ss-multiselect-dropdown>
-    </span>
-    <span class="col-xs-3">
-        <ss-multiselect-dropdown [options]="tagOptions" [texts]="tagTextOptions" [settings]="searchDropdownSettings" [(ngModel)]="tagOptionsModel"></ss-multiselect-dropdown>
-    </span>
-</div>
+
 <div class="col-xs-12"> <br/><br/> </div>
 <div class="col-xs-12">
     <div class="alert alert-info text-center" role="alert" *ngIf="form.submitted && themes.length == 0">No relevant themes found</div>
@@ -48,3 +50,8 @@
     </div>
 </div>
 <br/><br/>
+
+
+<div class="col-xs-12">
+    <app-pagination [totalResults]="searchResultsCount" (navigate)="navigatePage($event)"> </app-pagination>
+</div>

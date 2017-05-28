@@ -1,6 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {NgForm} from "@angular/forms";
 import {Theme} from "../models/theme";
+import { NavigationModel } from "../models/NavigationModel";
 import {Router, ActivatedRoute, Params} from "@angular/router";
 import {ThemeService} from "../services/theme.service";
 import { IMultiSelectOption, IMultiSelectTexts, IMultiSelectSettings} from 'angular-2-dropdown-multiselect';
@@ -13,6 +14,7 @@ import * as _ from 'underscore';
 export class ThemeSearchComponent implements OnInit {
     searchTerm = "";
     themes: Theme[] = [];
+    searchResultsCount: number = 0;
 
     generalTextOptions: IMultiSelectTexts = {
         checkAll: 'Select all',
@@ -119,7 +121,7 @@ export class ThemeSearchComponent implements OnInit {
         this.tagOptionsModel = getParamStringModel('tags');
 
         if (!(Object.keys(queryParams).length === 0 && queryParams.constructor === Object))
-            this.searchThemes(this.searchTerm, this.categoryOptionsModel, this.maturityOptionsModel, this.timeHorizonOptionsModel, this.tagOptionsModel);
+            this.searchThemes(this.searchTerm, 1, this.categoryOptionsModel, this.maturityOptionsModel, this.timeHorizonOptionsModel, this.tagOptionsModel);
     }
 
     onSubmit(form: NgForm) {
@@ -140,17 +142,23 @@ export class ThemeSearchComponent implements OnInit {
     }
 
     updateView(data: any) {
+        this.searchResultsCount = data[0];
         this.themes = data[1];
     }
 
-    searchThemes(searchTerm: any, categoryOptionsModel: number[], maturityOptionsModel: number[], timeHorizonOptionsModel: number[], tagOptionsModel: string[]) {
-        this.themeService.searchThemes(searchTerm, categoryOptionsModel, maturityOptionsModel, timeHorizonOptionsModel, tagOptionsModel).subscribe(data => this.updateView(data), error => console.log(error));
+    searchThemes(searchTerm: any, start: number, categoryOptionsModel: number[], maturityOptionsModel: number[], timeHorizonOptionsModel: number[], tagOptionsModel: string[]) {
+        this.themeService.searchThemes(searchTerm, start, categoryOptionsModel, maturityOptionsModel, timeHorizonOptionsModel, tagOptionsModel).subscribe(data => this.updateView(data), error => console.log(error));
     }
 
     updateTagList(tags) {
         for (let tag of tags) {
             this.tagOptions.push({ id: tag, name: tag });
         }
+    }
+
+    navigatePage(page: NavigationModel){
+        let start: number = ((page.pageNumber - 1) * page.pageLength) + 1;
+        this.searchThemes(this.searchTerm, start, this.categoryOptionsModel, this.maturityOptionsModel, this.timeHorizonOptionsModel, this.tagOptionsModel);
     }
 
 }
