@@ -13,10 +13,10 @@ export let maturityValues = [
 ];
 
 export let categoryValues = [
-    { description: 'Economic', value: 0, checked: false},
-    { description: 'Technologic', value: 1, checked: false},
-    { description: 'Environmental', value: 2, checked: false},
-    { description: 'Political', value: 3, checked: false},
-    { description: 'Regulatory', value: 4, checked: false},
-    { description: 'Sociologic', value: 5, checked: false}
+    { description: 'Economic', value: 0},
+    { description: 'Technologic', value: 1},
+    { description: 'Environmental', value: 2},
+    { description: 'Political', value: 3},
+    { description: 'Regulatory', value: 4},
+    { description: 'Sociologic', value: 5}
 ];

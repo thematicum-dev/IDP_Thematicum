@@ -1,11 +1,15 @@
 import {categoryValues} from "../models/themePropertyValues";
 
-export class ThemePropertiesEditModel {
+export class ThemePropertiesEditModel{
     categoryValues = categoryValues;
-
+    categoriesValuesChecked: boolean[];
     public timeHorizon: number = null;
     public maturity: number = null;
     public categories: number[];
+ 
+    constructor() {
+        this.categoriesValuesChecked = Array(this.categoryValues.length).fill(false);
+    }
 
     setTimeHorizon(timeHorizon: number) {
         this.timeHorizon = timeHorizon;
@@ -16,7 +20,7 @@ export class ThemePropertiesEditModel {
     }
 
     toggleCheckedCategory(category: number) {
-        this.categoryValues[category].checked = !categoryValues[category].checked;
+        this.categoriesValuesChecked[category] = !this.categoriesValuesChecked[category];
     }
 
     setCheckedCategories() {
@@ -24,15 +28,16 @@ export class ThemePropertiesEditModel {
     }
 
     getCheckedCategories() {
-        return categoryValues.filter(category => {
-            return category.checked;
-        }).map(category => {
-            return category.value
+        let categories: number[] = [];
+        this.categoriesValuesChecked.forEach((value, index) => {
+            if (value)
+                categories.push(index)
         });
+        return categories;
     }
 
     uncheckAllCategories() {
-        this.categoryValues.forEach(category => category.checked = false);
+        this.categoriesValuesChecked.forEach(categoryChecked => categoryChecked = false);
     }
 
     clearProperties() {
