@@ -8,21 +8,30 @@ var request = require('request');
 const repo = new DataRepository();
 
 export function signup(req, res, next) {
-    repo.isAccessCodeValid(req.body.accessCode, req.body.currentTime)
+
+    check_captcha(req.body.captcha).then(body =>{
+	console.log("body.success");
+	   console.log(body.success);
+	    if(!body.success){
+		   return next(new AppError('Captcha Invalid', 401));
+	    }
+    });
+
+    repo.isAccessCodeValid(req.body.user.accessCode, req.body.user.currentTime)
         .then(results => {
             if(!results) {
                 return next(new AppError('Invalid Access Code', 500));
             }
 
-            if (req.body.user.password.length < 8) {
+            if (req.body.user.user.password.length < 8) {
                 return next(new AppError('Validation error: password must be no shorter than 8 characters', 500));
             }
 
             const user = new User({
-                name: req.body.user.name,
-                email: req.body.user.email,
-                password: req.body.user.password,
-                personalRole: req.body.user.personalRole
+                name: req.body.user.user.name,
+                email: req.body.user.user.email,
+                password: req.body.user.user.password,
+                personalRole: req.body.user.user.personalRole
             });
 
             repo.save(user).then(() => {
@@ -32,24 +41,33 @@ export function signup(req, res, next) {
 }
 
 export function signin(req, res, next) {
-    repo.getUserByEmail(req.body.email)
-        .then(user => {
-            if(!user) {
-                return next(new AppError('Invalid login credentials', 401));
-            }
 
-            if (!user.passwordIsValid(req.body.password)) {
-                return next(new AppError('Invalid login credentials', 401));
-            }
+	check_captcha(req.body.captcha).then(body => {
+		console.log("body.success");
+		console.log(body.success);
+		if (!body.success) {
+			return next(new AppError('Captcha Invalid', 401));
+		} else {
+			repo.getUserByEmail(req.body.user.email)
+				.then(user => {
+					if (!user) {
+						return next(new AppError('Invalid login credentials', 401));
+					}
+					if (!user.passwordIsValid(req.body.user.password)) {
+						return next(new AppError('Invalid login credentials', 401));
+					}
+					const token = authUtilities.jwtSign({ user: user });
+					res.status(200).json({
+						message: 'Successful login',
+						token: token,
+						username: user.name
+					});
+				})
+				.catch(err => next(err));
+		}
+	});
 
-            const token = authUtilities.jwtSign({user: user});
-            res.status(200).json({
-                message: 'Successful login',
-                token: token,
-                username: user.name
-            });
-        })
-        .catch(err => next(err));
+
 }
 
 export function isAuthenticated(req, res, next) {
@@ -66,7 +84,31 @@ export function test(req, res, next) {
 	return res.status(200).json({'sucess':1});
 }
 
-export function captcha(req, res, next) {
+// function check_captcha(captcha) {
+// 	var headers = {
+// 		'User-Agent':       'Super Agent/0.0.1',
+// 		'Content-Type':     'application/json'
+// 	}
+
+// 	var options = {
+//     		url: 'https://www.google.com/recaptcha/api/siteverify',
+//    		method: 'POST',
+//     		headers: headers,
+//     		form: captcha
+// 	};
+
+// 	request(options, function (error, response, body) {
+//     		if (!error) {
+//         			return response.body.success;
+//    		 }
+// 		else{
+// 			return false;
+// 		}
+// 	})	
+// }
+
+
+function check_captcha(captcha) {
 	var headers = {
 		'User-Agent':       'Super Agent/0.0.1',
 		'Content-Type':     'application/json'
@@ -76,15 +118,16 @@ export function captcha(req, res, next) {
     		url: 'https://www.google.com/recaptcha/api/siteverify',
    		method: 'POST',
     		headers: headers,
-    		form: req.body
+    		form: captcha
 	};
 
-	request(options, function (error, response, body) {
-    		if (!error && response.statusCode == 200) {
-        			return res.status(200).json(body);
-   		 }
-		else{
-			return res.status(400).json(body);
-		}
-	})	
+	return new Promise((resolve, reject) => {
+		request(options, function (error, response, body) {
+			if (error) {
+				reject(error)
+			}
+			resolve(JSON.parse(body));
+		});	
+	});
+	
 }

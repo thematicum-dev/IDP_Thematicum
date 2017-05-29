@@ -15,25 +15,19 @@ export class SigninComponent implements AfterViewInit {
     constructor(private authService: AuthService) {}
 
     ngAfterViewInit(){
-	    this.captcha.render();
+	    this.captcha.render();	    
     }
 
     onSubmit(form: NgForm) {
-	this.authService.captcha_check(window['grecaptcha'].getResponse()).subscribe(data => {
-	         var obj = JSON.parse(data);
-	         if(obj.success == true){
-			 this.authService.signin(this.user).subscribe(data => {
-			//store auth data in local storage
-			localStorage.setItem('token', data.token);
-			localStorage.setItem('username', data.username);
-		},
-		error => {
-			form.reset();
-			 this.captcha.reset();
-		});
-	         }else{
-			throw Error("Captcha not correct");
-	         }
-        }, error => form.reset());
+	this.authService.signin(this.user, this.captcha.getResponse()).subscribe(data => {
+		//store auth data in local storage
+		localStorage.setItem('token', data.token);
+		localStorage.setItem('username', data.username);
+     	},
+	error => {
+		console.log("got an error");
+		form.reset();
+		this.captcha.reset();
+	});
     }
 }

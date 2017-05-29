@@ -36,17 +36,9 @@ export class SignupComponent implements AfterViewInit{
 
     onSubmit(form: NgForm) {
         const signupModel = new SignupModel(this.user, this.registrationAccessCode);
-
-        this.authService.captcha_check(window['grecaptcha'].getResponse()).subscribe(data => {
-	         var obj = JSON.parse(data);
-	         if(obj.success == true){
-			 this.authService.signup(signupModel).subscribe(data => this.router.navigateByUrl('/signin'), error => {
-				 form.reset();
-			 	this.captcha.reset();
-			 });
-	         }else{
-			throw Error("Captcha not correct");
-	         }
-        }, error => form.reset());
+        this.authService.signup(signupModel, this.captcha.getResponse()).subscribe(data => this.router.navigateByUrl('/signin'), error => {
+		 form.reset();
+		this.captcha.reset();
+	});
     }
 }

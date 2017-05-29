@@ -13,9 +13,13 @@ export class CaptchaComponent {
 		   window.onload =function(){
 			grecaptcha.render(document.getElementById(tag),{'sitekey':sitekey});
 		   }
-	    }else{
+	    }else if (window['grecaptcha'] != null){
 		  grecaptcha.render(document.getElementById(tag),{'sitekey':sitekey});
 	    }
+    }
+
+    getResponse(){
+	    return window['grecaptcha'].getResponse();
     }
     
     reset(){

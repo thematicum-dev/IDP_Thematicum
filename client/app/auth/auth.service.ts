@@ -15,34 +15,35 @@ export class AuthService implements AuthServiceInterface {
     contentTypeHeaders = new Headers({'Content-Type': 'application/json'});
     redirectUrl: string;
     constructor(private http: Http, private router: Router, private errorService: ErrorService) {}
-
-    captcha_check(captcha: String){
-	    
-	let apiPath = "/api/auth/captcha";
-	let body = JSON.stringify({
-		'secret': '6LerPh4UAAAAAJt5ZhaHiz2NWX8kLnZu9S9TLghN',
-		'response': captcha
-	});
-	return this.http.post(apiPath, body, {headers: this.contentTypeHeaders})
-		.map((response: Response) => response.json())
-            	.catch(this.handleError);    
-    }
     
-    signup(signupModel: SignupModel) {
-        const body = JSON.stringify(signupModel);
-        
+    signup(signupModel: SignupModel, captcha: String) {
+        const body = JSON.stringify({
+	        user: signupModel,
+	        captcha: {
+		        'secret': '6LerPh4UAAAAAJt5ZhaHiz2NWX8kLnZu9S9TLghN',
+		        response: captcha
+	        }
+        });
         let apiPath = this.baseAPI + 'auth/signup';
         return this.http.post(apiPath, body, {headers: this.contentTypeHeaders})
             .map((response: Response) => response.json())
             .catch(this.handleError);
     }
 
-    signin(user: UserModel) {
-        const body = JSON.stringify(user);
+    signin(user: UserModel, captcha: String) {
+	    console.log("signin pressed");
+        const body = JSON.stringify({
+	        user: user,
+	        captcha: {
+		        'secret': '6LerPh4UAAAAAJt5ZhaHiz2NWX8kLnZu9S9TLghN',
+		        response: captcha
+	        }
+        });
         let apiPath = this.baseAPI + 'auth/signin';
 
         return this.http.post(apiPath, body, {headers: this.contentTypeHeaders})
             .map((response: Response) => {
+		console.log("sigin in successful, redirecting to URL after login");
                 this.redirectToUrlAfterLogin();
                 return response.json();
             })
@@ -50,6 +51,7 @@ export class AuthService implements AuthServiceInterface {
     }
 
     logout() {
+	    console.log("logout pressed");
         localStorage.clear();
         this.redirectUrl = null;
         this.router.navigate(['/']);
@@ -80,10 +82,15 @@ export class AuthService implements AuthServiceInterface {
     }
 
     redirectToUrlAfterLogin() {
+	    console.log("redirectURL", this.redirectUrl);
+	    console.log("redirectURL == null", this.redirectUrl == null);
+	    console.log("redirectURL == undefined", this.redirectUrl == undefined);
         if (this.redirectUrl) {
             this.router.navigate([this.redirectUrl]);
+	console.log("navigating to this.redirectURL");
         } else {
             this.router.navigate(['/home']);
+	console.log("navigating to home");
         }
     }
 
