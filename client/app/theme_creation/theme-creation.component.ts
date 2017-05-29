@@ -1,4 +1,4 @@
-import {Component} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {Theme} from "../models/theme";
 import {NgForm} from "@angular/forms";
 import {ThemeService} from "../services/theme.service";
@@ -15,9 +15,9 @@ import {Observable} from "rxjs";
         background-color: #d9edf7
     }`]
 })
-export class ThemeCreationComponent {
+export class ThemeCreationComponent implements OnInit{
     theme: Theme = new Theme();
-    themeProperties: ThemePropertiesEditModel = new ThemePropertiesEditModel();
+    themeProperties: ThemePropertiesEditModel;
     createdThemeId: string;
 
     timeHorizonValues = timeHorizonValues;
@@ -26,6 +26,10 @@ export class ThemeCreationComponent {
     maxDescriptionLength: number = 500;
 
     constructor(private themeService: ThemeService, private router: Router) {}
+
+    ngOnInit(): void {  
+        this.themeProperties = new ThemePropertiesEditModel();
+    }
 
     onSubmit(form: NgForm, themeTags: AutoCompleteContainerComponent, themeStockAllocation: AutoCompleteContainerComponent) {
         //update model with data from child components
