@@ -19,10 +19,7 @@ export class AuthService implements AuthServiceInterface {
     signup(signupModel: SignupModel, captcha: String) {
         const body = JSON.stringify({
 	        user: signupModel,
-	        captcha: {
-		        'secret': '6LerPh4UAAAAAJt5ZhaHiz2NWX8kLnZu9S9TLghN',
-		        response: captcha
-	        }
+		    response: captcha	        
         });
         let apiPath = this.baseAPI + 'auth/signup';
         return this.http.post(apiPath, body, {headers: this.contentTypeHeaders})
@@ -34,10 +31,7 @@ export class AuthService implements AuthServiceInterface {
 	    console.log("signin pressed");
         const body = JSON.stringify({
 	        user: user,
-	        captcha: {
-		        'secret': '6LerPh4UAAAAAJt5ZhaHiz2NWX8kLnZu9S9TLghN',
-		        response: captcha
-	        }
+		    response: captcha	        
         });
         let apiPath = this.baseAPI + 'auth/signin';
 

@@ -1,6 +1,6 @@
 export class CaptchaComponent {
   tag_string = '';
-  sitekey='6LerPh4UAAAAAL6-PPaN6-w2JX4wcJSjkQp2MAxl';
+  sitekey='6Lei-x0UAAAAADAAdccFPc23CIlm1tZmaO0-ICwg';
 
   constructor(private tag: string) {
         this.tag_string = tag;
