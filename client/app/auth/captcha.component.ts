@@ -18,7 +18,7 @@ export class CaptchaComponent {
 	    }
     }
 
-    getResponse(){
+    getResponse(): string {
 	    return window['grecaptcha'].getResponse();
     }
     
