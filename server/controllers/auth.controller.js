@@ -3,7 +3,7 @@ import {AppResponse} from '../utilities/appResponse';
 import User from '../models/user';
 import * as authUtilities from '../utilities/authUtilities';
 import DataRepository from '../data_access/dataRepository';
-var request = require('request');
+import request from 'request';
 
 const repo = new DataRepository();
 
@@ -83,30 +83,6 @@ export function isAuthenticated(req, res, next) {
 export function test(req, res, next) {
 	return res.status(200).json({'sucess':1});
 }
-
-// function check_captcha(captcha) {
-// 	var headers = {
-// 		'User-Agent':       'Super Agent/0.0.1',
-// 		'Content-Type':     'application/json'
-// 	}
-
-// 	var options = {
-//     		url: 'https://www.google.com/recaptcha/api/siteverify',
-//    		method: 'POST',
-//     		headers: headers,
-//     		form: captcha
-// 	};
-
-// 	request(options, function (error, response, body) {
-//     		if (!error) {
-//         			return response.body.success;
-//    		 }
-// 		else{
-// 			return false;
-// 		}
-// 	})	
-// }
-
 
 function check_captcha(captcha) {
 	var headers = {
