@@ -11,10 +11,10 @@ export class CaptchaComponent {
 	var sitekey = this.sitekey;
 	 if (window['grecaptcha'] == undefined){
 		   window.onload =function(){
-			grecaptcha.render(document.getElementById(tag),{'sitekey':sitekey});
+			window['grecaptcha'].render(document.getElementById(tag),{'sitekey':sitekey});
 		   }
 	    }else if (window['grecaptcha'] != null){
-		  grecaptcha.render(document.getElementById(tag),{'sitekey':sitekey});
+		  window['grecaptcha'].render(document.getElementById(tag),{'sitekey':sitekey});
 	    }
     }
 
