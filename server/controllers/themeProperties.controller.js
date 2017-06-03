@@ -1,4 +1,5 @@
 import UserThemeInput from '../models/userThemeInput';
+import ActivityLog from '../models/ActivityLog';
 import {AppError} from '../utilities/appError';
 import {AppResponse} from '../utilities/appResponse';
 import DataRepository from '../data_access/dataRepository';
@@ -27,13 +28,24 @@ export function create(req, res, next) {
         categories: req.body.categories
     });
 
+    const activityToBeLogged = new ActivityLog({
+        user: res.locals.user,
+        theme: req.theme,
+        userInput: themeProperty
+    });
+
     repo.save(themeProperty)
-        .then(result => res.status(201).json(new AppResponse('Theme property created', result)))
+        .then(result => {
+            repo.save(activityToBeLogged).then(result => {
+                res.status(201).json(new AppResponse('Theme property created', result));
+            });
+        })
         .catch(err => next(err));
 }
 
 export function update(req, res, next) {
     let themeProperty = req.themeProperty;
+    
 
     if (req.body.timeHorizon != null)
         themeProperty.timeHorizon = req.body.timeHorizon;
@@ -42,8 +54,18 @@ export function update(req, res, next) {
     if (req.body.categories != null)
         themeProperty.categories = req.body.categories;
 
+    const activityToBeLogged = new ActivityLog({
+        user: themeProperty.user,
+        theme: themeProperty.theme,
+        userInput: req.body
+    });
+
     repo.save(themeProperty)
-        .then(result => res.status(201).json(new AppResponse('Theme property updated', result)))
+        .then(result => {
+            repo.save(activityToBeLogged).then(result => {
+                res.status(201).json(new AppResponse('Theme property updated', result))
+            });
+        })
         .catch(err => next(err));
 }
 

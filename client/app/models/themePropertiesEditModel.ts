@@ -6,6 +6,7 @@ export class ThemePropertiesEditModel{
     public timeHorizon: number = null;
     public maturity: number = null;
     public categories: number[];
+
  
     constructor() {
         this.categoriesValuesChecked = Array(this.categoryValues.length).fill(false);
