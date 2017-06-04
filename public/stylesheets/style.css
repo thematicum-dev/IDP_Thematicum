@@ -150,6 +150,20 @@ Remove if a better way is found to achieve this.*/
     width: 100%;
 }
 
+.search-icon {
+  color: #2980b9;
+  font-size: 18px;
+  margin-right:20px;
+}
+
+.no-border-radius {
+  border-radius: 0;
+}
+
+.no-margin {
+  margin:0;
+}
+
 /*Stylesheet for Theme Explorer Page*/
 .Theme-Explorer {
   margin-top: 34px;
