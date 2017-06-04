@@ -20,6 +20,7 @@ import {ErrorService} from "./error_handling/error.service";
 import {ThemeService} from "./services/theme.service";
 import {AutoCompleteTagsComponent} from "./autocomplete/autocomplete-tags.component";
 import {AutoCompleteStockAllocationComponent} from "./autocomplete/autocomplete-stock-allocation.component";
+import {AutoCompleteStockSearchComponent} from "./autocomplete/autocomplete-stock-search.component";
 import {AuthGuard} from "./auth/auth-guard.service";
 import {ThemePropertiesComponent} from "./theme_details/theme-properties.component";
 import {ThemeCharacteristicsEditing} from "./theme_details/theme-characteristics-editing.component";
@@ -49,6 +50,7 @@ import { PaginationComponent } from './utilities/pagination/pagination.component
         ThemeStockAllocationComponent,
         AutoCompleteTagsComponent,
         AutoCompleteStockAllocationComponent,
+        AutoCompleteStockSearchComponent,
         ModalComponent,
         PaginationComponent
     ],

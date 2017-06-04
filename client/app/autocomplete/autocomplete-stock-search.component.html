@@ -1,0 +1,13 @@
+<div class="form-group row">
+    <app-autocomplete [placeholderTerm]="autocompletePlaceholder"
+                      [allowCustomValues]="allowCustomValues"
+                      [allowEnterKey]="allowEnterKey"
+                      [allowDirectClick]="allowDirectClick"
+                      [dataSource]="itemList"
+                      (notifySelectedItem)='selectItem($event)'
+                      (clearErrorStr)="clearErrorStr()"
+                      id="stocksAutocomplete"
+                      #stocksAutocomplete
+                      class="col-xs-12">
+    </app-autocomplete>
+</div>

@@ -2,6 +2,7 @@ import {Component, OnInit, ViewChild} from '@angular/core';
 import {NgForm} from "@angular/forms";
 import {Theme} from "../models/theme";
 import { NavigationModel } from "../models/navigationModel";
+import {StockModel} from "../models/stockModel";
 import {Router, ActivatedRoute, Params} from "@angular/router";
 import {ThemeService} from "../services/theme.service";
 import { IMultiSelectOption, IMultiSelectTexts, IMultiSelectSettings} from 'angular-2-dropdown-multiselect';
@@ -139,6 +140,10 @@ export class ThemeSearchComponent implements OnInit {
 
     changeActiveSearchType(type: number){
         this.activeSearchType = type;
+    }
+
+    searchTermStock(stock: StockModel){
+        console.log(stock);
     }
 
 }

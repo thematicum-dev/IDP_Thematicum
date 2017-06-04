@@ -29,7 +29,8 @@ export let searchDisabled_IM: IMultiSelectSettings = {
         buttonClasses: 'btn btn-default btn-block no-border-radius',
         dynamicTitleMaxItems: 1,
         displayAllSelectedText: true,
-        containerClasses: 'full-width'
+        containerClasses: 'full-width',
+        showUncheckAll: true
     };
 
 export let searchEnabled_IM: IMultiSelectSettings = {
@@ -38,7 +39,8 @@ export let searchEnabled_IM: IMultiSelectSettings = {
         buttonClasses: 'btn btn-default btn-block no-border-radius',
         dynamicTitleMaxItems: 1,
         displayAllSelectedText: true,
-        containerClasses: 'full-width'
+        containerClasses: 'full-width',
+        showUncheckAll: true
 };
 
 export let categoryTextOptions_IM: IMultiSelectTexts = {

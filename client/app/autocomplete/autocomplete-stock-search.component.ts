@@ -1,4 +1,4 @@
-import {Component, OnInit, Input} from '@angular/core';
+import {Component, OnInit, Input, Output, EventEmitter} from '@angular/core';
 import {AutoCompleteContainerComponent} from "./autocomplete-container.component";
 import {StockModel} from "../models/stockModel";
 import {AutocompleteDatasourceService} from "./autocomplete-datasource.service";
@@ -7,8 +7,8 @@ import * as Settings from '../utilities/settings';
 import {StockAllocationModel} from "../models/stockAllocationModel";
 
 @Component({
-    selector: 'app-autocomplete-stock-allocation',
-    templateUrl: 'autocomplete-stock-allocation.component.html',
+    selector: 'app-autocomplete-stock-search',
+    templateUrl: 'autocomplete-stock-search.component.html',
     providers: [AutocompleteDatasourceService],
     styles: [`
         select, select:hover, select:focus {
@@ -33,9 +33,7 @@ import {StockAllocationModel} from "../models/stockAllocationModel";
         }
     `]
 })
-export class AutoCompleteStockAllocationComponent extends AutoCompleteContainerComponent implements OnInit {
-    @Input() preFilterStockIds: string[];
-    stockExposures = ['Strong Positive', 'Weak Positive', 'Neutral', 'Weak Negative', 'Strong Negative'];
+export class AutoCompleteStockSearchComponent extends AutoCompleteContainerComponent implements OnInit {
     currentlySelectedStock: StockModel;
 
     constructor(public dataSource: AutocompleteDatasourceService) {
@@ -44,6 +42,9 @@ export class AutoCompleteStockAllocationComponent extends AutoCompleteContainerC
             'search by company name',
             false, false, false);
     }
+    
+    @Output('stock')
+    stock: EventEmitter<StockModel> = new EventEmitter<StockModel>();
 
     ngOnInit(): void {
         console.log('ngOnInit at AutoCompleteContainerComponent');
@@ -61,21 +62,7 @@ export class AutoCompleteStockAllocationComponent extends AutoCompleteContainerC
                                 item.reportingCurrency));
     }
 
-    preFilter() {
-        if(!this.preFilterStockIds) {
-            return;
-        }
-        //filter stocks already allocated to theme from being displayed in the autocomplete
-        this.itemList = this.itemList.filter((item: AutocompleteItem) => this.preFilterStockIds.indexOf(item._id) < 0);
-    }
-
     selectItem(item: any) {
-        //TODO: refactor
-        /*
-            on selecting item: remove that item from the list of suggested stocks
-            on removing item: add that item back to the list
-         */
-
         //search by name (assume unique name)
         let existingItem = this.selectedItems.find((el: StockAllocationModel) => {
             return el.stockName == item.name
@@ -84,17 +71,9 @@ export class AutoCompleteStockAllocationComponent extends AutoCompleteContainerC
         //do not add an item if it was already selected
         if(!existingItem) {
             this.currentlySelectedStock = item;
+            this.stock.emit(this.currentlySelectedStock);
         } else {
             this.error = this.duplicateChosenErrorStr;
-        }
-    }
-
-    onSelectExposure(index: number, stocksAutocomplete: any) {
-        //add allocated stock
-        if (this.currentlySelectedStock) {
-            this.selectedItems.push(new StockAllocationModel(this.currentlySelectedStock._id, index, this.currentlySelectedStock.name));
-            this.currentlySelectedStock = null;
-            stocksAutocomplete.clearCurrentlySelectedItem();
         }
     }
 }
