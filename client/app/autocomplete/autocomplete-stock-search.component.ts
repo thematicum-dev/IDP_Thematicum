@@ -10,28 +10,7 @@ import {StockAllocationModel} from "../models/stockAllocationModel";
     selector: 'app-autocomplete-stock-search',
     templateUrl: 'autocomplete-stock-search.component.html',
     providers: [AutocompleteDatasourceService],
-    styles: [`
-        select, select:hover, select:focus {
-            background-color: white;
-            text-decoration: none;
-            outline:none;
-            border: none;
-            box-shadow: none;
-        }
-        .btn.btn-link {
-            color: red;
-        }
-        td>label {
-            padding: 6px 12px; 
-            margin-bottom: 0;
-        }
-        span.input-group-btn {
-            padding:0;
-        }
-        #stocksAutocomplete {
-            padding-right: 0;
-        }
-    `]
+ 
 })
 export class AutoCompleteStockSearchComponent extends AutoCompleteContainerComponent implements OnInit {
     currentlySelectedStock: StockModel;
