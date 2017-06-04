@@ -19,6 +19,7 @@ export class ThemeSearchComponent implements OnInit {
     searchResultsCount: number = 0;
     currentPage: number = 1;
     initialPage: number;
+    activeSearchType: number = 1;
     @ViewChild('searchPagePagination') searchPagePaginationComponent: PaginationComponent;
 
     categoryTextOptions = categoryTextOptions_IM;
@@ -134,6 +135,10 @@ export class ThemeSearchComponent implements OnInit {
 
     navigatePage(page: NavigationModel) {
         this.routeChange(page.pageNumber);
+    }
+
+    changeActiveSearchType(type: number){
+        this.activeSearchType = type;
     }
 
 }

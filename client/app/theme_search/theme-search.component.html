@@ -10,13 +10,20 @@
     <form (ngSubmit)="onSubmit(form)" #form="ngForm">
         <div class="form-group row">
             <div class="col-xs-12 text-center">
-                <button [class.btn-primary]="true" [class.btn-secondary]="false" type="button" class="btn no-margin no-border-radius">search themes</button>
-                <button [class.btn-primary]="false" [class.btn-secondary]="true" type="button" class="btn btn-secondary no-margin no-border-radius">search stocks</button>
+                <button (click)="changeActiveSearchType(1)" [class.btn-primary]="activeSearchType==1" [class.btn-secondary]="activeSearchType!=1" type="button" class="btn no-margin no-border-radius">search themes</button>
+                <button (click)="changeActiveSearchType(2)" [class.btn-primary]="activeSearchType==2" [class.btn-secondary]="activeSearchType!=2" type="button" class="btn btn-secondary no-margin no-border-radius">search stocks</button>
             </div>
         </div>
-        <div class="form-group row">
+        <div class="form-group row" [hidden]="activeSearchType!=1">
             <div class="col-xs-12">
-                <input type="text" id="searchTerm" class="form-control no-border-radius" [(ngModel)]="searchTerm" name="searchTerm" #name="ngModel" placeholder="Search for themes"
+                <input type="text" id="searchTerm" class="form-control no-border-radius" [(ngModel)]="searchTerm" name="searchTerm" #name="ngModel" placeholder="search for themes"
+                />
+                <i class="glyphicon glyphicon-search form-control-feedback search-icon"></i>
+            </div>
+        </div>
+        <div class="form-group row" [hidden]="activeSearchType!=2">
+            <div class="col-xs-12">
+                <input disabled="true" type="text" class="form-control no-border-radius" placeholder="search for stocks"
                 />
                 <i class="glyphicon glyphicon-search form-control-feedback search-icon"></i>
             </div>
