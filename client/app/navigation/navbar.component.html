@@ -14,13 +14,10 @@
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
             <ul class="nav navbar-nav navbar-right">
                 <li>
-                    <a class="thematicum-navbar-nav-text" routerLinkActive="active" [routerLink]="['/about']">Impressum</a>
-                </li>
-                <li>
                     <a class="thematicum-navbar-nav-text" routerLinkActive="active" [routerLink]="['/signup']" *ngIf="!isLoggedIn()">Sign Up</a>
                 </li>
                 <li>
-                    <a class="thematicum-navbar-nav-text" routerLinkActive="active" [routerLink]="['/signin']" *ngIf="!isLoggedIn()">Sign In</a>
+                    <a class="thematicum-navbar-nav-text" routerLinkActive="active" [routerLink]="['/signin']" *ngIf="!isLoggedIn()">Login</a>
                 </li>
 
                 <li class="dropdown" *ngIf="isLoggedIn()">
