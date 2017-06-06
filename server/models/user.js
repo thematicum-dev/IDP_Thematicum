@@ -11,7 +11,7 @@ const schema = new Schema({
         minlength: [4, 'User name must have at least 4 letters'],
         maxlength: [32, 'User name must have at most 32 letters']
     },
-    themes: [{ type : Schema.Types.ObjectId, ref: 'Theme' }],
+    follows: [{ type : Schema.Types.ObjectId, ref: 'Theme' }],
     email: {
         type: String,
         required: [true, 'The email field is required'],
