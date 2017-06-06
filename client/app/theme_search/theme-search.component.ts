@@ -2,11 +2,13 @@ import {Component, OnInit, ViewChild} from '@angular/core';
 import {NgForm} from "@angular/forms";
 import {Theme} from "../models/theme";
 import { NavigationModel } from "../models/navigationModel";
+import {StockModel} from "../models/stockModel";
 import {Router, ActivatedRoute, Params} from "@angular/router";
 import {ThemeService} from "../services/theme.service";
 import { IMultiSelectOption, IMultiSelectTexts, IMultiSelectSettings} from 'angular-2-dropdown-multiselect';
 import * as _ from 'underscore';
 import { PaginationComponent } from '../utilities/pagination/pagination.component';
+import {categoryValues_IM, maturityValues_IM, timeHorizonValues_IM, searchDisabled_IM, searchEnabled_IM, categoryTextOptions_IM, timeHorizonTextOptions_IM, maturityTextOptions_IM, tagTextOptions_IM} from "../models/IMultiSelectSettings";
 
 @Component({
     selector: 'app-theme-search',
@@ -18,73 +20,30 @@ export class ThemeSearchComponent implements OnInit {
     searchResultsCount: number = 0;
     currentPage: number = 1;
     initialPage: number;
+    activeSearchType: number = 1;
     @ViewChild('searchPagePagination') searchPagePaginationComponent: PaginationComponent;
 
-    generalTextOptions: IMultiSelectTexts = {
-        checkAll: 'Select all',
-        uncheckAll: 'Unselect all',
-        checked: 'item selected',
-        checkedPlural: 'items selected',
-        searchPlaceholder: 'Search',
-        defaultTitle: '',
-        allSelected: 'All Selected'
-    };
-    categoryTextOptions = _.clone(this.generalTextOptions);
-    timeHorizonTextOptions = _.clone(this.generalTextOptions);
-    maturityTextOptions = _.clone(this.generalTextOptions);
-    tagTextOptions = _.clone(this.generalTextOptions);
+    categoryTextOptions = categoryTextOptions_IM;
+    timeHorizonTextOptions = timeHorizonTextOptions_IM;
+    maturityTextOptions = maturityTextOptions_IM;
+    tagTextOptions = tagTextOptions_IM;
 
     categoryOptionsModel: number[] = [];
     timeHorizonOptionsModel: number[] = [];
     maturityOptionsModel: number[] = [];
     tagOptionsModel: string[] = [];
 
-    categoryOptions: IMultiSelectOption[] = [
-        { id: 0, name: 'Economic' },
-        { id: 1, name: 'Technologic' },
-        { id: 2, name: 'Environmental' },
-        { id: 3, name: 'Political' },
-        { id: 4, name: 'Regulatory' },
-        { id: 5, name: 'Sociologic' }
-    ];
-    timeHorizonOptions: IMultiSelectOption[] = [
-        { id: 0, name: 'Short Term' },
-        { id: 1, name: 'Medium Term' },
-        { id: 2, name: 'Long Term' }
-    ];
-    maturityOptions: IMultiSelectOption[] = [
-        { id: 0, name: 'Upcoming' },
-        { id: 1, name: 'Nascent' },
-        { id: 2, name: 'Accelerating' },
-        { id: 3, name: 'Mature' },
-        { id: 4, name: 'Declining' }
-    ];
+    categoryOptions: IMultiSelectOption[] = categoryValues_IM;
+    timeHorizonOptions: IMultiSelectOption[] = timeHorizonValues_IM;
+    maturityOptions: IMultiSelectOption[] = maturityValues_IM;
     tagOptions: IMultiSelectOption[] = [];
 
-    noSearchDropdownSettings: IMultiSelectSettings = {
-        enableSearch: false,
-        checkedStyle: 'checkboxes',
-        buttonClasses: 'btn btn-default btn-block',
-        dynamicTitleMaxItems: 1,
-        displayAllSelectedText: true,
-        containerClasses: 'full-width'
-    };
-    searchDropdownSettings: IMultiSelectSettings = {
-        enableSearch: true,
-        checkedStyle: 'checkboxes',
-        buttonClasses: 'btn btn-default btn-block',
-        dynamicTitleMaxItems: 1,
-        displayAllSelectedText: true,
-        containerClasses: 'full-width'
-    };
+    noSearchDropdownSettings: IMultiSelectSettings = searchDisabled_IM;
+    searchDropdownSettings: IMultiSelectSettings = searchEnabled_IM;
 
     constructor(private themeService: ThemeService, private router: Router, private route: ActivatedRoute) { }
 
     ngOnInit(): void {
-        this.categoryTextOptions.defaultTitle = 'Category';
-        this.timeHorizonTextOptions.defaultTitle = 'Time Horizon';
-        this.maturityTextOptions.defaultTitle = 'Maturity';
-        this.tagTextOptions.defaultTitle = 'Tags';
         this.themeService.getAllThemeTags().subscribe(data => this.updateTagList(data), error => console.log(error));
         this.route.queryParams.subscribe((queryParams: Params) => {
             // this method works with browser back and forward button
@@ -152,8 +111,7 @@ export class ThemeSearchComponent implements OnInit {
                 tags: JSON.stringify(this.tagOptionsModel),
                 currentPage: currentPage
             }
-        });
-    
+        });    
     }
 
     goToThemeDetails(themeId: string) {
@@ -178,6 +136,14 @@ export class ThemeSearchComponent implements OnInit {
 
     navigatePage(page: NavigationModel) {
         this.routeChange(page.pageNumber);
+    }
+
+    changeActiveSearchType(type: number){
+        this.activeSearchType = type;
+    }
+
+    searchTermStock(stock: StockModel){
+        console.log(stock);
     }
 
 }

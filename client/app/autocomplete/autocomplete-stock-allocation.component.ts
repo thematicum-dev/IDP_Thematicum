@@ -41,7 +41,7 @@ export class AutoCompleteStockAllocationComponent extends AutoCompleteContainerC
     constructor(public dataSource: AutocompleteDatasourceService) {
         super(dataSource,
             Settings.getBaseApi() + 'stocks',
-            'Search by company name',
+            'search by company name',
             false, false, false);
     }
 

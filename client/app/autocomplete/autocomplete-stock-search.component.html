@@ -1,0 +1,11 @@
+<app-autocomplete   [placeholderTerm]="autocompletePlaceholder"
+                      [allowCustomValues]="allowCustomValues"
+                      [allowEnterKey]="allowEnterKey"
+                      [allowDirectClick]="allowDirectClick"
+                      [dataSource]="itemList"
+                      (notifySelectedItem)='selectItem($event)'
+                      (clearErrorStr)="clearErrorStr()"
+                      id="stocksAutocomplete"
+                      #stocksAutocomplete
+                      >
+</app-autocomplete>
