@@ -3,6 +3,7 @@ import BaseRepository from './baseRepository';
 import QueryBuilder from './queryBuilder';
 import User from '../models/user';
 import Theme from '../models/theme';
+import ActivityLog from '../models/activitylog';
 import {AppError} from '../utilities/appError';
 import UserThemeInput from '../models/userThemeInput';
 import ThemeStockComposition from '../models/themeStockComposition';
@@ -233,5 +234,17 @@ export default class DataRepository extends BaseRepository {
         });
 
         return this.save(stockAllocation);
+    }
+
+    getActivities(){
+        console.log("inside get activities");
+        var filter = { _id:0, user:1, theme:1,"userInput.categories":1, "userInput.categoriesValuesChecked":1, "userInput.timeHorizon":1, "userInput.maturity":1, "userInput.categoryValues":1};
+        return new Promise((resolve, reject) => {
+            ActivityLog.find({},filter).sort( { createdAt: -1 } ).exec()
+                .then(results => {
+                    resolve(results);
+                })
+                .catch(err => reject(err));
+        });
     }
 }
