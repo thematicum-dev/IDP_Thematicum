@@ -16,3 +16,29 @@ export function listAllByTime(req, res, next) {
         })
         .catch(err => next(err));
 }
+
+export function getActivityByUser(req, res, next) {
+    let userEmail = req.userEmail;
+    repo.getActivityByUser(userEmail)
+        .then(results => {
+            if (!results) {
+                return next(new AppError('No activity found, please provide some theme input to find activity', 404));
+            }
+
+            return res.status(200).json(results);
+        })
+        .catch(err => next(err));
+}
+
+export function deleteActivityByUser(req, res, next) {
+    let userEmail = req.userEmail;
+    repo.deleteActivityByUser(userEmail)
+        .then(results => {
+            if (!results) {
+                return next(new AppError('No activity found, please provide some theme input to find activity', 404));
+            }
+
+            return res.status(200).json(results);
+        })
+        .catch(err => next(err));
+}

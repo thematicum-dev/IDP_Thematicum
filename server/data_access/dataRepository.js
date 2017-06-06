@@ -278,5 +278,27 @@ export default class DataRepository extends BaseRepository {
         });
     }
 
+    getActivityByUser(userEmail){
+        user = getUserByEmail(userEmail);
+        return new Promise((resolve, reject) => {
+            ActivityLog.find( {userInput: user})
+                .then(results => {
+                    resolve(results);
+                })
+                .catch(err => reject(err));
+        });
+    }
+
+    deleteActivityByUser(userEmail){
+        user = getUserByEmail(userEmail);
+        return new Promise((resolve, reject) => {
+            ActivityLog.remove( {userInput: user})
+                .then(results => {
+                    resolve(results);
+                })
+                .catch(err => reject(err));
+        });
+    }
+
     
 }
