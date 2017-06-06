@@ -247,4 +247,36 @@ export default class DataRepository extends BaseRepository {
                 .catch(err => reject(err));
         });
     }
+
+    followTheme(userId, themeId){
+        return new Promise((resolve, reject) => {
+            User.update( { "_id" : userId }, { "$addToSet" : { "follows" : themeId} } )
+                .then(results => {
+                    resolve(results);
+                })
+                .catch(err => reject(err));
+        });
+    }
+
+    unFollowTheme(userId, themeId){
+        return new Promise((resolve, reject) => {
+            User.update( { "_id" : userId }, { "$pull" : { "follows" : themeId} } )
+                .then(results => {
+                    resolve(results);
+                })
+                .catch(err => reject(err));
+        });
+    }
+
+    updateUserByEmail(userEmail, user){
+        return new Promise((resolve, reject) => {
+            User.update( {email: userEmail} , user)
+                .then(results => {
+                    resolve(results);
+                })
+                .catch(err => reject(err));
+        });
+    }
+
+    
 }
