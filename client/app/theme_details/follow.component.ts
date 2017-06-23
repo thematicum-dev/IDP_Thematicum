@@ -16,40 +16,24 @@ export class FollowComponent implements OnInit{
             @Input('theme')
             theme: string = "Clean Energy";
 
+            reactToData(results){
+                if (results.isFollowing){
+                        this.follow = true;
+                }else{
+                        this.follow = false;
+                }
+            }
+
             ngOnInit(): void{
                         this.follow = this.followService.getFollowMock(this.theme);
-                        this.followService.getFollow(this.theme).subscribe(results => {
-                            console.log("theme following data");
-                            console.log(results);
-                            if (results.isFollowing){
-                                this.follow = true;
-                            }else{
-                                this.follow = false;
-                            }
-                        });
+                        this.followService.getFollow(this.theme).subscribe(results => this.reactToData(results));
             }
 
             changeFollow($event, follow){
                     if(follow){
-                            this.followService.unfollow(this.theme).subscribe(results => {
-                            console.log("theme following data");
-                            console.log(results);
-                            if (results.isFollowing){
-                                this.follow = true;
-                            }else{
-                                this.follow = false;
-                            }
-                        });
+                            this.followService.unfollow(this.theme).subscribe(results => this.reactToData(results));
                     }else{
-                        this.followService.follow(this.theme).subscribe(results => {
-                            console.log("theme following data");
-                            console.log(results);
-                            if (results.isFollowing){
-                                this.follow = true;
-                            }else{
-                                this.follow = false;
-                            }
-                        });
+                        this.followService.follow(this.theme).subscribe(results => this.reactToData(results));
                     }
             }
 }
