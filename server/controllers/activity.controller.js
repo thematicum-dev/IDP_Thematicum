@@ -19,6 +19,7 @@ export function listAllByTime(req, res, next) {
 
 export function getActivityByUser(req, res, next) {
     let userEmail = req.userEmail;
+    console.log(req.userEmail);
     repo.getActivityByUser(userEmail)
         .then(results => {
             if (!results) {

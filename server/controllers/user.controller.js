@@ -60,3 +60,27 @@ export function unfollow(req, res, next) {
         })
         .catch(err => next(err));
 }
+
+export function getFollowStatus(req, res, next) {
+    // not tested yet, can only test when UI is made
+    
+    repo.getUserByEmail(req.query.email).then(
+        user => {
+            if (!user) {
+                return next(new AppError('User not found', 404));
+            }
+            let userId = user._id;
+            let themeId = req.query.theme;
+            repo.getFollowThemeStatus(userId, themeId)
+                .then(results => {
+                    if (!results) {
+                        return next(new AppError('Followed theme not found', 404));
+                    }
+
+                    return res.status(200).json({user: userId, theme: themeId, isFollowing: results});
+                })
+                .catch(err => next(err));
+        }
+    ).catch(err => next(err));
+    
+}

@@ -27,8 +27,14 @@ export default class DataRepository extends BaseRepository {
         return RegistrationAccessCode.findOne({code: code, validFrom: {'$lte': currentTime}, validUntil: {'$gte': currentTime}}).exec();
     }
 
-    getUserByEmail(email) {
-        return User.findOne({email: email}).exec();
+    getUserByEmail(email){
+        return new Promise((resolve, reject) => {
+            User.findOne({email: email}).exec()
+                .then(results => {
+                    resolve(results);
+                })
+                .catch(err => reject(err));
+        });
     }
 
     getThemeTags() {
@@ -237,10 +243,20 @@ export default class DataRepository extends BaseRepository {
     }
 
     getActivities(){
-        console.log("inside get activities");
         var filter = { _id:0, user:1, theme:1,"userInput.categories":1, "userInput.categoriesValuesChecked":1, "userInput.timeHorizon":1, "userInput.maturity":1, "userInput.categoryValues":1};
         return new Promise((resolve, reject) => {
             ActivityLog.find({},filter).sort( { createdAt: -1 } ).exec()
+                .then(results => {
+                    resolve(results);
+                })
+                .catch(err => reject(err));
+        });
+    }
+
+    getFollowThemeStatus(userId, themeId){
+        console.log("inside get follow status" + userId + " " + themeId);
+        return new Promise((resolve, reject) => {
+            User.find({ _id:userId, follows: { $in : [themeId]}}).count()
                 .then(results => {
                     resolve(results);
                 })

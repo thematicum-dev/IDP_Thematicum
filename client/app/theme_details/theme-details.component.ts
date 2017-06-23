@@ -4,6 +4,7 @@ import {ActivatedRoute, Router} from '@angular/router';
 import 'rxjs/add/operator/switchMap';
 import {ThemeService} from "../services/theme.service";
 import {ModalComponent} from "./modal.component";
+import { FollowComponent } from "./follow.component";
 
 @Component({
     selector: 'app-theme-details',
@@ -26,7 +27,7 @@ export class ThemeDetailsComponent implements OnInit, OnChanges {
     selectedThemeId: string; //theme Id retrieved from the url
     isEditMode = false; //to show/hide theme-editing form
 
-    @ViewChild(ModalComponent)
+    @ViewChild(ModalComponent, FollowComponent)
     public modal: ModalComponent;
 
     constructor(private route: ActivatedRoute, private router: Router, private themeService: ThemeService) { }
