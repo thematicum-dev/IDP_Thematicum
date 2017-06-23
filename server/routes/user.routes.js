@@ -11,7 +11,7 @@ router.use('/', authUtilities.authenticationMiddleware);
 
 router.route('/follow')
     .get(userController.getFollowStatus)
-    .post(userController.follow)
+    .put(userController.follow)
     .delete(userController.unfollow);
 
 

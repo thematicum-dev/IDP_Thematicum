@@ -34,9 +34,6 @@ export class FollowService {
             let params = {'email': email, 'theme': theme['_id']};
             let searchQuery = this.encodeQueryData(params);
             let apiPath = this.baseAPI + 'user/follow' + searchQuery;
-            console.log(apiPath);
-
-
             return this.http.get(apiPath, {headers: this.headers})
                         .map((response: Response) => response.json())
                         .catch(this.handleError);
@@ -46,9 +43,7 @@ export class FollowService {
             var email = this.authService.getLoggedInUserEmail();
             let params = {'email': email, 'themeId': theme['_id']};
             let apiPath = this.baseAPI + 'user/follow'
-            console.log(apiPath);
-
-            return this.http.post(apiPath,params, {headers: this.headers})
+            return this.http.put(apiPath,params, {headers: this.headers})
                         .map((response: Response) => response.json())
                         .catch(this.handleError);
     }
@@ -59,8 +54,6 @@ export class FollowService {
             let params = {'email': email, 'themeId': theme['_id']};
             let searchQuery = this.encodeQueryData(params);
             let apiPath = this.baseAPI + 'user/follow'
-            console.log(apiPath);
-
             return this.http.delete(apiPath + searchQuery, {headers: this.headers})
                         .map((response: Response) => response.json())
                         .catch(this.handleError);
