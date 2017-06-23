@@ -11,6 +11,7 @@ client/*.js
 client/*.js.map
 
 us_stocks.json
+bin/*bundle.js
 
 !systemjs.config.js
 !typings/typings.d.ts
