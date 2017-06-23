@@ -4,7 +4,7 @@ import { FollowService } from '../services/follow.service';
 @Component({
   selector: 'app-follow',
   providers: [FollowService],
-  template: `<a class="btn center-block" ng-class="{true: 'btn-primary', false: 'btn-danger'}[!patient.archived]" > <span class="glyphicons glyphicons-star-empty"></span> {{!follow && 'Follow' || 'Unfollow'}} </a>`
+  template: `<a class="btn center-block" ng-class="{true: 'btn-primary', false: 'btn-danger'}[!patient.archived]" (click)="changeFollow($event, follow)"> <span class="glyphicons glyphicons-star-empty"></span> {{!follow && 'Follow' || 'Unfollow'}} </a>`
 })
 
 export class FollowComponent implements OnInit{
@@ -18,7 +18,7 @@ export class FollowComponent implements OnInit{
 
             ngOnInit(): void{
                         this.follow = this.followService.getFollowMock(this.theme);
-                        this.followService.getFollowReal(this.theme).subscribe(results => {
+                        this.followService.getFollow(this.theme).subscribe(results => {
                             console.log("theme following data");
                             console.log(results);
                             if (results.isFollowing){
@@ -29,11 +29,27 @@ export class FollowComponent implements OnInit{
                         });
             }
 
-            onclick(){
-                    if(this.follow){
-
+            changeFollow($event, follow){
+                    if(follow){
+                            this.followService.unfollow(this.theme).subscribe(results => {
+                            console.log("theme following data");
+                            console.log(results);
+                            if (results.isFollowing){
+                                this.follow = true;
+                            }else{
+                                this.follow = false;
+                            }
+                        });
                     }else{
-                        
+                        this.followService.follow(this.theme).subscribe(results => {
+                            console.log("theme following data");
+                            console.log(results);
+                            if (results.isFollowing){
+                                this.follow = true;
+                            }else{
+                                this.follow = false;
+                            }
+                        });
                     }
             }
 }

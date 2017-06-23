@@ -28,7 +28,7 @@ export class FollowService {
         return "?" + ret.join('&');
     }
 
-    getFollowReal(theme: string){
+    getFollow(theme: string){
             var email = this.authService.getLoggedInUserEmail();
 
             let params = {'email': email, 'theme': theme['_id']};
@@ -38,6 +38,30 @@ export class FollowService {
 
 
             return this.http.get(apiPath, {headers: this.headers})
+                        .map((response: Response) => response.json())
+                        .catch(this.handleError);
+    }
+
+    follow(theme: string){
+            var email = this.authService.getLoggedInUserEmail();
+            let params = {'email': email, 'themeId': theme['_id']};
+            let apiPath = this.baseAPI + 'user/follow'
+            console.log(apiPath);
+
+            return this.http.post(apiPath,params, {headers: this.headers})
+                        .map((response: Response) => response.json())
+                        .catch(this.handleError);
+    }
+
+    unfollow(theme: string){
+            var email = this.authService.getLoggedInUserEmail();
+
+            let params = {'email': email, 'themeId': theme['_id']};
+            let searchQuery = this.encodeQueryData(params);
+            let apiPath = this.baseAPI + 'user/follow'
+            console.log(apiPath);
+
+            return this.http.delete(apiPath + searchQuery, {headers: this.headers})
                         .map((response: Response) => response.json())
                         .catch(this.handleError);
     }
