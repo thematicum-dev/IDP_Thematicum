@@ -33,30 +33,70 @@ export function update(req, res, next) {
 
 export function follow(req, res, next) {
     // not tested yet, can only test when UI is made
-    let userId = repo.getUserByEmail(req.body.userEmail)._id;
-    let themeId = repo.getThemeById((req.body.themeName)).exec()._id;
-    repo.followTheme(userId, themeId)
-        .then(results => {
-            if (!results) {
-                return next(new AppError('ActivityLog not saved', 404));
-            }
+    let userId = repo.getUserByEmail(req.query.email)._id;
+    let themeId = req.query.themeId;
 
-            return res.status(200).json(results);
-        })
-        .catch(err => next(err));
+    repo.getUserByEmail(req.body.email).then(
+        user => {
+            if (!user) {
+                return next(new AppError('User not found', 404));
+            }
+            let userId = user._id;
+            let themeId = req.body.themeId;
+            repo.followTheme(userId, themeId)
+                .then(results => {
+                    if (!results) {
+                        return next(new AppError('Theme not unfollowed', 404));
+                    }
+
+                     return res.status(201).json({isFollowing: true, results: results});
+                })
+            .catch(err => next(err));
+            }
+    ).catch(err => next(err));
 }
 
 export function unfollow(req, res, next) {
     // not tested yet, can only test when UI is made
-    let userId = repo.getUserByEmail(req.body.userEmail)._id;
-    let themeId = repo.getThemeById((req.body.themeName)).exec()._id;
-    repo.unFollowTheme(userId, themeId)
-        .then(results => {
-            if (!results) {
-                return next(new AppError('ActivityLog not saved', 404));
-            }
+    let userId = repo.getUserByEmail(req.query.email)._id;
+    let themeId = req.query.themeId;
 
-            return res.status(200).json(results);
-        })
-        .catch(err => next(err));
+    repo.getUserByEmail(req.query.email).then(
+        user => {
+            if (!user) {
+                return next(new AppError('User not found', 404));
+            }
+            let userId = user._id;
+            let themeId = req.query.themeId;
+            repo.unFollowTheme(userId, themeId)
+                .then(results => {
+                    if (!results) {
+                        return next(new AppError('Theme not unfollowed', 404));
+                    }
+
+                     return res.status(202).json({isFollowing: false, results: results});
+                })
+            .catch(err => next(err));
+            }
+    ).catch(err => next(err));
+}
+
+export function getFollowStatus(req, res, next) {
+    // not tested yet, can only test when UI is made
+    
+    repo.getUserByEmail(req.query.email).then(
+        user => {
+            if (!user) {
+                return next(new AppError('User not found', 404));
+            }
+            let userId = user._id;
+            let themeId = req.query.theme;
+            repo.getFollowThemeStatus(userId, themeId)
+                .then(results => {
+                    return res.status(200).json({user: userId, theme: themeId, isFollowing: results});
+                })
+                .catch(err => next(err));
+        }
+    ).catch(err => next(err));
+    
 }

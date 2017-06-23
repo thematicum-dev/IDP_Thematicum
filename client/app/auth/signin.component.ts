@@ -23,6 +23,8 @@ export class SigninComponent implements AfterViewInit {
 		//store auth data in local storage
 		localStorage.setItem('token', data.token);
 		localStorage.setItem('username', data.username);
+		localStorage.setItem('email', data.email);
+
      	},
 	error => {
 		console.log("got an error");
