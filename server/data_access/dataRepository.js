@@ -73,11 +73,11 @@ export default class DataRepository extends BaseRepository {
         });
     }
 
-    getThemeByUserQueryPagination(start, limit, searchQuery, categories, maturity, timeHorizon, tags) {
-        let countPromise = this.getThemeByUserQuery(searchQuery, categories, maturity, timeHorizon, tags)
+    getThemeByUserThemeQueryPagination(start, limit, searchQuery, categories, maturity, timeHorizon, tags) {
+        let countPromise = this.getThemeByUserThemeQuery(searchQuery, categories, maturity, timeHorizon, tags)
             .count().exec();
 
-        let resultPromise = this.getThemeByUserQuery(searchQuery, categories, maturity, timeHorizon, tags)
+        let resultPromise = this.getThemeByUserThemeQuery(searchQuery, categories, maturity, timeHorizon, tags)
             .skip(start - 1).limit(limit).exec();
 
         return new Promise((resolve, reject) => {
@@ -89,11 +89,52 @@ export default class DataRepository extends BaseRepository {
         }).catch(err => reject(err));
     }
 
-    getThemeByUserQuery(searchQuery, categories, maturity, timeHorizon, tags) {
+     getThemeByUserStockQueryPagination(start, limit, stockId, categories, maturity, timeHorizon, tags) {
+        let countPromise = this.getThemeByUserStockQuery(stockId, categories, maturity, timeHorizon, tags)
+            .count().exec();
+
+        let resultPromise = this.getThemeByUserStockQuery(stockId, categories, maturity, timeHorizon, tags)
+            .skip(start - 1).limit(limit).exec();
+
+        return new Promise((resolve, reject) => {
+            Promise.all([countPromise, resultPromise])
+                .then(results => {
+                    resolve(results);
+                })
+                .catch(err => reject(err));
+        }).catch(err => reject(err));
+    }
+
+    getThemeByUserThemeQuery(searchQuery, categories, maturity, timeHorizon, tags) {
         let andQuery = [];
 
         if (searchQuery !== undefined && searchQuery.length > 0)
             andQuery.push({ $text: { $search: searchQuery } });
+
+        if (categories !== undefined && categories.length > 0)
+            andQuery.push({ categories: { "$in": categories } });
+
+        if (maturity !== undefined && maturity.length > 0)
+            andQuery.push({ maturity: { "$in": maturity } });
+
+        if (timeHorizon !== undefined && timeHorizon.length > 0)
+            andQuery.push({ timeHorizon: { "$in": timeHorizon } });
+
+        if (tags !== undefined && tags.length > 0)
+            andQuery.push({ tags: { "$in": tags } });
+
+        if (andQuery.length != 0) {
+            return Theme.find({ $and: andQuery });
+        } else {
+            return Theme.find({});
+        }
+    }
+
+     getThemeByUserStockQuery(stockId, categories, maturity, timeHorizon, tags) {
+        let andQuery = [];
+
+        if (stockId !== undefined && stockId.length > 0)
+            andQuery.push({ stockTags: { "$in": [stockId] } });
 
         if (categories !== undefined && categories.length > 0)
             andQuery.push({ categories: { "$in": categories } });

@@ -15,7 +15,7 @@ import {categoryValues_IM, maturityValues_IM, timeHorizonValues_IM, searchDisabl
     templateUrl: 'theme-search.component.html'
 })
 export class ThemeSearchComponent implements OnInit {
-    searchTerm = "";
+    searchTerm: string = "";
     themes: Theme[] = [];
     searchResultsCount: number = 0;
     currentPage: number = 1;
@@ -64,6 +64,12 @@ export class ThemeSearchComponent implements OnInit {
         else
             this.currentPage = 1;
 
+        if (queryParams['searchType']){
+            this.activeSearchType = parseInt(queryParams['searchType'], 10);
+        }
+        else
+            this.activeSearchType = 1;
+
         var getParamNumberModel = function (param) {
             if (queryParams[param])
                 if (Array.isArray(queryParams[param]))
@@ -93,18 +99,14 @@ export class ThemeSearchComponent implements OnInit {
         this.tagOptionsModel = getParamStringModel('tags');
 
         if (!(Object.keys(queryParams).length === 0 && queryParams.constructor === Object))
-            this.searchThemes(this.searchTerm, this.categoryOptionsModel, this.maturityOptionsModel, this.timeHorizonOptionsModel, this.tagOptionsModel);
+            this.searchThemes(this.searchTerm, this.activeSearchType, this.categoryOptionsModel, this.maturityOptionsModel, this.timeHorizonOptionsModel, this.tagOptionsModel);
     }
 
     onSubmit(form: NgForm) {
-        if(this.activeSearchType == 1){ // theme
-            this.routeChange(1);
-        } else if(this.activeSearchType == 2){ // stock
-
-        }
+            this.routeChange(1, this.activeSearchType);
     }
 
-    routeChange(currentPage: number) {
+    routeChange(currentPage: number, activeSearchType: number) {
         // Calls searchThemeOnRouteChange
         this.router.navigate([], {
             queryParams: {
@@ -113,7 +115,8 @@ export class ThemeSearchComponent implements OnInit {
                 timeHorizon: this.timeHorizonOptionsModel,
                 maturity: this.maturityOptionsModel,
                 tags: JSON.stringify(this.tagOptionsModel),
-                currentPage: currentPage
+                currentPage: currentPage,
+                searchType: activeSearchType
             }
         });    
     }
@@ -127,9 +130,10 @@ export class ThemeSearchComponent implements OnInit {
         this.themes = data[1];
     }
 
-    searchThemes(searchTerm: any, categoryOptionsModel: number[], maturityOptionsModel: number[], timeHorizonOptionsModel: number[], tagOptionsModel: string[]) {
+    searchThemes(searchTerm: string, searchType: number, categoryOptionsModel: number[], maturityOptionsModel: number[], timeHorizonOptionsModel: number[], tagOptionsModel: string[]) {
+        this.searchPagePaginationComponent.currentPage = this.currentPage; // check this line later. Needed for back button to work properly as this function ends up being called before initialPage is passed to pagionation component
         let start: number = this.searchPagePaginationComponent.nextResultStartsFrom();
-        this.themeService.searchThemes(searchTerm, start, categoryOptionsModel, maturityOptionsModel, timeHorizonOptionsModel, tagOptionsModel).subscribe(data => this.updateView(data), error => console.log(error));
+        this.themeService.searchThemes(searchTerm, searchType, start, categoryOptionsModel, maturityOptionsModel, timeHorizonOptionsModel, tagOptionsModel).subscribe(data => this.updateView(data), error => console.log(error));
     }
 
     updateTagList(tags) {
@@ -139,15 +143,16 @@ export class ThemeSearchComponent implements OnInit {
     }
 
     navigatePage(page: NavigationModel) {
-        this.routeChange(page.pageNumber);
+        this.routeChange(page.pageNumber, this.activeSearchType);
     }
 
     changeActiveSearchType(type: number){
         this.activeSearchType = type;
+        this.searchTerm = "";
     }
 
     searchTermStock(stock: StockModel){
-        console.log(stock);
+        this.searchTerm = stock._id;
     }
 
 }

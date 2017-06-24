@@ -78,6 +78,11 @@ export function list(req, res, next) {
     req.query.start = parseInt(req.query.start, 10);
     req.query.limit = 10;
 
+     if (!req.query.searchType || isNaN(req.query.searchType) || req.query.searchType <= 0) {
+        req.query.searchType = 1;
+    }
+    req.query.searchType = parseInt(req.query.searchType, 10);
+
     var concatenatedNumberStringToArray = function (concatenatedString) {
         if (!concatenatedString || concatenatedString.length == 0) {
             return [];
@@ -106,10 +111,17 @@ export function list(req, res, next) {
     req.query.timeHorizon = concatenatedNumberStringToArray(req.query.timeHorizon);
     req.query.tags = concatenatedStringToArray(req.query.tags);
 
-    repo.getThemeByUserQueryPagination(req.query.start, req.query.limit, req.query.searchQuery, req.query.categories, req.query.maturity, req.query.timeHorizon, req.query.tags)
-        .then(results => {
-            res.status(200).json(new AppResponse('Investment themes retrieved', results));
-        }).catch(err => next(err));
+    if (req.query.searchType == 1) {
+        repo.getThemeByUserThemeQueryPagination(req.query.start, req.query.limit, req.query.searchQuery, req.query.categories, req.query.maturity, req.query.timeHorizon, req.query.tags)
+            .then(results => {
+                res.status(200).json(new AppResponse('Investment themes retrieved', results));
+            }).catch(err => next(err));
+    } else if (req.query.searchType == 2) {
+        repo.getThemeByUserStockQueryPagination(req.query.start, req.query.limit, req.query.searchQuery, req.query.categories, req.query.maturity, req.query.timeHorizon, req.query.tags)
+            .then(results => {
+                res.status(200).json(new AppResponse('Investment themes retrieved', results));
+            }).catch(err => next(err));
+    }
 }
 
 export function themeById(req, res, next, id) {

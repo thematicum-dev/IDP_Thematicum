@@ -164,6 +164,11 @@ Remove if a better way is found to achieve this.*/
   margin:0;
 }
 
+.no-decoration, .no-decoration:hover{
+  color: #000000;
+  text-decoration: none;
+}
+
 /*Stylesheet for Theme Explorer Page*/
 .Theme-Explorer {
   margin-top: 34px;
