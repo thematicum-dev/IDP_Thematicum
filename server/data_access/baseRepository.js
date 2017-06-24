@@ -41,6 +41,28 @@ export default class BaseRepository {
         return collection.update(query, update,  {upsert: true}); 
     }
 
+    // adds a value to an array from collection where a query is satisfied
+    push(collection, query, push) {
+        return new Promise((resolve, reject) => {
+            collection.update(query, { $push: push },  {upsert: true})
+                .then(() => resolve(true))
+                .catch(err => reject(err));
+        });
+    }
+
+    // removes a value from an array from collection where a query is satisfied
+    pull(collection, query, pull) {
+        return new Promise((resolve, reject) => {
+            collection.update(query, { $pull: pull })
+                .then(() => {
+                    resolve(true)
+                })
+                .catch(err => {
+                    reject(err)
+                });
+        });
+    }
+
     remove(document) {
         return document.remove();
     }
@@ -50,7 +72,6 @@ export default class BaseRepository {
             if (!mongoose.Types.ObjectId.isValid(id)) {
                 reject(new AppError('Invalid Object Id', 400));
             }
-
             resolve(collection.findByIdAndRemove(id).exec());
         });
     }

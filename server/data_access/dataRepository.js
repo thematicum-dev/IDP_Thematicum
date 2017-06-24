@@ -206,13 +206,47 @@ export default class DataRepository extends BaseRepository {
     createStockCompositionAndAllocation(allocationData, theme, user) {
         return this.getById(Stock, allocationData.stockId)
             .then(stock => {
-                return this.createThemeStockComposition(theme, stock, user);
+                this.addStockTagToTheme(theme._id, stock._id)
+                    .then(() => {
+                        return this.createThemeStockComposition(theme, stock, user);
+                    })
+                    .then(themeStockComposition => {
+                        return this.createStockAllocation(themeStockComposition, user, allocationData.exposure)
+                    });
             })
-            .then(themeStockComposition => {
-                return this.createStockAllocation(themeStockComposition, user, allocationData.exposure)
-            });
+        //TODO: add .catch? / error handling
+    }
 
-        //TODO: add .catch?
+    addStockTagToTheme(themeId, stockId){
+        return new Promise((resolve, reject) => {
+            this.push(Theme, { _id: themeId }, { "stockTags": stockId })
+            .then(() => {
+                console.log("Stock tag added to theme.");
+                resolve(true);
+            })
+            .catch(err => {
+                console.log(err);
+                reject(err);
+            });
+        });
+    }
+
+    removeStockTagFromTheme(themeStockCompositionID) {
+        var that = this;
+        return new Promise((resolve, reject) => {
+            ThemeStockComposition.findById(themeStockCompositionID).then(function (themeStockComposition) {
+                that.pull(Theme, { _id: themeStockComposition.theme }, { "stockTags": themeStockComposition.stock })
+                    .then(() => {
+                        console.log("Stock tag removed from theme.");
+                        resolve(true);
+                    })
+                    .catch(err => {
+                        console.log(err);
+                        reject(err);
+                    });
+            })
+            .catch(err => reject(err));
+        });
     }
 
     createThemeStockComposition(theme, stock, user) {

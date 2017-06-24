@@ -97,7 +97,11 @@ export class ThemeSearchComponent implements OnInit {
     }
 
     onSubmit(form: NgForm) {
-        this.routeChange(1);
+        if(this.activeSearchType == 1){ // theme
+            this.routeChange(1);
+        } else if(this.activeSearchType == 2){ // stock
+
+        }
     }
 
     routeChange(currentPage: number) {
