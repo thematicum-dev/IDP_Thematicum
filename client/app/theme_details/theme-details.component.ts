@@ -1,4 +1,4 @@
-import {Component, OnInit, OnChanges, SimpleChanges, ViewChild} from '@angular/core';
+import {Component, Input, OnInit, OnChanges, SimpleChanges, ViewChild} from '@angular/core';
 import {Theme} from "../models/theme";
 import {ActivatedRoute, Router} from '@angular/router';
 import 'rxjs/add/operator/switchMap';
@@ -31,6 +31,9 @@ export class ThemeDetailsComponent implements OnInit, OnChanges {
     public modal: ModalComponent;
 
     constructor(private route: ActivatedRoute, private router: Router, private themeService: ThemeService) { }
+
+    @Input('theme')
+     isCurrentUserAdmin: boolean = false;
 
     ngOnInit(): void {
         if(!this.route.snapshot.params['id']) {
