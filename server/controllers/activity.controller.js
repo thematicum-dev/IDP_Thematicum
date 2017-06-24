@@ -39,7 +39,7 @@ export function deleteActivityByUser(req, res, next) {
                 return next(new AppError('No activity found, please provide some theme input to find activity', 404));
             }
 
-            return res.status(200).json(results);
+            return res.status(202).json(results);
         })
         .catch(err => next(err));
 }
