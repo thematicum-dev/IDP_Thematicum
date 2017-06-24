@@ -32,10 +32,6 @@ export function update(req, res, next) {
 }
 
 export function follow(req, res, next) {
-    // not tested yet, can only test when UI is made
-    let userId = repo.getUserByEmail(req.query.email)._id;
-    let themeId = req.query.themeId;
-
     repo.getUserByEmail(req.body.email).then(
         user => {
             if (!user) {
@@ -57,9 +53,6 @@ export function follow(req, res, next) {
 }
 
 export function unfollow(req, res, next) {
-    // not tested yet, can only test when UI is made
-    let userId = repo.getUserByEmail(req.query.email)._id;
-    let themeId = req.query.themeId;
 
     repo.getUserByEmail(req.query.email).then(
         user => {
