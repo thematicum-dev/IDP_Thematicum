@@ -254,7 +254,6 @@ export default class DataRepository extends BaseRepository {
     }
 
     getFollowThemeStatus(userId, themeId){
-        console.log("inside get follow status" + userId + " " + themeId);
         return new Promise((resolve, reject) => {
             User.find({ _id:userId, follows: { $in : [themeId]}}).count()
                 .then(results => {
@@ -295,25 +294,31 @@ export default class DataRepository extends BaseRepository {
     }
 
     getActivityByUser(userEmail){
-        user = getUserByEmail(userEmail);
-        return new Promise((resolve, reject) => {
-            ActivityLog.find( {userInput: user})
-                .then(results => {
-                    resolve(results);
-                })
-                .catch(err => reject(err));
-        });
+        repo.getUserByEmail(userEmail)
+        .then(user => {
+            return new Promise((resolve, reject) => {
+                ActivityLog.find( {userInput: user})
+                    .then(results => {
+                        resolve(results);
+                    })
+                    .catch(err => reject(err));
+            });
+        })
+        .catch(err => next(err));
     }
 
     deleteActivityByUser(userEmail){
-        user = getUserByEmail(userEmail);
-        return new Promise((resolve, reject) => {
-            ActivityLog.remove( {userInput: user})
-                .then(results => {
-                    resolve(results);
-                })
-                .catch(err => reject(err));
-        });
+        repo.getUserByEmail(userEmail)
+        .then(user => {
+            return new Promise((resolve, reject) => {
+                ActivityLog.remove( {userInput: user})
+                    .then(results => {
+                        resolve(results);
+                    })
+                    .catch(err => reject(err));
+            });
+        })
+        .catch(err => next(err));
     }
 
     
