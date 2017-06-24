@@ -53,7 +53,10 @@ export function deleteStockAllocation(req, res, next) {
         })
         .then(notExistStockAllocation => {
             if (notExistStockAllocation) {
-                return repo.removeById(ThemeStockComposition, compositionId);
+                repo.removeStockTagFromTheme(compositionId).then(function(){
+                    return repo.removeById(ThemeStockComposition, compositionId);
+                })
+                .catch(err => reject(err));                
             }
         })
         .then(() => {

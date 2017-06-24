@@ -25,6 +25,10 @@ const schema = new Schema({
         minlength: 4,
         maxlength: 500
     },
+    stockTags: [{
+        type: Schema.Types.ObjectId, 
+        ref: 'Stock'
+    }],
     categories:[{
         type: Number,
         minlength: 4,
