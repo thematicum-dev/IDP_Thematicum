@@ -1,5 +1,5 @@
 import UserThemeInput from '../models/userThemeInput';
-import ActivityLog from '../models/ActivityLog';
+import ActivityLog from '../models/activitylog';
 import {AppError} from '../utilities/appError';
 import {AppResponse} from '../utilities/appResponse';
 import DataRepository from '../data_access/dataRepository';

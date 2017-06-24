@@ -71,6 +71,10 @@ export class AuthService implements AuthServiceInterface {
         return localStorage.getItem('username');
     }
 
+    getLoggedInUserEmail(){
+        return localStorage.getItem('email');
+    }
+
     getStoredToken() {
         return localStorage.getItem('token');
     }

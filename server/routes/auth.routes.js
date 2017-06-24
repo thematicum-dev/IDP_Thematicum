@@ -6,6 +6,7 @@ router.route('/signup')
     .post(authController.signup);
 router.route('/signin')
     .post(authController.signin);
+
 // router.route('/captcha')
 //     .post(authController.captcha);
 router.route('/isAuthenticated')

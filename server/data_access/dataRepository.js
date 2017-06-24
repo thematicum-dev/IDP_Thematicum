@@ -3,6 +3,7 @@ import BaseRepository from './baseRepository';
 import QueryBuilder from './queryBuilder';
 import User from '../models/user';
 import Theme from '../models/theme';
+import ActivityLog from '../models/activitylog';
 import {AppError} from '../utilities/appError';
 import UserThemeInput from '../models/userThemeInput';
 import ThemeStockComposition from '../models/themeStockComposition';
@@ -26,8 +27,14 @@ export default class DataRepository extends BaseRepository {
         return RegistrationAccessCode.findOne({code: code, validFrom: {'$lte': currentTime}, validUntil: {'$gte': currentTime}}).exec();
     }
 
-    getUserByEmail(email) {
-        return User.findOne({email: email}).exec();
+    getUserByEmail(email){
+        return new Promise((resolve, reject) => {
+            User.findOne({email: email}).exec()
+                .then(results => {
+                    resolve(results);
+                })
+                .catch(err => reject(err));
+        });
     }
 
     getThemeTags() {
@@ -268,4 +275,80 @@ export default class DataRepository extends BaseRepository {
 
         return this.save(stockAllocation);
     }
+
+    getActivities(){
+        var filter = { _id:0, user:1, theme:1,"userInput.categories":1, "userInput.categoriesValuesChecked":1, "userInput.timeHorizon":1, "userInput.maturity":1, "userInput.categoryValues":1};
+        return new Promise((resolve, reject) => {
+            ActivityLog.find({},filter).sort( { createdAt: -1 } ).exec()
+                .then(results => {
+                    resolve(results);
+                })
+                .catch(err => reject(err));
+        });
+    }
+
+    getFollowThemeStatus(userId, themeId){
+        console.log("inside get follow status" + userId + " " + themeId);
+        return new Promise((resolve, reject) => {
+            User.find({ _id:userId, follows: { $in : [themeId]}}).count()
+                .then(results => {
+                    resolve(results);
+                })
+                .catch(err => reject(err));
+        });
+    }
+
+    followTheme(userId, themeId){
+        return new Promise((resolve, reject) => {
+            User.update( { "_id" : userId }, { "$addToSet" : { "follows" : themeId} } )
+                .then(results => {
+                    resolve(results);
+                })
+                .catch(err => reject(err));
+        });
+    }
+
+    unFollowTheme(userId, themeId){
+        return new Promise((resolve, reject) => {
+            User.update( { "_id" : userId }, { "$pull" : { "follows" : themeId} } )
+                .then(results => {
+                    resolve(results);
+                })
+                .catch(err => reject(err));
+        });
+    }
+
+    updateUserByEmail(userEmail, user){
+        return new Promise((resolve, reject) => {
+            User.update( {email: userEmail} , user)
+                .then(results => {
+                    resolve(results);
+                })
+                .catch(err => reject(err));
+        });
+    }
+
+    getActivityByUser(userEmail){
+        user = getUserByEmail(userEmail);
+        return new Promise((resolve, reject) => {
+            ActivityLog.find( {userInput: user})
+                .then(results => {
+                    resolve(results);
+                })
+                .catch(err => reject(err));
+        });
+    }
+
+    deleteActivityByUser(userEmail){
+        user = getUserByEmail(userEmail);
+        return new Promise((resolve, reject) => {
+            ActivityLog.remove( {userInput: user})
+                .then(results => {
+                    resolve(results);
+                })
+                .catch(err => reject(err));
+        });
+    }
+
+    
 }

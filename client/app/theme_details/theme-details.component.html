@@ -11,6 +11,10 @@
                 </p>
             </div>
 
+            <div class="row" >
+                <app-follow #followButton [theme]="theme"></app-follow>
+            </div>
+
             <div class="text-right" *ngIf="!isEditMode">
                 <div class="btn-group-vertical" role="group">
                     <div class="btn-group" *ngIf="theme.isCurrentUserCreator">

@@ -18,6 +18,7 @@ router.route('/:themeId')
     .put(themeController.update)
     .delete(themeController.deleteThemeData);
 
+
 router.param('themeId', themeController.themeById);
 
 export default router;

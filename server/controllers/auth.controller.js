@@ -55,7 +55,8 @@ export function signin(req, res, next) {
 					res.status(200).json({
 						message: 'Successful login',
 						token: token,
-						username: user.name
+						username: user.name,
+						email:user.email
 					});
 				})
 				.catch(err => next(err));
