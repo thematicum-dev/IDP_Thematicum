@@ -6,6 +6,7 @@ import {ThemeService} from "../services/theme.service";
 import {ModalComponent} from "./modal.component";
 import { FollowComponent } from "./follow.component";
 
+
 @Component({
     selector: 'app-theme-details',
     templateUrl: 'theme-details.component.html',
