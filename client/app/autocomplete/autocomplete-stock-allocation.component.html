@@ -7,6 +7,7 @@
                       [allowDirectClick]="allowDirectClick"
                       [dataSource]="itemList"
                       (notifySelectedItem)='selectItem($event)'
+                      (isResultFound)='isResultFound($event)'
                       (clearErrorStr)="clearErrorStr()"
                       id="stocksAutocomplete"
                       #stocksAutocomplete
@@ -26,6 +27,10 @@
 
 </div>
 <p *ngIf="error" class="col-xs-offset-2 error-red-front">{{error}}</p>
+
+<br>
+
+<app-stock-create *ngIf="!resultFound"></app-stock-create>
 
 <br>
 

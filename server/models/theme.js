@@ -1,3 +1,14 @@
+/*
+The category, maturity and time horizon are aggreagted results from userThemeInput. They are used 
+while searching a theme or stock i.e. filter by category, time horizon, maturity etc.
+e.g. If theme is 30% Nascent, 60% Accelerating and 10% Mature as per user votes then
+the theme is tagged as Accelerating. This aggregation is done for a theme every time any user visits
+that theme's detail page.
+
+Whenever an entry is made into themeStockComposition, that stock is added here in StockTags. Whenever
+an entry is removed from themeStockComposition, that stock is removed from the StockTags. The StockTags
+are required to search by stock while filtering by category, time horizon or maturity.
+*/
 import mongoose from 'mongoose';
 import mongooseUniqueValidator from 'mongoose-unique-validator';
 import constants from '../utilities/constants';

@@ -58,7 +58,8 @@ export class AutoCompleteStockAllocationComponent extends AutoCompleteContainerC
                                 item.country,
                                 item.website,
                                 item.exchange,
-                                item.reportingCurrency));
+                                item.reportingCurrency,
+                                item.investableInstrument));
     }
 
     preFilter() {
@@ -95,6 +96,14 @@ export class AutoCompleteStockAllocationComponent extends AutoCompleteContainerC
             this.selectedItems.push(new StockAllocationModel(this.currentlySelectedStock._id, index, this.currentlySelectedStock.name));
             this.currentlySelectedStock = null;
             stocksAutocomplete.clearCurrentlySelectedItem();
+        }
+    }
+
+    isResultFound(found: boolean){
+        if(found == true){
+            this.resultFound = true;
+        } else if(found == false){
+            this.resultFound = false;
         }
     }
 }

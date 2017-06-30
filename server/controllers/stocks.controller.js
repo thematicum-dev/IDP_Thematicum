@@ -16,3 +16,17 @@ export function list(req, res, next) {
         })
         .catch(err => next(err));
 }
+
+export function create(req, res, next){
+     const stock = new Stock({
+        companyName: req.body.companyName,
+        country: req.body.country,
+        website: req.body.website,
+        addedBy: res.locals.user,
+        investableInstrument: req.body.investableInstrument,
+    });
+
+    repo.save(stock)
+        .then(() => res.status(201).json(new AppResponse('Stock added', stock)))
+        .catch(err => next(err));
+}

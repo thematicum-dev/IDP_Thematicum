@@ -5,6 +5,7 @@ import {AutocompleteDatasourceService} from "./autocomplete-datasource.service";
 
 export class AutoCompleteContainerComponent implements AutocompleteItemSelectionInterface {
     error: string = '';
+    resultFound: boolean = true;
     itemList: AutocompleteItem[] = []; //data source (all items)
     selectedItems: any[] = [];
     duplicateChosenErrorStr: string = 'This item has already been selected. Please choose another one';

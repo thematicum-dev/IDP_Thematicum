@@ -1,11 +1,11 @@
 import mongoose from 'mongoose';
 import mongooseUniqueValidator from 'mongoose-unique-validator';
+import constants from '../utilities/constants';
 
 const Schema = mongoose.Schema;
 const schema = new Schema({
     seqNr: {
         type: Number,
-        required: true,
         unique: true
     },
     companyName: {
@@ -15,20 +15,16 @@ const schema = new Schema({
     },
     ticker: {
         type: String,
-        required: true,
         unique: true
     },
     CIK: {
-        type: Number,
-        required: true
+        type: Number
     },
     SIC: {
-        type: Number,
-        required: true
+        type: Number
     },
     businessDescription: {
         type: String,
-        required: true,
         unique: true
     },
     country: {
@@ -40,13 +36,19 @@ const schema = new Schema({
         required: true
     },
     exchange: {
-        type: String,
-        required: true
+        type: String
     },
     reportingCurrency: {
-        type: String,
-        required: true
-    }
+        type: String
+    },
+    addedBy: { 
+        type: Schema.Types.ObjectId, ref: 'User' 
+    },
+    investableInstrument:[{
+        type: Number,
+        min: constants.MIN_INVESTABLE_INSTRUMENT,
+        max: constants.MAX_INVESTABLE_INSTRUMENT
+    }]
 });
 
 schema.plugin(mongooseUniqueValidator);

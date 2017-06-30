@@ -1,3 +1,7 @@
+/*
+Adds a stock to a theme. 
+The votes for the stocks are stored in userThemeStockAllocation
+*/
 import mongoose from 'mongoose';
 
 const Schema = mongoose.Schema;

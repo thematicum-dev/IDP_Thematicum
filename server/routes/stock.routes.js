@@ -7,6 +7,7 @@ const router = Router();
 router.use('/', authUtilities.authenticationMiddleware);
 
 router.route('/')
-    .get(stocksController.list);
+    .get(stocksController.list)
+    .post(stocksController.create);
 
 export default router;

@@ -9,5 +9,6 @@ export class StockModel extends AutocompleteItem {
         public website: string,
         public exchange: string,
         public reportingCurrency: string,
+        public investableInstrument: number[]
     ) { super(name, alias, _id); }
 }

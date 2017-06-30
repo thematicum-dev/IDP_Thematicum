@@ -15,6 +15,7 @@ import {ThemeSearchComponent} from "./theme_search/theme-search.component";
 import {ErrorComponent} from "./error_handling/error.component";
 import {AutoCompleteComponent} from "./autocomplete/autocomplete.component";
 import {ThemeCreationComponent} from "./theme_creation/theme-creation.component";
+import {StockCreationComponent} from "./stock/stock-creation.component";
 import {ThemeDetailsComponent} from "./theme_details/theme-details.component";
 import {ErrorService} from "./error_handling/error.service";
 import {ThemeService} from "./services/theme.service";
@@ -52,6 +53,7 @@ import { FollowComponent } from "./theme_details/follow.component";
         AutoCompleteTagsComponent,
         AutoCompleteStockAllocationComponent,
         AutoCompleteStockSearchComponent,
+        StockCreationComponent,
         ModalComponent,
         PaginationComponent,
         FollowComponent

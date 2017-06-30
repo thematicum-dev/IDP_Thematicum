@@ -1,3 +1,6 @@
+/* 
+stores all raw user votes for assigned stocks to a theme.
+*/
 import mongoose from 'mongoose';
 import constants from '../utilities/constants';
 
