@@ -19,6 +19,7 @@ import {StockCreationComponent} from "./stock/stock-creation.component";
 import {ThemeDetailsComponent} from "./theme_details/theme-details.component";
 import {ErrorService} from "./error_handling/error.service";
 import {ThemeService} from "./services/theme.service";
+import {StockService} from "./services/stock.service";
 import {AutoCompleteTagsComponent} from "./autocomplete/autocomplete-tags.component";
 import {AutoCompleteStockAllocationComponent} from "./autocomplete/autocomplete-stock-allocation.component";
 import {AutoCompleteStockSearchComponent} from "./autocomplete/autocomplete-stock-search.component";
@@ -59,7 +60,7 @@ import { FollowComponent } from "./theme_details/follow.component";
         FollowComponent
     ],
     imports: [BrowserModule, routing, FormsModule, ReactiveFormsModule, HttpModule, MultiselectDropdownModule],
-    providers: [ AuthService, ErrorService, ThemeService, AuthGuard ],
+    providers: [ AuthService, ErrorService, ThemeService, StockService, AuthGuard ],
     bootstrap: [AppComponent]
 })
 export class AppModule {

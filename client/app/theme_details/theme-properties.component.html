@@ -73,8 +73,8 @@
         </div>
 
     <div *ngIf="isEditMode" class="text-right">
-        <button class="btn btn-default" type="button" (click)="clearEditing(propertiesContainer)">Cancel</button>
-        <button class="btn btn-primary" type="submit"
+        <button class="btn btn-default no-border-radius" type="button" (click)="clearEditing(propertiesContainer)">Cancel</button>
+        <button class="btn btn-primary no-border-radius" type="submit"
                 [disabled]="!form.form.valid || themeProperties.hasNoUserInputs()">Save</button>
     </div>
     </form>

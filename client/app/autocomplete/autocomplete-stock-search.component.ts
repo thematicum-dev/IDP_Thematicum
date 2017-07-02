@@ -38,7 +38,8 @@ export class AutoCompleteStockSearchComponent extends AutoCompleteContainerCompo
                                 item.country,
                                 item.website,
                                 item.exchange,
-                                item.reportingCurrency));
+                                item.reportingCurrency,
+                                item.investableInstrument));
     }
 
     selectItem(item: any) {

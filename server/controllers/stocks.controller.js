@@ -19,7 +19,7 @@ export function list(req, res, next) {
 
 export function create(req, res, next){
      const stock = new Stock({
-        companyName: req.body.companyName,
+        companyName: req.body.name,
         country: req.body.country,
         website: req.body.website,
         addedBy: res.locals.user,
@@ -28,5 +28,5 @@ export function create(req, res, next){
 
     repo.save(stock)
         .then(() => res.status(201).json(new AppResponse('Stock added', stock)))
-        .catch(err => next(err));
+        .catch(err => next(err)); 
 }

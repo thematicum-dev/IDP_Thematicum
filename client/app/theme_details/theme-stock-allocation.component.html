@@ -45,8 +45,8 @@
                 </div>
             </div>
             <div class="row text-right" *ngIf="allocationModel.isAllocationEditable">
-                <button class="btn btn-default" type="button" (click)="clearEditing(allocationModel, exposuresContainer)">Cancel</button>
-                <button class="btn btn-primary" type="submit" [disabled]="!form.form.valid || !selectedExposure">Save</button>
+                <button class="btn btn-default no-border-radius" type="button" (click)="clearEditing(allocationModel, exposuresContainer)">Cancel</button>
+                <button class="btn btn-primary no-border-radius" type="submit" [disabled]="!form.form.valid || !selectedExposure">Save</button>
             </div>
             </form>
         </div>
@@ -56,7 +56,7 @@
 <!-- New Allocations -->
 <br>
 <div class="row text-center" *ngIf="!showAddOtherStocksButton">
-    <button class="btn btn-md btn-primary" (click)="toggleShowAddOtherStocksButton()">Add Other Stocks</button>
+    <button class="btn btn-md btn-primary no-border-radius" (click)="toggleShowAddOtherStocksButton()">Add Other Stocks</button>
 </div>
 
 <div *ngIf="showAddOtherStocksButton">
@@ -64,8 +64,8 @@
         <app-autocomplete-stock-allocation [preFilterStockIds]="allocatedStockIds" #themeStockAllocation></app-autocomplete-stock-allocation>
 
         <div class="text-right">
-            <button class="btn btn-default" type="button" (click)="toggleShowAddOtherStocksButton()">Cancel</button>
-            <button class="btn btn-primary" type="submit"
+            <button class="btn btn-default no-border-radius" type="button" (click)="toggleShowAddOtherStocksButton()">Cancel</button>
+            <button class="btn btn-primary no-border-radius" type="submit"
                     formnovalidate
                     [disabled]="!stockForm.form.valid || !themeStockAllocation.selectedItems || themeStockAllocation.selectedItems.length == 0">Save</button>
         </div>
