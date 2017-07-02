@@ -99,6 +99,10 @@ export class AutoCompleteStockAllocationComponent extends AutoCompleteContainerC
         }
     }
 
+    stockCreated(stock: StockModel){
+        this.dataSource.getAutocompleteList(this.dataSourceAPI).subscribe(this.handleResults, this.handleError);
+    }
+
     isResultFound(found: boolean){
         if(found == true){
             this.resultFound = true;

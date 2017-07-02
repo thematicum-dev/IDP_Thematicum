@@ -30,7 +30,7 @@
 
 <br>
 
-<app-stock-create *ngIf="!resultFound"></app-stock-create>
+<app-stock-create *ngIf="!resultFound" (stockCreated)="stockCreated($event)"></app-stock-create>
 
 <br>
 
