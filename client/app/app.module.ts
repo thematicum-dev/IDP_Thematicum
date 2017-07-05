@@ -15,9 +15,11 @@ import {ThemeSearchComponent} from "./theme_search/theme-search.component";
 import {ErrorComponent} from "./error_handling/error.component";
 import {AutoCompleteComponent} from "./autocomplete/autocomplete.component";
 import {ThemeCreationComponent} from "./theme_creation/theme-creation.component";
+import {StockCreationComponent} from "./stock/stock-creation.component";
 import {ThemeDetailsComponent} from "./theme_details/theme-details.component";
 import {ErrorService} from "./error_handling/error.service";
 import {ThemeService} from "./services/theme.service";
+import {StockService} from "./services/stock.service";
 import {AutoCompleteTagsComponent} from "./autocomplete/autocomplete-tags.component";
 import {AutoCompleteStockAllocationComponent} from "./autocomplete/autocomplete-stock-allocation.component";
 import {AutoCompleteStockSearchComponent} from "./autocomplete/autocomplete-stock-search.component";
@@ -53,13 +55,14 @@ import { DeleteComponent } from "./theme_details/delete-theme.component"
         AutoCompleteTagsComponent,
         AutoCompleteStockAllocationComponent,
         AutoCompleteStockSearchComponent,
+        StockCreationComponent,
         ModalComponent,
         PaginationComponent,
         FollowComponent,
         DeleteComponent
     ],
     imports: [BrowserModule, routing, FormsModule, ReactiveFormsModule, HttpModule, MultiselectDropdownModule],
-    providers: [ AuthService, ErrorService, ThemeService, AuthGuard ],
+    providers: [ AuthService, ErrorService, ThemeService, StockService, AuthGuard ],
     bootstrap: [AppComponent]
 })
 export class AppModule {

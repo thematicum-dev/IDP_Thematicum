@@ -23,6 +23,13 @@ export let categoryValues_IM: IMultiSelectOption[] = [
     { name: 'Sociologic', id: 5}
 ];
 
+export let stockInvestableValues_IM: IMultiSelectOption[] = [
+    { name: 'Public equity (the company is listed at a stock exchange)', id: 0},
+    { name: 'Private equity (the company is not listed at a stock exchange i.e. pre-IPO)', id: 1},
+    { name: 'Coins or tokens (the company will issue or has issued tradable coins or tokens)', id: 2},
+    { name: 'I do not know', id: 3}
+];
+
 export let searchDisabled_IM: IMultiSelectSettings = {
         enableSearch: false,
         checkedStyle: 'checkboxes',
@@ -80,5 +87,15 @@ export let tagTextOptions_IM: IMultiSelectTexts = {
         checkedPlural: 'items selected',
         searchPlaceholder: 'Search',
         defaultTitle: 'Tags',
+        allSelected: 'All Selected'
+};
+
+export let stockInvestableOptions_IM: IMultiSelectTexts = {
+        checkAll: 'Select all',
+        uncheckAll: 'Unselect all',
+        checked: 'item selected',
+        checkedPlural: 'items selected',
+        searchPlaceholder: 'Search',
+        defaultTitle: 'Investable Instruments',
         allSelected: 'All Selected'
 };

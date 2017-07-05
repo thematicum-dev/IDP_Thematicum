@@ -93,8 +93,8 @@
         <app-autocomplete-stock-allocation #themeStockAllocation></app-autocomplete-stock-allocation>
 
         <div class="text-right">
-            <a routerLinkActive="active" [routerLink]="['/search']" class="btn btn-default" role="button">Cancel</a>
-            <button class="btn btn-primary" type="submit" formnovalidate
+            <a routerLinkActive="active" [routerLink]="['/search']" class="btn btn-default no-border-radius" role="button">Cancel</a>
+            <button class="btn btn-primary no-border-radius" type="submit" formnovalidate
                     [disabled]="!form.form.valid || themeProperties.hasNoUserInputs()">Save</button>
         </div>
 

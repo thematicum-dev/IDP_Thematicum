@@ -1,0 +1,52 @@
+<h5 *ngIf="!formCancelled"> Sorry, we do not have this company in our database yet. Help us and add it.</h5>
+<h5 *ngIf="companyAddedSuccessfully">Company {{currentlyAddedStock.name}} added successfully.</h5>
+
+<div *ngIf="!formCancelled">
+    <br/>
+    <form (ngSubmit)="onSubmit(form)" #form="ngForm">
+        <div class="form-group row">
+            <div class="col-xs-2">
+                <strong> Company name </strong>
+            </div>
+            <div class="col-xs-10">
+                <input type="text" id="companyName" class="form-control input-list no-border-radius" [(ngModel)]="currentlyAddedStock.name"
+                    name="companyName" #name="ngModel" placeholder="name" />
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="col-xs-2">
+                <strong> URL company website  </strong>
+            </div>
+            <div class="col-xs-10">
+                <input type="text" id="companyWebsite" class="form-control input-list no-border-radius" [(ngModel)]="currentlyAddedStock.website"
+                    name="companyWebsite" #name="ngModel" placeholder="website" />
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="col-xs-2">
+                <strong> HQ country </strong>
+            </div>
+            <div class="col-xs-10">
+                <input type="text" id="companyCountry" class="form-control input-list no-border-radius" [(ngModel)]="currentlyAddedStock.country"
+                    name="companyCountry" #name="ngModel" placeholder="country" />
+            </div>
+        </div>
+        <div class="col-xs-12"> <br/> </div>
+        <div class="form-group row">
+            <div class="col-xs-2">
+                <strong> Investable instruments </strong>
+            </div>
+            <span class="col-xs-10">
+                <ss-multiselect-dropdown name="categories" [options]="stockInvestableOptions" [texts]="stockInvestableTextOptions" [settings]="noSearchDropdownSettings" [(ngModel)]="currentlyAddedStock.investableInstrument"></ss-multiselect-dropdown>
+            </span>
+        </div>
+        <div class="col-xs-12"> <br/> </div>
+        <div class="form-group row">
+            <div class="text-right">
+                <button [disabled]="false" class="btn btn-md btn-default no-border-radius" type="submit" (click)="cancelForm()">Cancel</button>
+                <button [disabled]="isFormIncomplete()" class="btn btn-md btn-primary no-border-radius" type="submit">Save</button>
+            </div>
+        </div>
+    </form>
+<hr />
+</div>

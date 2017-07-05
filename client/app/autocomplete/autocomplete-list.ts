@@ -15,6 +15,12 @@ export class AutocompleteList {
 
     }
 
+    isResultFound(){
+        if(this.filteredList.length == 0 && this.query.length > 0)
+            return false;
+        return true;
+    }
+
     getItemAt(position: number) {
         if(this.filteredList) return this.filteredList[position];
     }

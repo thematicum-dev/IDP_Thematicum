@@ -1,3 +1,6 @@
+/* 
+stores all raw user votes for theme characteristics.
+*/
 import mongoose from 'mongoose';
 import constants from '../utilities/constants';
 

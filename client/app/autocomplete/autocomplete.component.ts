@@ -26,6 +26,7 @@ export class AutoCompleteComponent implements OnChanges {
     @Output() notifySelectedItem: EventEmitter<AutocompleteItem> = new EventEmitter<AutocompleteItem>();
     @Output() clearErrorStr: EventEmitter<any> = new EventEmitter<any>();
     @Output() notifyError: EventEmitter<string> = new EventEmitter<string>();
+    @Output() isResultFound: EventEmitter<boolean> = new EventEmitter<boolean>();
     @Input() allowDirectClick: boolean;
     @Input() queryRequired: boolean;
     @Input() queryMinLength: number;
@@ -44,6 +45,7 @@ export class AutoCompleteComponent implements OnChanges {
     /** set filteredList to the items containing the query */
     filterQuery() {
         this.autocompleteList.filterList();
+        this.isResultFound.emit(this.autocompleteList.isResultFound());
     }
 
     /** input key-press event handler */
