@@ -25,6 +25,11 @@ const schema = new Schema({
     personalRole: {
         type: String,
         required: [true, 'The personal role field is required']
+    },
+    isAdmin: {
+        type: Boolean,
+        default: false,
+        required: true
     }
 });
 

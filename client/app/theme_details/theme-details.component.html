@@ -16,7 +16,7 @@
             </div>
 
             <div>
-                <a class = "pull-right" *ngIf="!isCurrentUserAdmin" (click)="deleteTheme"> Delete </a>
+                <app-delete-theme class = "pull-right" *ngIf="isCurrentUserAdmin" [themeId]="selectedThemeId"></app-delete-theme>
             </div>
 
             <div class="text-right" *ngIf="!isEditMode">

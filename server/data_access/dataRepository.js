@@ -248,7 +248,14 @@ export default class DataRepository extends BaseRepository {
                 });
             });
 
-        return Promise.all([deleteThemePromise, deleteUserThemeInputsPromise, deleteStocksPromise]);
+        // unfollow all users from the deleted theme
+        const deleteThemesUserFollowersPromise = User.update(
+            { },
+            { $pull: {follows: theme._id } },
+            { multi: true }
+        );
+
+        return Promise.all([deleteThemePromise, deleteUserThemeInputsPromise, deleteStocksPromise, deleteThemesUserFollowersPromise]);
     }
 
     createStockCompositionAndAllocation(allocationData, theme, user) {

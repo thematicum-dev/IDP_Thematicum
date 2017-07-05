@@ -56,7 +56,8 @@ export function signin(req, res, next) {
 						message: 'Successful login',
 						token: token,
 						username: user.name,
-						email:user.email
+						email:user.email,
+						isAdmin:user.isAdmin
 					});
 				})
 				.catch(err => next(err));

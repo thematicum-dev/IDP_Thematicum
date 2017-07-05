@@ -34,7 +34,7 @@ export class ThemeDetailsComponent implements OnInit, OnChanges {
     constructor(private route: ActivatedRoute, private router: Router, private themeService: ThemeService) { }
 
     @Input('theme')
-     isCurrentUserAdmin: boolean = false;
+     isCurrentUserAdmin: boolean = localStorage.getItem("isAdmin") == "true";
 
     ngOnInit(): void {
         if(!this.route.snapshot.params['id']) {

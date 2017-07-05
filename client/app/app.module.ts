@@ -30,6 +30,7 @@ import {UserProfileComponent} from "./user_profile/user-profile.component";
 import { MultiselectDropdownModule } from 'angular-2-dropdown-multiselect'; 
 import { PaginationComponent } from './utilities/pagination/pagination.component';
 import { FollowComponent } from "./theme_details/follow.component";
+import { DeleteComponent } from "./theme_details/delete-theme.component"
 
 @NgModule({
     declarations: [
@@ -54,7 +55,8 @@ import { FollowComponent } from "./theme_details/follow.component";
         AutoCompleteStockSearchComponent,
         ModalComponent,
         PaginationComponent,
-        FollowComponent
+        FollowComponent,
+        DeleteComponent
     ],
     imports: [BrowserModule, routing, FormsModule, ReactiveFormsModule, HttpModule, MultiselectDropdownModule],
     providers: [ AuthService, ErrorService, ThemeService, AuthGuard ],
