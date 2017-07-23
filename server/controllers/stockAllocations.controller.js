@@ -3,6 +3,7 @@ import UserThemeStockAllocation from '../models/userThemeStockAllocation';
 import {AppError} from '../utilities/appError';
 import {AppResponse} from '../utilities/appResponse';
 import DataRepository from '../data_access/dataRepository';
+import ActivityLog from '../models/activitylog';
 
 const repo = new DataRepository();
 
@@ -17,9 +18,25 @@ export function createMany(req, res, next) {
 }
 
 export function create(req, res, next) {
-    repo.createStockAllocation(req.themeStockComposition, res.locals.user, req.body.exposure)
-        .then(result => {
-            return res.status(201).json(new AppResponse('Stock allocation created', result));
+
+    const stockAllocation = new UserThemeStockAllocation({
+        user: res.locals.user,
+        themeStockComposition: req.themeStockComposition,
+        exposure: req.body.exposure
+    });
+
+    const activityToBeLogged = new ActivityLog({
+        user: stockAllocation.user,
+        theme: stockAllocation.themeStockComposition.theme,
+        stock: stockAllocation.themeStockComposition,
+        userThemeStockAllocation: stockAllocation
+    });
+
+    repo.save(activityToBeLogged).then( result => {
+        repo.createStockAllocation(req.themeStockComposition, res.locals.user, req.body.exposure)
+            .then(result => {
+                return res.status(201).json(new AppResponse('Stock allocation created', result));
+            })
         })
         .catch(error => { next(error) });
 }
@@ -29,8 +46,18 @@ export function update(req, res, next) {
     let stockAllocation = req.stockAllocation;
     stockAllocation.exposure = req.body.exposure;
 
-    repo.save(stockAllocation)
-        .then(result => {return res.status(200).json(new AppResponse('Stock allocation updated', result)) })
+    const activityToBeLogged = new ActivityLog({
+        user: stockAllocation.user,
+        theme: stockAllocation.themeStockComposition.theme,
+        stock: stockAllocation.themeStockComposition,
+        userThemeStockAllocation: req.body
+    });
+
+        repo.save(stockAllocation).then(result => {
+            repo.save(activityToBeLogged).then(result => {
+                res.status(201).json(new AppResponse('Stock allocation updated', result))
+            });
+        })
         .catch(err => next(err));
 }
 
