@@ -18,9 +18,10 @@ export function listAllByTime(req, res, next) {
 }
 
 export function getActivityByUser(req, res, next) {
-    let userEmail = req.userEmail;
-    console.log(req.userEmail);
-    repo.getActivityByUser(userEmail)
+    let user = req.user;
+    let upperLimit = req.upperLimit;
+    let lowerLimit = req.lowerLimit;
+    repo.getNewsFeedByUserWithLimits(user, upperLimit, lowerLimit)
         .then(results => {
             if (!results) {
                 return next(new AppError('No activity found, please provide some theme input to find activity', 404));
@@ -32,14 +33,28 @@ export function getActivityByUser(req, res, next) {
 }
 
 export function deleteActivityByUser(req, res, next) {
-    let userEmail = req.userEmail;
-    repo.deleteActivityByUser(userEmail)
+    let user = req.user;
+    repo.deleteActivityByUser(user.email)
         .then(results => {
             if (!results) {
                 return next(new AppError('No activity found, please provide some theme input to find activity', 404));
             }
 
             return res.status(202).json(results);
+        })
+        .catch(err => next(err));
+}
+
+
+export function userByEmail(req, res, next, userEmail) {
+    repo.getUserByEmail(userEmail)
+        .then(result => {
+            if (!result) {
+                return next(new AppError('No user found for the given email', 404))
+            }
+
+            req.user = result;
+            next();
         })
         .catch(err => next(err));
 }

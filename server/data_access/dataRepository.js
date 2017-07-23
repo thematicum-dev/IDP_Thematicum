@@ -214,6 +214,22 @@ export default class DataRepository extends BaseRepository {
             .exec();
     }
 
+    getThemeStockCompositionById(id){
+        return new Promise((resolve, reject) => {
+            ThemeStockComposition.findOne({_id: id}).exec().then(composition =>{
+                resolve(composition)
+            }).catch(err => reject(err));
+        });
+    }
+
+    getStockById(id){
+        return new Promise((resolve, reject) => {
+            Stock.findOne({_id: id}).exec().then(stock =>{
+                resolve(stock)
+            }).catch(err => reject(err));
+        });
+    }
+
     getStockAllocationsByThemeStockComposition(themeStockComposition, currentUserId) {
         return new Promise((resolve, reject) => {
             UserThemeStockAllocation.find({themeStockComposition: themeStockComposition._id}).exec()
@@ -401,6 +417,17 @@ export default class DataRepository extends BaseRepository {
             });
         })
         .catch(err => next(err));
+    }
+
+    getNewsFeedByUserWithLimits(user, lowerLimit, upperLimit){
+        var filter = { _id:0, user:1, theme:1, userThemeInput:1, userThemeStockAllocation: 1, stock: 1};
+        return new Promise((resolve, reject) => {
+            ActivityLog.find({user: user}, filter).sort( { createdAt: -1 } ).skip(lowerLimit).limit(upperLimit)
+                .then(results => {
+                    resolve(results);
+                })
+                .catch(err => reject(err));
+        });
     }
 
     
