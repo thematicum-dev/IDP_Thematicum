@@ -17,6 +17,7 @@ import stockAllocationRoutes from './server/routes/stockAllocations.routes';
 import adminRoutes from './server/routes/admin.routes';
 import activityRoutes from './server/routes/activity.routes';
 import userRoutes from './server/routes/user.routes';
+import userProfileRoutes from './server/routes/user-profile.routes';
 
 dotenv.config({path: "dot.env"});
 const app = express();
@@ -53,15 +54,16 @@ app.use('/api/stockallocations', stockAllocationRoutes);
 app.use('/api/admin', adminRoutes);
 app.use('/api/activity', activityRoutes);
 app.use('/api/user', userRoutes);
+app.use('/api/profile', userProfileRoutes);
 
 app.use(function (req, res, next) {
     return res.render('index');
 });
 
 //error handling
-app.use(function (err, req, res, next) {
-    console.log('Error handling middleware', JSON.stringify(err))
-    return res.status(err.status || 500).json(err);
-});
+//app.use(function (err, req, res, next) {
+    //console.log('Error handling middleware', JSON.stringify(err))
+    //return res.status(err.status || 500).json(err);
+//});
 
 export default app;

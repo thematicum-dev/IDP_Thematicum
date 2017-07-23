@@ -28,7 +28,7 @@ export function create(req, res, next) {
     const activityToBeLogged = new ActivityLog({
         user: stockAllocation.user,
         theme: stockAllocation.themeStockComposition.theme,
-        stock: stockAllocation.themeStockComposition,
+        stock: stockAllocation.themeStockComposition.stock,
         userThemeStockAllocation: stockAllocation
     });
 
@@ -46,19 +46,26 @@ export function update(req, res, next) {
     let stockAllocation = req.stockAllocation;
     stockAllocation.exposure = req.body.exposure;
 
-    const activityToBeLogged = new ActivityLog({
-        user: stockAllocation.user,
-        theme: stockAllocation.themeStockComposition.theme,
-        stock: stockAllocation.themeStockComposition,
-        userThemeStockAllocation: req.body
-    });
+    let composition1 = null;
 
-        repo.save(stockAllocation).then(result => {
-            repo.save(activityToBeLogged).then(result => {
-                res.status(201).json(new AppResponse('Stock allocation updated', result))
-            });
-        })
-        .catch(err => next(err));
+    repo.getThemeStockCompositionById(req.stockAllocation.themeStockComposition).then(composition => {
+        composition1 = composition;
+        return repo.getStockById(composition.stock);
+    }).then(stock => {
+        const activityToBeLogged = new ActivityLog({
+            user: stockAllocation.user,
+            theme: composition1.theme,
+            stock: stock.companyName,
+            userThemeStockAllocation: stockAllocation
+        });
+        return repo.save(activityToBeLogged);  
+    }).then(results =>{
+        console.log("saved results");
+    }).catch(err => next(err));
+
+    repo.save(stockAllocation).then(result => {
+            res.status(201).json(new AppResponse('Stock allocation updated', result))
+    }).catch(err => next(err));
 }
 
 export function listByTheme(req, res, next) {
