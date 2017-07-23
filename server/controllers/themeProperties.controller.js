@@ -31,7 +31,7 @@ export function create(req, res, next) {
     const activityToBeLogged = new ActivityLog({
         user: res.locals.user,
         theme: req.theme,
-        userInput: themeProperty
+        userThemeInput: themeProperty
     });
 
     repo.save(themeProperty)
@@ -57,7 +57,7 @@ export function update(req, res, next) {
     const activityToBeLogged = new ActivityLog({
         user: themeProperty.user,
         theme: themeProperty.theme,
-        userInput: req.body
+        userThemeInput: req.body
     });
 
     repo.save(themeProperty)
