@@ -15,8 +15,8 @@ router.route('/follow')
     .delete(userController.unfollow);
 
 
-router.route('/activity/:userEmail')
-    .get(activityController.getActivityByUser)
-    .delete(activityController.deleteActivityByUser);
+//router.route('/activity/:userEmail')
+   // .get(activityController.getActivityByUser)
+    //.delete(activityController.deleteActivityByUser);
 
 export default router;
