@@ -13,7 +13,8 @@ const schema = new Schema({
     userThemeInput: { type: UserThemeInputSchema, default: null },
     userThemeStockAllocation: { type: UserThemeStockAllocation, default: null },
     stock: {type: String, default: null},
-    createdAt : { type : Date, default: Date.now }
+    createdAt : { type : Date, default: Date.now },
+    visible: {type: Boolean, default: true}
 });
 
 export default mongoose.model('ActivityLog', schema);
