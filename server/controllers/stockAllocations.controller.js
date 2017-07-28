@@ -9,8 +9,10 @@ const repo = new DataRepository();
 
 export function createMany(req, res, next) {
     //add many stocks
-    Promise.all(req.body.stockAllocation.map(allocationData =>
-            repo.createStockCompositionAndAllocation(allocationData, req.theme, res.locals.user)))
+
+    Promise.all(req.body.stockAllocation.map(allocationData =>{
+            repo.createStockCompositionAndAllocation(allocationData, req.theme, res.locals.user);
+        }))
         .then(result => {
             return res.status(201).json(new AppResponse('Theme-stock compositions and allocations created', result));
         })
@@ -25,20 +27,11 @@ export function create(req, res, next) {
         exposure: req.body.exposure
     });
 
-    const activityToBeLogged = new ActivityLog({
-        user: stockAllocation.user,
-        theme: stockAllocation.themeStockComposition.theme,
-        stock: stockAllocation.themeStockComposition.stock,
-        userThemeStockAllocation: stockAllocation
-    });
-
-    repo.save(activityToBeLogged).then( result => {
-        repo.createStockAllocation(req.themeStockComposition, res.locals.user, req.body.exposure)
-            .then(result => {
-                return res.status(201).json(new AppResponse('Stock allocation created', result));
-            })
-        })
-        .catch(error => { next(error) });
+    repo.storeNewsFeedBasedOnStockAllocation(stockAllocation).then(results =>{
+        return repo.createStockAllocation(req.themeStockComposition, res.locals.user, req.body.exposure);
+    }).then(results =>{
+        res.status(201).json(new AppResponse('Stock allocation created', results))
+    }).catch(err => next(err));
 }
 
 export function update(req, res, next) {
@@ -46,25 +39,11 @@ export function update(req, res, next) {
     let stockAllocation = req.stockAllocation;
     stockAllocation.exposure = req.body.exposure;
 
-    let composition1 = null;
-
-    repo.getThemeStockCompositionById(req.stockAllocation.themeStockComposition).then(composition => {
-        composition1 = composition;
-        return repo.getStockById(composition.stock);
-    }).then(stock => {
-        const activityToBeLogged = new ActivityLog({
-            user: stockAllocation.user,
-            theme: composition1.theme,
-            stock: stock.companyName,
-            userThemeStockAllocation: stockAllocation
-        });
-        return repo.save(activityToBeLogged);  
+    repo.storeNewsFeedBasedOnStockAllocation(stockAllocation).then(results =>{
     }).then(results =>{
-        console.log("saved results");
-    }).catch(err => next(err));
-
-    repo.save(stockAllocation).then(result => {
-            res.status(201).json(new AppResponse('Stock allocation updated', result))
+        return repo.save(stockAllocation);
+    }).then(results =>{
+        res.status(201).json(new AppResponse('Stock allocation updated', results))
     }).catch(err => next(err));
 }
 

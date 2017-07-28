@@ -37,6 +37,16 @@ export default class DataRepository extends BaseRepository {
         });
     }
 
+    getUserById(id){
+        return new Promise((resolve, reject) => {
+            User.findOne({_id: id}).exec()
+                .then(results => {
+                    resolve(results);
+                })
+                .catch(err => reject(err));
+        });
+    }
+
     getThemeTags() {
         return Theme.find().distinct('tags').exec();
     }
@@ -275,14 +285,23 @@ export default class DataRepository extends BaseRepository {
     }
 
     createStockCompositionAndAllocation(allocationData, theme, user) {
+        let activitylog = new ActivityLog();
+        activitylog.user = user._id;
+        activitylog.theme = theme._id;
+        activitylog.userName = user.name;
+        activitylog.themeName = theme.name;
         return this.getById(Stock, allocationData.stockId)
             .then(stock => {
+                activitylog.stock = stock.companyName;
                 this.addStockTagToTheme(theme._id, stock._id)
                     .then(() => {
                         return this.createThemeStockComposition(theme, stock, user);
                     })
                     .then(themeStockComposition => {
                         return this.createStockAllocation(themeStockComposition, user, allocationData.exposure)
+                    }).then(userThemeStockAllocation => {
+                        activitylog.userThemeStockAllocation = userThemeStockAllocation;
+                        return this.save(activitylog);
                     });
             })
         //TODO: add .catch? / error handling
@@ -420,7 +439,7 @@ export default class DataRepository extends BaseRepository {
     }
 
     getNewsFeedByUserWithLimits(user, lowerLimit, upperLimit){
-        var filter = { _id:0, user:1, theme:1, userThemeInput:1, userThemeStockAllocation: 1, stock: 1};
+        var filter = { _id:0, userName:1, themeName:1, userThemeInput:1, userThemeStockAllocation: 1, stock: 1};
         return new Promise((resolve, reject) => {
             ActivityLog.find({user: user}, filter).sort( { createdAt: -1 } ).skip(lowerLimit).limit(upperLimit)
                 .then(results => {
@@ -430,5 +449,38 @@ export default class DataRepository extends BaseRepository {
         });
     }
 
-    
+    storeNewsFeedBasedOnStockAllocation(stockAllocation){
+        let activityToBeLogged = new ActivityLog();
+        activityToBeLogged.user = stockAllocation.user;
+        activityToBeLogged.userThemeStockAllocation = stockAllocation;
+        return this.getUserById(stockAllocation.user).then(user => {
+            activityToBeLogged.userName = user.name;
+            return this.getThemeStockCompositionById(stockAllocation.themeStockComposition);
+        }).then(composition=>{
+            stockAllocation.composition = composition;
+            activityToBeLogged.theme = composition.theme;
+            return this.getThemeById(composition.theme);
+        }).then(theme=>{
+            activityToBeLogged.themeName = theme.name;
+            return this.getStockById(stockAllocation.composition.stock);
+        }).then(stock=>{
+            activityToBeLogged.stock = stock.companyName;
+            return this.save(activityToBeLogged);
+        });
+    }
+
+
+    storeNewsFeedBasedOnThemeProperties(user, theme, themeProperty){
+        let activityToBeLogged = new ActivityLog();
+        activityToBeLogged.user = user;
+        activityToBeLogged.theme = theme;
+        activityToBeLogged.userThemeInput = themeProperty;
+        return this.getUserById(user).then(user=>{
+            activityToBeLogged.userName = user.name;
+            return this.getThemeById(theme);
+        }).then(theme=>{
+            activityToBeLogged.themeName = theme.name;
+            return this.save(activityToBeLogged);
+        })
+    }
 }

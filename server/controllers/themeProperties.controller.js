@@ -28,15 +28,9 @@ export function create(req, res, next) {
         categories: req.body.categories
     });
 
-    const activityToBeLogged = new ActivityLog({
-        user: res.locals.user,
-        theme: req.theme,
-        userThemeInput: themeProperty
-    });
-
     repo.save(themeProperty)
         .then(result => {
-            repo.save(activityToBeLogged).then(result => {
+            repo.storeNewsFeedBasedOnThemeProperties(res.locals.user,req.theme,themeProperty).then(result => {
                 res.status(201).json(new AppResponse('Theme property created', result));
             });
         })
@@ -45,7 +39,6 @@ export function create(req, res, next) {
 
 export function update(req, res, next) {
     let themeProperty = req.themeProperty;
-    
 
     if (req.body.timeHorizon != null)
         themeProperty.timeHorizon = req.body.timeHorizon;
@@ -54,15 +47,9 @@ export function update(req, res, next) {
     if (req.body.categories != null)
         themeProperty.categories = req.body.categories;
 
-    const activityToBeLogged = new ActivityLog({
-        user: themeProperty.user,
-        theme: themeProperty.theme,
-        userThemeInput: req.body
-    });
-
     repo.save(themeProperty)
         .then(result => {
-            repo.save(activityToBeLogged).then(result => {
+            repo.storeNewsFeedBasedOnThemeProperties(themeProperty.user,themeProperty.theme,req.body).then(result => {
                 res.status(201).json(new AppResponse('Theme property updated', result))
             });
         })
