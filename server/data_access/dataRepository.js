@@ -439,9 +439,20 @@ export default class DataRepository extends BaseRepository {
     }
 
     getNewsFeedByUserWithLimits(user, lowerLimit, upperLimit){
-        var filter = { _id:0, userName:1, themeName:1, userThemeInput:1, userThemeStockAllocation: 1, stock: 1};
+        var filter = { _id:0, userName:1, themeName:1, userThemeInput:1, userThemeStockAllocation: 1, stock: 1, createdAt: 1};
         return new Promise((resolve, reject) => {
             ActivityLog.find({user: user}, filter).sort( { createdAt: -1 } ).skip(lowerLimit).limit(upperLimit)
+                .then(results => {
+                    resolve(results);
+                })
+                .catch(err => reject(err));
+        });
+    }
+
+    getNewsFeedByThemesAUserFollowsWithLimits(user, lowerLimit, upperLimit){
+        var filter = { _id:0, userName:1, themeName:1, userThemeInput:1, userThemeStockAllocation: 1, stock: 1,createdAt: 1};
+        return new Promise((resolve, reject) => {
+            ActivityLog.find({ theme:  {$in: user.follows }}, filter).sort( { createdAt: -1 } ).skip(lowerLimit).limit(upperLimit)
                 .then(results => {
                     resolve(results);
                 })

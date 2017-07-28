@@ -9,7 +9,10 @@ const router = Router();
 //router.use('/', authUtilities.authenticationMiddleware);
 
 router.route('/newsfeed/byUser/:userEmail/:upperLimit/:lowerLimit')
-    .get(activityController.getActivityByUser)
+    .get(activityController.getActivityByUser);
+
+router.route('/newsfeed/byThemesOfAUser/:userEmail/:upperLimit/:lowerLimit')
+    .get(activityController.getActivityByThemesOfAUser);
 
 router.param('userEmail', activityController.userByEmail);
 

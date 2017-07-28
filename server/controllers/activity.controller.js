@@ -32,6 +32,19 @@ export function getActivityByUser(req, res, next) {
         .catch(err => next(err));
 }
 
+export function getActivityByThemesOfAUser(req, res, next){
+    let user = req.user;
+    let upperLimit = req.upperLimit;
+    let lowerLimit = req.lowerLimit;
+    repo.getNewsFeedByThemesAUserFollowsWithLimits(user,upperLimit,lowerLimit).then(results=>{
+        if (!results) {
+                return next(new AppError('No activity found, please provide some theme input to find activity', 404));
+            }
+
+        return res.status(200).json(results);
+    }).catch(err => next(err));
+}
+
 export function deleteActivityByUser(req, res, next) {
     let user = req.user;
     repo.deleteActivityByUser(user.email)
