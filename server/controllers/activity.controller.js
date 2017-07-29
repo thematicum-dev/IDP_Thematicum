@@ -19,9 +19,9 @@ export function listAllByTime(req, res, next) {
 
 export function getActivityByUser(req, res, next) {
     let user = req.user;
-    let upperLimit = req.upperLimit;
-    let lowerLimit = req.lowerLimit;
-    repo.getNewsFeedByUserWithLimits(user, upperLimit, lowerLimit)
+    let lowerLimit = Number(req.query.from);
+    let upperLimit = Number(req.query.to);
+    repo.getNewsFeedByUserWithLimits(user, lowerLimit, upperLimit)
         .then(results => {
             if (!results) {
                 return next(new AppError('No activity found, please provide some theme input to find activity', 404));
@@ -34,9 +34,11 @@ export function getActivityByUser(req, res, next) {
 
 export function getActivityByThemesOfAUser(req, res, next){
     let user = req.user;
-    let upperLimit = req.upperLimit;
-    let lowerLimit = req.lowerLimit;
-    repo.getNewsFeedByThemesAUserFollowsWithLimits(user,upperLimit,lowerLimit).then(results=>{
+    let lowerLimit = Number(req.query.from);
+    let upperLimit = Number(req.query.to);
+    console.log(upperLimit);
+    console.log(lowerLimit);
+    repo.getNewsFeedByThemesAUserFollowsWithLimits(user,lowerLimit,upperLimit).then(results=>{
         if (!results) {
                 return next(new AppError('No activity found, please provide some theme input to find activity', 404));
             }
@@ -47,20 +49,20 @@ export function getActivityByThemesOfAUser(req, res, next){
 
 export function getActivityByAdminBetweenTimeAndLimits(req, res, next){
     let user = req.user;
-    let lowerLimit = Number(req.query.lowerLimit);
-    let upperLimit = Number(req.query.upperLimit);
+    let lowerLimit = Number(req.query.from);
+    let upperLimit = Number(req.query.to);
     let lowerTimeLimit = null;
-    if (req.query.lowerTimeLimit == undefined){
+    if (req.query.fromTime == undefined){
         lowerTimeLimit = Date.parse("1900-07-29T12:25:16.783Z")
     }else{
-        lowerTimeLimit = new Date(Number(req.query.lowerTimeLimit)).toISOString();
+        lowerTimeLimit = new Date(Number(req.query.fromTime)).toISOString();
     }
 
     let upperTimeLimit = null;
-    if (req.query.lowerTimeLimit == undefined){
+    if (req.query.toTime == undefined){
         upperTimeLimit = new Date().toISOString();
     }else{
-        upperTimeLimit = new Date(Number(req.query.upperTimeLimit)).toISOString();
+        upperTimeLimit = new Date(Number(req.query.toTime)).toISOString();
     }
     
     
