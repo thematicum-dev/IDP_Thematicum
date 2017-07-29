@@ -8,10 +8,10 @@ const router = Router();
 //auth middleware
 //router.use('/', authUtilities.authenticationMiddleware);
 
-router.route('/newsfeed/byUser/:userEmail/:upperLimit/:lowerLimit')
+router.route('/newsfeed/byUser/:userEmail')
     .get(activityController.getActivityByUser);
 
-router.route('/newsfeed/byThemesOfAUser/:userEmail/:upperLimit/:lowerLimit')
+router.route('/newsfeed/byThemesOfAUser/:userEmail')
     .get(activityController.getActivityByThemesOfAUser);
 
 router.param('userEmail', activityController.userByEmail);
