@@ -45,6 +45,26 @@ export function getActivityByThemesOfAUser(req, res, next){
     }).catch(err => next(err));
 }
 
+export function getActivityByAdminBetweenTimeAndLimits(req, res, next){
+    let user = req.user;
+    let lowerLimit = Number(req.query.lowerLimit);
+    let upperLimit = Number(req.query.upperLimit);
+    let lowerTimeLimit = new Date(Number(req.query.lowerTimeLimit)).toISOString();
+    let upperTimeLimit = new Date(Number(req.query.upperTimeLimit)).toISOString();
+    
+    repo.getNewsFeedByAdminUserBetweenDatesWithLimits(lowerTimeLimit, upperTimeLimit, lowerLimit, upperLimit).then(results=>{
+        if (user.isAdmin == false){
+            return next(new AppError('The user is not admin, cannot get activity data', 404));
+        }
+        else if (!results) {
+                return next(new AppError('No activity found, please provide some theme input to find activity', 404));
+        }
+
+        return res.status(200).json(results);
+    }).catch(err => next(err));
+
+}
+
 export function deleteActivityByUser(req, res, next) {
     let user = req.user;
     repo.deleteActivityByUser(user.email)
