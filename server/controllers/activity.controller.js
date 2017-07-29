@@ -49,8 +49,21 @@ export function getActivityByAdminBetweenTimeAndLimits(req, res, next){
     let user = req.user;
     let lowerLimit = Number(req.query.lowerLimit);
     let upperLimit = Number(req.query.upperLimit);
-    let lowerTimeLimit = new Date(Number(req.query.lowerTimeLimit)).toISOString();
-    let upperTimeLimit = new Date(Number(req.query.upperTimeLimit)).toISOString();
+    let lowerTimeLimit = null;
+    if (req.query.lowerTimeLimit == undefined){
+        lowerTimeLimit = Date.parse("1900-07-29T12:25:16.783Z")
+    }else{
+        lowerTimeLimit = new Date(Number(req.query.lowerTimeLimit)).toISOString();
+    }
+
+    let upperTimeLimit = null;
+    if (req.query.lowerTimeLimit == undefined){
+        upperTimeLimit = new Date().toISOString();
+    }else{
+        upperTimeLimit = new Date(Number(req.query.upperTimeLimit)).toISOString();
+    }
+    
+    
     
     repo.getNewsFeedByAdminUserBetweenDatesWithLimits(lowerTimeLimit, upperTimeLimit, lowerLimit, upperLimit).then(results=>{
         if (user.isAdmin == false){

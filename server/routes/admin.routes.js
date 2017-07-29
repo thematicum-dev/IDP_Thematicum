@@ -13,7 +13,9 @@ router.route('/accesscodes')
 router.route('/themes/:themeId')
     .delete(adminController.deleteThemeByAdmin);
 
-//Example: localhost:3000/api/admin/newsfeed/byAdminUser/taimoor.alam3%40gmail.com?lowerLimit=0&upperLimit=10&lowerTimeLimit=1438172716783&upperTimeLimit=1501330870910
+//Example with all limits: localhost:3000/api/admin/newsfeed/byAdminUser/taimoor.alam3%40gmail.com?lowerLimit=0&upperLimit=10&lowerTimeLimit=1438172716783&upperTimeLimit=1501330870910
+//Example with only limits: localhost:3000/api/admin/newsfeed/byAdminUser/taimoor.alam3%40gmail.com?lowerLimit=0&upperLimit=10
+//Example without any limits: localhost:3000/api/admin/newsfeed/byAdminUser/taimoor.alam3%40gmail.com
 router.route('/newsfeed/byAdminUser/:userEmail')
     .get(activityController.getActivityByAdminBetweenTimeAndLimits);
 
