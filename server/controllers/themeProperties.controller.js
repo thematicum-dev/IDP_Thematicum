@@ -22,7 +22,7 @@ export function create(req, res, next) {
     //TODO: createOrUpdate - check in frontend?
     const themeProperty = new UserThemeInput({
         user: res.locals.user,
-        theme: req.theme,
+        theme: req.theme._id,
         timeHorizon: req.body.timeHorizon,
         maturity: req.body.maturity,
         categories: req.body.categories
@@ -30,7 +30,7 @@ export function create(req, res, next) {
 
     repo.save(themeProperty)
         .then(result => {
-            repo.storeNewsFeedBasedOnThemeProperties(res.locals.user,req.theme,themeProperty).then(result => {
+            repo.storeNewsFeedBasedOnThemeProperties(themeProperty.user,themeProperty.theme,themeProperty).then(result => {
                 res.status(201).json(new AppResponse('Theme property created', result));
             });
         })
@@ -49,6 +49,7 @@ export function update(req, res, next) {
 
     repo.save(themeProperty)
         .then(result => {
+            console.log("updating properties");
             repo.storeNewsFeedBasedOnThemeProperties(themeProperty.user,themeProperty.theme,req.body).then(result => {
                 res.status(201).json(new AppResponse('Theme property updated', result))
             });

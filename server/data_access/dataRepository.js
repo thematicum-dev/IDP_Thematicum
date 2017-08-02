@@ -496,9 +496,12 @@ export default class DataRepository extends BaseRepository {
 
     storeNewsFeedBasedOnThemeProperties(user, theme, themeProperty){
         let activityToBeLogged = new ActivityLog();
-        activityToBeLogged.user = user;
-        activityToBeLogged.theme = theme;
+        activityToBeLogged.user = user._id;
+        activityToBeLogged.theme = theme._id;
+        activityToBeLogged.userName = user.name;
+        activityToBeLogged.themeName = theme.name;
         activityToBeLogged.userThemeInput = themeProperty;
+        console.log(activityToBeLogged);
         return this.getUserById(user).then(user=>{
             activityToBeLogged.userName = user.name;
             return this.getThemeById(theme);
