@@ -33,6 +33,7 @@ import { MultiselectDropdownModule } from 'angular-2-dropdown-multiselect';
 import { PaginationComponent } from './utilities/pagination/pagination.component';
 import { FollowComponent } from "./theme_details/follow.component";
 import { DeleteComponent } from "./theme_details/delete-theme.component"
+import { NewsFeedComponent } from "./user_profile/newsfeed.component"
 
 @NgModule({
     declarations: [
@@ -59,7 +60,8 @@ import { DeleteComponent } from "./theme_details/delete-theme.component"
         ModalComponent,
         PaginationComponent,
         FollowComponent,
-        DeleteComponent
+        DeleteComponent,
+        NewsFeedComponent
     ],
     imports: [BrowserModule, routing, FormsModule, ReactiveFormsModule, HttpModule, MultiselectDropdownModule],
     providers: [ AuthService, ErrorService, ThemeService, StockService, AuthGuard ],

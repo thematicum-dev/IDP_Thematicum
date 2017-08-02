@@ -1,5 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import { UserProfileService } from '../services/user-profile.service';
+import {NewsFeedModel} from "../models/newsFeedModel";
 @Component({
     selector: 'app-user-profile',
     providers: [UserProfileService],
@@ -102,14 +103,24 @@ export class UserProfileComponent implements OnInit{
   userNewsFeedCursor = 0;
   userNewsFeedCursorLimit = 10;
 
+  //newsfeedbyuserdata
+  newsFeedByUserData: NewsFeedModel[] = []; //to hold data received
+
+  //newsfeedbyusersthemes
+  newsFeedByUsersThemesData: NewsFeedModel[] = []; //to hold data received
+
+
   ngOnInit(): void{
-                        var from = this.userNewsFeedCursor;
-                        var to = this.userNewsFeedCursor + this.userNewsFeedCursorLimit;
-                        this.userProfileService.getNewsFeedOfUser(from.toString() , to.toString()).subscribe(newsFeed => {
-                          console.log("newsFeedByUserwithLimit10");
-                          console.log(newsFeed);
-                        });
-            }
+      var from = this.userNewsFeedCursor;
+      var to = this.userNewsFeedCursor + this.userNewsFeedCursorLimit;
+      this.userProfileService.getNewsFeedOfUser(from.toString() , to.toString()).subscribe(newsFeed => this.setUsersActivity(newsFeed));
+  }
+
+  setUsersActivity = (data: NewsFeedModel[]) => {
+        console.log('Stock Allocations');
+        this.newsFeedByUserData = data;
+        console.log(this.newsFeedByUserData);
+    }
 
 
 }
