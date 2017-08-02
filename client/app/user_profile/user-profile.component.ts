@@ -101,7 +101,10 @@ export class UserProfileComponent implements OnInit{
 
   //the newsfeed log cursor for users own activity
   userNewsFeedCursor = 0;
-  userNewsFeedCursorLimit = 10;
+  userNewsFeedCursorLimit = 1;
+
+  overallNewsFeedCursor = 0;
+  overallNewsFeedCursorLimit = 10;
 
   //newsfeedbyuserdata
   newsFeedByUserData: NewsFeedModel[] = []; //to hold data received
@@ -111,15 +114,25 @@ export class UserProfileComponent implements OnInit{
 
 
   ngOnInit(): void{
-      var from = this.userNewsFeedCursor;
-      var to = this.userNewsFeedCursor + this.userNewsFeedCursorLimit;
-      this.userProfileService.getNewsFeedOfUser(from.toString() , to.toString()).subscribe(newsFeed => this.setUsersActivity(newsFeed));
+      var fromUser = this.userNewsFeedCursor;
+      var toUser = this.userNewsFeedCursor + this.userNewsFeedCursorLimit;
+      this.userProfileService.getNewsFeedOfUser(fromUser.toString() , toUser.toString()).subscribe(newsFeed => this.setUsersActivity(newsFeed));
+
+      var fromNewsFeed = this.overallNewsFeedCursor;
+      var toNewsFeed = this.overallNewsFeedCursorLimit;
+      this.userProfileService.getNewsFeedByThemesAUserFollows(fromNewsFeed.toString() , toNewsFeed.toString()).subscribe(newsFeed => this.setNewsFeed(newsFeed));
   }
 
   setUsersActivity = (data: NewsFeedModel[]) => {
-        console.log('Stock Allocations');
+        //console.log('Stock Allocations');
         this.newsFeedByUserData = data;
-        console.log(this.newsFeedByUserData);
+        //console.log(this.newsFeedByUserData);
+    }
+
+    setNewsFeed = (data: NewsFeedModel[]) => {
+        console.log('Stock Allocations');
+        this.newsFeedByUsersThemesData = data;
+        console.log(this.newsFeedByUsersThemesData);
     }
 
 

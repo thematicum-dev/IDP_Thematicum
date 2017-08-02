@@ -1,1 +1,15 @@
-<p>{{newsfeed.userName}}</p>
+
+            <div *ngIf="newsfeed != null"><span>{{newsfeed.userName}} voted on the theme: {{newsfeed.themeName}}</span>
+                        <div *ngIf="newsfeed.userThemeInput != null">
+                                    <div><span>Time Horizon: {{newsfeed.userThemeInput.timeHorizon}}</span></div>
+                                    <div><span>Maturity: {{newsfeed.userThemeInput.maturity}}</span></div>
+                                    <div><span>Theme Category: {{newsfeed.userThemeInput.categories}}</span></div>
+                        </div>
+                        <div *ngIf="newsfeed.userThemeStockAllocation != null">
+                                    <div><span>Stock: {{newsfeed.stock}}</span></div>
+                                    <div><span>Exposure: {{newsfeed.userThemeStockAllocation.exposure}}</span></div>
+                        </div>
+            </div>
+            <div *ngIf="newsfeed == null">
+                        <p>No data availbale</p>
+            </div>

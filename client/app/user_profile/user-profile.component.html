@@ -4,8 +4,8 @@
         <ul class="nav nav-tabs tabs-left">
             <li class="active"><a href="#profile" data-toggle="tab">Your account info</a></li>
             <li><a href="#settings" data-toggle="tab">Your themes</a></li>
-            <li><a href="#myThemes" data-toggle="tab">Your votes </a></li>
-            <li><a href="#myThemeContributions" data-toggle="tab">Newsfeed</a></li>
+            <li><a href="#myvotes" data-toggle="tab">Your votes </a></li>
+            <li><a href="#mynewsfeed" data-toggle="tab">Newsfeed</a></li>
         </ul>
     </div>
 
@@ -14,11 +14,20 @@
         <div class="tab-content">
             <div class="tab-pane active" id="home">Profile Tab [coming soon]</div>
             <div class="tab-pane" id="settings">Settings Tab [coming soon]</div>
-            <div class="tab-pane" id="myThemes">
-                My Theme Contributions Tab [coming soon]
+            <div class="tab-pane" id="myvotes">
+                <h2>My Votes</h2>
                 <ul>
                     <li *ngFor="let newsfeed of newsFeedByUserData">
-                        <app-user-newsfeed class = "pull-right" [newsfeed]="newsfeed"></app-user-newsfeed>
+                        <app-user-newsfeed [newsfeed]="newsfeed"></app-user-newsfeed>
+                    </li>
+                </ul>
+                
+            </div>
+            <div class="tab-pane" id="mynewsfeed">
+                <h2>Newsfeed</h2>
+                <ul>
+                    <li *ngFor="let newsfeed of newsFeedByUsersThemesData">
+                        <app-user-newsfeed  [newsfeed]="newsfeed"></app-user-newsfeed>
                     </li>
                 </ul>
                 
