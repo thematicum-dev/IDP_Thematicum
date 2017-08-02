@@ -27,6 +27,14 @@ export function getActivityByUser(req, res, next) {
                 return next(new AppError('No activity found, please provide some theme input to find activity', 404));
             }
 
+            if (res.locals.user){
+                for(var i = 0 ; i < results.length ; i++){
+                    if(results[i].user == res.locals.user._id){
+                        results[i].userName = "You";
+                    }
+                }
+            }
+
             return res.status(200).json(results);
         })
         .catch(err => next(err));
@@ -36,12 +44,18 @@ export function getActivityByThemesOfAUser(req, res, next){
     let user = req.user;
     let lowerLimit = Number(req.query.from);
     let upperLimit = Number(req.query.to);
-    console.log(upperLimit);
-    console.log(lowerLimit);
     repo.getNewsFeedByThemesAUserFollowsWithLimits(user,lowerLimit,upperLimit).then(results=>{
         if (!results) {
                 return next(new AppError('No activity found, please provide some theme input to find activity', 404));
             }
+
+        if (res.locals.user){
+                for(var i = 0 ; i < results.length ; i++){
+                    if(results[i].user == res.locals.user._id){
+                        results[i].userName = "You";
+                    }
+                }
+        }
 
         return res.status(200).json(results);
     }).catch(err => next(err));
@@ -74,6 +88,15 @@ export function getActivityByAdminBetweenTimeAndLimits(req, res, next){
         else if (!results) {
                 return next(new AppError('No activity found, please provide some theme input to find activity', 404));
         }
+
+        if (res.locals.user){
+                for(var i = 0 ; i < results.length ; i++){
+                    if(results[i].user == res.locals.user._id){
+                        results[i].userName = "You";
+                    }
+                }
+            }
+        
 
         return res.status(200).json(results);
     }).catch(err => next(err));

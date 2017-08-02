@@ -439,7 +439,7 @@ export default class DataRepository extends BaseRepository {
     }
 
     getNewsFeedByUserWithLimits(user, lowerLimit, upperLimit){
-        var filter = { _id:0, userName:1, theme: 1, themeName:1, userThemeInput:1, userThemeStockAllocation: 1, stock: 1, createdAt: 1};
+        var filter = { _id:0, user: 1, userName:1, theme: 1, themeName:1, userThemeInput:1, userThemeStockAllocation: 1, stock: 1, createdAt: 1};
         return new Promise((resolve, reject) => {
             ActivityLog.find({user: user}, filter).sort( { createdAt: -1 } ).skip(lowerLimit).limit(upperLimit)
                 .then(results => {
@@ -450,7 +450,7 @@ export default class DataRepository extends BaseRepository {
     }
 
     getNewsFeedByThemesAUserFollowsWithLimits(user, lowerLimit, upperLimit){
-        var filter = { _id:0, userName:1, theme: 1, themeName:1, userThemeInput:1, userThemeStockAllocation: 1, stock: 1,createdAt: 1};
+        var filter = { _id:0, user: 1,userName:1, theme: 1, themeName:1, userThemeInput:1, userThemeStockAllocation: 1, stock: 1,createdAt: 1};
         return new Promise((resolve, reject) => {
             ActivityLog.find({ theme:  {$in: user.follows }}, filter).sort( { createdAt: -1 } ).skip(lowerLimit).limit(upperLimit)
                 .then(results => {
@@ -463,7 +463,7 @@ export default class DataRepository extends BaseRepository {
     //whether the user is admin or (probably logged in or not) should be checked in the controller and not here in the repo
     //make sure that the dates are in ISO() format e.g.ISODate("2017-07-04 15:46:11.976Z"),
     getNewsFeedByAdminUserBetweenDatesWithLimits(lowerDateLimit, upperDateLimit, lowerLimit, upperLimit){
-        var filter = { _id:0, userName:1, theme:1, themeName:1, userThemeInput:1, userThemeStockAllocation: 1, stock: 1,createdAt: 1};
+        var filter = { _id:0, user: 1, userName:1, theme:1, themeName:1, userThemeInput:1, userThemeStockAllocation: 1, stock: 1,createdAt: 1};
         return new Promise((resolve, reject) => {
             ActivityLog.find({ createdAt: { $gte: lowerDateLimit, $lt: upperDateLimit}}, filter).sort( { createdAt: -1 } ).skip(lowerLimit).limit(upperLimit)
                 .then(results => {

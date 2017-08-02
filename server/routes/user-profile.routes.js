@@ -6,7 +6,7 @@ import * as authUtilities from '../utilities/authUtilities';
 const router = Router();
 
 //auth middleware
-//router.use('/', authUtilities.authenticationMiddleware);
+router.use('/', authUtilities.authenticationMiddleware);
 
 //http://localhost:3000/api/profile/newsfeed/byUser/taimoor.alam3%40gmail.com?from=0&to=10
 //http://localhost:3000/api/profile/newsfeed/byUser/taimoor.alam3%40gmail.com
