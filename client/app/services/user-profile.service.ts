@@ -29,7 +29,7 @@ export class UserProfileService {
 
                         let params = {from: from, to: to};
                         let searchQuery = this.encodeQueryData(params);
-                        let apiPath = this.baseAPI + 'profile/newsfeed/byUser/' + "taimoor.alam3%40gmail.com";
+                        let apiPath = this.baseAPI + 'profile/newsfeed/byUser/' + email;
                         return this.http.get(apiPath + searchQuery, {headers: this.headers})
                                     .map((response: Response) => response.json())
                                     .catch((error => Observable.throw("Error in user profie service")));
