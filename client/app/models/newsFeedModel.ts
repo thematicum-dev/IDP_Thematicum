@@ -19,6 +19,7 @@ export class NewsFeedModel {
         public name?: string,
         public stock?: string,
         public themeName?: string,
+        public themeId?: string,
         public userName?: string,
         public userThemeInput?: UserThemeInput,
         public createdAt?: Date,
