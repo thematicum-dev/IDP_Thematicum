@@ -1,6 +1,8 @@
-import {Component} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
+import { UserProfileService } from '../services/user-profile.service';
 @Component({
     selector: 'app-user-profile',
+    providers: [UserProfileService],
     templateUrl: 'user-profile.component.html',
     styles: [`
         .tabs-left, .tabs-right {
@@ -92,5 +94,22 @@ import {Component} from '@angular/core';
 })
 
 //TODO: load 'bootstrap.vertical-tabs.css'
-export class UserProfileComponent {
+export class UserProfileComponent implements OnInit{
+
+  constructor(private userProfileService: UserProfileService) { }
+
+  //the newsfeed log cursor for users own activity
+  userNewsFeedCursor = 0;
+  userNewsFeedCursorLimit = 10;
+
+  ngOnInit(): void{
+                        var from = this.userNewsFeedCursor;
+                        var to = this.userNewsFeedCursor + this.userNewsFeedCursorLimit;
+                        this.userProfileService.getNewsFeedOfUser(from.toString() , to.toString()).subscribe(newsFeed => {
+                          console.log("newsFeedByUserwithLimit10");
+                          console.log(newsFeed);
+                        });
+            }
+
+
 }

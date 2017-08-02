@@ -24,15 +24,15 @@ export class UserProfileService {
                         return "?" + ret.join('&');
             }
 
-            getNewsFeedOfUser(theme: string, from: string, to: string){
+            getNewsFeedOfUser(from: string, to: string){
                         var email = this.authService.getLoggedInUserEmail();
 
                         let params = {from: from, to: to};
                         let searchQuery = this.encodeQueryData(params);
-                        let apiPath = this.baseAPI + '/newsfeed/byUser/' + email;
+                        let apiPath = this.baseAPI + 'profile/newsfeed/byUser/' + "taimoor.alam3%40gmail.com";
                         return this.http.get(apiPath + searchQuery, {headers: this.headers})
                                     .map((response: Response) => response.json())
-                                    .catch(this.handleError);
+                                    .catch((error => Observable.throw("Error in user profie service")));
             }
 
             getNewsFeedByThemesAUserFollows(from: string, to: string){
@@ -40,7 +40,7 @@ export class UserProfileService {
 
                         let params = {from: from, to: to};
                         let searchQuery = this.encodeQueryData(params);
-                        let apiPath = this.baseAPI + '/newsfeed/byThemesOfAUser/' + email;
+                        let apiPath = this.baseAPI + 'profile/newsfeed/byThemesOfAUser/' + email;
                         return this.http.get(apiPath + searchQuery, {headers: this.headers})
                                     .map((response: Response) => response.json())
                                     .catch(this.handleError);

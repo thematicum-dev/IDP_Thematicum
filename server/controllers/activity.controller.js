@@ -100,7 +100,6 @@ export function userByEmail(req, res, next, userEmail) {
             if (!result) {
                 return next(new AppError('No user found for the given email', 404))
             }
-
             req.user = result;
             next();
         })
