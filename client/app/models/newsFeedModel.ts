@@ -22,7 +22,7 @@ export class NewsFeedModel {
         public themeId?: string,
         public userName?: string,
         public userThemeInput?: UserThemeInput,
-        public createdAt?: Date,
+        public createdAt?: string,
         public userThemeStockAllocation?: UserThemeStockAllocation,
     ) {}
 }
