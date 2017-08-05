@@ -46,6 +46,29 @@ export class UserProfileService {
                                     .catch(this.handleError);
             }
 
+            getNewsFeedOfAdmin(from: string, to: String){
+                        var email = this.authService.getLoggedInUserEmail();
+
+                        let params = {from: from, to: to};
+                        let searchQuery = this.encodeQueryData(params);
+                        let apiPath = this.baseAPI + 'admin/newsfeed/byAdminUser/' + email;
+                        return this.http.get(apiPath + searchQuery, {headers: this.headers})
+                                    .map((response: Response) => response.json())
+                                    .catch(this.handleError);
+            }
+
+            getNewsFeedOfAdminWithoutLimits(){
+                        var email = this.authService.getLoggedInUserEmail();
+
+                        let apiPath = this.baseAPI + 'admin/newsfeed/byAdminUser/' + email;
+                        return this.http.get(apiPath , {headers: this.headers})
+                                    .map((response: Response) => response.json())
+                                    .catch((error => Observable.throw("Error in user profie service")));
+            }
+
+            copyjson($event){
+            }
+
             handleError = (error: any) => {
                         this.errorService.handleError(error);
                         return Observable.throw(error);

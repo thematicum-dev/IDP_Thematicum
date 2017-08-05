@@ -3,9 +3,10 @@
         <!-- Nav tabs -->
         <ul class="nav nav-tabs tabs-left">
             <li class="active"><a href="#profile" data-toggle="tab">Your account info</a></li>
-            <li><a href="#settings" data-toggle="tab">Your themes</a></li>
-            <li><a href="#myvotes" data-toggle="tab">Your votes </a></li>
+            <li><a href="#settings" data-toggle="tab">My themes</a></li>
+            <li><a href="#myvotes" data-toggle="tab">My votes </a></li>
             <li><a href="#mynewsfeed" data-toggle="tab">Newsfeed</a></li>
+            <li *ngIf="isUserAdmin"><a href="#myadminfeed" data-toggle="tab">Admin Newsfeed</a></li>
         </ul>
     </div>
 
@@ -16,7 +17,7 @@
             <div class="tab-pane" id="settings">Settings Tab [coming soon]</div>
             <div class="tab-pane" id="myvotes">
                 <h2>My Votes</h2>
-                <ul>
+                <ul class="nobullet">
                     <li *ngFor="let newsfeed of newsFeedByUserData">
                         <app-user-newsfeed [newsfeed]="newsfeed"></app-user-newsfeed>
                     </li>
@@ -25,8 +26,19 @@
             </div>
             <div class="tab-pane" id="mynewsfeed">
                 <h2>Newsfeed</h2>
-                <ul>
+                <ul class="nobullet">
                     <li *ngFor="let newsfeed of newsFeedByUsersThemesData">
+                        <app-user-newsfeed  [newsfeed]="newsfeed"></app-user-newsfeed>
+                    </li>
+                </ul>
+                
+            </div>
+            <div *ngIf="isUserAdmin" class="tab-pane" id="myadminfeed">
+                <h2>Admin: All Newsfeed</h2>
+                <a (click)="copyjson($event)">Copy JSON</a>
+                <p>{{newsFeedByAdminString}}</p>
+                <ul class="nobullet">
+                    <li *ngFor="let newsfeed of newsFeedByAdminData">
                         <app-user-newsfeed  [newsfeed]="newsfeed"></app-user-newsfeed>
                     </li>
                 </ul>

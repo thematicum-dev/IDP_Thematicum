@@ -87,16 +87,7 @@ export function getActivityByAdminBetweenTimeAndLimits(req, res, next){
         }
         else if (!results) {
                 return next(new AppError('No activity found, please provide some theme input to find activity', 404));
-        }
-
-        if (res.locals.user){
-                for(var i = 0 ; i < results.length ; i++){
-                    if(results[i].user == res.locals.user._id){
-                        results[i].userName = "You";
-                    }
-                }
-            }
-        
+        }        
 
         return res.status(200).json(results);
     }).catch(err => next(err));

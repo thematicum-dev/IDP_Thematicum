@@ -90,7 +90,11 @@ import {NewsFeedModel} from "../models/newsFeedModel";
           -ms-transform: rotate(-90deg);
           -o-transform: rotate(-90deg);
           transform: rotate(-90deg);
-        }   
+        }
+        
+        .nobullet {
+          list-style-type: none;
+        }
         `]
 })
 
@@ -101,16 +105,24 @@ export class UserProfileComponent implements OnInit{
 
   //the newsfeed log cursor for users own activity
   userNewsFeedCursor = 0;
-  userNewsFeedCursorLimit = 1;
+  userNewsFeedCursorLimit = 10;
 
   overallNewsFeedCursor = 0;
   overallNewsFeedCursorLimit = 10;
+
+  overAllAdminCursor = 0;
+  overAllAdminCursorLimit=10;
 
   //newsfeedbyuserdata
   newsFeedByUserData: NewsFeedModel[] = []; //to hold data received
 
   //newsfeedbyusersthemes
   newsFeedByUsersThemesData: NewsFeedModel[] = []; //to hold data received
+
+  isUserAdmin:boolean = localStorage.getItem('isAdmin') == 'true';
+   //newsfeedbyadmin
+  newsFeedByAdminString: string = null; //to hold data received
+  newsFeedByAdminData: NewsFeedModel[] = []; //to hold data received
 
 
   ngOnInit(): void{
@@ -119,8 +131,25 @@ export class UserProfileComponent implements OnInit{
       this.userProfileService.getNewsFeedOfUser(fromUser.toString() , toUser.toString()).subscribe(newsFeed => this.setUsersActivity(newsFeed));
 
       var fromNewsFeed = this.overallNewsFeedCursor;
-      var toNewsFeed = this.overallNewsFeedCursorLimit;
+      var toNewsFeed = this.overallNewsFeedCursorLimit + this.overallNewsFeedCursor;
       this.userProfileService.getNewsFeedByThemesAUserFollows(fromNewsFeed.toString() , toNewsFeed.toString()).subscribe(newsFeed => this.setNewsFeed(newsFeed));
+
+      if (this.isUserAdmin){
+        this.userProfileService.getNewsFeedOfAdminWithoutLimits().subscribe(newsFeed => {
+          this.setNewsFeedByAdminString(JSON.stringify(newsFeed))
+        });
+
+        if (this.isUserAdmin){
+          var fromAdminFeed = this.overAllAdminCursor;
+          var toAdminFeed = this.overAllAdminCursorLimit + this.overAllAdminCursor;
+          this.userProfileService.getNewsFeedOfAdmin(fromAdminFeed.toString(), toAdminFeed.toString()).subscribe(
+            newsfeed=>{
+              this.setAdminFeedData(newsfeed);
+            }
+          );
+        }
+        
+      }
   }
 
   setUsersActivity = (data: NewsFeedModel[]) => {
@@ -130,9 +159,16 @@ export class UserProfileComponent implements OnInit{
     }
 
     setNewsFeed = (data: NewsFeedModel[]) => {
-        console.log('Stock Allocations');
         this.newsFeedByUsersThemesData = data;
-        console.log(this.newsFeedByUsersThemesData);
+    }
+
+    setAdminFeedData = (data: NewsFeedModel[]) => {
+      console.log(data);
+      this.newsFeedByAdminData = data;
+    }
+
+    setNewsFeedByAdminString = (adminString: string) => {
+      this.newsFeedByAdminString = adminString;
     }
 
 

@@ -6,7 +6,7 @@ import * as authUtilities from '../utilities/authUtilities';
 const router = Router();
 
 //auth middleware
-//router.use('/', authUtilities.authenticationMiddleware);
+router.use('/', authUtilities.authenticationMiddleware);
 router.route('/accesscodes')
     .get(adminController.listAccessCodes);
 
