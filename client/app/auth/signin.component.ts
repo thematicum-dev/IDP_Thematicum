@@ -24,6 +24,7 @@ export class SigninComponent implements AfterViewInit {
 		localStorage.setItem('token', data.token);
 		localStorage.setItem('username', data.username);
 		localStorage.setItem('email', data.email);
+		localStorage.setItem('datejoined', data.datejoined);
 		localStorage.setItem('isAdmin', data.isAdmin);
      	},
 	error => {

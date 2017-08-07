@@ -57,7 +57,8 @@ export function signin(req, res, next) {
 						token: token,
 						username: user.name,
 						email:user.email,
-						isAdmin:user.isAdmin
+						isAdmin:user.isAdmin,
+						datejoined: user.createdAt
 					});
 				})
 				.catch(err => next(err));

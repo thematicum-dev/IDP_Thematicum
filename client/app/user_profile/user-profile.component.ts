@@ -2,9 +2,10 @@ import {Component, OnInit} from '@angular/core';
 import { UserProfileService } from '../services/user-profile.service';
 import {NewsFeedModel} from "../models/newsFeedModel";
 import {Theme} from '../models/theme';
+import {AuthService} from '../auth/auth.service';
 @Component({
     selector: 'app-user-profile',
-    providers: [UserProfileService],
+    providers: [UserProfileService, AuthService],
     templateUrl: 'user-profile.component.html',
     styles: [`
         .tabs-left, .tabs-right {
@@ -93,6 +94,10 @@ import {Theme} from '../models/theme';
           transform: rotate(-90deg);
         }
         
+        .thick {
+          font-weight: bold;
+         }
+
         .nobullet {
           list-style-type: none;
         }
@@ -103,7 +108,7 @@ import {Theme} from '../models/theme';
 //TODO: load 'bootstrap.vertical-tabs.css'
 export class UserProfileComponent implements OnInit{
 
-  constructor(private userProfileService: UserProfileService) { }
+  constructor(private userProfileService: UserProfileService, private authService: AuthService) { }
 
   //the newsfeed log cursor for users own activity
   userNewsFeedCursor = 0;
@@ -129,8 +134,20 @@ export class UserProfileComponent implements OnInit{
   //themes the user follows
   themes: Theme[] = []
 
+  //user values
+  username: string;
+  email: string;
+  datejoined: string;
+
 
   ngOnInit(): void{
+
+
+    //get the user data
+      this.username = this.authService.getLoggedInUser();
+      this.email = this.authService.getLoggedInUserEmail();
+      this.datejoined = new Date(this.authService.getLoggedInUserDateJoined()).toLocaleDateString();
+
 
       //get themes data
       this.userProfileService.getThemesOfAUser().subscribe(themes =>this.setThemes(themes));
@@ -180,7 +197,6 @@ export class UserProfileComponent implements OnInit{
     }
 
     setThemes = (themes: Theme[]) => {
-      console.log(themes);
       this.themes = themes;
     }
 }

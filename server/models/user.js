@@ -30,7 +30,8 @@ const schema = new Schema({
         type: Boolean,
         default: false,
         required: true
-    }
+    },
+    createdAt : { type : Date, default: Date.now }
 });
 
 schema.pre('save', function(next) {

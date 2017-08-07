@@ -3,7 +3,7 @@
         <!-- Nav tabs -->
         <ul class="nav nav-tabs tabs-left">
             <li class="active"><a href="#profile" data-toggle="tab">My account info</a></li>
-            <li><a href="#settings" data-toggle="tab">My themes</a></li>
+            <li><a href="#themes" data-toggle="tab">My themes</a></li>
             <li><a href="#myvotes" data-toggle="tab">My votes </a></li>
             <li><a href="#mynewsfeed" data-toggle="tab">Newsfeed</a></li>
             <li *ngIf="isUserAdmin"><a href="#myadminfeed" data-toggle="tab">Admin Data</a></li>
@@ -13,9 +13,20 @@
     <div class="col-xs-9">
         <!-- Tab panes -->
         <div class="tab-content">
-            <div class="tab-pane active" id="home">Profile Tab [coming soon]</div>
-            <div class="tab-pane" id="settings">
+            <div class="tab-pane active" id="profile">
+                <h2>My Info</h2>
+                <br>
+                <br>
+                <ul  class="nobullet">
+                    <li  ><span><span class="thick">Username:</span> {{username}}</span> </li>
+                    <li><span><span class="thick">Email:</span> {{email}}</span></li>
+                    <li><span><span class="thick">Date joined:</span> {{datejoined}}</span></li>
+                </ul>
+            </div>
+            <div class="tab-pane" id="themes">
                 <h2>My Themes</h2>
+                <br>
+                <br>
                 <ul id="themelist" class="nobullet">
                     <li  *ngFor="let theme of themes">
                         <div class="row themeclass"><span class="themename">{{theme.name}}</span><span class="followcomponent pull-right"><app-follow #followButton [theme]="theme"></app-follow></span></div>
@@ -24,6 +35,7 @@
             </div>
             <div class="tab-pane" id="myvotes">
                 <h2>My Votes</h2>
+                <br>
                 <ul class="nobullet">
                     <li *ngFor="let newsfeed of newsFeedByUserData">
                         <app-user-newsfeed [newsfeed]="newsfeed"></app-user-newsfeed>
@@ -33,6 +45,7 @@
             </div>
             <div class="tab-pane" id="mynewsfeed">
                 <h2>Newsfeed</h2>
+                <br>
                 <ul class="nobullet">
                     <li *ngFor="let newsfeed of newsFeedByUsersThemesData">
                         <app-user-newsfeed  [newsfeed]="newsfeed"></app-user-newsfeed>
@@ -42,6 +55,7 @@
             </div>
             <div *ngIf="isUserAdmin" class="tab-pane" id="myadminfeed">
                 <h2>Admin: All Newsfeed</h2>
+                <br>
                 <p id="paratocopy">{{newsFeedByAdminString}}</p>
                 <!--<ul class="nobullet">
                     <li *ngFor="let newsfeed of newsFeedByAdminData">

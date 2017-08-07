@@ -79,6 +79,10 @@ export class AuthService implements AuthServiceInterface {
         return localStorage.getItem('token');
     }
 
+    getLoggedInUserDateJoined(){
+        return localStorage.getItem('datejoined');
+    }
+
     redirectToUrlAfterLogin() {
 	    console.log("redirectURL", this.redirectUrl);
 	    console.log("redirectURL == null", this.redirectUrl == null);
