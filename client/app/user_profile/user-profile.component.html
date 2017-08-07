@@ -37,21 +37,22 @@
                 <h2>My Votes</h2>
                 <br>
                 <ul class="nobullet">
-                    <li *ngFor="let newsfeed of newsFeedByUserData">
+                    <li *ngFor="let newsfeed of userFeedData">
                         <app-user-newsfeed [newsfeed]="newsfeed"></app-user-newsfeed>
                     </li>
                 </ul>
+                <div *ngIf="showUserFeedData"><a (click)="showMore($event, true)">Show More</a></div>
                 
             </div>
             <div class="tab-pane" id="mynewsfeed">
                 <h2>Newsfeed</h2>
                 <br>
                 <ul class="nobullet">
-                    <li *ngFor="let newsfeed of newsFeedByUsersThemesData">
+                    <li *ngFor="let newsfeed of overAllFeedData">
                         <app-user-newsfeed  [newsfeed]="newsfeed"></app-user-newsfeed>
                     </li>
                 </ul>
-                
+                <div *ngIf="showOverAllFeedData"><a (click)="showMore($event, false)">Show More</a></div>
             </div>
             <div *ngIf="isUserAdmin" class="tab-pane" id="myadminfeed">
                 <h2>Admin: All Newsfeed</h2>

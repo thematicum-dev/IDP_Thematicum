@@ -111,20 +111,22 @@ export class UserProfileComponent implements OnInit{
   constructor(private userProfileService: UserProfileService, private authService: AuthService) { }
 
   //the newsfeed log cursor for users own activity
-  userNewsFeedCursor = 0;
-  userNewsFeedCursorLimit = 10;
+  userFeedCursor = 0;
+  userFeedCursorLimit = 10;
 
-  overallNewsFeedCursor = 0;
-  overallNewsFeedCursorLimit = 10;
+  overAllFeedCursor = 0;
+  overAllFeedCursorLimit = 10;
 
-  overAllAdminCursor = 0;
-  overAllAdminCursorLimit=10;
+  adminFeedCursor = 0;
+  adminFeedCursorLimit=10;
 
   //newsfeedbyuserdata
-  newsFeedByUserData: NewsFeedModel[] = []; //to hold data received
+  userFeedData: NewsFeedModel[] = []; //to hold data received
+  showUserFeedData: boolean = true;
 
   //newsfeedbyusersthemes
-  newsFeedByUsersThemesData: NewsFeedModel[] = []; //to hold data received
+  overAllFeedData: NewsFeedModel[] = []; //to hold data received
+  showOverAllFeedData:boolean = true;
 
   isUserAdmin:boolean = localStorage.getItem('isAdmin') == 'true';
    //newsfeedbyadmin
@@ -152,51 +154,80 @@ export class UserProfileComponent implements OnInit{
       //get themes data
       this.userProfileService.getThemesOfAUser().subscribe(themes =>this.setThemes(themes));
 
-      var fromUser = this.userNewsFeedCursor;
-      var toUser = this.userNewsFeedCursor + this.userNewsFeedCursorLimit;
-      this.userProfileService.getNewsFeedOfUser(fromUser.toString() , toUser.toString()).subscribe(newsFeed => this.setUsersActivity(newsFeed));
+      this.getUserFeed();
 
-      var fromNewsFeed = this.overallNewsFeedCursor;
-      var toNewsFeed = this.overallNewsFeedCursorLimit + this.overallNewsFeedCursor;
-      this.userProfileService.getNewsFeedByThemesAUserFollows(fromNewsFeed.toString() , toNewsFeed.toString()).subscribe(newsFeed => this.setNewsFeed(newsFeed));
+      this.getOverAllFeed();
 
       if (this.isUserAdmin){
-        this.userProfileService.getNewsFeedOfAdminWithoutLimits().subscribe(newsFeed => {
-          this.setNewsFeedByAdminString(JSON.stringify(newsFeed, null, 4))
-        });
-
-        if (this.isUserAdmin){
-          var fromAdminFeed = this.overAllAdminCursor;
-          var toAdminFeed = this.overAllAdminCursorLimit + this.overAllAdminCursor;
-          this.userProfileService.getNewsFeedOfAdmin(fromAdminFeed.toString(), toAdminFeed.toString()).subscribe(
-            newsfeed=>{
-              this.setAdminFeedData(newsfeed);
-            }
-          );
-        }
-        
+        this.getAdminFeedWithoutLimits();
+        this.getAdminFeedWithLimits();        
       }
   }
 
-  setUsersActivity = (data: NewsFeedModel[]) => {
-        //console.log('Stock Allocations');
-        this.newsFeedByUserData = data;
-        //console.log(this.newsFeedByUserData);
+  setUserFeed = (data: NewsFeedModel[]) => {
+        if(data.length < this.userFeedCursorLimit){
+          this.showUserFeedData = false;
+        }
+        this.userFeedData = this.userFeedData.concat(data);   
     }
 
-    setNewsFeed = (data: NewsFeedModel[]) => {
-        this.newsFeedByUsersThemesData = data;
+    setOverAllFeed = (data: NewsFeedModel[]) => {
+        if(data.length < this.overAllFeedCursorLimit){
+          this.showOverAllFeedData = false;
+        }
+        this.overAllFeedData = this.overAllFeedData.concat(data);
     }
 
-    setAdminFeedData = (data: NewsFeedModel[]) => {
-      this.newsFeedByAdminData = data;
+    setAdminFeed = (data: NewsFeedModel[]) => {
+      this.newsFeedByAdminData = this.newsFeedByAdminData.concat(data);
     }
 
-    setNewsFeedByAdminString = (adminString: string) => {
+    setAdminFeedString = (adminString: string) => {
       this.newsFeedByAdminString = adminString;
     }
 
     setThemes = (themes: Theme[]) => {
       this.themes = themes;
+    }
+
+    showMore($event, flag){
+      if(flag){ //means that show more was pressed in users own votes
+        console.log("show more votes pressed");
+        this.userFeedCursor += this.userFeedCursorLimit;
+        this.getUserFeed();
+
+      }else{ //means that show more was pressed in users newsfeed for themes that the user follows
+        console.log("show more activity log pressed");
+        this.overAllFeedCursor += this.overAllFeedCursorLimit;
+        this.getOverAllFeed();
+      }
+    }
+
+    getUserFeed(){
+      var fromUser = this.userFeedCursor;
+      var toUser = this.userFeedCursor + this.userFeedCursorLimit;
+      this.userProfileService.getNewsFeedOfUser(fromUser.toString() , toUser.toString()).subscribe(newsFeed => this.setUserFeed(newsFeed));
+    }
+
+    getOverAllFeed(){
+      var fromNewsFeed = this.overAllFeedCursor;
+      var toNewsFeed = this.overAllFeedCursorLimit + this.overAllFeedCursor;
+      this.userProfileService.getNewsFeedByThemesAUserFollows(fromNewsFeed.toString() , toNewsFeed.toString()).subscribe(newsFeed => this.setOverAllFeed(newsFeed));
+    }
+
+    getAdminFeedWithoutLimits(){
+      this.userProfileService.getNewsFeedOfAdminWithoutLimits().subscribe(newsFeed => {
+          this.setAdminFeedString(JSON.stringify(newsFeed, null, 4))
+        });
+    }
+
+    getAdminFeedWithLimits(){
+      var fromAdminFeed = this.adminFeedCursor;
+          var toAdminFeed = this.adminFeedCursorLimit + this.adminFeedCursor;
+          this.userProfileService.getNewsFeedOfAdmin(fromAdminFeed.toString(), toAdminFeed.toString()).subscribe(
+            newsfeed=>{
+              this.setAdminFeed(newsfeed);
+            }
+          );
     }
 }
