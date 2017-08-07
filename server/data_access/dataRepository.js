@@ -510,4 +510,14 @@ export default class DataRepository extends BaseRepository {
             return this.save(activityToBeLogged);
         })
     }
+
+    getThemesAUserFollows(user){
+        return new Promise((resolve, reject) => {
+            Theme.find({ _id:  {$in: user.follows }})
+                .then(results => {
+                    resolve(results);
+                })
+                .catch(err => reject(err));
+        });
+    }
 }

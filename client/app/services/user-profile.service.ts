@@ -24,6 +24,15 @@ export class UserProfileService {
                         return "?" + ret.join('&');
             }
 
+            getThemesOfAUser(){
+                        var email = this.authService.getLoggedInUserEmail();
+
+                        let apiPath = this.baseAPI + 'profile/newsfeed/themes/' + email;
+                        return this.http.get(apiPath , {headers: this.headers})
+                                    .map((response: Response) => response.json())
+                                    .catch((error => Observable.throw("Error in user profie service")));
+            }
+
             getNewsFeedOfUser(from: string, to: string){
                         var email = this.authService.getLoggedInUserEmail();
 

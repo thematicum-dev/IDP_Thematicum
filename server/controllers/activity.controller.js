@@ -107,6 +107,19 @@ export function deleteActivityByUser(req, res, next) {
         .catch(err => next(err));
 }
 
+export function getThemesAUserFollows(req, res, next) {
+    let user = req.user;
+    repo.getThemesAUserFollows(user)
+        .then(results => {
+            if (!results) {
+                return next(new AppError('No Theme Found, please follow some theme to get the results here', 404));
+            }
+
+            return res.status(200).json(results);
+        })
+        .catch(err => next(err));
+}
+
 
 export function userByEmail(req, res, next, userEmail) {
     repo.getUserByEmail(userEmail)

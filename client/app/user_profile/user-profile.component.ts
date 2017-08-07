@@ -1,6 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import { UserProfileService } from '../services/user-profile.service';
 import {NewsFeedModel} from "../models/newsFeedModel";
+import {Theme} from '../models/theme';
 @Component({
     selector: 'app-user-profile',
     providers: [UserProfileService],
@@ -95,6 +96,7 @@ import {NewsFeedModel} from "../models/newsFeedModel";
         .nobullet {
           list-style-type: none;
         }
+
         `]
 })
 
@@ -124,8 +126,15 @@ export class UserProfileComponent implements OnInit{
   newsFeedByAdminString: string = null; //to hold data received
   newsFeedByAdminData: NewsFeedModel[] = []; //to hold data received
 
+  //themes the user follows
+  themes: Theme[] = []
+
 
   ngOnInit(): void{
+
+      //get themes data
+      this.userProfileService.getThemesOfAUser().subscribe(themes =>this.setThemes(themes));
+
       var fromUser = this.userNewsFeedCursor;
       var toUser = this.userNewsFeedCursor + this.userNewsFeedCursorLimit;
       this.userProfileService.getNewsFeedOfUser(fromUser.toString() , toUser.toString()).subscribe(newsFeed => this.setUsersActivity(newsFeed));
@@ -136,7 +145,7 @@ export class UserProfileComponent implements OnInit{
 
       if (this.isUserAdmin){
         this.userProfileService.getNewsFeedOfAdminWithoutLimits().subscribe(newsFeed => {
-          this.setNewsFeedByAdminString(JSON.stringify(newsFeed))
+          this.setNewsFeedByAdminString(JSON.stringify(newsFeed, null, 4))
         });
 
         if (this.isUserAdmin){
@@ -163,7 +172,6 @@ export class UserProfileComponent implements OnInit{
     }
 
     setAdminFeedData = (data: NewsFeedModel[]) => {
-      console.log(data);
       this.newsFeedByAdminData = data;
     }
 
@@ -171,5 +179,8 @@ export class UserProfileComponent implements OnInit{
       this.newsFeedByAdminString = adminString;
     }
 
-
+    setThemes = (themes: Theme[]) => {
+      console.log(themes);
+      this.themes = themes;
+    }
 }

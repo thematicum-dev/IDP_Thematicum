@@ -18,6 +18,10 @@ router.route('/newsfeed/byUser/:userEmail')
 router.route('/newsfeed/byThemesOfAUser/:userEmail')
     .get(activityController.getActivityByThemesOfAUser);
 
+    //http://localhost:3000/api/profile/newsfeed/themes/taimoor.alam3%40gmail.com
+router.route('/newsfeed/themes/:userEmail')
+    .get(activityController.getThemesAUserFollows);
+
 router.param('userEmail', activityController.userByEmail);
 
 export default router;
