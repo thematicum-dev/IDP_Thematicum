@@ -1,5 +1,7 @@
 import {Component, Input, OnInit} from '@angular/core';
+import {UserThemeInput} from '../models/newsFeedModel';
 import {NewsFeedModel} from '../models/newsFeedModel';
+import {UserThemeStockAllocation} from '../models/newsFeedModel';
 @Component({
             selector: 'app-user-newsfeed',
             templateUrl: 'newsfeed.component.html',
@@ -31,8 +33,30 @@ import {NewsFeedModel} from '../models/newsFeedModel';
 export class NewsFeedComponent implements OnInit{
             @Input('newsfeed')
             newsfeed: NewsFeedModel;
+            displayTimeHorizon: string;
+            displayMaturity: string;
+            displayCategories: string;
 
             ngOnInit(): void{
                         this.newsfeed.createdAt = new Date(this.newsfeed.createdAt).toLocaleString();
+
+                        if (this.newsfeed.userThemeInput != null){
+                                    var generaltimehorizonArray = ['Short Term ( 1-6 months )', 'Medium Term ( 0.5-3 years )', 'Long Term ( > 3 years )'];
+
+                                    this.displayTimeHorizon = generaltimehorizonArray[this.newsfeed.userThemeInput.timeHorizon];
+
+                                    var maturityArray = ['Upcoming', 'Nascent', 'Accelerating', 'Mature', 'Declining'];
+                                    this.displayMaturity = maturityArray[this.newsfeed.userThemeInput.maturity];
+
+                                    var categoriesArray = ['Economic, ', 'Technologic, ', 'Environmental, ', 'Political, ', 'Regulatory, ', 'Sociologic, '];
+                                    this.displayCategories ='';
+                                    for (var i = 0; i < this.newsfeed.userThemeInput.categories.length; i++){
+                                                this.displayCategories += categoriesArray[this.newsfeed.userThemeInput.categories[i]];
+                                    }
+
+                                    //trimming the last space and commas
+                                    this.displayCategories = this.displayCategories.substring(0, this.displayCategories.length - 2);
+                        }
+
             }
 }

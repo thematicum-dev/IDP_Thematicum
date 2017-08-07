@@ -1,16 +1,16 @@
 export class UserThemeInput {
             constructor(
-                        categories?: number[],
-                        maturity?: number,
-                        timeHorizon?: 1
+                        public categories?: number[],
+                        public maturity?: number,
+                        public timeHorizon?: 1,
             ){}
 }
 
 export class UserThemeStockAllocation {
             constructor(
-                        exposure?: number,
-                        themeStockComposition?: string,
-                        user?: string
+                        public exposure?: number,
+                        public themeStockComposition?: string,
+                        public user?: string
             ){}
 }
 
