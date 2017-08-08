@@ -42,7 +42,11 @@ export class FollowComponent implements OnInit{
 
             ngOnInit(): void{
                         this.follow = this.followService.getFollowMock(this.theme);
-                        this.followService.getFollow(this.theme).subscribe(results => this.reactToData(results));
+                        this.refresh();
+            }
+
+            public refresh(){
+                this.followService.getFollow(this.theme).subscribe(results => this.reactToData(results));
             }
 
             changeFollow($event, follow){

@@ -301,7 +301,10 @@ export default class DataRepository extends BaseRepository {
                         return this.createStockAllocation(themeStockComposition, user, allocationData.exposure)
                     }).then(userThemeStockAllocation => {
                         activitylog.userThemeStockAllocation = userThemeStockAllocation;
-                        return this.save(activitylog);
+                        var followPromise = this.followTheme(activitylog.user, activitylog.theme);
+                        var savePromise = this.save(activitylog);
+                        return Promise.all([followPromise, savePromise]);
+                        //return this.save(activitylog);
                     });
             })
         //TODO: add .catch? / error handling
@@ -381,6 +384,9 @@ export default class DataRepository extends BaseRepository {
     }
 
     followTheme(userId, themeId){
+        console.log("inside follow theme");
+        console.log(userId);
+        console.log(themeId);
         return new Promise((resolve, reject) => {
             User.update( { "_id" : userId }, { "$addToSet" : { "follows" : themeId} } )
                 .then(results => {
@@ -489,7 +495,10 @@ export default class DataRepository extends BaseRepository {
             return this.getStockById(stockAllocation.composition.stock);
         }).then(stock=>{
             activityToBeLogged.stock = stock.companyName;
-            return this.save(activityToBeLogged);
+            var savePromise = this.save(activityToBeLogged);
+            var followPromise = this.followTheme(activityToBeLogged.user, activityToBeLogged.theme);
+            return Promise.all([savePromise, followPromise]);
+            //return this.save(activityToBeLogged);
         });
     }
 
@@ -507,7 +516,10 @@ export default class DataRepository extends BaseRepository {
             return this.getThemeById(theme);
         }).then(theme=>{
             activityToBeLogged.themeName = theme.name;
-            return this.save(activityToBeLogged);
+            var followPromise = this.followTheme(activityToBeLogged.user, theme._id);
+            var savePromise = this.save(activityToBeLogged);
+            return Promise.all([followPromise, savePromise]);
+            //return this.save(activityToBeLogged);
         })
     }
 

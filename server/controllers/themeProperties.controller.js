@@ -49,7 +49,6 @@ export function update(req, res, next) {
 
     repo.save(themeProperty)
         .then(result => {
-            console.log("updating properties");
             repo.storeNewsFeedBasedOnThemeProperties(themeProperty.user,themeProperty.theme,req.body).then(result => {
                 res.status(201).json(new AppResponse('Theme property updated', result))
             });
