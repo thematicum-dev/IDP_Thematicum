@@ -57,6 +57,14 @@
             <div *ngIf="isUserAdmin" class="tab-pane" id="myadminfeed">
                 <h2>Admin: All Newsfeed</h2>
                 <br>
+                <div>
+                    <form>
+                        <label>From:</label>
+                        <input id="datefrom" #from type="date" max="2020-12-31" min="1990-12-31" value="2017-01-01"/>
+                        <label>To:</label>
+                        <input id="dateto" #to type="date" max="2020-12-31" min="1990-12-31" value="2017-12-31"/>
+                        <input type="button" (click)="getAdminFeedWithDates(from, to)" value="Go"/>
+                    </form></div>
                 <p id="paratocopy">{{newsFeedByAdminString}}</p>
                 <!--<ul class="nobullet">
                     <li *ngFor="let newsfeed of newsFeedByAdminData">

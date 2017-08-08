@@ -66,6 +66,17 @@ export class UserProfileService {
                                     .catch(this.handleError);
             }
 
+            getNewsFeedOfAdminWithDates(fromTime: string, toTime: String){
+                        var email = this.authService.getLoggedInUserEmail();
+
+                        let params = {fromTime: fromTime, toTime: toTime};
+                        let searchQuery = this.encodeQueryData(params);
+                        let apiPath = this.baseAPI + 'admin/newsfeed/byAdminUser/' + email;
+                        return this.http.get(apiPath + searchQuery, {headers: this.headers})
+                                    .map((response: Response) => response.json())
+                                    .catch(this.handleError);
+            }
+
             getNewsFeedOfAdminWithoutLimits(){
                         var email = this.authService.getLoggedInUserEmail();
 

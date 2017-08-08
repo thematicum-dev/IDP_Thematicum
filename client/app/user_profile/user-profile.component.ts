@@ -222,11 +222,24 @@ export class UserProfileComponent implements OnInit{
     }
 
     getAdminFeedWithLimits(){
-      var fromAdminFeed = this.adminFeedCursor;
+          var fromAdminFeed = this.adminFeedCursor;
           var toAdminFeed = this.adminFeedCursorLimit + this.adminFeedCursor;
           this.userProfileService.getNewsFeedOfAdmin(fromAdminFeed.toString(), toAdminFeed.toString()).subscribe(
             newsfeed=>{
               this.setAdminFeed(newsfeed);
+            }
+          );
+    }
+
+    getAdminFeedWithDates(from, to){
+          var dateFromValue = (<HTMLInputElement>document.getElementById("datefrom")).value;
+          var dateToValue = (<HTMLInputElement>document.getElementById("dateto")).value;
+
+          var fromAdminDate = dateFromValue ? Date.parse(dateFromValue).toString() : undefined;
+          var toAdminDate = dateToValue ? Date.parse(dateToValue).toString() : undefined;
+          this.userProfileService.getNewsFeedOfAdminWithDates(fromAdminDate ,toAdminDate).subscribe(
+            newsfeed=>{
+              this.setAdminFeedString(JSON.stringify(newsfeed, null, 4));
             }
           );
     }
