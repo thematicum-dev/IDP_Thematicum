@@ -384,9 +384,6 @@ export default class DataRepository extends BaseRepository {
     }
 
     followTheme(userId, themeId){
-        console.log("inside follow theme");
-        console.log(userId);
-        console.log(themeId);
         return new Promise((resolve, reject) => {
             User.update( { "_id" : userId }, { "$addToSet" : { "follows" : themeId} } )
                 .then(results => {
