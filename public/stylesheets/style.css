@@ -11,12 +11,52 @@ body {
   min-height: 80%;
 }
 
+.thematicum-navbar ul.nav a, .thematicum-navbar ul.nav a:hover, .thematicum-navbar ul.nav a:active, .thematicum-navbar ul.nav a:focus{ 
+  background-color: inherit;
+}
+
 .thematicum-navbar-color {
   background-color: #2980b9;
   border-color: #2980b9;
 }
 
-.thematicum-navbar-text {
+.thematicum-navbar-color-homepage {
+  background-color: #ffffff;
+  border-color: #ffffff;
+}
+
+
+.thematicum-navbar-nav-text-dropdown {
+  font-family: DroidSans;
+  font-size: 16px;
+  color: #2980b9;
+}
+
+.thematicum-navbar-nav-text {
+  font-family: DroidSans;
+  font-size: 16px;
+  color: #ffffff;
+}
+
+.thematicum-navbar-nav-text:hover, .thematicum-navbar-nav-text:visited, 
+.thematicum-navbar-nav-text:link, .thematicum-navbar-nav-text:active {
+  color: #ffffff;
+  text-decoration: none;
+}
+
+.thematicum-navbar-nav-text-homepage {
+  font-family: DroidSans;
+  font-size: 16px;
+  color: #2980b9;
+}
+
+.thematicum-navbar-nav-text-homepage:hover, .thematicum-navbar-nav-text-homepage:visited, 
+.thematicum-navbar-nav-text-homepage:link, .thematicum-navbar-nav-text-homepage:active {
+  color: #2980b9;
+  text-decoration: none;
+}
+
+.thematicum-navbar-thematicum {
   width: 674px;
   height: 58px;
   font-family: DroidSerif;
@@ -25,15 +65,10 @@ body {
   color: #ffffff;
 }
 
-.thematicum-navbar-text:hover, .thematicum-navbar-text:visited, .thematicum-navbar-text:link, .thematicum-navbar-text:active{
+.thematicum-navbar-thematicum:hover, .thematicum-navbar-thematicum:visited, 
+.thematicum-navbar-thematicum:link, .thematicum-navbar-thematicum:active {
   color: #ffffff;
   text-decoration: none;
-}
-
-.thematicum-navbar-nav-text {
-  font-family: DroidSans;
-  font-size: 16px;
-  color: #ffffff;
 }
 
 /* Footer Styles */
@@ -189,12 +224,12 @@ Remove if a better way is found to achieve this.*/
 }
 
 .landing-banner .banner-font {
-    font-size: 48px;
+    font-size: 54px;
     color: #2980b9;
 }
 
 .landing-banner .banner-font + .banner-font-detail{
-    font-size: 22px;
+    font-size: 21px;
     color: #34495e;
 }
 /*End Stylesheet for Landing Page*/
