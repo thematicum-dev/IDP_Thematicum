@@ -118,10 +118,6 @@ textarea {
     text-align: center;
 }
 
-.font-banner {
-    font-size: 41px;
-}
-
 /*Overriding bootstrap class to add width:100%. 
 Angular2 Multi Select dropdowns uses bootstrap.
 Without the width property the dropdowns do not extend to full width when enableSearch is false.
@@ -173,7 +169,38 @@ Remove if a better way is found to achieve this.*/
   text-decoration: none;
 }
 
+/*Stylesheet for Landing Page*/
+.outer {
+    display: table;
+    position: absolute;
+    height: 80%;
+    width: 75%;
+}
+
+.inner {
+    display: table-cell;
+    vertical-align: middle;
+}
+
+.landing-banner {
+  font-family: 'Droid Serif';
+  text-align: center;
+  width: 100%;
+}
+
+.landing-banner .banner-font {
+    font-size: 48px;
+    color: #2980b9;
+}
+
+.landing-banner .banner-font + .banner-font-detail{
+    font-size: 22px;
+    color: #34495e;
+}
+/*End Stylesheet for Landing Page*/
+
 /*Stylesheet for Theme Explorer Page*/
+
 .Theme-Explorer {
   margin-top: 34px;
   margin-bottom: 34px;
