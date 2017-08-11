@@ -9,6 +9,7 @@ import { IMultiSelectOption, IMultiSelectTexts, IMultiSelectSettings} from 'angu
 import * as _ from 'underscore';
 import { PaginationComponent } from '../utilities/pagination/pagination.component';
 import {categoryValues_IM, maturityValues_IM, timeHorizonValues_IM, searchDisabled_IM, searchEnabled_IM, categoryTextOptions_IM, timeHorizonTextOptions_IM, maturityTextOptions_IM, tagTextOptions_IM} from "../models/IMultiSelectSettings";
+import {timeHorizonValues, maturityValues, categoryValues} from "../models/themePropertyValues";
 
 @Component({
     selector: 'app-theme-search',
@@ -22,6 +23,10 @@ export class ThemeSearchComponent implements OnInit {
     initialPage: number;
     activeSearchType: number = 1;
     @ViewChild('searchPagePagination') searchPagePaginationComponent: PaginationComponent;
+
+    timeHorizonValues = timeHorizonValues;
+    maturityValues = maturityValues;
+    categoryValues = categoryValues;
 
     categoryTextOptions = categoryTextOptions_IM;
     timeHorizonTextOptions = timeHorizonTextOptions_IM;
