@@ -1,4 +1,7 @@
-<nav class="navbar thematicum-navbar-color navbar-fixed-top" role="navigation">
+<nav class="navbar navbar-fixed-top"  
+    [ngClass]="{'thematicum-navbar-color': homePage==false}"
+    [ngClass]="{'thematicum-navbar-color-homepage': homePage==true}"
+    role="navigation">
     <div class="container">
 
         <div class="navbar-header" >
@@ -8,24 +11,32 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a class="thematicum-navbar-text" routerLinkActive="active" [routerLink]="['/home']"><strong>them</strong>aticum</a>
+            <a class="thematicum-navbar-thematicum" routerLinkActive="active" [routerLink]="['/home']"><strong>them</strong>aticum</a>
         </div>
 
-        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+        <div class="thematicum-navbar collapse navbar-collapse" id="bs-example-navbar-collapse-1">
             <ul class="nav navbar-nav navbar-right">
                 <li>
-                    <a class="thematicum-navbar-nav-text" routerLinkActive="active" [routerLink]="['/signup']" *ngIf="!isLoggedIn()">Sign Up</a>
+                    <a  [ngClass]="{'thematicum-navbar-nav-text': homePage==false}"
+                        [ngClass]="{'thematicum-navbar-nav-text-homepage': homePage==true}"
+                        routerLinkActive="active" [routerLink]="['/signup']" *ngIf="!isLoggedIn()">Sign Up</a>
                 </li>
                 <li>
-                    <a class="thematicum-navbar-nav-text" routerLinkActive="active" [routerLink]="['/signin']" *ngIf="!isLoggedIn()">Login</a>
+                    <a  [ngClass]="{'thematicum-navbar-nav-text': homePage==false}"
+                        [ngClass]="{'thematicum-navbar-nav-text-homepage': homePage==true}"
+                        routerLinkActive="active" [routerLink]="['/signin']" *ngIf="!isLoggedIn()">Login</a>
                 </li>
 
                 <li class="dropdown" *ngIf="isLoggedIn()">
-                    <a class="dropdown-toggle thematicum-navbar-nav-text" data-toggle="dropdown">{{getLoggedInUser()}}<b class="caret"></b></a>
+
+                    <a  [ngClass]="{'thematicum-navbar-nav-text': homePage==false}"
+                        [ngClass]="{'thematicum-navbar-nav-text-homepage': homePage==true}"
+                        class="dropdown-toggle" data-toggle="dropdown">{{getLoggedInUser()}}<b class="caret"></b></a>
+
                     <ul class="dropdown-menu">
-                        <li><a routerLinkActive="active" class="thematicum-navbar-nav-text" [routerLink]="['/profile']">Profile</a></li>
+                        <li><a class="thematicum-navbar-nav-text-dropdown" routerLinkActive="active" [routerLink]="['/profile']">Profile</a></li>
                         <li role="separator" class="divider"></li>
-                        <li><a (click)="onLogoutClick()"class="thematicum-navbar-nav-text">Logout</a></li>
+                        <li><a class="thematicum-navbar-nav-text-dropdown" (click)="onLogoutClick()">Logout</a></li>
                     </ul>
                 </li>
             </ul>

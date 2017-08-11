@@ -1,9 +1,10 @@
-<div class="text-center">
-    <br/><br/><br/><br/><br/><br/><br/><br/>
-    <div class=" font-banner"><strong>them</strong>aticum</div>
-    <h2>Thematic risk research</h2> <br/>
-
-    <p *ngIf="isLoggedIn()"><a routerLinkActive="active" [routerLink]="['/search']" class="btn btn-primary btn-md" role="button">Enter</a></p>
-    <p *ngIf="!isLoggedIn()"><a routerLinkActive="active" [routerLink]="['/signin']" class="btn btn-primary btn-md" role="button">Login</a></p>
-    <br/><br/><br/><br/>
+<div class="outer">
+    <div class="inner">
+        <div class="landing-banner">
+            <div class="banner-font"><strong>them</strong>aticum</div>
+            <div class="banner-font-detail">Thematic risk research</div> <br/>
+            <p *ngIf="isLoggedIn()"><a routerLinkActive="active" [routerLink]="['/search']" class="btn btn-primary no-border-radius btn-md" role="button">&nbsp; Enter &nbsp;</a></p>
+            <p *ngIf="!isLoggedIn()"><a routerLinkActive="active" [routerLink]="['/signin']" class="btn btn-primary no-border-radius btn-md" role="button">&nbsp; Login &nbsp;</a></p>
+        </div>
+    </div>
 </div>
