@@ -240,6 +240,14 @@ export default class DataRepository extends BaseRepository {
         });
     }
 
+    nextStockSeqNr(){
+        return new Promise((resolve,reject) => {
+            Stock.find().sort({_id:-1}).limit(1).exec().then(stock =>{
+                resolve(parseInt(stock[0].seqNr,10)+1);
+            }).catch(err => reject (err));
+        });
+    }
+
     getStockAllocationsByThemeStockComposition(themeStockComposition, currentUserId) {
         return new Promise((resolve, reject) => {
             UserThemeStockAllocation.find({themeStockComposition: themeStockComposition._id}).exec()

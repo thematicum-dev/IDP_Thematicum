@@ -18,15 +18,18 @@ export function list(req, res, next) {
 }
 
 export function create(req, res, next){
-     const stock = new Stock({
-        companyName: req.body.name,
-        country: req.body.country,
-        website: req.body.website,
-        addedBy: res.locals.user,
-        investableInstrument: req.body.investableInstrument,
-    });
-
-    repo.save(stock)
-        .then(() => res.status(201).json(new AppResponse('Stock added', stock)))
-        .catch(err => next(err)); 
+    repo.nextStockSeqNr().then(function(seqNr){
+        const stock = new Stock({
+            seqNr: seqNr,
+            companyName: req.body.name.toUpperCase(),
+            country: req.body.country.toUpperCase(),
+            website: req.body.website.toLowerCase(),
+            addedBy: res.locals.user,
+            investableInstrument: req.body.investableInstrument,
+        });
+    
+        repo.save(stock)
+            .then(() => res.status(201).json(new AppResponse('Stock added', stock)))
+            .catch(err => next(err)); 
+    });    
 }
