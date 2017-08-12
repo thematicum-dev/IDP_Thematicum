@@ -503,7 +503,7 @@ export default class DataRepository extends BaseRepository {
     storeNewsFeedBasedOnThemeProperties(user, theme, themeProperty){
         let activityToBeLogged = new ActivityLog();
         activityToBeLogged.user = user;
-        activityToBeLogged.theme = theme._id;
+        activityToBeLogged.theme = theme;
         activityToBeLogged.userName = user.name;
         activityToBeLogged.themeName = theme.name;
         activityToBeLogged.userThemeInput = themeProperty;
@@ -513,7 +513,6 @@ export default class DataRepository extends BaseRepository {
         }).then(theme=>{
             activityToBeLogged.themeName = theme.name;
             var followPromise = this.followTheme(activityToBeLogged.user, theme._id);
-            console.log(activityToBeLogged);
             var savePromise = this.save(activityToBeLogged);
             return Promise.all([followPromise, savePromise]);
             //return this.save(activityToBeLogged);
