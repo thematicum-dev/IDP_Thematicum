@@ -107,6 +107,11 @@ footer {
   border-bottom-right-radius: 0;
 }
 
+.badge-theme {
+background-color: #2980b9;
+margin: 1px;
+}
+
 .button-list {
   float:left;
   height: 34px;

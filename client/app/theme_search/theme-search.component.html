@@ -1,7 +1,3 @@
-<div class="col-xs-12 text-center">
- <div ><img class="clip-1" src="http://www.freeiconspng.com/uploads/compass-icon-5.png" /></div>
-</div>
-
 <div class="col-xs-12">
  <div class="Theme-Explorer">Theme Explorer</div>
 </div>
@@ -61,7 +57,20 @@
     <div class="list-group" *ngIf="themes.length>0">
         <div class="Theme-Explorer-Separator"> </div>
         <a class="list-group-item list-group-item-action borderless" *ngFor="let theme of themes" (click)="goToThemeDetails(theme._id)">
-            <div class="Theme-Explorer-Heading">{{theme.name}}</div>
+            <div class="Theme-Explorer-Heading">
+                {{theme.name}} &nbsp;     
+                <span class="badge badge-theme" *ngFor="let timeHorizon of theme.timeHorizon; let currentIndex = index">
+                    {{timeHorizonValues[theme.timeHorizon[currentIndex]].description}}
+                </span>
+                |
+                <span class="badge badge-theme" *ngFor="let maturity of theme.maturity; let currentIndex = index">
+                    {{maturityValues[theme.maturity[currentIndex]].description}}
+                </span>   
+                |             
+                 <span class="badge badge-theme" *ngFor="let category of theme.categories; let currentIndex = index">
+                    {{categoryValues[theme.categories[currentIndex]].description}}
+                </span>
+            </div> 
             <div class="Theme-Explorer-Text">{{theme.description}}</div>
             <p class="Theme-Explorer-Tags" *ngIf="theme.tags"><i>Tags: {{theme.tags}}</i></p>
             <div class="Theme-Explorer-Separator"> </div>

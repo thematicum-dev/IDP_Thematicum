@@ -25,7 +25,7 @@ export class NavbarComponent implements OnInit {
     }
 
     routeChange(event: NavigationStart){
-        if(event.url == "/home"){
+        if(event.url == "/home" || event.url == "/"){
             this.homePage = true;
         } else {
             this.homePage = false;
