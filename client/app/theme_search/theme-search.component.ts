@@ -160,4 +160,7 @@ export class ThemeSearchComponent implements OnInit {
         this.searchTerm = stock._id;
     }
 
+    stringAsDate(dateStr: string) {
+        return new Date(dateStr);
+    }
 }
