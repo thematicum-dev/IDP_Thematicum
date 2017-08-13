@@ -41,6 +41,7 @@ export class NewsFeedComponent implements OnInit{
             ngOnInit(): void{
                         this.newsfeed.createdAt = new Date(this.newsfeed.createdAt).toLocaleString();
 
+
                         if (this.newsfeed.userThemeInput != null){
                                     var generaltimehorizonArray = ['Short Term ( 1-6 months )', 'Medium Term ( 0.5-3 years )', 'Long Term ( > 3 years )'];
 
@@ -59,8 +60,8 @@ export class NewsFeedComponent implements OnInit{
                                     this.displayCategories = this.displayCategories.substring(0, this.displayCategories.length - 2);
                         }
                         if (this.newsfeed.userThemeStockAllocation != null){
-                                    var exposureArray = ['Strongly positive', 'Weakly Positive', 'Neutral', 'Weakly Negative', 'Strongly Negative'];
-                                    this.displayExposure = this.newsfeed.userThemeStockAllocation.exposure ? exposureArray[this.newsfeed.userThemeStockAllocation.exposure]: '';
+                                    var exposureArray = ['Strongly Positive', 'Weakly Positive', 'Neutral', 'Weakly Negative', 'Strongly Negative'];
+                                    this.displayExposure = this.newsfeed.userThemeStockAllocation.exposure != null ? exposureArray[this.newsfeed.userThemeStockAllocation.exposure]: '';
                         }
 
             }
