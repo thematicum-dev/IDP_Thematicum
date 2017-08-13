@@ -19,6 +19,10 @@ hr {
   min-height: 80%;
 }
 
+.thematicum-navbar{
+  cursor: pointer; cursor: hand; 
+}
+
 .thematicum-navbar ul.nav a, .thematicum-navbar ul.nav a:hover, .thematicum-navbar ul.nav a:active, .thematicum-navbar ul.nav a:focus{ 
   background-color: inherit;
 }
@@ -32,7 +36,6 @@ hr {
   background-color: #ffffff;
   border-color: #ffffff;
 }
-
 
 .thematicum-navbar-nav-text-dropdown {
   font-family: DroidSans;
@@ -66,9 +69,9 @@ hr {
 
 .thematicum-navbar-thematicum {
   width: 674px;
-  height: 58px;
   font-family: DroidSerif;
-  font-size: 32px;
+  font-size: 30px;
+  line-height: 47px;
   text-align: center;
   color: #ffffff;
 }
@@ -79,6 +82,16 @@ hr {
   text-decoration: none;
 }
 
+@media (min-width: 768px) {
+  .navbar .navbar-header {
+      float: none;
+      margin-left:13%;
+  }
+
+  .navbar .navbar-collapse {
+      text-align: center;
+  }
+}
 /* Footer Styles */
 
 footer {
