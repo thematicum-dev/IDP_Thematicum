@@ -476,7 +476,7 @@ export default class DataRepository extends BaseRepository {
     getNewsFeedByAdminUserBetweenDatesWithLimits(lowerDateLimit, upperDateLimit, lowerLimit, upperLimit){
         var filter = { _id:0, user: 1, userName:1, theme:1, themeName:1, userThemeInput:1, userThemeStockAllocation: 1, stock: 1,createdAt: 1};
         return new Promise((resolve, reject) => {
-            ActivityLog.find({ createdAt: { $gte: lowerDateLimit, $lt: upperDateLimit}}, filter).sort( { createdAt: -1 } ).skip(lowerLimit).limit(upperLimit)
+            ActivityLog.find({ createdAt: { $gte: lowerDateLimit, $lte: upperDateLimit}}, filter).sort( { createdAt: -1 } ).skip(lowerLimit).limit(upperLimit)
                 .then(results => {
                     resolve(results);
                 })

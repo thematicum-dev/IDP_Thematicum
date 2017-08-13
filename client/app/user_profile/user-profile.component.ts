@@ -149,7 +149,7 @@ export class UserProfileComponent implements OnInit{
 
     //initializing the date of the admin 'date to' string
     this.defaultFromDateString = new Date(Date.parse(new Date().toISOString())-2685600000).toISOString().slice(0,10);
-    this.defaultToDateString = new Date().toISOString().slice(0,10)
+    this.defaultToDateString = new Date().toISOString().slice(0,10);
     console.log(this.defaultFromDateString);
     console.log(this.defaultToDateString);
 
@@ -246,7 +246,7 @@ export class UserProfileComponent implements OnInit{
           var dateToValue = to == null?(<HTMLInputElement>document.getElementById("dateto")).value : to;
 
           var fromAdminDate = dateFromValue ? Date.parse(dateFromValue).toString() : undefined;
-          var toAdminDate = dateToValue ? Date.parse(dateToValue).toString() : undefined;
+          var toAdminDate = dateToValue ? (Date.parse(dateToValue)+86398999).toString() : undefined;
           this.userProfileService.getNewsFeedOfAdminWithDates(fromAdminDate ,toAdminDate).subscribe(
             newsfeed=>{
               this.setAdminFeedString(JSON.stringify(newsfeed, null, 4));
