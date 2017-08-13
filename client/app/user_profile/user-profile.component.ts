@@ -141,8 +141,17 @@ export class UserProfileComponent implements OnInit{
   email: string;
   datejoined: string;
 
+  defaultFromDateString: string;
+  defaultToDateString: string;
+
 
   ngOnInit(): void{
+
+    //initializing the date of the admin 'date to' string
+    this.defaultFromDateString = new Date(Date.parse(new Date().toISOString())-2685600000).toISOString().slice(0,10);
+    this.defaultToDateString = new Date().toISOString().slice(0,10)
+    console.log(this.defaultFromDateString);
+    console.log(this.defaultToDateString);
 
 
     //get the user data
@@ -159,7 +168,8 @@ export class UserProfileComponent implements OnInit{
       this.getOverAllFeed();
 
       if (this.isUserAdmin){
-        this.getAdminFeedWithoutLimits();
+        //this.getAdminFeedWithoutLimits();
+        this.getAdminFeedWithDates(this.defaultFromDateString, this.defaultToDateString);
         this.getAdminFeedWithLimits();        
       }
   }
@@ -231,9 +241,9 @@ export class UserProfileComponent implements OnInit{
           );
     }
 
-    getAdminFeedWithDates(from, to){
-          var dateFromValue = (<HTMLInputElement>document.getElementById("datefrom")).value;
-          var dateToValue = (<HTMLInputElement>document.getElementById("dateto")).value;
+    getAdminFeedWithDates(from = null, to = null){
+          var dateFromValue = from == null? (<HTMLInputElement>document.getElementById("datefrom")).value : from;
+          var dateToValue = to == null?(<HTMLInputElement>document.getElementById("dateto")).value : to;
 
           var fromAdminDate = dateFromValue ? Date.parse(dateFromValue).toString() : undefined;
           var toAdminDate = dateToValue ? Date.parse(dateToValue).toString() : undefined;
