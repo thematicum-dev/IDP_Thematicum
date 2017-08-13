@@ -7,7 +7,7 @@
                         </div>
                         <div class="indent" *ngIf="newsfeed.userThemeStockAllocation != null">
                                     <div><span>Stock: {{newsfeed.stock}}</span></div>
-                                    <div><span>Exposure: {{newsfeed.userThemeStockAllocation.exposure}}</span></div>
+                                    <div><span>Exposure: {{displayExposure}}</span></div>
                         </div>
                         <div class="time">{{newsfeed.createdAt.toLocaleString()}}</div>
             </div>

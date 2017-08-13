@@ -36,6 +36,7 @@ export class NewsFeedComponent implements OnInit{
             displayTimeHorizon: string;
             displayMaturity: string;
             displayCategories: string;
+            displayExposure: string;
 
             ngOnInit(): void{
                         this.newsfeed.createdAt = new Date(this.newsfeed.createdAt).toLocaleString();
@@ -56,6 +57,10 @@ export class NewsFeedComponent implements OnInit{
 
                                     //trimming the last space and commas
                                     this.displayCategories = this.displayCategories.substring(0, this.displayCategories.length - 2);
+                        }
+                        if (this.newsfeed.userThemeStockAllocation != null){
+                                    var exposureArray = ['Strongly positive', 'Weakly Positive', 'Neutral', 'Weakly Negative', 'Strongly Negative'];
+                                    this.displayExposure = this.newsfeed.userThemeStockAllocation.exposure ? exposureArray[this.newsfeed.userThemeStockAllocation.exposure]: '';
                         }
 
             }
