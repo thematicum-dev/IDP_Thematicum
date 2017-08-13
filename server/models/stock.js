@@ -6,6 +6,7 @@ const Schema = mongoose.Schema;
 const schema = new Schema({
     seqNr: {
         type: Number,
+        required: true,
         unique: true
     },
     companyName: {
@@ -14,8 +15,7 @@ const schema = new Schema({
         unique: true
     },
     ticker: {
-        type: String,
-        unique: true
+        type: String
     },
     CIK: {
         type: Number
@@ -24,8 +24,7 @@ const schema = new Schema({
         type: Number
     },
     businessDescription: {
-        type: String,
-        unique: true
+        type: String
     },
     country: {
         type: String,

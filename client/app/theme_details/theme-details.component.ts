@@ -5,7 +5,7 @@ import 'rxjs/add/operator/switchMap';
 import {ThemeService} from "../services/theme.service";
 import {ModalComponent} from "./modal.component";
 import { FollowComponent } from "./follow.component";
-
+import {Location} from '@angular/common';
 
 @Component({
     selector: 'app-theme-details',
@@ -31,7 +31,7 @@ export class ThemeDetailsComponent implements OnInit, OnChanges {
     @ViewChild(ModalComponent, FollowComponent)
     public modal: ModalComponent;
 
-    constructor(private route: ActivatedRoute, private router: Router, private themeService: ThemeService) { }
+    constructor(private route: ActivatedRoute, private router: Router, private themeService: ThemeService, private location: Location) { }
 
     @Input('theme')
      isCurrentUserAdmin: boolean = localStorage.getItem("isAdmin") == "true";
@@ -70,5 +70,9 @@ export class ThemeDetailsComponent implements OnInit, OnChanges {
                 this.router.navigate(['/search']);
             },
             error => console.log(error));
+    }
+
+    backButton(){
+        this.location.back();
     }
 }

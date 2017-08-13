@@ -5,10 +5,22 @@ body {
 
 body {
   padding-top: 50px; /* Required padding for .navbar-fixed-top. Remove if using .navbar-static-top. Change if height of navigation changes. */
+  overflow-x: hidden
+}
+
+hr {  
+  margin: 0;
+  margin-left: -50%;
+  width:200%;
+  padding: 0;
 }
 
 .content {
   min-height: 80%;
+}
+
+.thematicum-navbar{
+  cursor: pointer; cursor: hand; 
 }
 
 .thematicum-navbar ul.nav a, .thematicum-navbar ul.nav a:hover, .thematicum-navbar ul.nav a:active, .thematicum-navbar ul.nav a:focus{ 
@@ -24,7 +36,6 @@ body {
   background-color: #ffffff;
   border-color: #ffffff;
 }
-
 
 .thematicum-navbar-nav-text-dropdown {
   font-family: DroidSans;
@@ -58,9 +69,9 @@ body {
 
 .thematicum-navbar-thematicum {
   width: 674px;
-  height: 58px;
   font-family: DroidSerif;
-  font-size: 32px;
+  font-size: 30px;
+  line-height: 47px;
   text-align: center;
   color: #ffffff;
 }
@@ -71,6 +82,16 @@ body {
   text-decoration: none;
 }
 
+@media (min-width: 768px) {
+  .navbar .navbar-header {
+      float: none;
+      margin-left:13%;
+  }
+
+  .navbar .navbar-collapse {
+      text-align: center;
+  }
+}
 /* Footer Styles */
 
 footer {
@@ -335,4 +356,11 @@ Remove if a better way is found to achieve this.*/
   color: #898989;
 }
 
+.theme-back-button {
+  font-family: 'Droid Serif';
+  font-size: 16px;
+  color: #226baa;
+  line-height: 56px;
+  cursor: pointer; cursor: hand;
+}
 /*End Stylesheet for Theme Details Page*/

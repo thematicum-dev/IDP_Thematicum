@@ -55,7 +55,7 @@
     <div class="alert alert-info text-center" role="alert" *ngIf="form.submitted && themes.length == 0">No relevant themes found</div>
 
     <div class="list-group" *ngIf="themes.length>0">
-        <div class="Theme-Explorer-Separator"> </div>
+        <hr/>
         <a class="list-group-item list-group-item-action borderless" *ngFor="let theme of themes" (click)="goToThemeDetails(theme._id)">
             <div class="Theme-Explorer-Heading">
                 {{theme.name}} &nbsp;     
@@ -72,8 +72,10 @@
                 </span>
             </div> 
             <div class="Theme-Explorer-Text">{{theme.description}}</div>
-            <p class="Theme-Explorer-Tags" *ngIf="theme.tags"><i>Tags: {{theme.tags}}</i></p>
-            <div class="Theme-Explorer-Separator"> </div>
+            <p class="Theme-Explorer-Tags" *ngIf="theme.tags">
+                {{stringAsDate(theme.createdAt) | date:'mediumDate'}}
+            </p>            
+            <hr/>
         </a>
     </div>
 </div>
