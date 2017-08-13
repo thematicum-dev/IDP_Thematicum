@@ -5,6 +5,14 @@ body {
 
 body {
   padding-top: 50px; /* Required padding for .navbar-fixed-top. Remove if using .navbar-static-top. Change if height of navigation changes. */
+  overflow-x: hidden
+}
+
+hr {  
+  margin: 0;
+  margin-left: -50%;
+  width:200%;
+  padding: 0;
 }
 
 .content {
@@ -335,4 +343,11 @@ Remove if a better way is found to achieve this.*/
   color: #898989;
 }
 
+.theme-back-button {
+  font-family: 'Droid Serif';
+  font-size: 16px;
+  color: #226baa;
+  line-height: 56px;
+  cursor: pointer; cursor: hand;
+}
 /*End Stylesheet for Theme Details Page*/
