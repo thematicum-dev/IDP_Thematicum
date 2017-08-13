@@ -19,7 +19,7 @@ export function listAccessCodes(req, res, next) {
 export function deleteThemeByAdmin(req, res, next) {
 
     let theme = req.theme;
-    let isCurrentLoggedInUserAdmin = res.locals.user.isAdmin;
+    let isCurrentLoggedInUserAdmin = res.locals.user.isAdmin == true ? true : false;
     if (isCurrentLoggedInUserAdmin){
             repo.deleteThemeData(theme)
                 .then(result => {

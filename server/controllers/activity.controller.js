@@ -82,7 +82,7 @@ export function getActivityByAdminBetweenTimeAndLimits(req, res, next){
     
     
     repo.getNewsFeedByAdminUserBetweenDatesWithLimits(lowerTimeLimit, upperTimeLimit, lowerLimit, upperLimit).then(results=>{
-        if (user.isAdmin == false){
+        if (!user.isAdmin){
             return next(new AppError('The user is not admin, cannot get activity data', 404));
         }
         else if (!results) {

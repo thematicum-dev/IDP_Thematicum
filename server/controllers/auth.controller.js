@@ -52,6 +52,9 @@ export function signin(req, res, next) {
 						return next(new AppError('Invalid login credentials', 401));
 					}
 					const token = authUtilities.jwtSign({ user: user });
+					if (!user.isAdmin){
+						user.isAdmin = false;
+					}
 					res.status(200).json({
 						message: 'Successful login',
 						token: token,
