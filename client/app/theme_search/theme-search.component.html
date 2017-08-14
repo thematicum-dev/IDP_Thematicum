@@ -21,6 +21,10 @@
                 <app-autocomplete-stock-search (stock)="searchTermStock($event)"> </app-autocomplete-stock-search>
                  <i class="glyphicon glyphicon-search form-control-feedback search-icon"></i>
             </div>
+            <div class="col-xs-12 Theme-Explorer-Text" *ngIf="selectedStock!==undefined">
+                <br />
+                <strong>Business Description: </strong>{{selectedStock.businessDescription}}
+            </div>
         </div>
         <div class="col-xs-12"> <br/> </div>
         <div class="form-group row">

@@ -18,6 +18,7 @@ import {timeHorizonValues, maturityValues, categoryValues} from "../models/theme
 export class ThemeSearchComponent implements OnInit {
     searchTerm: string = "";
     themes: Theme[] = [];
+    selectedStock: StockModel;
     searchResultsCount: number = 0;
     currentPage: number = 1;
     initialPage: number;
@@ -157,6 +158,7 @@ export class ThemeSearchComponent implements OnInit {
     }
 
     searchTermStock(stock: StockModel){
+        this.selectedStock = stock;
         this.searchTerm = stock._id;
     }
 
