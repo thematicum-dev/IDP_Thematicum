@@ -17,34 +17,33 @@ export function listAccessCodes(req, res, next) {
 }
 
 export function deleteThemeByAdmin(req, res, next) {
-
     let theme = req.theme;
     let isCurrentLoggedInUserAdmin = res.locals.user.isAdmin == true ? true : false;
-    if (isCurrentLoggedInUserAdmin){
-            repo.deleteThemeData(theme)
-                .then(result => {
-                    return res.status(202).json(new AppResponse('Theme related data deleted', result));
-                })
-             .catch(error => { next(error) });
-    }else{
-            return res.status(400).json(new AppResponse('User is not logged in ', null));
+    if (isCurrentLoggedInUserAdmin) {
+        repo.deleteThemeData(theme)
+            .then(result => {
+                return res.status(202).json(new AppResponse('Theme related data deleted', result));
+            })
+            .catch(error => { next(error) });
+    } else {
+        return res.status(400).json(new AppResponse('User is not logged in ', null));
     }
+}
 
-    
+export function deleteStockCompositionByAdmin(req, res, next) {
+    console.log("Admin Controller Stock Composition Delete");
+    console.log(req.params.compositionId);
+    let isCurrentLoggedInUserAdmin = res.locals.user.isAdmin == true ? true : false;
+    if (isCurrentLoggedInUserAdmin) {
+        console.log("Admin User");
+        repo.deleteAllStockAllocationsByCompositionId(req.params.compositionId)
+            .then(result => {
 
-    
-    
-    //console.log(res.locals.user.isAdmin);
-
-    // repo.getThemeById(theme._id)
-    //     .then(result => {
-    //         if (!result) {
-    //             return next(new AppError('No theme found for the given Id', 404))
-    //         }
-
-    //         return res.status(200).json(new AppResponse('Theme related data deleted', result));
-    //     })
-    //     .catch(err => next(err));
+            })
+            .catch(err => next(err));
+    } else {
+        return res.status(400).json(new AppResponse('User is not logged in ', null));
+    }
 }
 
 export function themeById(req, res, next, id) {

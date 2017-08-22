@@ -57,7 +57,8 @@ export class ThemeStockAllocationComponent implements OnInit {
     showAddOtherStocksButton: boolean = false; //to show/hide "Add Other Stocks" button
     stockAllocationData: ThemeStockCompositionAllocationModel[] = []; //to hold data received from the service
     selectedExposure: number; //to hold the exposure value edited by the user
-
+    isCurrentUserAdmin: boolean = localStorage.getItem("isAdmin") == "true";
+    
     @ViewChild(ModalComponent)
     public modal: ModalComponent;
 
@@ -146,6 +147,19 @@ export class ThemeStockAllocationComponent implements OnInit {
         const allocationId = modal.getData();
         modal.hide();
         this.themeService.deleteUserStockAllocation(allocationId)
+            .flatMap(data => {
+                console.log(data);
+                return this.getComponentDataObservable(); //reload model
+            })
+            .subscribe(this.handleResults, this.handleError);
+    }
+
+    deleteUserStockCompositionAdmin(modal: ModalComponent) {       
+        const compositionId = modal.getData().themeStockComposition._id; 
+        console.log(modal);
+        console.log(compositionId);                
+        modal.hide();
+        this.themeService.deleteUserStockCompositionByAdmin(compositionId)
             .flatMap(data => {
                 console.log(data);
                 return this.getComponentDataObservable(); //reload model

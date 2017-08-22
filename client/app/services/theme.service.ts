@@ -152,6 +152,14 @@ export class ThemeService implements ThemeServiceInterface{
             .map((response: Response) => response.json())
             .catch(error => Observable.throw("Error in x service"));
     }
+    
+    deleteUserStockCompositionByAdmin(compositionId: string) {
+        let apiPath = this.baseAPI + 'admin/stockcompositions/' + compositionId;
+        console.log(apiPath);
+        return this.http.delete(apiPath, {headers: this.headers})
+            .map((response: Response) => response.json())
+            .catch(this.handleError);
+    }
 
     handleError = (error: Response) => {
         this.errorService.handleError(error);

@@ -266,6 +266,23 @@ export default class DataRepository extends BaseRepository {
         });
     }
 
+    deleteAllStockAllocationsByCompositionId(compositionId){
+        return new Promise((resolve, reject) => {
+            var deletePromises = []
+            UserThemeStockAllocation.find({themeStockComposition: compositionId}).exec()
+            .then(allocations => {
+                for (var index in allocations){
+                    deletePromises.push(this.removeById(UserThemeStockAllocation, allocations[index]._id));
+                }
+                Promise.all(deletePromises).then(result => {
+                    resolve(result);
+                })
+                .catch(err => reject(err));
+            })
+            .catch(err => reject(err));
+        });
+    }
+
     getStockAllocationByUser(allocations, userId) {
         return allocations.find(allocation => allocation.user == userId);
     }
