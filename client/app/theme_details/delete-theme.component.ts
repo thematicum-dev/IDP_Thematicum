@@ -1,10 +1,10 @@
 import { Component, Input, Output, OnInit } from '@angular/core';
 import { ThemeService } from '../services/theme.service';
 @Component({
-  selector: 'app-delete-theme',
-  providers: [ThemeService],
-  template: `<a class="btn center-block" ng-class="{true: 'btn-primary', false: 'btn-danger'}[!patient.archived]" (click)="deleteTheme($event)"> <span >Delete Theme</span></a>`,
-  styles: [`
+        selector: 'app-delete-theme',
+        providers: [ThemeService],
+        template: `<a class="btn center-block" ng-class="{true: 'btn-primary', false: 'btn-danger'}[!patient.archived]" (click)="deleteTheme($event)"> <span >Delete Theme</span></a>`,
+        styles: [`
         .Follow-this-theme {
                 width: 128px;
                 height: 36px;
@@ -22,27 +22,26 @@ import { ThemeService } from '../services/theme.service';
   `]
 })
 
-export class DeleteComponent implements OnInit{
+export class DeleteThemeComponent implements OnInit {
 
-            constructor(private themeService: ThemeService) { }
+        constructor(private themeService: ThemeService) { }
 
-            follow: boolean = false;
+        follow: boolean = false;
 
-            @Input('userEmail')
-            userEmail: string;
+        @Input('userEmail')
+        userEmail: string;
 
-            @Input('themeId')
-            themeId: string;
+        @Input('themeId')
+        themeId: string;
 
-            reactToData(results){
+        reactToData(results) {
                 console.log(results);
-            }
+        }
 
-            ngOnInit(): void{
-                        
-            }
+        ngOnInit(): void {
+        }
 
-            deleteTheme($event){
-                    this.themeService.deleteThemeByAdmin(this.userEmail, this.themeId).subscribe(results => this.reactToData(results));
-            }
+        deleteTheme($event) {
+                this.themeService.deleteThemeByAdmin(this.userEmail, this.themeId).subscribe(results => this.reactToData(results));
+        }
 }
