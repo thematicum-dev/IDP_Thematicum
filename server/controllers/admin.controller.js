@@ -1,6 +1,7 @@
 import {AppError} from '../utilities/appError';
 import {AppResponse} from '../utilities/appResponse';
 import DataRepository from '../data_access/dataRepository';
+import ThemeStockComposition from '../models/themeStockComposition';
 
 const repo = new DataRepository();
 
@@ -31,14 +32,15 @@ export function deleteThemeByAdmin(req, res, next) {
 }
 
 export function deleteStockCompositionByAdmin(req, res, next) {
-    console.log("Admin Controller Stock Composition Delete");
-    console.log(req.params.compositionId);
+    let compositionId = req.params.compositionId;
     let isCurrentLoggedInUserAdmin = res.locals.user.isAdmin == true ? true : false;
     if (isCurrentLoggedInUserAdmin) {
-        console.log("Admin User");
-        repo.deleteAllStockAllocationsByCompositionId(req.params.compositionId)
+        repo.deleteAllStockAllocationsByCompositionId(compositionId)
             .then(result => {
-
+                repo.removeById(ThemeStockComposition, compositionId).then(result => {
+                    return res.status(200).json(new AppResponse('Stock Composition Removed', result));
+                })
+                .catch(err => next(err));
             })
             .catch(err => next(err));
     } else {
