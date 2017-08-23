@@ -155,9 +155,16 @@ export class ThemeService implements ThemeServiceInterface{
     
     deleteUserStockCompositionByAdmin(compositionId: string) {
         let apiPath = this.baseAPI + 'admin/stockcompositions/' + compositionId;
-        console.log(apiPath);
         return this.http.delete(apiPath, {headers: this.headers})
             .map((response: Response) => response.json())
+            .catch(this.handleError);
+    }
+
+    validateStockCompositionByAdmin(compositionId: string, validation: boolean) {
+        let apiPath = this.baseAPI + 'admin/stockcompositions/validate/' + compositionId + '/' + validation;
+        const body = {};
+        return this.http.put(apiPath, body, { headers: this.headers })
+            .map((response: Response) => response.json().obj)
             .catch(this.handleError);
     }
 

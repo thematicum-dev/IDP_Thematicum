@@ -167,6 +167,25 @@ export class ThemeStockAllocationComponent implements OnInit {
             .subscribe(this.handleResults, this.handleError);
     }
 
+    toggleStockCompositionValidation(allocationModel: ThemeStockCompositionAllocationModel){
+        const compositionId = allocationModel.themeStockComposition._id;
+        if(allocationModel.themeStockComposition.isValidated == true){
+            this.themeService.validateStockCompositionByAdmin(compositionId, false)
+            .flatMap(data => {
+                console.log(data);
+                return this.getComponentDataObservable(); //reload model
+            })
+            .subscribe(this.handleResults, this.handleError);
+        } else if(allocationModel.themeStockComposition.isValidated == false){
+            this.themeService.validateStockCompositionByAdmin(compositionId, true)
+            .flatMap(data => {
+                console.log(data);
+                return this.getComponentDataObservable(); //reload model
+            })
+            .subscribe(this.handleResults, this.handleError);
+        }
+    }
+
     createStockCompositionAndAllocation(allocations: StockAllocationModel[]) {
         this.toggleShowAddOtherStocksButton();
         this.themeService.createManyStockCompositionsAndAllocations(this.themeId, allocations)

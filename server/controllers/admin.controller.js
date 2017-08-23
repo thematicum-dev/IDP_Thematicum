@@ -48,13 +48,26 @@ export function deleteStockCompositionByAdmin(req, res, next) {
     }
 }
 
+export function validateStockComposition(req, res, next){
+    let compositionId = req.params.compositionId;
+    let validation = req.params.validation == "true";
+    let isCurrentLoggedInUserAdmin = res.locals.user.isAdmin == true ? true : false;
+    if (isCurrentLoggedInUserAdmin) {
+        repo.validateStockComposition(compositionId, validation).then(result => {
+            return res.status(200).json(new AppResponse('Stock Validated to ', result));
+        })
+        .catch(err => next(err));
+    } else {
+        return res.status(400).json(new AppResponse('User is not logged in ', null));
+    }
+}
+
 export function themeById(req, res, next, id) {
     repo.getThemeById(id)
         .then(result => {
             if (!result) {
                 return next(new AppError('No theme found for the given Id', 404))
             }
-
             req.theme = result;
             next();
         })

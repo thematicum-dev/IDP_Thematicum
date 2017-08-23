@@ -553,4 +553,14 @@ export default class DataRepository extends BaseRepository {
                 .catch(err => reject(err));
         });
     }
+
+    validateStockComposition(compositionId, validation){
+        return new Promise ((resolve,reject) => {
+            this.update(ThemeStockComposition, { "_id" : compositionId }, {"isValidated": validation})
+            .then(results => {
+                resolve(results);
+            })
+            .catch(err => reject(err));
+        });
+    }
 }

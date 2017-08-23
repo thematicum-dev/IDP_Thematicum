@@ -17,11 +17,14 @@ router.route('/themes/:themeId')
 //Example with only limits: localhost:3000/api/admin/newsfeed/byAdminUser/taimoor.alam3%40gmail.com?from=0&to=10
 //Example without any limits: localhost:3000/api/admin/newsfeed/byAdminUser/taimoor.alam3%40gmail.com
 
+router.route('/newsfeed/byAdminUser/:userEmail')
+    .get(activityController.getActivityByAdminBetweenTimeAndLimits);
+
 router.route('/stockcompositions/:compositionId')
     .delete(adminController.deleteStockCompositionByAdmin);
 
-router.route('/newsfeed/byAdminUser/:userEmail')
-    .get(activityController.getActivityByAdminBetweenTimeAndLimits);
+router.route('/stockcompositions/validate/:compositionId/:validation')
+    .put(adminController.validateStockComposition);
 
 router.param('themeId', adminController.themeById);
 router.param('userEmail', activityController.userByEmail);
