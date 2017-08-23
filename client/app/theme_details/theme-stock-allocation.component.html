@@ -8,7 +8,8 @@
         <div class="row" >
             <div class="col-xs-5">
                 <h5>{{allocationModel?.themeStockComposition?.stock?.companyName}}, {{allocationModel?.themeStockComposition?.stock?.country}} 
-                    {{allocationModel?.themeStockComposition?.isValidated ? 'Validated' : 'Not Validated'}}</h5>
+                    <span *ngIf="allocationModel?.themeStockComposition?.isValidated" class="glyphicon glyphicon-ok color-tick-validated" aria-hidden="true"></span>
+                    <span *ngIf="!allocationModel?.themeStockComposition?.isValidated" class="glyphicon glyphicon-ok color-tick-invalidated" aria-hidden="true"></span></h5>
                 <p>Total votes: {{allocationModel.totalCount}}</p>
             </div>
             <div class="col-xs-7 text-right" *ngIf="!allocationModel.isAllocationEditable">

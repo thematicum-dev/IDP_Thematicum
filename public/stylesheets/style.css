@@ -364,3 +364,10 @@ Remove if a better way is found to achieve this.*/
   cursor: pointer; cursor: hand;
 }
 /*End Stylesheet for Theme Details Page*/
+
+.color-tick-validated {
+  color: #2980b9;
+}
+.color-tick-invalidated {
+  color:gainsboro;
+}
