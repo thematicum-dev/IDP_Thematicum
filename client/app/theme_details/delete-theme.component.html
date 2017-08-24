@@ -1,0 +1,17 @@
+<a class="btn center-block" ng-class="{true: 'btn-primary', false: 'btn-danger'}[!patient.archived]" (click)="modalDeleteTheme.show()"> 
+    <span >Delete Theme</span>
+</a>
+
+<!-- Delete stockAllocation -->
+<app-modal #modalDeleteTheme>
+        <div class="app-modal-header">
+            <h5>Delete Theme</h5>
+        </div>
+        <div class="app-modal-body">
+            <p>Are you sure you want to delete the theme? All associated votes and stocks will also be deleted.</p>
+        </div>
+        <div class="app-modal-footer">
+            <button type="button" class="btn btn-default" (click)="modalDeleteTheme.hide()">Close</button>
+            <button type="button" class="btn btn-primary" (click)="deleteTheme(modalDeleteTheme)">Delete</button>
+        </div>
+    </app-modal>

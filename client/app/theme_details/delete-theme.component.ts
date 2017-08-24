@@ -1,9 +1,12 @@
 import { Component, Input, Output, OnInit } from '@angular/core';
 import { ThemeService } from '../services/theme.service';
+import {ModalComponent} from "./modal.component";
+import {Location} from '@angular/common';
+
 @Component({
         selector: 'app-delete-theme',
         providers: [ThemeService],
-        template: `<a class="btn center-block" ng-class="{true: 'btn-primary', false: 'btn-danger'}[!patient.archived]" (click)="deleteTheme($event)"> <span >Delete Theme</span></a>`,
+        templateUrl: 'delete-theme.component.html',
         styles: [`
         .Follow-this-theme {
                 width: 128px;
@@ -24,7 +27,7 @@ import { ThemeService } from '../services/theme.service';
 
 export class DeleteThemeComponent implements OnInit {
 
-        constructor(private themeService: ThemeService) { }
+        constructor(private themeService: ThemeService, private location: Location) { }
 
         follow: boolean = false;
 
@@ -41,7 +44,11 @@ export class DeleteThemeComponent implements OnInit {
         ngOnInit(): void {
         }
 
-        deleteTheme($event) {
-                this.themeService.deleteThemeByAdmin(this.userEmail, this.themeId).subscribe(results => this.reactToData(results));
+        deleteTheme(modal: ModalComponent) {
+                this.themeService.deleteThemeByAdmin(this.userEmail, this.themeId).subscribe(results => {
+                        this.reactToData(results);                        
+                        modal.hide();
+                        this.location.back();
+                });
         }
 }
