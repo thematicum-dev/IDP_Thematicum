@@ -267,20 +267,32 @@ export default class DataRepository extends BaseRepository {
     }
 
     deleteAllStockAllocationsByCompositionId(compositionId){
-        return new Promise((resolve, reject) => {
-            var deletePromises = []
-            UserThemeStockAllocation.find({themeStockComposition: compositionId}).exec()
-            .then(allocations => {
-                for (var index in allocations){
-                    deletePromises.push(this.removeById(UserThemeStockAllocation, allocations[index]._id));
-                }
-                Promise.all(deletePromises).then(result => {
-                    resolve(result);
-                })
-                .catch(err => reject(err));
-            })
-            .catch(err => reject(err));
-        });
+        return Promise.all([UserThemeStockAllocation.remove({ themeStockComposition: compositionId }).exec()]); 
+    }
+
+    deleteStockCompositionById(compositionId){        
+        return Promise.all([ThemeStockComposition.remove({_id: compositionId }).exec(), UserThemeStockAllocation.remove({ themeStockComposition: compositionId }).exec()]);
+    }
+
+    deleteAllStockCompositionsByThemeId(themeId){
+        const deleteStocksPromise = ThemeStockComposition.find({ theme: themeId }).exec()
+            .then(compositions => {
+                compositions.map(composition => {
+                    return Promise.all([this.remove(composition), UserThemeStockAllocation.remove({ themeStockComposition: composition._id }).exec()]);
+                });
+            });
+    }
+
+    deleteAllUserThemeInputsByThemeId(themeId){
+        return UserThemeInput.remove({theme: themeId}).exec(); 
+    }
+
+    removeAllUserFollowersByThemeId(themeId){
+        return User.update(
+            { },
+            { $pull: {follows: themeId} },
+            { multi: true }
+        );
     }
 
     getStockAllocationByUser(allocations, userId) {
@@ -288,25 +300,11 @@ export default class DataRepository extends BaseRepository {
     }
 
     deleteThemeData(theme) {
-        const deleteThemePromise = this.remove(theme); //delete theme
-        const deleteUserThemeInputsPromise = UserThemeInput.remove({theme: theme._id}).exec(); //delete user theme inputs
-
-        //delete theme-stock compositions and their related stock allocations
-        const deleteStocksPromise = ThemeStockComposition.find({theme: theme._id}).exec()
-            .then(compositions => {
-                compositions.map(composition => {
-                    return Promise.all([this.remove(composition), UserThemeStockAllocation.remove({themeStockComposition: composition._id}).exec()]);
-                });
-            });
-
-        // unfollow all users from the deleted theme
-        const deleteThemesUserFollowersPromise = User.update(
-            { },
-            { $pull: {follows: theme._id } },
-            { multi: true }
-        );
-
-        return Promise.all([deleteThemePromise, deleteUserThemeInputsPromise, deleteStocksPromise, deleteThemesUserFollowersPromise]);
+        const deleteAllStockCompositionsPromise = this.deleteAllStockCompositionsByThemeId(theme.id);
+        const deleteAllUserThemeInputsPromise = this.deleteAllUserThemeInputsByThemeId(theme.id);
+        const removeAllUserFollowersPromise = this.removeAllUserFollowersByThemeId(theme.id);
+        const deleteThemePromise = this.remove(theme); 
+        return Promise.all([deleteAllStockCompositionsPromise, deleteAllUserThemeInputsPromise, removeAllUserFollowersPromise, deleteThemePromise]);
     }
 
     createStockCompositionAndAllocation(allocationData, theme, user) {

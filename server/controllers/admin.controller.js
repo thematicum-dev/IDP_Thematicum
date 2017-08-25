@@ -27,7 +27,7 @@ export function deleteThemeByAdmin(req, res, next) {
             })
             .catch(error => { next(error) });
     } else {
-        return res.status(400).json(new AppResponse('User is not logged in ', null));
+        return res.status(400).json(new AppResponse('Access denied ', null));
     }
 }
 
@@ -35,16 +35,13 @@ export function deleteStockCompositionByAdmin(req, res, next) {
     let compositionId = req.params.compositionId;
     let isCurrentLoggedInUserAdmin = res.locals.user.isAdmin == true ? true : false;
     if (isCurrentLoggedInUserAdmin) {
-        repo.deleteAllStockAllocationsByCompositionId(compositionId)
+        repo.deleteStockCompositionById(compositionId)
             .then(result => {
-                repo.removeById(ThemeStockComposition, compositionId).then(result => {
-                    return res.status(200).json(new AppResponse('Stock Composition Removed', result));
-                })
-                .catch(err => next(err));
+                return res.status(200).json(new AppResponse('Stock Composition Removed', result));
             })
             .catch(err => next(err));
     } else {
-        return res.status(400).json(new AppResponse('User is not logged in ', null));
+        return res.status(400).json(new AppResponse('Access denied ', null));
     }
 }
 
@@ -58,7 +55,7 @@ export function validateStockComposition(req, res, next){
         })
         .catch(err => next(err));
     } else {
-        return res.status(400).json(new AppResponse('User is not logged in ', null));
+        return res.status(400).json(new AppResponse('Access denied ', null));
     }
 }
 
