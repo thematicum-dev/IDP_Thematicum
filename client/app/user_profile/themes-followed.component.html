@@ -1,0 +1,5 @@
+<ul id="themelist" class="nobullet">
+    <li  *ngFor="let theme of themes">
+        <div class="row themeclass"><span class="themename">{{theme.name}}</span><span class="followcomponent pull-right"><app-follow #followButton [theme]="theme"></app-follow></span></div>
+    </li>
+</ul>

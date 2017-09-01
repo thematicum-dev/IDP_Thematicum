@@ -133,8 +133,8 @@ export class UserProfileComponent implements OnInit{
   newsFeedByAdminString: string = null; //to hold data received
   newsFeedByAdminData: NewsFeedModel[] = []; //to hold data received
 
-  //themes the user follows
-  themes: Theme[] = []
+  // //themes the user follows
+  // themes: Theme[] = []
 
   //user values
   username: string;
@@ -158,10 +158,6 @@ export class UserProfileComponent implements OnInit{
       this.username = this.authService.getLoggedInUser();
       this.email = this.authService.getLoggedInUserEmail();
       this.datejoined = new Date(this.authService.getLoggedInUserDateJoined()).toLocaleDateString();
-
-
-      //get themes data
-      this.userProfileService.getThemesOfAUser().subscribe(themes =>this.setThemes(themes));
 
       this.getUserFeed();
 
@@ -194,10 +190,6 @@ export class UserProfileComponent implements OnInit{
 
     setAdminFeedString = (adminString: string) => {
       this.newsFeedByAdminString = adminString;
-    }
-
-    setThemes = (themes: Theme[]) => {
-      this.themes = themes;
     }
 
     showMore($event, flag){
