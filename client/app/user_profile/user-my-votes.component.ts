@@ -1,7 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
-// import { Theme } from '../models/theme';
 import { UserProfileService } from '../services/user-profile.service';
-import {NewsFeedModel} from "../models/newsFeedModel";
+import { NewsFeedModel } from "../models/newsFeedModel";
 
 @Component({
     selector: 'app-user-my-votes',
@@ -24,25 +23,24 @@ export class UserMyVotes implements OnInit {
 
     ngOnInit(): void {
         this.getUserFeed();
-    }    
+    }
 
     setUserFeed = (data: NewsFeedModel[]) => {
-        if(data.length < this.userFeedCursorLimit){
-          this.showUserFeedData = false;
+        if (data.length < this.userFeedCursorLimit) {
+            this.showUserFeedData = false;
         }
-        this.userFeedData = this.userFeedData.concat(data);   
+        this.userFeedData = this.userFeedData.concat(data);
     }
 
-    getUserFeed(){
-      var fromUser = this.userFeedCursor;
-      var toUser = this.userFeedCursor + this.userFeedCursorLimit;
-      this.userProfileService.getNewsFeedOfUser(fromUser.toString() , toUser.toString()).subscribe(newsFeed => this.setUserFeed(newsFeed));
+    getUserFeed() {
+        var fromUser = this.userFeedCursor;
+        var toUser = this.userFeedCursor + this.userFeedCursorLimit;
+        this.userProfileService.getNewsFeedOfUser(fromUser.toString(), toUser.toString()).subscribe(newsFeed => this.setUserFeed(newsFeed));
     }
 
-    showMore($event){
-          console.log("show more votes pressed");
-          this.userFeedCursor += this.userFeedCursorLimit;
-          this.getUserFeed();
-      }
-
+    showMore($event) {
+        console.log("show more votes pressed");
+        this.userFeedCursor += this.userFeedCursorLimit;
+        this.getUserFeed();
+    }
 }
