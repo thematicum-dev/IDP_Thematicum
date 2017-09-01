@@ -1,0 +1,6 @@
+<ul class="nobullet">
+    <li *ngFor="let newsfeed of userFeedData">
+        <app-user-newsfeed [newsfeed]="newsfeed"></app-user-newsfeed>
+    </li>
+</ul>
+<div *ngIf="showUserFeedData"><a (click)="showMore($event)">Show More</a></div>
