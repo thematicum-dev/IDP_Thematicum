@@ -33,8 +33,10 @@ import { MultiselectDropdownModule } from 'angular-2-dropdown-multiselect';
 import { PaginationComponent } from './utilities/pagination/pagination.component';
 import { FollowComponent } from "./theme_details/follow.component";
 import { DeleteThemeComponent } from "./theme_details/delete-theme.component";
-import { NewsFeedComponent } from "./user_profile/newsfeed.component";
-import {ThemesFollowedComponent} from "./user_profile/themes-followed.component";
+import { FeedComponent } from "./user_profile/feed.component";
+import { ThemesFollowedComponent } from "./user_profile/themes-followed.component";
+import { UserMyVotes } from "./user_profile/user-my-votes.component";
+import { UserNewsFeed } from "./user_profile/user-newsfeed.component";
 
 @NgModule({
     declarations: [
@@ -62,8 +64,10 @@ import {ThemesFollowedComponent} from "./user_profile/themes-followed.component"
         PaginationComponent,
         FollowComponent,
         DeleteThemeComponent,
-        NewsFeedComponent,
-        ThemesFollowedComponent
+        FeedComponent,
+        ThemesFollowedComponent,
+        UserMyVotes,
+        UserNewsFeed
     ],
     imports: [BrowserModule, routing, FormsModule, ReactiveFormsModule, HttpModule, MultiselectDropdownModule],
     providers: [AuthService, ErrorService, ThemeService, StockService, AuthGuard],
