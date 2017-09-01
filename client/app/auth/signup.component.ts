@@ -24,6 +24,7 @@ export class SignupComponent implements AfterViewInit{
         'Private investor',
         'Other'
     ];
+    reenterPassword: string = "";
 
     constructor(private authService: AuthService, private router: Router) {
         this.user.personalRole = this.personalRoles[0]; //default value
@@ -33,6 +34,9 @@ export class SignupComponent implements AfterViewInit{
 	    this.captcha.render();
     }
 
+    doPasswordsMatch(){
+        return this.reenterPassword == this.user.password;
+    }
 
     onSubmit(form: NgForm) {
         const signupModel = new SignupModel(this.user, this.registrationAccessCode);
