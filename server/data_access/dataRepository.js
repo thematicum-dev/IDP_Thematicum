@@ -196,7 +196,7 @@ export default class DataRepository extends BaseRepository {
 
                     const totalCount = results ? results.length : 0;
                     const themePropertiesByCurrentUser = this.getThemePropertiesByUser(results, userId);
-                    const obj = {properties: themeProperties, userInputs: themePropertiesByCurrentUser, totalCount: totalCount};
+                    const obj = {themeId: themeId, properties: themeProperties, userInputs: themePropertiesByCurrentUser, totalCount: totalCount};
 
                     resolve(obj);
                 })

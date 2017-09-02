@@ -371,3 +371,7 @@ Remove if a better way is found to achieve this.*/
 .color-tick-invalidated {
   color:gainsboro;
 }
+
+.global-font {
+  font-family: 'Droid Serif';
+}

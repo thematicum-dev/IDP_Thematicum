@@ -1,10 +1,13 @@
 <ul id="themelist" class="nobullet">
     <li *ngFor="let theme of themes" class="row theme-row-margin">
         <a routerLinkActive="active" [routerLink]="['/theme/' + theme._id ]">
-            <span class="themename">
-                {{theme.name}}
+            <span class="themename global-font">
+                {{theme.name}} 
             </span>            
-        </a>
+        </a>        
+        <span class="themename pull-right global-font"> 
+            &nbsp; &nbsp; Total votes: {{ themePropertiesData [theme._id] && themePropertiesData [theme._id].totalCount}}  
+        </span>
         <span class="followcomponent pull-right">
             <app-follow #followButton [theme]="theme"></app-follow>
         </span>
