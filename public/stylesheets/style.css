@@ -375,3 +375,7 @@ Remove if a better way is found to achieve this.*/
 .global-font {
   font-family: 'Droid Serif';
 }
+
+.gloabl-color-green {
+  color: #27ae60;
+}
