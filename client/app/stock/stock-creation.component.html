@@ -15,6 +15,15 @@
         </div>
         <div class="form-group row">
             <div class="col-xs-2">
+                <strong> Company description </strong>
+            </div>
+            <div class="col-xs-10">
+                <input type="text" id="companyDescription" class="form-control input-list no-border-radius" [(ngModel)]="currentlyAddedStock.businessDescription"
+                    name="companyDescription" #name="ngModel" placeholder="description" />
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="col-xs-2">
                 <strong> URL company website  </strong>
             </div>
             <div class="col-xs-10">

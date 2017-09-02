@@ -26,6 +26,7 @@ export function create(req, res, next){
             website: req.body.website.toLowerCase(),
             addedBy: res.locals.user,
             investableInstrument: req.body.investableInstrument,
+            businessDescription: req.body.businessDescription
         });
     
         repo.save(stock)
