@@ -6,23 +6,7 @@ import {Location} from '@angular/common';
 @Component({
         selector: 'app-delete-theme',
         providers: [ThemeService],
-        templateUrl: 'delete-theme.component.html',
-        styles: [`
-        .Follow-this-theme {
-                width: 128px;
-                height: 36px;
-                font-family: DroidSans;
-                font-size: 16px;
-                line-height: 2.25;
-                text-align: center;
-                color: #2980b9;
-        }
-        .Follow-button {
-                width: 230px;
-                height: 50px;
-                border: solid 1px #2980b9;
-        }
-  `]
+        templateUrl: 'delete-theme.component.html'
 })
 
 export class DeleteThemeComponent implements OnInit {
