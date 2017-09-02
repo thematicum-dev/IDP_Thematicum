@@ -8,7 +8,13 @@ import { UserProfileService } from '../services/user-profile.service';
     providers: [UserProfileService],
     styles: [`
         .nobullet {
-        list-style-type: none;
+            list-style-type: none;
+        }
+        .themename {
+            line-height: 50px;
+        }
+        .theme-row-margin{
+            margin-bottom: 1px;
         }
     `]
 })
