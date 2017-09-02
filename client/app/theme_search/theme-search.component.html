@@ -1,91 +1,98 @@
-<div class="col-xs-12">
- <div class="Theme-Explorer">Theme Explorer</div>
-</div>
-<div>   
-    <br/>
-    <form (ngSubmit)="onSubmit(form)" #form="ngForm">
-        <div class="form-group row">
-            <div class="col-xs-12 text-center">
-                <button (click)="changeActiveSearchType(1)" [class.btn-primary]="activeSearchType==1" [class.btn-secondary]="activeSearchType!=1" type="button" class="btn no-margin no-border-radius">search themes</button>
-                <button (click)="changeActiveSearchType(2)" [class.btn-primary]="activeSearchType==2" [class.btn-secondary]="activeSearchType!=2" type="button" class="btn btn-secondary no-margin no-border-radius">search stocks</button>
+<div>
+    <div class="row global-back-button">
+            <span (click)="backButton()"> < Home </span>
+            <hr/>
+    </div>
+    <div class="row">
+        <div class="global-heading">Theme Explorer</div>
+    </div>
+    <div>
+        <form (ngSubmit)="onSubmit(form)" #form="ngForm">
+            <div class="form-group row">
+                <div class="col-xs-12 text-center">
+                    <button (click)="changeActiveSearchType(1)" [class.btn-primary]="activeSearchType==1" [class.btn-secondary]="activeSearchType!=1"
+                        type="button" class="btn no-margin no-border-radius">search themes</button>
+                    <button (click)="changeActiveSearchType(2)" [class.btn-primary]="activeSearchType==2" [class.btn-secondary]="activeSearchType!=2"
+                        type="button" class="btn btn-secondary no-margin no-border-radius">search stocks</button>
+                </div>
             </div>
-        </div>
-        <div class="form-group row" [hidden]="activeSearchType!=1">
-            <div class="col-xs-12">
-                <input type="text" id="searchTerm" class="form-control input-list no-border-radius" [(ngModel)]="searchTerm" name="searchTerm" #name="ngModel" placeholder="search for themes"/>
-                <i class="glyphicon glyphicon-search form-control-feedback search-icon"></i>
+            <div class="form-group row" [hidden]="activeSearchType!=1">
+                <div class="col-xs-12">
+                    <input type="text" id="searchTerm" class="form-control input-list no-border-radius" [(ngModel)]="searchTerm" name="searchTerm"
+                        #name="ngModel" placeholder="search for themes" />
+                    <i class="glyphicon glyphicon-search form-control-feedback search-icon"></i>
+                </div>
             </div>
-        </div>
-        <div class="form-group row" [hidden]="activeSearchType!=2">
-            <div class="col-xs-12">
-                <app-autocomplete-stock-search (stock)="searchTermStock($event)"> </app-autocomplete-stock-search>
-                 <i class="glyphicon glyphicon-search form-control-feedback search-icon"></i>
+            <div class="form-group row" [hidden]="activeSearchType!=2">
+                <div class="col-xs-12">
+                    <app-autocomplete-stock-search (stock)="searchTermStock($event)"> </app-autocomplete-stock-search>
+                    <i class="glyphicon glyphicon-search form-control-feedback search-icon"></i>
+                </div>
+                <div class="col-xs-12 global-paragraph-text" *ngIf="selectedStock!==undefined">
+                    <br />
+                    <strong>Business Description: </strong>{{selectedStock.businessDescription}}
+                </div>
             </div>
-            <div class="col-xs-12 Theme-Explorer-Text" *ngIf="selectedStock!==undefined">
-                <br />
-                <strong>Business Description: </strong>{{selectedStock.businessDescription}}
-            </div>
-        </div>
-        <div class="col-xs-12"> <br/> </div>
-        <div class="form-group row">
-            <span class="col-xs-3">
+            <div class="col-xs-12"> <br/> </div>
+            <div class="form-group row">
+                <span class="col-xs-3">
                 <ss-multiselect-dropdown name="categories" [options]="categoryOptions" [texts]="categoryTextOptions" [settings]="noSearchDropdownSettings" [(ngModel)]="categoryOptionsModel"></ss-multiselect-dropdown>
             </span>
-            <span class="col-xs-3">
+                <span class="col-xs-3">
                 <ss-multiselect-dropdown name="timeHorizon" [options]="timeHorizonOptions" [texts]="timeHorizonTextOptions" [settings]="noSearchDropdownSettings" [(ngModel)]="timeHorizonOptionsModel"></ss-multiselect-dropdown>
             </span>
-            <span class="col-xs-3">
+                <span class="col-xs-3">
                 <ss-multiselect-dropdown name="maturity" [options]="maturityOptions" [texts]="maturityTextOptions" [settings]="noSearchDropdownSettings" [(ngModel)]="maturityOptionsModel"></ss-multiselect-dropdown>
             </span>
-            <span class="col-xs-3">
+                <span class="col-xs-3">
                 <ss-multiselect-dropdown  name="tags" [options]="tagOptions" [texts]="tagTextOptions" [settings]="searchDropdownSettings" [(ngModel)]="tagOptionsModel"></ss-multiselect-dropdown>
             </span>
-        </div>
-        <div class="col-xs-12"> <br/> </div>
-        <div class="form-group row">
-            <div class="text-center">
-                <button [disabled]="activeSearchType==2 && searchTerm.length == 0" class="btn btn-md btn-primary no-border-radius " type="submit">{{searchTerm.length == 0 ? "search" : "search "}}</button>
-                <a routerLinkActive="active" class="btn btn-md btn-primary no-border-radius " [routerLink]="['/theme/create']">add theme</a>
             </div>
-        </div>
+            <div class="col-xs-12"> <br/> </div>
+            <div class="form-group row">
+                <div class="text-center">
+                    <button [disabled]="activeSearchType==2 && searchTerm.length == 0" class="btn btn-md btn-primary no-border-radius " type="submit">{{searchTerm.length == 0 ? "search" : "search "}}</button>
+                    <a routerLinkActive="active" class="btn btn-md btn-primary no-border-radius " [routerLink]="['/theme/create']">add theme</a>
+                </div>
+            </div>
 
-    </form>
-    <app-error></app-error>
+        </form>
+        <app-error></app-error>
 
-</div>
+    </div>
 
-<div class="col-xs-12"> <br/> </div>
-<div class="col-xs-12">
-    <div class="alert alert-info text-center" role="alert" *ngIf="form.submitted && themes.length == 0">No relevant themes found</div>
+    <div class="col-xs-12"> <br/> </div>
+    <div class="col-xs-12">
+        <div class="alert alert-info text-center" role="alert" *ngIf="form.submitted && themes.length == 0">No relevant themes found</div>
 
-    <div class="list-group" *ngIf="themes.length>0">
-        <hr/>
-        <a class="list-group-item list-group-item-action borderless" *ngFor="let theme of themes" (click)="goToThemeDetails(theme._id)">
-            <div class="Theme-Explorer-Heading">
-                {{theme.name}} &nbsp;     
-                <span class="badge badge-theme" *ngFor="let timeHorizon of theme.timeHorizon; let currentIndex = index">
+        <div class="list-group" *ngIf="themes.length>0">
+            <hr/>
+            <a class="list-group-item list-group-item-action borderless" *ngFor="let theme of themes" (click)="goToThemeDetails(theme._id)">
+                <div class="global-paragraph-heading">
+                    {{theme.name}} &nbsp;
+                    <span class="badge badge-theme" *ngFor="let timeHorizon of theme.timeHorizon; let currentIndex = index">
                     {{timeHorizonValues[theme.timeHorizon[currentIndex]].description}}
-                </span>
-                |
-                <span class="badge badge-theme" *ngFor="let maturity of theme.maturity; let currentIndex = index">
+                </span> |
+                    <span class="badge badge-theme" *ngFor="let maturity of theme.maturity; let currentIndex = index">
                     {{maturityValues[theme.maturity[currentIndex]].description}}
-                </span>   
-                |             
-                 <span class="badge badge-theme" *ngFor="let category of theme.categories; let currentIndex = index">
+                </span> |
+                    <span class="badge badge-theme" *ngFor="let category of theme.categories; let currentIndex = index">
                     {{categoryValues[theme.categories[currentIndex]].description}}
                 </span>
-            </div> 
-            <div class="Theme-Explorer-Text">{{theme.description}}</div>
-            <p class="Theme-Explorer-Tags" *ngIf="theme.tags">
-                {{stringAsDate(theme.createdAt) | date:'mediumDate'}}
-            </p>            
-            <hr/>
-        </a>
+                </div>
+                <div class="global-paragraph-text">{{theme.description}}</div>
+                <p class="global-paragraph-author global-color-grey" *ngIf="theme.tags">
+                    {{stringAsDate(theme.createdAt) | date:'mediumDate'}}
+                </p>
+                <hr/>
+            </a>
+        </div>
     </div>
-</div>
-<br/><br/>
+    <br/><br/>
 
 
-<div class="col-xs-12" style="text-align: center;">
-    <app-pagination #searchPagePagination [totalResults]="searchResultsCount" [initialPage]="initialPage" (navigate)="navigatePage($event)"> </app-pagination>
+    <div class="col-xs-12" style="text-align: center;">
+        <app-pagination #searchPagePagination [totalResults]="searchResultsCount" [initialPage]="initialPage" (navigate)="navigatePage($event)">
+        </app-pagination>
+    </div>
 </div>
