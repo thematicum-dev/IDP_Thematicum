@@ -383,3 +383,19 @@ Remove if a better way is found to achieve this.*/
 .global-color-blue {
   color: #2980b9;
 }
+
+.global-background-light-grey{
+  background-color: rgba(220, 220, 220, 0.36);
+}
+
+.global-background-bar-outer{
+  padding-top: 4%;
+  padding-bottom: 4%;
+  margin-left: -100%;
+  margin-right: -100%;
+}
+
+.global-background-bar-inner{
+  margin-left: 33.33%;
+  margin-right: 33.33%;
+}

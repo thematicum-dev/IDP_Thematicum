@@ -74,17 +74,22 @@
 </div>
 
 <div *ngIf="showAddOtherStocksButton">
-    <form #stockForm="ngForm" (ngSubmit)="createStockCompositionAndAllocation(themeStockAllocation.selectedItems)">
-        <app-autocomplete-stock-allocation [preFilterStockIds]="allocatedStockIds" #themeStockAllocation></app-autocomplete-stock-allocation>
+    <div class="global-background-bar-outer global-background-light-grey">
+        <div class="global-background-bar-inner">
+            <form #stockForm="ngForm" (ngSubmit)="createStockCompositionAndAllocation(themeStockAllocation.selectedItems)">
+                <app-autocomplete-stock-allocation [preFilterStockIds]="allocatedStockIds" #themeStockAllocation></app-autocomplete-stock-allocation>
 
-        <div class="text-right">
-            <button class="btn btn-default no-border-radius" type="button" (click)="toggleShowAddOtherStocksButton()">Cancel</button>
-            <button class="btn btn-primary no-border-radius" type="submit"
-                    formnovalidate
-                    [disabled]="!stockForm.form.valid || !themeStockAllocation.selectedItems || themeStockAllocation.selectedItems.length == 0">Save</button>
+                <div class="text-right">
+                    <button class="btn btn-default no-border-radius" type="button" (click)="toggleShowAddOtherStocksButton()">Cancel</button>
+                    <button class="btn btn-primary no-border-radius" type="submit"
+                            formnovalidate
+                            [disabled]="!stockForm.form.valid || !themeStockAllocation.selectedItems || themeStockAllocation.selectedItems.length == 0">Save</button>
+                </div>
+            </form>
         </div>
-    </form>
+    </div>
 </div>
+
 
 <!-- Delete user theme input modal -->
 <app-modal #modal>
