@@ -14,13 +14,13 @@ import { FollowService } from '../services/follow.service';
                 line-height: 2.25;
                 text-align: center;
         }
-        .unfollow-button {
+        .follow-button {
                 width: 230px;
                 height: 50px;
                 border: solid 1px #2980b9;                
                 color: #2980b9;
         }
-        .follow-button {
+        .unfollow-button {
                 width: 230px;
                 height: 50px;
                 border: solid 1px #ffffff;     
