@@ -9,17 +9,20 @@
     <div>
         <form (ngSubmit)="onSubmit(form)" #form="ngForm">
             <div class="form-group row">
-                <div class="col-xs-12 text-center">
+                <div class="col-xs-offset-4 col-xs-2">
                     <button (click)="changeActiveSearchType(1)" [class.btn-primary]="activeSearchType==1" [class.btn-secondary]="activeSearchType!=1"
-                        type="button" class="btn no-margin no-border-radius">search themes</button>
+                    type="button" class="btn btn-block no-margin no-border-radius">by keyword</button>
+                </div>
+                <div class="col-xs-2">
                     <button (click)="changeActiveSearchType(2)" [class.btn-primary]="activeSearchType==2" [class.btn-secondary]="activeSearchType!=2"
-                        type="button" class="btn btn-secondary no-margin no-border-radius">search stocks</button>
+                    type="button" class="btn btn-block btn-secondary no-margin no-border-radius">by stock</button>
                 </div>
             </div>
+            <div class="col-xs-12"> <br/> </div>
             <div class="form-group row" [hidden]="activeSearchType!=1">
                 <div class="col-xs-12">
                     <input type="text" id="searchTerm" class="form-control input-list no-border-radius" [(ngModel)]="searchTerm" name="searchTerm"
-                        #name="ngModel" placeholder="search for themes" />
+                        #name="ngModel" placeholder="search for themes by keyword" />
                     <i class="glyphicon glyphicon-search form-control-feedback search-icon"></i>
                 </div>
             </div>
@@ -50,9 +53,11 @@
             </div>
             <div class="col-xs-12"> <br/> </div>
             <div class="form-group row">
-                <div class="text-center">
-                    <button [disabled]="activeSearchType==2 && searchTerm.length == 0" class="btn btn-md btn-primary no-border-radius " type="submit">{{searchTerm.length == 0 ? "search" : "search "}}</button>
-                    <a routerLinkActive="active" class="btn btn-md btn-primary no-border-radius " [routerLink]="['/theme/create']">add theme</a>
+                <div class="col-xs-offset-4 col-xs-2">
+                    <button [disabled]="activeSearchType==2 && searchTerm.length == 0" class="btn btn-block btn-md btn-primary no-border-radius " type="submit">{{searchTerm.length == 0 ? "search" : "search "}}</button>
+                </div>
+                <div class="col-xs-2">
+                    <a routerLinkActive="active" class="btn btn-block btn-md btn-primary no-border-radius " [routerLink]="['/theme/create']">add theme</a>
                 </div>
             </div>
 
