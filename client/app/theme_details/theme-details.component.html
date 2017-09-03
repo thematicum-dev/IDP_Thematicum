@@ -1,6 +1,9 @@
 <div *ngIf="theme">
     <div class="row global-back-button">
-        <span (click)="backButton()"> < Themes </span>
+            <span routerLinkActive="active" [routerLink]="['/home']"> Home </span>
+            <!-- backButton() makes sure the previous search results and page number are still available -->
+            <span (click)="backButton()"> > Theme Explorer </span>
+            <span routerLinkActive="inactive"> > {{theme.name}} </span>
         <hr/>
     </div>
     <div class="row">

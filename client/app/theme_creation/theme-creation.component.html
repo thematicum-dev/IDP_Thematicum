@@ -1,11 +1,12 @@
 <div>
 
     <div class="row global-back-button">
-            <span (click)="backButton()"> < Theme Explorer </span>
-            <hr/>
+            <span routerLinkActive="active" [routerLink]="['/home']"> Home </span>
+            <span routerLinkActive="active" [routerLink]="['/search']"> > Theme Explorer </span>
+            <span routerLinkActive="inactive"> > Create New Theme </span>
     </div>
     <div class="row text-center">
-        <div class="global-heading">Create new theme</div>
+        <div class="global-heading">Create New Theme</div>
     </div>
     <br/>
 

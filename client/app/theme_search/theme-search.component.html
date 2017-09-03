@@ -1,6 +1,7 @@
 <div>
     <div class="row global-back-button">
-            <span (click)="backButton()"> < Home </span>
+            <span routerLinkActive="active" [routerLink]="['/home']"> Home </span>
+            <span routerLinkActive="inactive"> > Theme Explorer </span>
             <hr/>
     </div>
     <div class="row">
