@@ -1,28 +1,38 @@
 import {Component, OnInit, Input, SimpleChanges} from '@angular/core';
-import { StockFieldsComponent } from './stock-field.component';
 import {StockService} from "../services/stock.service";
 import {NgForm} from "@angular/forms";
 import {ThemeService} from "../services/theme.service";
 import {StockModel} from "../models/stockModel";
+import {stockInvestableValues_IM, searchDisabled_IM, stockInvestableOptions_IM} from "../models/IMultiSelectSettings";
+import {IMultiSelectOption, IMultiSelectTexts, IMultiSelectSettings} from 'angular-2-dropdown-multiselect';
 
 @Component({
     selector: 'app-stock-update',
     templateUrl: 'stock-field.component.html',
 })
-export class StockUpdateComponent extends StockFieldsComponent implements OnInit{
+export class StockUpdateComponent implements OnInit{
          
     isUpdate: boolean = true;
+    currentStock: StockModel;
+    stockInvestableTextOptions = stockInvestableOptions_IM;
+    stockInvestableOptions: IMultiSelectOption[] = stockInvestableValues_IM;
+    noSearchDropdownSettings: IMultiSelectSettings = searchDisabled_IM;
+    formCancelled: boolean = false;
+    companyAddedSuccessfully: boolean = false;
 
     @Input('stock')
     stock: StockModel;
 
+    constructor(private stockService: StockService) {}
+
     ngOnInit(): void { 
-        super.ngOnInit();
+        this.currentStock = new StockModel(
+            "", "", "", "", "","","","",[]
+        );
     }
 
     onSubmit(form: NgForm) {
-        console.log("Update");
-        //this.getStockService().createStock(this.currentStock).subscribe(this.handleResults, this.handleError);
+        this.stockService.updateStock(this.currentStock).subscribe(this.handleResults, this.handleError);
     }
 
     ngOnChanges(changes: SimpleChanges) {
@@ -42,6 +52,14 @@ export class StockUpdateComponent extends StockFieldsComponent implements OnInit
             }
             
         return true;
+    }
+
+    handleResults = (data: StockModel) => {
+        console.log(data);
+    }
+
+    handleError = (error: any) => {
+        console.log('Error: ' + error);
     }
 
     isDefined(variable: any){

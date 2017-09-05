@@ -34,3 +34,18 @@ export function create(req, res, next){
             .catch(err => next(err)); 
     });    
 }
+
+export function update(req,res, next){
+    const stock = new Stock({
+        _id: req.body._id,
+        companyName: req.body.name.toUpperCase(),
+        country: req.body.country.toUpperCase(),
+        website: req.body.website.toLowerCase(),
+        addedBy: res.locals.user,
+        investableInstrument: req.body.investableInstrument,
+        businessDescription: req.body.businessDescription
+    });
+    repo.update(Stock, {"_id": stock._id}, stock)
+        .then(()=> res.status(201).json(new AppResponse("Stock Updated", stock)))
+        .catch(err=>next(err));
+}

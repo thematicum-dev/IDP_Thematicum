@@ -16,7 +16,6 @@ router.route('/themes/:themeId')
 //Example with all limits: localhost:3000/api/admin/newsfeed/byAdminUser/taimoor.alam3%40gmail.com?from=0&to=10&fromTime=1438172716783&toTime=1501330870910
 //Example with only limits: localhost:3000/api/admin/newsfeed/byAdminUser/taimoor.alam3%40gmail.com?from=0&to=10
 //Example without any limits: localhost:3000/api/admin/newsfeed/byAdminUser/taimoor.alam3%40gmail.com
-
 router.route('/newsfeed/byAdminUser/:userEmail')
     .get(activityController.getActivityByAdminBetweenTimeAndLimits);
 

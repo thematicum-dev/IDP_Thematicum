@@ -21,6 +21,14 @@ export class StockService implements StockServiceInterface{
             .map((response: Response) => response.json().obj)
             .catch(this.handleError);
     }
+
+    updateStock(stock: StockModel) {
+        const body = JSON.stringify(stock);
+        let apiPath = this.baseAPI + 'stocks/';
+        return this.http.put(apiPath, body, { headers: this.headers })
+            .map((response: Response) => response.json().obj)
+            .catch(this.handleError);
+    }
     
     handleError = (error: Response) => {
         this.errorService.handleError(error);

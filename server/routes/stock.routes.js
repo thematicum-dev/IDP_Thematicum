@@ -8,6 +8,7 @@ router.use('/', authUtilities.authenticationMiddleware);
 
 router.route('/')
     .get(stocksController.list)
-    .post(stocksController.create);
+    .post(stocksController.create)
+    .put(stocksController.update);
 
 export default router;
