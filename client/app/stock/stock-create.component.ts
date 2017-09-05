@@ -42,8 +42,7 @@ export class StockCreateComponent implements OnInit{
             this.isDefined(this.currentStock.country) && 
             this.isDefined(this.currentStock.investableInstrument)) {
                 return false;
-            }
-            
+            }            
         return true;
     }
 

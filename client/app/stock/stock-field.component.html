@@ -1,5 +1,6 @@
 <h5 *ngIf="!formCancelled && isCreate"> Sorry, we do not have this company in our database yet. Help us and add it.</h5>
 <h5 *ngIf="companyAddedSuccessfully" class="gloabl-color-green">Company {{currentStock.name}} added successfully.</h5>
+<h5 *ngIf="companyUpdatedSuccessfully" class="gloabl-color-green">Company {{currentStock.name}} updated successfully.</h5>
 
 <div *ngIf="!formCancelled">
     <br/>
@@ -18,7 +19,7 @@
                 <strong> Company name </strong>
             </div>
             <div class="col-xs-10">
-                <input type="text" id="companyName" class="form-control input-list no-border-radius" [(ngModel)]="currentStock.name"
+                <input [disabled]="isUpdate" type="text" id="companyName" class="form-control input-list no-border-radius" [(ngModel)]="currentStock.name"
                     name="companyName" #name="ngModel" placeholder="name" />
             </div>
         </div>

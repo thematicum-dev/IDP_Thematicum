@@ -18,7 +18,7 @@ export class StockUpdateComponent implements OnInit{
     stockInvestableOptions: IMultiSelectOption[] = stockInvestableValues_IM;
     noSearchDropdownSettings: IMultiSelectSettings = searchDisabled_IM;
     formCancelled: boolean = false;
-    companyAddedSuccessfully: boolean = false;
+    companyUpdatedSuccessfully: boolean = false;
 
     @Input('stock')
     stock: StockModel;
@@ -39,6 +39,7 @@ export class StockUpdateComponent implements OnInit{
         if (changes.stock && !changes.stock.firstChange) {
             this.currentStock = this.stock;
         }
+        this.companyUpdatedSuccessfully = false;
     }
 
     isFormIncomplete(){
@@ -49,13 +50,13 @@ export class StockUpdateComponent implements OnInit{
             this.isDefined(this.currentStock.country) && 
             this.isDefined(this.currentStock.investableInstrument)) {
                 return false;
-            }
-            
+            }            
         return true;
     }
 
     handleResults = (data: StockModel) => {
         console.log(data);
+        this.companyUpdatedSuccessfully = true;
     }
 
     handleError = (error: any) => {
