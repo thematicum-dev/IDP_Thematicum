@@ -4,6 +4,15 @@
 <div *ngIf="!formCancelled">
     <br/>
     <form (ngSubmit)="onSubmit(form)" #form="ngForm">
+        <div *ngIf="isUpdate" class="form-group row">
+            <div class="col-xs-2">
+                <strong> id </strong>
+            </div>
+            <div class="col-xs-10">
+                <input [disabled]="true" type="text" id="companyId" class="form-control input-list no-border-radius" [(ngModel)]="currentlyAddedStock._id"
+                    name="companyId" #name="ngModel" placeholder="id" />
+            </div>
+        </div>
         <div class="form-group row">
             <div class="col-xs-2">
                 <strong> Company name </strong>
@@ -53,7 +62,7 @@
         <div class="form-group row">
             <div class="text-right">
                 <button [disabled]="false" class="btn btn-md btn-default no-border-radius" type="submit" (click)="cancelForm()">Cancel</button>
-                <button [disabled]="isFormIncomplete()" class="btn btn-md btn-primary no-border-radius" type="submit">Save</button>
+                <button [disabled]="isFormIncomplete()" class="btn btn-md btn-primary no-border-radius" type="submit">{{stockCommand}}</button>
             </div>
         </div>
     </form>

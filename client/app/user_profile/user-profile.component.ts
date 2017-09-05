@@ -126,7 +126,6 @@ export class UserProfileComponent implements OnInit{
   defaultFromDateString: string;
   defaultToDateString: string;
 
-
   ngOnInit(): void{
 
     //initializing the date of the admin 'date to' string
@@ -140,10 +139,6 @@ export class UserProfileComponent implements OnInit{
       this.username = this.authService.getLoggedInUser();
       this.email = this.authService.getLoggedInUserEmail();
       this.datejoined = new Date(this.authService.getLoggedInUserDateJoined()).toLocaleDateString();
-
-      // this.getUserFeed();
-
-      // this.getOverAllFeed();
 
       if (this.isUserAdmin){
         //this.getAdminFeedWithoutLimits();

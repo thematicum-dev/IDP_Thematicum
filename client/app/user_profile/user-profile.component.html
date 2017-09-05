@@ -7,6 +7,7 @@
             <li><a href="#myvotes" data-toggle="tab">My votes </a></li>
             <li><a href="#profile" data-toggle="tab">My account info</a></li>
             <li *ngIf="isUserAdmin"><a href="#myadminfeed" data-toggle="tab">Admin Data</a></li>
+            <li *ngIf="isUserAdmin"><a href="#stocksManager" data-toggle="tab">Stocks Manager</a></li>
         </ul>
     </div>
 
@@ -49,6 +50,11 @@
                         <input type="button" (click)="getAdminFeedWithDates()" value="Go"/>
                     </form></div>
                 <p id="paratocopy">{{newsFeedByAdminString}}</p>                
+            </div>
+            <div class="tab-pane" id="stocksManager">
+                <h2>Stocks Manager</h2>
+                <br>
+                <!-- <app-user-my-votes> </app-user-my-votes>                 -->
             </div>
         </div>
     </div>

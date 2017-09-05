@@ -9,10 +9,10 @@ import {StockService} from "../services/stock.service";
 import {ThemeService} from "../services/theme.service";
 
 @Component({
-    selector: 'app-stock-create',
-    templateUrl: 'stock-creation.component.html',
+    selector: 'app-stock-field',
+    templateUrl: 'stock-field.component.html',
 })
-export class StockCreationComponent implements OnInit{
+export class StockFieldsComponent implements OnInit{
     
     currentlyAddedStock: StockModel;
     stockInvestableTextOptions = stockInvestableOptions_IM;
@@ -20,6 +20,7 @@ export class StockCreationComponent implements OnInit{
     noSearchDropdownSettings: IMultiSelectSettings = searchDisabled_IM;
     formCancelled: boolean = false;
     companyAddedSuccessfully: boolean = false;
+    public stockCommand = "";
 
     @Output() stockCreated: EventEmitter<StockModel> = new EventEmitter<StockModel>();
 
@@ -33,7 +34,7 @@ export class StockCreationComponent implements OnInit{
     }
 
     onSubmit(form: NgForm) {
-        this.stockService.createStock(this.currentlyAddedStock).subscribe(this.handleResults, this.handleError);
+        //this.stockService.createStock(this.currentlyAddedStock).subscribe(this.handleResults, this.handleError);
     }
 
     handleResults = (data: StockModel) => {
@@ -54,5 +55,9 @@ export class StockCreationComponent implements OnInit{
         if(this.currentlyAddedStock.name.length == 0 || this.currentlyAddedStock.website.length == 0 || this.currentlyAddedStock.country.length == 0 || this.currentlyAddedStock.investableInstrument.length == 0)
             return true;
         return false;
+    }
+
+    getStockService(){
+        return this.stockService;
     }
 }

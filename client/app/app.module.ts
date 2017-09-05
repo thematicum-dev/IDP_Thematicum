@@ -15,7 +15,9 @@ import { ThemeSearchComponent } from "./theme_search/theme-search.component";
 import { ErrorComponent } from "./error_handling/error.component";
 import { AutoCompleteComponent } from "./autocomplete/autocomplete.component";
 import { ThemeCreationComponent } from "./theme_creation/theme-creation.component";
-import { StockCreationComponent } from "./stock/stock-creation.component";
+import { StockFieldsComponent } from "./stock/stock-field.component";
+import { StockCreateComponent } from "./stock/stock-create.component";
+import { StockUpdateComponent } from "./stock/stock-update.component";
 import { ThemeDetailsComponent } from "./theme_details/theme-details.component";
 import { ErrorService } from "./error_handling/error.service";
 import { ThemeService } from "./services/theme.service";
@@ -59,7 +61,8 @@ import { UserNewsFeed } from "./user_profile/user-newsfeed.component";
         AutoCompleteTagsComponent,
         AutoCompleteStockAllocationComponent,
         AutoCompleteStockSearchComponent,
-        StockCreationComponent,
+        StockFieldsComponent,
+        StockCreateComponent,
         ModalComponent,
         PaginationComponent,
         FollowComponent,
