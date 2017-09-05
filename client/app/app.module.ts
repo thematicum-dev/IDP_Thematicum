@@ -39,6 +39,7 @@ import { FeedComponent } from "./user_profile/feed.component";
 import { ThemesFollowedComponent } from "./user_profile/themes-followed.component";
 import { UserMyVotes } from "./user_profile/user-my-votes.component";
 import { UserNewsFeed } from "./user_profile/user-newsfeed.component";
+import { AdminStocksManager } from "./admin/admin-stocks-manager.component";
 
 @NgModule({
     declarations: [
@@ -63,6 +64,7 @@ import { UserNewsFeed } from "./user_profile/user-newsfeed.component";
         AutoCompleteStockSearchComponent,
         StockFieldsComponent,
         StockCreateComponent,
+        StockUpdateComponent,
         ModalComponent,
         PaginationComponent,
         FollowComponent,
@@ -70,7 +72,8 @@ import { UserNewsFeed } from "./user_profile/user-newsfeed.component";
         FeedComponent,
         ThemesFollowedComponent,
         UserMyVotes,
-        UserNewsFeed
+        UserNewsFeed,
+        AdminStocksManager
     ],
     imports: [BrowserModule, routing, FormsModule, ReactiveFormsModule, HttpModule, MultiselectDropdownModule],
     providers: [AuthService, ErrorService, ThemeService, StockService, AuthGuard],

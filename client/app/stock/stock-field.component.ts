@@ -14,27 +14,26 @@ import {ThemeService} from "../services/theme.service";
 })
 export class StockFieldsComponent implements OnInit{
     
-    currentlyAddedStock: StockModel;
+    currentStock: StockModel;
     stockInvestableTextOptions = stockInvestableOptions_IM;
     stockInvestableOptions: IMultiSelectOption[] = stockInvestableValues_IM;
     noSearchDropdownSettings: IMultiSelectSettings = searchDisabled_IM;
     formCancelled: boolean = false;
     companyAddedSuccessfully: boolean = false;
-    public stockCommand = "";
 
     @Output() stockCreated: EventEmitter<StockModel> = new EventEmitter<StockModel>();
 
     constructor(private stockService: StockService, private themeService: ThemeService) {}
 
     ngOnInit(): void { 
-        this.currentlyAddedStock = new StockModel(
+        this.currentStock = new StockModel(
             "", "", "", "", "","","","",[]
         );
         this.companyAddedSuccessfully = false;
     }
 
     onSubmit(form: NgForm) {
-        //this.stockService.createStock(this.currentlyAddedStock).subscribe(this.handleResults, this.handleError);
+        //this.stockService.createStock(this.currentStock).subscribe(this.handleResults, this.handleError);
     }
 
     handleResults = (data: StockModel) => {
@@ -52,9 +51,7 @@ export class StockFieldsComponent implements OnInit{
     }
 
     isFormIncomplete(){
-        if(this.currentlyAddedStock.name.length == 0 || this.currentlyAddedStock.website.length == 0 || this.currentlyAddedStock.country.length == 0 || this.currentlyAddedStock.investableInstrument.length == 0)
-            return true;
-        return false;
+  
     }
 
     getStockService(){

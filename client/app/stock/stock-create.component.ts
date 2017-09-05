@@ -10,13 +10,32 @@ import {ThemeService} from "../services/theme.service";
 })
 export class StockCreateComponent extends StockFieldsComponent implements OnInit{
          
+    isCreate: boolean = true;
+    
     ngOnInit(): void { 
         super.ngOnInit();
-        this.stockCommand = "Save";
     }
 
     onSubmit(form: NgForm) {
-        this.getStockService().createStock(this.currentlyAddedStock).subscribe(this.handleResults, this.handleError);
+        this.getStockService().createStock(this.currentStock).subscribe(this.handleResults, this.handleError);
+    }
+
+    isFormIncomplete(){
+        if( this.isDefined(this.currentStock.name) && 
+            this.isDefined(this.currentStock.businessDescription) && 
+            this.isDefined(this.currentStock.website) && 
+            this.isDefined(this.currentStock.country) && 
+            this.isDefined(this.currentStock.investableInstrument)) {
+                return false;
+            }
+            
+        return true;
+    }
+
+    isDefined(variable: any){
+        if(typeof variable === 'undefined' || (typeof variable !== 'undefined' && variable.length == 0))
+            return false;
+        return true;
     }
 
 }

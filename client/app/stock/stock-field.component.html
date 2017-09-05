@@ -1,5 +1,5 @@
-<h5 *ngIf="!formCancelled"> Sorry, we do not have this company in our database yet. Help us and add it.</h5>
-<h5 *ngIf="companyAddedSuccessfully" class="gloabl-color-green">Company {{currentlyAddedStock.name}} added successfully.</h5>
+<h5 *ngIf="!formCancelled && isCreate"> Sorry, we do not have this company in our database yet. Help us and add it.</h5>
+<h5 *ngIf="companyAddedSuccessfully" class="gloabl-color-green">Company {{currentStock.name}} added successfully.</h5>
 
 <div *ngIf="!formCancelled">
     <br/>
@@ -9,7 +9,7 @@
                 <strong> id </strong>
             </div>
             <div class="col-xs-10">
-                <input [disabled]="true" type="text" id="companyId" class="form-control input-list no-border-radius" [(ngModel)]="currentlyAddedStock._id"
+                <input [disabled]="true" type="text" id="companyId" class="form-control input-list no-border-radius" [(ngModel)]="currentStock._id"
                     name="companyId" #name="ngModel" placeholder="id" />
             </div>
         </div>
@@ -18,7 +18,7 @@
                 <strong> Company name </strong>
             </div>
             <div class="col-xs-10">
-                <input type="text" id="companyName" class="form-control input-list no-border-radius" [(ngModel)]="currentlyAddedStock.name"
+                <input type="text" id="companyName" class="form-control input-list no-border-radius" [(ngModel)]="currentStock.name"
                     name="companyName" #name="ngModel" placeholder="name" />
             </div>
         </div>
@@ -27,7 +27,7 @@
                 <strong> Company description </strong>
             </div>
             <div class="col-xs-10">
-                <input type="text" id="companyDescription" class="form-control input-list no-border-radius" [(ngModel)]="currentlyAddedStock.businessDescription"
+                <input type="text" id="companyDescription" class="form-control input-list no-border-radius" [(ngModel)]="currentStock.businessDescription"
                     name="companyDescription" #name="ngModel" placeholder="description" />
             </div>
         </div>
@@ -36,7 +36,7 @@
                 <strong> URL company website  </strong>
             </div>
             <div class="col-xs-10">
-                <input type="text" id="companyWebsite" class="form-control input-list no-border-radius" [(ngModel)]="currentlyAddedStock.website"
+                <input type="text" id="companyWebsite" class="form-control input-list no-border-radius" [(ngModel)]="currentStock.website"
                     name="companyWebsite" #name="ngModel" placeholder="website" />
             </div>
         </div>
@@ -45,7 +45,7 @@
                 <strong> HQ country </strong>
             </div>
             <div class="col-xs-10">
-                <input type="text" id="companyCountry" class="form-control input-list no-border-radius" [(ngModel)]="currentlyAddedStock.country"
+                <input type="text" id="companyCountry" class="form-control input-list no-border-radius" [(ngModel)]="currentStock.country"
                     name="companyCountry" #name="ngModel" placeholder="country" />
             </div>
         </div>
@@ -55,14 +55,15 @@
                 <strong> Investable instruments </strong>
             </div>
             <span class="col-xs-10">
-                <ss-multiselect-dropdown name="categories" [options]="stockInvestableOptions" [texts]="stockInvestableTextOptions" [settings]="noSearchDropdownSettings" [(ngModel)]="currentlyAddedStock.investableInstrument"></ss-multiselect-dropdown>
+                <ss-multiselect-dropdown name="categories" [options]="stockInvestableOptions" [texts]="stockInvestableTextOptions" [settings]="noSearchDropdownSettings" [(ngModel)]="currentStock.investableInstrument"></ss-multiselect-dropdown>
             </span>
         </div>
         <div class="col-xs-12"> <br/> </div>
         <div class="form-group row">
             <div class="text-right">
                 <button [disabled]="false" class="btn btn-md btn-default no-border-radius" type="submit" (click)="cancelForm()">Cancel</button>
-                <button [disabled]="isFormIncomplete()" class="btn btn-md btn-primary no-border-radius" type="submit">{{stockCommand}}</button>
+                <button *ngIf="isCreate" [disabled]="isFormIncomplete()" class="btn btn-md btn-primary no-border-radius" type="submit">Create</button>
+                <button *ngIf="isUpdate" [disabled]="isFormIncomplete()" class="btn btn-md btn-primary no-border-radius" type="submit">Update</button>
             </div>
         </div>
     </form>
