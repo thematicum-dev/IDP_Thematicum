@@ -16,9 +16,6 @@ export class AdminStocksManager implements OnInit {
 
     searchTermStock(stock: StockModel){
         this.selectedStock = stock;
-        console.log("admin stocks manager");
-        console.log(stock);
-        // this.searchTerm = stock._id;
     }
     
 }

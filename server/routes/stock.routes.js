@@ -11,4 +11,7 @@ router.route('/')
     .post(stocksController.create)
     .put(stocksController.update);
 
+router.route('/:stockId')
+    .delete(stocksController.remove);
+
 export default router;

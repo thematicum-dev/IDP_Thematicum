@@ -13,12 +13,15 @@ import {IMultiSelectOption, IMultiSelectTexts, IMultiSelectSettings} from 'angul
 export class StockUpdateComponent implements OnInit{
          
     isUpdate: boolean = true;
+
     currentStock: StockModel;
     stockInvestableTextOptions = stockInvestableOptions_IM;
     stockInvestableOptions: IMultiSelectOption[] = stockInvestableValues_IM;
     noSearchDropdownSettings: IMultiSelectSettings = searchDisabled_IM;
     formCancelled: boolean = false;
     companyUpdatedSuccessfully: boolean = false;
+    companyDeletedSuccessfully: boolean = false;
+    isCompanySelected: boolean = false;
 
     @Input('stock')
     stock: StockModel;
@@ -32,17 +35,19 @@ export class StockUpdateComponent implements OnInit{
     }
 
     onSubmit(form: NgForm) {
-        this.stockService.updateStock(this.currentStock).subscribe(this.handleResults, this.handleError);
+        this.stockService.updateStock(this.currentStock).subscribe(this.handleUpdate, this.handleError);
     }
 
     ngOnChanges(changes: SimpleChanges) {
         if (changes.stock && !changes.stock.firstChange) {
             this.currentStock = this.stock;
+            this.isCompanySelected = true;
         }
         this.companyUpdatedSuccessfully = false;
+        this.companyDeletedSuccessfully = false;
     }
 
-    isFormIncomplete(){
+    isUpdateFormIncomplete(){
         if( this.isDefined(this.currentStock._id) &&
             this.isDefined(this.currentStock.name) && 
             this.isDefined(this.currentStock.businessDescription) && 
@@ -54,9 +59,23 @@ export class StockUpdateComponent implements OnInit{
         return true;
     }
 
-    handleResults = (data: StockModel) => {
-        console.log(data);
+    isDeleteFormIncomplete(){
+        if( this.isDefined(this.currentStock._id) &&
+            this.isDefined(this.currentStock.name)){
+                return false;
+            }
+        return true;
+    }
+
+    handleUpdate = (data: StockModel) => {
         this.companyUpdatedSuccessfully = true;
+    }
+
+    handleDelete = (data: StockModel) => {
+        this.companyDeletedSuccessfully = true;
+        this.currentStock = new StockModel(
+            "", "", "", "", "","","","",[]
+        );
     }
 
     handleError = (error: any) => {
@@ -67,5 +86,9 @@ export class StockUpdateComponent implements OnInit{
         if(typeof variable === 'undefined' || (typeof variable !== 'undefined' && variable.length == 0))
             return false;
         return true;
+    }
+
+    deleteStock(){
+        this.stockService.deleteStock(this.currentStock).subscribe(this.handleDelete, this.handleError);
     }
 }

@@ -1,6 +1,7 @@
 <h5 *ngIf="!formCancelled && isCreate"> Sorry, we do not have this company in our database yet. Help us and add it.</h5>
 <h5 *ngIf="companyAddedSuccessfully" class="gloabl-color-green">Company {{currentStock.name}} added successfully.</h5>
 <h5 *ngIf="companyUpdatedSuccessfully" class="gloabl-color-green">Company {{currentStock.name}} updated successfully.</h5>
+<h5 *ngIf="companyDeletedSuccessfully" class="gloabl-color-green">Company deleted successfully.</h5>
 
 <div *ngIf="!formCancelled">
     <br/>
@@ -62,9 +63,10 @@
         <div class="col-xs-12"> <br/> </div>
         <div class="form-group row">
             <div class="text-right">
-                <button *ngIf="isCreate" [disabled]="false" class="btn btn-md btn-default no-border-radius" type="submit" (click)="cancelForm()">Cancel</button>
+                <button *ngIf="isCreate" [disabled]="false" class="btn btn-md btn-default no-border-radius" type="button" (click)="cancelForm()">Cancel</button>
                 <button *ngIf="isCreate" [disabled]="isFormIncomplete()" class="btn btn-md btn-primary no-border-radius" type="submit">Create</button>
-                <button *ngIf="isUpdate" [disabled]="isFormIncomplete()" class="btn btn-md btn-primary no-border-radius" type="submit">Update</button>
+                <button *ngIf="isUpdate" [disabled]="isDeleteFormIncomplete()" class="btn btn-md btn-primary no-border-radius" type="button" (click)="deleteStock()">Delete</button>
+                <button *ngIf="isUpdate" [disabled]="isUpdateFormIncomplete()" class="btn btn-md btn-primary no-border-radius" type="submit">Update</button>
             </div>
         </div>
     </form>

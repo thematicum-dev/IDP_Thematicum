@@ -49,3 +49,10 @@ export function update(req,res, next){
         .then(()=> res.status(201).json(new AppResponse("Stock Updated", stock)))
         .catch(err=>next(err));
 }
+
+export function remove(req,res, next){
+    let id = (req.params.stockId);
+    repo.removeById(Stock, id)
+        .then(() => res.status(201).json(new AppResponse("Stock Deleted", id)))
+        .catch(err => next(err));
+}

@@ -29,7 +29,16 @@ export class StockService implements StockServiceInterface{
             .map((response: Response) => response.json().obj)
             .catch(this.handleError);
     }
-    
+
+    deleteStock(stock: StockModel) {
+        const body = JSON.stringify(stock);
+        let apiPath = this.baseAPI + 'stocks/' + stock._id;
+        this.http.delete(apiPath)
+        return this.http.delete(apiPath, { headers: this.headers })
+            .map((response: Response) => response.json())
+            .catch(this.handleError);
+    }
+
     handleError = (error: Response) => {
         this.errorService.handleError(error);
         return Observable.throw(error.json());
