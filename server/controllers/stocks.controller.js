@@ -52,7 +52,7 @@ export function update(req,res, next){
 
 export function remove(req,res, next){
     let id = (req.params.stockId);
-    repo.removeById(Stock, id)
+    repo.deleteStockById(id)
         .then(() => res.status(201).json(new AppResponse("Stock Deleted", id)))
         .catch(err => next(err));
 }

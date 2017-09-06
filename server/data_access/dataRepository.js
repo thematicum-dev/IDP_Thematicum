@@ -18,6 +18,8 @@ export default class DataRepository extends BaseRepository {
         super();
     }
 
+    // TODO: Refactor this class into separate classes
+
     getValidAccessCodes() {
         const timeInMillis = new Date().getTime();
         return RegistrationAccessCode.find({validFrom: {'$lte': timeInMillis}, validUntil: {'$gte': timeInMillis}}).exec();
@@ -276,6 +278,15 @@ export default class DataRepository extends BaseRepository {
 
     deleteAllStockCompositionsByThemeId(themeId){
         const deleteStocksPromise = ThemeStockComposition.find({ theme: themeId }).exec()
+            .then(compositions => {
+                compositions.map(composition => {
+                    return Promise.all([this.remove(composition), UserThemeStockAllocation.remove({ themeStockComposition: composition._id }).exec()]);
+                });
+            });
+    }
+
+    deleteAllStockCompositionsByStockId(stockId){
+        const deleteStocksPromise = ThemeStockComposition.find({ stock: stockId }).exec()
             .then(compositions => {
                 compositions.map(composition => {
                     return Promise.all([this.remove(composition), UserThemeStockAllocation.remove({ themeStockComposition: composition._id }).exec()]);
@@ -560,5 +571,11 @@ export default class DataRepository extends BaseRepository {
             })
             .catch(err => reject(err));
         });
+    }
+
+    deleteStockById(stockId){
+        const deleteAllStockCompositionsPromise = this.deleteAllStockCompositionsByStockId(stockId);
+        const deleteStock = this.removeById(Stock,stockId);
+        return Promise.all([deleteAllStockCompositionsPromise, deleteStock]);        
     }
 }
