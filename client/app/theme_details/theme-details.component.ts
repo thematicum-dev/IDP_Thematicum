@@ -75,4 +75,8 @@ export class ThemeDetailsComponent implements OnInit, OnChanges {
     backButton(){
         this.location.back();
     }
+
+    getTags(){
+        return this.theme.tags.join(', ');
+    }
 }

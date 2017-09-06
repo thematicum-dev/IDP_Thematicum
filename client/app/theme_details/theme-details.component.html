@@ -12,7 +12,7 @@
             <p class="global-tags global-color-grey">
                 By {{theme.creator?.name}}, {{theme.createdAt | date:mediumDate}} <br/>
                 <span class="global-tags global-color-blue-2" #themeCharacteristicsNonEditable *ngIf="!isEditMode && theme.tags">
-                    {{theme.tags}}
+                    {{getTags()}}
                 </span>
             </p>
         </div>
