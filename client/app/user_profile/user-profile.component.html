@@ -51,7 +51,7 @@
                     </form></div>
                 <p id="paratocopy">{{newsFeedByAdminString}}</p>                
             </div>
-            <div class="tab-pane" id="stocksManager">
+            <div *ngIf="isUserAdmin" class="tab-pane" id="stocksManager">
                 <h2>Stocks Manager</h2>
                 <br>
                 <app-admin-stocks-manager> </app-admin-stocks-manager> 
