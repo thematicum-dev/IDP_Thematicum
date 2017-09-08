@@ -299,8 +299,24 @@ Remove if a better way is found to achieve this.*/
   color: #898989;
 }
 
+.global-color-sea-green {
+  color: #1abc9c;
+}
+
+.global-color-purple {
+  color: #9b59b6;
+}
+
+.global-color-red {
+  color: #c0392b;
+}
+
+.global-color-white {
+  color: #ffffff;
+}
+
 .global-background-light-grey{
-  background-color: rgba(220, 220, 220, 0.36);
+  background-color: #f3f3f3;
 }
 
 .global-background-bar-outer{
@@ -313,6 +329,10 @@ Remove if a better way is found to achieve this.*/
 .global-background-bar-inner{
   margin-left: 33.33%;
   margin-right: 33.33%;
+}
+
+.global-no-background {
+  background-color: transparent;
 }
 
 .global-heading {

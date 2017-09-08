@@ -81,15 +81,43 @@ export class ThemeStockAllocationComponent implements OnInit {
 
     setExposureBackgroundColor(isAllocationEditable: boolean, exposureIndex: number, percentage: number) {
         if (isAllocationEditable) {
-            return;
+            if(exposureIndex == this.selectedExposure){
+                const backgroundColor = this.exposureBackgroundColors[exposureIndex];
+                return `rgb(${backgroundColor.r}, ${backgroundColor.g}, ${backgroundColor.b})`;
+            }
+            return "transparent";
         }
-
         const backgroundColor = this.exposureBackgroundColors[exposureIndex];
-        return `rgba(${backgroundColor.r}, ${backgroundColor.g}, ${backgroundColor.b}, ${percentage/100})`;
+        return `rgba(${backgroundColor.r}, ${backgroundColor.g}, ${backgroundColor.b}, ${(percentage+5)/100})`;
     }
 
-    setBorder(allocationModel: ThemeStockCompositionAllocationModel, exposureIndex: number) {
-        return allocationModel.userStockAllocation && allocationModel.userStockAllocation.exposure == exposureIndex ? this.BORDER_EXPOSURE : '';
+    setBorderColor(isAllocationEditable: boolean, exposureIndex: number){
+        if(!isAllocationEditable){
+            return;
+        }
+        else{
+            const backgroundColor = this.exposureBackgroundColors[exposureIndex];
+            return `rgb(${backgroundColor.r}, ${backgroundColor.g}, ${backgroundColor.b})`;
+        }
+    }
+
+    setBorder(isAllocationEditable: boolean, exposureIndex: number){
+        if(!isAllocationEditable){
+            return "0 none";
+        }
+        else{
+            return "1px solid";
+        }
+    }
+
+
+    setBottomBorder(allocationModel: ThemeStockCompositionAllocationModel, exposureIndex: number) {
+        return allocationModel.userStockAllocation && allocationModel.userStockAllocation.exposure == exposureIndex ? this.BORDER_EXPOSURE : "0 none";
+    }
+
+    setLabelColor(exposureIndex: number){
+        const backgroundColor = this.exposureBackgroundColors[exposureIndex];
+        return `rgb(${backgroundColor.r}, ${backgroundColor.g}, ${backgroundColor.b})`;
     }
 
     setDataToggleAttribute(isAllocationEditable: boolean) {
