@@ -129,8 +129,8 @@ footer {
 }
 
 .badge-theme {
-background-color: #2980b9;
-margin: 1px;
+  background-color: #2980b9;
+  margin: 1px;
 }
 
 .button-list {
@@ -251,7 +251,6 @@ Remove if a better way is found to achieve this.*/
 
 .landing-banner .banner-font {
     font-size: 54px;
-    color: #2980b9;
 }
 
 .landing-banner .banner-font + .banner-font-detail{
@@ -315,6 +314,10 @@ Remove if a better way is found to achieve this.*/
   color: #ffffff;
 }
 
+.global-color-light-black {
+  color: #34495e;
+}
+
 .global-background-light-grey{
   background-color: #f3f3f3;
 }
@@ -358,9 +361,7 @@ Remove if a better way is found to achieve this.*/
 .global-paragraph-heading{
   width: 100%;
   height: auto;
-  font-family: 'Droid Serif'; 
   font-size: 20px;
-  color: #2980b9;
 }
 
 .global-paragraph-subheading {
@@ -375,16 +376,13 @@ Remove if a better way is found to achieve this.*/
 .global-paragraph-text {
   margin-top: 9px;
   margin-bottom: 11px;
-  font-family: 'Droid Sans';
   font-size: 16px;
   line-height: 1.5;
-  color: #34495e;
 }
 
 .global-paragraph-author  {
   width: 100%;
   margin-bottom: 30px;
   height: 19px;
-  font-family: 'Droid Sans';
-  font-size: 16px;
+  font-size: 14px;
 }
