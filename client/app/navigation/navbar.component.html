@@ -11,22 +11,22 @@
                 <ul class="nav navbar-nav navbar-right">
                     <li>
                         <a [ngClass]="{'thematicum-navbar-nav-text': homePage==false}" [ngClass]="{'thematicum-navbar-nav-text-homepage': homePage==true}"
-                            routerLinkActive="active" [routerLink]="['/signup']" *ngIf="!isLoggedIn()">Sign Up</a>
+                           class="global-font-2" routerLinkActive="active" [routerLink]="['/signup']" *ngIf="!isLoggedIn()">Sign Up</a>
                     </li>
                     <li>
                         <a [ngClass]="{'thematicum-navbar-nav-text': homePage==false}" [ngClass]="{'thematicum-navbar-nav-text-homepage': homePage==true}"
-                            routerLinkActive="active" [routerLink]="['/signin']" *ngIf="!isLoggedIn()">Login</a>
+                            class="global-font-2" routerLinkActive="active" [routerLink]="['/signin']" *ngIf="!isLoggedIn()">Login</a>
                     </li>
 
                     <li class="dropdown" *ngIf="isLoggedIn()">
 
                         <a [ngClass]="{'thematicum-navbar-nav-text': homePage==false}" [ngClass]="{'thematicum-navbar-nav-text-homepage': homePage==true}"
-                            class="dropdown-toggle" data-toggle="dropdown">{{getLoggedInUser()}}<b class="caret"></b></a>
+                            class="dropdown-toggle global-font-2" data-toggle="dropdown">{{getLoggedInUser()}}<b class="caret"></b></a>
 
                         <ul class="dropdown-menu">
-                            <li><a class="thematicum-navbar-nav-text-dropdown" routerLinkActive="active" [routerLink]="['/profile']">Profile</a></li>
+                            <li><a class="thematicum-navbar-nav-text-dropdown global-font-2" routerLinkActive="active" [routerLink]="['/profile']">Profile</a></li>
                             <li role="separator" class="divider"></li>
-                            <li><a class="thematicum-navbar-nav-text-dropdown" (click)="onLogoutClick()">Logout</a></li>
+                            <li><a class="thematicum-navbar-nav-text-dropdown global-font-2" (click)="onLogoutClick()">Logout</a></li>
                         </ul>
                     </li>
                 </ul>
