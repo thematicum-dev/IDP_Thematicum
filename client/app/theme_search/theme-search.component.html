@@ -1,11 +1,11 @@
 <div>
-    <div class="row global-back-button">
-            <span class="global-font-2" routerLinkActive="active" [routerLink]="['/home']"> Home </span>
-            <span class="global-font-2" routerLinkActive="inactive"> > Theme Explorer </span>
+    <div class="row global-back-button global-font-2 global-color-blue-2">
+            <span routerLinkActive="active" [routerLink]="['/home']"> Home </span>
+            <span routerLinkActive="inactive"> > Theme Explorer </span>
             <hr/>
     </div>
     <div class="row">
-        <div class="global-heading">Theme Explorer</div>
+        <div class="global-heading global-font">Theme Explorer</div>
     </div>
     <div>
         <form (ngSubmit)="onSubmit(form)" #form="ngForm">

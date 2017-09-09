@@ -1,25 +1,25 @@
 <div>
 
-    <div class="row global-back-button">
+    <div class="row global-back-button global-font-2 global-color-blue-2">
         <span routerLinkActive="active" [routerLink]="['/home']"> Home </span>
         <span routerLinkActive="active" [routerLink]="['/search']"> > Theme Explorer </span>
         <span routerLinkActive="inactive"> > Create New Theme </span>
         <hr/>
     </div>
     <div class="row text-center">
-        <div class="global-heading">Create New Theme</div>
+        <div class="global-heading global-font global-color-light-black">Create New Theme</div>
     </div>
     <br/>
 
     <form (ngSubmit)="onSubmit(form, themeTags, themeStockAllocation)" #form="ngForm">
         <div class="form-group row">
-            <label class="col-xs-2 col-form-label" for="themeName">Theme name</label>
+            <label class="col-xs-2 col-form-label global-font-2" for="themeName">Theme name</label>
             <div class="col-xs-10">
                 <input
                         type="text"
                         placeholder="Investment theme"
                         id="themeName"
-                        class="form-control"
+                        class="form-control global-font-2"
                         [(ngModel)]="theme.name"
                         name="themeName"
                         #themeName="ngModel"
@@ -27,21 +27,21 @@
                         minlength="4"
                         maxlength="32"
                         >
-                <div *ngIf="themeName.dirty && !themeName.valid" class="data-validation-message">
+                <div *ngIf="themeName.dirty && !themeName.valid" class="data-validation-message global-font-2">
                     Theme name is required and between 4 to 34 characters
                 </div>
             </div>
         </div>
 
-        <app-autocomplete-tags #themeTags></app-autocomplete-tags>
+        <app-autocomplete-tags #themeTags class="global-font-2"></app-autocomplete-tags>
 
         <div class="form-group row">
-            <label class="col-xs-2 col-form-label" for="description">Description</label>
+            <label class="col-xs-2 col-form-label global-font-2" for="description">Description</label>
             <div class="col-xs-10">
                 <textarea
                         id="description"
                         placeholder="Please enter a description (min 4 characters, maximum 500 characters)"
-                        class="form-control"
+                        class="form-control global-font-2"
                         [(ngModel)]="theme.description"
                         name="description"
                         #description="ngModel"
@@ -49,19 +49,19 @@
                         required
                         minlength="4"
                         [maxlength]="maxDescriptionLength"></textarea>
-                <p>{{getDescriptionCharactersRemaining()}}</p>
-                <div *ngIf="description.dirty && !description.valid" class="data-validation-message">
+                <p class="global-font-2">{{getDescriptionCharactersRemaining()}}</p>
+                <div *ngIf="description.dirty && !description.valid" class="data-validation-message global-font-2">
                     Description is required and between 4 to 500 characters
                 </div>
         </div>
         </div>
 
         <div class="form-group row">
-            <label class="col-xs-2 col-form-label">Expected time horizon</label>
+            <label class="col-xs-2 col-form-label global-font-2">Expected time horizon</label>
 
             <div class="col-xs-10">
                 <div class="btn-group btn-group-justified" data-toggle="buttons">
-                    <label class="btn btn-default" *ngFor="let timeHorizon of timeHorizonValues" (click)="themeProperties.setTimeHorizon(timeHorizon.value)">
+                    <label class="btn btn-default global-font-2" *ngFor="let timeHorizon of timeHorizonValues" (click)="themeProperties.setTimeHorizon(timeHorizon.value)">
                         <input type="radio" id="timeHorizon" name="timeHorizon" [value]="timeHorizon.value">{{timeHorizon.description}}
                     </label>
                 </div>
@@ -70,11 +70,11 @@
 
 
         <div class="form-group row">
-            <label class="col-xs-2 col-form-label">Current theme maturity</label>
+            <label class="col-xs-2 col-form-label global-font-2">Current theme maturity</label>
 
             <div class="col-xs-10">
                 <div class="btn-group btn-group-justified" data-toggle="buttons">
-                    <label class="btn btn-default" *ngFor="let maturity of maturityValues" (click)="themeProperties.setMaturity(maturity.value)">
+                    <label class="btn btn-default global-font-2" *ngFor="let maturity of maturityValues" (click)="themeProperties.setMaturity(maturity.value)">
                         <input type="radio" id="maturity" name="maturity" [value]="maturity.value" >{{maturity.description}}
                     </label>
                 </div>
@@ -82,11 +82,11 @@
         </div>
 
         <div class="form-group row">
-            <label class="col-xs-2 col-form-label">Theme category</label>
+            <label class="col-xs-2 col-form-label global-font-2">Theme category</label>
 
             <div class="col-xs-10">
                 <div class="btn-group btn-group-justified" data-toggle="buttons">
-                    <label class="btn btn-default" *ngFor="let category of categoryValues" (click)="themeProperties.toggleCheckedCategory(category.value)">
+                    <label class="btn btn-default global-font-2" *ngFor="let category of categoryValues" (click)="themeProperties.toggleCheckedCategory(category.value)">
                         <input type="checkbox" id="categories" name="categories" [value]="category.value">{{category.description}}
                     </label>
                 </div>
@@ -94,15 +94,16 @@
         </div>
 
         <!-- Stock Allocation -->
-        <fieldset class="form-group">
+        <br />
+        <fieldset class="form-group  global-font">
             <legend>Stock Allocation</legend>
         </fieldset>
 
         <app-autocomplete-stock-allocation #themeStockAllocation></app-autocomplete-stock-allocation>
 
         <div class="text-right">
-            <a routerLinkActive="active" [routerLink]="['/search']" class="btn btn-default no-border-radius" role="button">Cancel</a>
-            <button class="btn btn-primary no-border-radius" type="submit" formnovalidate
+            <a routerLinkActive="active" [routerLink]="['/search']" class="btn btn-default no-border-radius global-font-2" role="button">Cancel</a>
+            <button class="btn btn-primary no-border-radius global-font-2" type="submit" formnovalidate
                     [disabled]="!form.form.valid || themeProperties.hasNoUserInputs()">Save</button>
         </div>
 

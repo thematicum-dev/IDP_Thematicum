@@ -1,5 +1,5 @@
 <div class="form-group row">
-    <label class="col-xs-2 col-form-label">Add Company</label>
+    <label class="col-xs-2 col-form-label global-font-2">Add Company</label>
 
     <app-autocomplete [placeholderTerm]="autocompletePlaceholder"
                       [allowCustomValues]="allowCustomValues"
@@ -16,10 +16,10 @@
 
     <span class="input-group-btn col-xs-2">
         <div class="btn-group">
-            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                Select Exposure<span class="caret"></span>
+            <button type="button" class="btn btn-default dropdown-toggle global-font-2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Select Exposure <span class="caret"></span>
             </button>
-            <ul class="dropdown-menu">
+            <ul class="dropdown-menu global-font-2">
                 <li *ngFor="let exposure of stockExposures; let i = index;" (click)="onSelectExposure(i, stocksAutocomplete)"><a>{{exposure}}</a></li>
             </ul>
         </div>
