@@ -110,7 +110,6 @@ export class ThemeStockAllocationComponent implements OnInit {
         }
     }
 
-
     setBottomBorder(allocationModel: ThemeStockCompositionAllocationModel, exposureIndex: number) {
         return allocationModel.userStockAllocation && allocationModel.userStockAllocation.exposure == exposureIndex ? this.BORDER_EXPOSURE : "0 none";
     }

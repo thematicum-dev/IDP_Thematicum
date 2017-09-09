@@ -38,7 +38,9 @@ export class ThemePropertiesEditModel{
     }
 
     uncheckAllCategories() {
-        this.categoriesValuesChecked.forEach(categoryChecked => categoryChecked = false);
+        this.categoriesValuesChecked.forEach((value, index) => {
+            this.categoriesValuesChecked[index] = false;
+        });
     }
 
     clearProperties() {

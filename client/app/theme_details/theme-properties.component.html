@@ -1,83 +1,108 @@
-<div class="row">
-    <div class="text-center">
-        <h3>Theme properties</h3>
-        <p *ngIf="themePropertiesData">Total votes: {{themePropertiesData.totalCount}}</p>
-    </div>
-    <div class="text-right" *ngIf="!isEditMode">
-        <div class="btn-group">
-            <button type="button" class="btn btn-default dropdown-toggle borderless no-decoration-element"
-                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>
-                Provide your view
-            </button>
-            <ul class="dropdown-menu">
-                <li><a (click)="clearEditing(propertiesContainer)">Edit</a></li>
-                <li *ngIf="themePropertiesData?.userInputs" role="separator" class="divider"></li>
-                <li *ngIf="themePropertiesData?.userInputs"><a type="button" (click)="modal.show()">Delete</a></li>
-            </ul>
-        </div>
-    </div>
-</div>
-
-<div *ngIf="themePropertiesData" #propertiesContainer>
-    <form (ngSubmit)="createOrUpdateThemeProperty(form)" #form="ngForm">
-        <div class="form-group row">
-            <h5>Expected Time Horizon</h5>
-
-            <div class="btn-group btn-group-justified" [attr.data-toggle]="setDataToggleAttribute()">
-                <div class="btn-group" *ngFor="let timeHorizon of themePropertiesData?.properties?.timeHorizon; let i = index">
-                    <label class="btn btn-default"
-                           [style.backgroundColor]="setBackgroundColor(timeHorizon?.percentage)"
-                           [style.borderBottom]="setBorder('timeHorizon', i)"
-                           [class.inactive-element]="!isEditMode"
-                           (click)="themeProperties.setTimeHorizon(i)">
-                        <input type="radio" disabled="disabled" id="timeHorizon" name="timeHorizon" [value]="i">{{timeHorizon?.percentage}}%
-                    </label>
-                    <p class="text-center">{{timeHorizonValues[i].description}}</p>
+<div class="global-background-bar-outer global-background-light-grey">
+    <div class="global-background-bar-inner">
+        <div class="row">
+            <div class="text-center">
+                <h3>Theme properties</h3>
+                <p *ngIf="themePropertiesData">Total votes: {{themePropertiesData.totalCount}}</p>
+            </div>
+            <div class="text-right" *ngIf="!isEditMode">
+                <div class="btn-group">
+                    <button type="button" class="btn btn-default dropdown-toggle borderless no-decoration-element global-color-blue"
+                            style="background-color: transparent;" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>
+                            <span> Provide your view </span>
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li><a (click)="clearEditing(propertiesContainer)">Edit</a></li>
+                        <li *ngIf="themePropertiesData?.userInputs" role="separator" class="divider"></li>
+                        <li *ngIf="themePropertiesData?.userInputs"><a type="button" (click)="modal.show()">Delete</a></li>
+                    </ul>
                 </div>
             </div>
         </div>
 
-        <div class="form-group row">
-            <h5>Current theme maturity</h5>
+        <div *ngIf="themePropertiesData" #propertiesContainer>
+            <form (ngSubmit)="createOrUpdateThemeProperty(form)" #form="ngForm">
+                <div class="form-group row">
+                    <h5>Expected Time Horizon</h5>
 
-            <div class="btn-group btn-group-justified" [attr.data-toggle]="setDataToggleAttribute()">
-                <div class="btn-group" *ngFor="let maturity of themePropertiesData?.properties?.maturity; let i = index">
-                    <label class="btn btn-default"
-                           [style.backgroundColor]="setBackgroundColor(maturity?.percentage)"
-                           [style.borderBottom]="setBorder('maturity', i)"
-                           [class.inactive-element]="!isEditMode"
-                           (click)="themeProperties.setMaturity(i)">
-                        <input type="radio" disabled="disabled" id="maturity" name="maturity" [value]="i">{{maturity?.percentage}}%
-                    </label>
-                    <p class="text-center">{{maturityValues[i].description}}</p>
+                    <div class="btn-group btn-group-justified" [attr.data-toggle]="setDataToggleAttribute()">
+                        <div class="btn-group" *ngFor="let timeHorizon of themePropertiesData?.properties?.timeHorizon; let i = index">
+                            <label class="btn btn-default"
+                                [style.backgroundColor]="setBackgroundColor(timeHorizon?.percentage, themeProperties.timeHorizon == i)"
+                                [style.border] = "setBorder(isEditMode, i)"
+                                [style.border-color]="setBorderColor(isEditMode, i)"
+                                [style.borderBottom]="setBottomBorder('timeHorizon', i)"
+                                [class.inactive-element]="!isEditMode"
+                                style="margin-bottom: 8px;"
+                                (click)="themeProperties.setTimeHorizon(i)">
+                                <input type="radio" disabled="disabled" id="timeHorizon" name="timeHorizon" [value]="i">
+                                <span *ngIf="!isEditMode" class="global-color-white"> {{timeHorizon?.percentage}}% </span>
+                                <span *ngIf="isEditMode" class="global-color-white"> &nbsp; </span>
+                            </label>
+                            <p class="text-center  global-color-blue">
+                                {{timeHorizonValues[i].description}}
+                            </p>
+                        </div>
+                    </div>
                 </div>
-            </div>
-        </div>
 
-        <div class="form-group row">
-            <h5>Theme category</h5>
+                <div class="form-group row">
+                    <h5>Current theme maturity</h5>
 
-            <div class="btn-group btn-group-justified" [attr.data-toggle]="setDataToggleAttribute()">
-                <div class="btn-group" *ngFor="let category of themePropertiesData?.properties?.categories; let i = index">
-                    <label class="btn btn-default"
-                           [style.backgroundColor]="setBackgroundColor(category?.percentage)"
-                           [style.borderBottom]="setBorder('categories', i)"
-                           [class.inactive-element]="!isEditMode"
-                           (click)="themeProperties.toggleCheckedCategory(i)">
-                        <input type="checkbox" disabled="disabled" required id="categories" name="categories" [value]="i">{{category?.percentage}}%
-                    </label>
-                    <p class="text-center">{{categoryValues[i].description}}</p>
+                    <div class="btn-group btn-group-justified" [attr.data-toggle]="setDataToggleAttribute()">
+                        <div class="btn-group" *ngFor="let maturity of themePropertiesData?.properties?.maturity; let i = index">
+                            <label class="btn btn-default"
+                                [style.backgroundColor]="setBackgroundColor(maturity?.percentage, themeProperties.maturity == i)"
+                                [style.border] = "setBorder(isEditMode, i)"
+                                [style.border-color]="setBorderColor(isEditMode, i)"
+                                [style.borderBottom]="setBottomBorder('maturity', i)"
+                                [class.inactive-element]="!isEditMode"
+                                style="margin-bottom: 8px;"
+                                (click)="themeProperties.setMaturity(i)">
+                                <input type="radio" disabled="disabled" id="maturity" name="maturity" [value]="i">
+                                <span *ngIf="!isEditMode" class="global-color-white"> {{maturity?.percentage}}% </span>
+                                <span *ngIf="isEditMode" class="global-color-white"> &nbsp; </span>
+                            </label>
+                            <p class="text-center global-color-blue">
+                                {{maturityValues[i].description}}
+                            </p>
+                        </div>
+                    </div>
                 </div>
-            </div>
-        </div>
 
-    <div *ngIf="isEditMode" class="text-right">
-        <button class="btn btn-default no-border-radius" type="button" (click)="clearEditing(propertiesContainer)">Cancel</button>
-        <button class="btn btn-primary no-border-radius" type="submit"
-                [disabled]="!form.form.valid || themeProperties.hasNoUserInputs()">Save</button>
+                <div class="form-group row">
+                    <h5>Theme category</h5>
+
+                    <div class="btn-group btn-group-justified" [attr.data-toggle]="setDataToggleAttribute()">
+                        <div class="btn-group" *ngFor="let category of themePropertiesData?.properties?.categories; let i = index">
+                            <label class="btn btn-default"
+                                [style.backgroundColor]="setBackgroundColor(category?.percentage, themeProperties.categoriesValuesChecked[i] == true)"
+                                [style.border] = "setBorder(isEditMode, i)"
+                                [style.border-color]="setBorderColor(isEditMode, i)"
+                                [style.borderBottom]="setBottomBorder('categories', i)"
+                                [class.inactive-element]="!isEditMode"
+                                style="margin-bottom: 8px;"
+                                (click)="themeProperties.toggleCheckedCategory(i)">
+                                <input type="checkbox" disabled="disabled" required id="categories" name="categories" [value]="i">
+                                <span *ngIf="!isEditMode" class="global-color-white"> {{category?.percentage}}% </span>
+                                <span *ngIf="isEditMode" class="global-color-white"> &nbsp; </span>         
+                            </label>
+                            <p class="text-center global-color-blue">
+                                {{categoryValues[i].description}}
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+            <div *ngIf="isEditMode" class="text-right">
+                <button class="btn btn-default no-border-radius" type="button" (click)="clearEditing(propertiesContainer)">Cancel</button>
+                <button class="btn btn-primary no-border-radius" type="submit"
+                        [disabled]="!form.form.valid || themeProperties.hasNoUserInputs()">Save</button>
+            </div>
+            </form>
+        </div>
     </div>
-    </form>
 </div>
 
 <!-- Delete user theme input modal -->

@@ -69,9 +69,8 @@ export class ThemePropertiesComponent implements OnInit {
     }
 
     handleResults = (data: any) => {
-        console.log('Theme properties');
-        console.log(data);
         this.themePropertiesData = data;
+        this.themeProperties.clearProperties();
     }
 
     handleError = (error: any) => {
@@ -102,15 +101,36 @@ export class ThemePropertiesComponent implements OnInit {
         return this.isEditMode ? 'buttons' : '';
     }
 
-    setBackgroundColor(percentage: number) {
+    setBackgroundColor(percentage: number, isSelected: boolean) {
         if (this.isEditMode) {
+            if (isSelected) {
+                return `rgb(${this.BLUE_THEME_PROPERTY_COLOR.r}, ${this.BLUE_THEME_PROPERTY_COLOR.g}, ${this.BLUE_THEME_PROPERTY_COLOR.b})`;
+            }
             return;
         }
 
-        return `rgba(${this.BLUE_THEME_PROPERTY_COLOR.r}, ${this.BLUE_THEME_PROPERTY_COLOR.g}, ${this.BLUE_THEME_PROPERTY_COLOR.b}, ${percentage/100})`;
+        return `rgba(${this.BLUE_THEME_PROPERTY_COLOR.r}, ${this.BLUE_THEME_PROPERTY_COLOR.g}, ${this.BLUE_THEME_PROPERTY_COLOR.b}, ${(percentage+5)/100})`;
     }
 
-    setBorder(propertyName: string, value: number) {
+    setBorderColor(isEdit: boolean, index: number){
+        if(!isEdit){
+            return;
+        }
+        else{
+            return "#2980b9";
+        }
+    }
+
+    setBorder(isEdit: boolean, index: number){
+        if(!isEdit){
+            return "0 none";
+        }
+        else{
+            return "1px solid";
+        }
+    }
+
+    setBottomBorder(propertyName: string, value: number) {
         if (!this.themePropertiesData.userInputs) {
             return;
         }
