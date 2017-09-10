@@ -41,15 +41,7 @@
             <div *ngIf="isUserAdmin" class="tab-pane" id="myadminfeed">
                 <h2 class="global-font">Admin: All Newsfeed</h2>
                 <br>
-                <div>
-                    <form>
-                        <label>From:</label>
-                        <input id="datefrom" #from type="date" max="2020-12-31" min="1990-12-31" value={{defaultFromDateString}}/>
-                        <label>To:</label>
-                        <input id="dateto" #to type="date" max="2020-12-31" min="1990-12-31" value={{defaultToDateString}}/>
-                        <input type="button" (click)="getAdminFeedWithDates()" value="Go"/>
-                    </form></div>
-                <p id="paratocopy">{{newsFeedByAdminString}}</p>                
+                <app-admin-news-feed> </app-admin-news-feed>
             </div>
             <div *ngIf="isUserAdmin" class="tab-pane" id="stocksManager">
                 <h2 class="global-font">Stocks Manager</h2>

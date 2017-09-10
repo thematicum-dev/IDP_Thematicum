@@ -39,6 +39,7 @@ import { ThemesFollowedComponent } from "./user_profile/themes-followed.componen
 import { UserMyVotes } from "./user_profile/user-my-votes.component";
 import { UserNewsFeed } from "./user_profile/user-newsfeed.component";
 import { AdminStocksManager } from "./admin/admin-stocks-manager.component";
+import { AdminNewsFeed } from "./admin/admin-news-feed.component";
 
 @NgModule({
     declarations: [
@@ -71,7 +72,8 @@ import { AdminStocksManager } from "./admin/admin-stocks-manager.component";
         ThemesFollowedComponent,
         UserMyVotes,
         UserNewsFeed,
-        AdminStocksManager
+        AdminStocksManager,
+        AdminNewsFeed
     ],
     imports: [BrowserModule, routing, FormsModule, ReactiveFormsModule, HttpModule, MultiselectDropdownModule],
     providers: [AuthService, ErrorService, ThemeService, StockService, AuthGuard],

@@ -1,13 +1,11 @@
-import {Component, OnInit} from '@angular/core';
-import { UserProfileService } from '../services/user-profile.service';
-import {NewsFeedModel} from "../models/newsFeedModel";
-import {Theme} from '../models/theme';
-import {AuthService} from '../auth/auth.service';
+import { Component, OnInit } from '@angular/core';
+import { Theme } from '../models/theme';
+import { AuthService } from '../auth/auth.service';
 @Component({
-    selector: 'app-user-profile',
-    providers: [UserProfileService, AuthService],
-    templateUrl: 'user-profile.component.html',
-    styles: [`
+  selector: 'app-user-profile',
+  providers: [AuthService],
+  templateUrl: 'user-profile.component.html',
+  styles: [`
         .tabs-left, .tabs-right {
           border-bottom: none;
           padding-top: 2px;
@@ -106,81 +104,20 @@ import {AuthService} from '../auth/auth.service';
 })
 
 //TODO: load 'bootstrap.vertical-tabs.css'
-export class UserProfileComponent implements OnInit{
+export class UserProfileComponent implements OnInit {
 
-  constructor(private userProfileService: UserProfileService, private authService: AuthService) { }
-
-  adminFeedCursor = 0;
-  adminFeedCursorLimit=10;
-
-  isUserAdmin:boolean = localStorage.getItem('isAdmin') == 'true';
-   //newsfeedbyadmin
-  newsFeedByAdminString: string = null; //to hold data received
-  newsFeedByAdminData: NewsFeedModel[] = []; //to hold data received
+  constructor(private authService: AuthService) { }
 
   //user values
   username: string;
   email: string;
   datejoined: string;
+  isUserAdmin: boolean = localStorage.getItem('isAdmin') == 'true';
 
-  defaultFromDateString: string;
-  defaultToDateString: string;
-
-  ngOnInit(): void{
-
-    //initializing the date of the admin 'date to' string
-    this.defaultFromDateString = new Date(Date.parse(new Date().toISOString())-2685600000).toISOString().slice(0,10);
-    this.defaultToDateString = new Date().toISOString().slice(0,10);
-    console.log(this.defaultFromDateString);
-    console.log(this.defaultToDateString);
-
-
+  ngOnInit(): void {
     //get the user data
-      this.username = this.authService.getLoggedInUser();
-      this.email = this.authService.getLoggedInUserEmail();
-      this.datejoined = new Date(this.authService.getLoggedInUserDateJoined()).toLocaleDateString();
-
-      if (this.isUserAdmin){
-        //this.getAdminFeedWithoutLimits();
-        this.getAdminFeedWithDates(this.defaultFromDateString, this.defaultToDateString);
-        this.getAdminFeedWithLimits();        
-      }
+    this.username = this.authService.getLoggedInUser();
+    this.email = this.authService.getLoggedInUserEmail();
+    this.datejoined = new Date(this.authService.getLoggedInUserDateJoined()).toLocaleDateString();
   }
-
-    setAdminFeed = (data: NewsFeedModel[]) => {
-      this.newsFeedByAdminData = this.newsFeedByAdminData.concat(data);
-    }
-
-    setAdminFeedString = (adminString: string) => {
-      this.newsFeedByAdminString = adminString;
-    }
-
-    getAdminFeedWithoutLimits(){
-      this.userProfileService.getNewsFeedOfAdminWithoutLimits().subscribe(newsFeed => {
-          this.setAdminFeedString(JSON.stringify(newsFeed, null, 4))
-        });
-    }
-
-    getAdminFeedWithLimits(){
-          var fromAdminFeed = this.adminFeedCursor;
-          var toAdminFeed = this.adminFeedCursorLimit + this.adminFeedCursor;
-          this.userProfileService.getNewsFeedOfAdmin(fromAdminFeed.toString(), toAdminFeed.toString()).subscribe(
-            newsfeed=>{
-              this.setAdminFeed(newsfeed);
-            }
-          );
-    }
-
-    getAdminFeedWithDates(from = null, to = null){
-          var dateFromValue = from == null? (<HTMLInputElement>document.getElementById("datefrom")).value : from;
-          var dateToValue = to == null?(<HTMLInputElement>document.getElementById("dateto")).value : to;
-
-          var fromAdminDate = dateFromValue ? Date.parse(dateFromValue).toString() : undefined;
-          var toAdminDate = dateToValue ? (Date.parse(dateToValue)+86398999).toString() : undefined;
-          this.userProfileService.getNewsFeedOfAdminWithDates(fromAdminDate ,toAdminDate).subscribe(
-            newsfeed=>{
-              this.setAdminFeedString(JSON.stringify(newsfeed, null, 4));
-            }
-          );
-    }
 }
