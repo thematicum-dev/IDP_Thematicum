@@ -1,7 +1,7 @@
 <div class="container">
     <div class="col-xs-3">
         <!-- Nav tabs -->
-        <ul class="nav nav-tabs tabs-left">            
+        <ul class="nav nav-tabs tabs-left global-font-2">            
             <li class="active"><a href="#mynewsfeed" data-toggle="tab">Newsfeed</a></li>
             <li><a href="#themes" data-toggle="tab">My themes</a></li>
             <li><a href="#myvotes" data-toggle="tab">My votes </a></li>
@@ -15,31 +15,31 @@
         <!-- Tab panes -->
         <div class="tab-content">
             <div class="tab-pane active" id="mynewsfeed">
-                <h2>Newsfeed</h2>
+                <h2 class="global-font">Newsfeed</h2>
                 <br>
                 <app-user-newsfeed> </app-user-newsfeed>
             </div>
             <div class="tab-pane" id="themes">
-                <h2>My Themes</h2> <br> <br>
+                <h2 class="global-font">My Themes</h2> <br> <br>
                 <app-user-themes-followed> </app-user-themes-followed>
             </div>
             <div class="tab-pane" id="myvotes">
-                <h2>My Votes</h2>
+                <h2 class="global-font">My Votes</h2>
                 <br>
                 <app-user-my-votes> </app-user-my-votes>                
             </div>
             <div class="tab-pane" id="profile">
-                <h2>My Info</h2>
+                <h2 class="global-font">My Info</h2>
                 <br>
                 <br>
-                <ul  class="nobullet">
+                <ul  class="nobullet global-font-2">
                     <li  ><span><span class="thick">Username:</span> {{username}}</span> </li>
                     <li><span><span class="thick">Email:</span> {{email}}</span></li>
                     <li><span><span class="thick">Date joined:</span> {{datejoined}}</span></li>
                 </ul>
             </div>
             <div *ngIf="isUserAdmin" class="tab-pane" id="myadminfeed">
-                <h2>Admin: All Newsfeed</h2>
+                <h2 class="global-font">Admin: All Newsfeed</h2>
                 <br>
                 <div>
                     <form>
@@ -52,7 +52,7 @@
                 <p id="paratocopy">{{newsFeedByAdminString}}</p>                
             </div>
             <div *ngIf="isUserAdmin" class="tab-pane" id="stocksManager">
-                <h2>Stocks Manager</h2>
+                <h2 class="global-font">Stocks Manager</h2>
                 <br>
                 <app-admin-stocks-manager> </app-admin-stocks-manager> 
             </div>

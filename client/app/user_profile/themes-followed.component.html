@@ -1,11 +1,11 @@
-<ul id="themelist" class="nobullet">
+<ul id="themelist" class="nobullet global-font-2">
     <li *ngFor="let theme of themes" class="row theme-row-margin">
         <a routerLinkActive="active" [routerLink]="['/theme/' + theme._id ]">
-            <span class="themename global-font">
+            <span class="themename global-label">
                 {{theme.name}} 
             </span>            
         </a>        
-        <span class="themename pull-right global-font"> 
+        <span class="themename pull-right global-label"> 
             &nbsp; &nbsp; Total votes: {{ themePropertiesData [theme._id] && themePropertiesData [theme._id].totalCount}}  
         </span>
         <span class="followcomponent pull-right">
