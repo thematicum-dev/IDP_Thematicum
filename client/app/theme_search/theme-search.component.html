@@ -74,7 +74,7 @@
         <div class="list-group" *ngIf="themes.length>0">
             <hr/>
             <a class="list-group-item list-group-item-action borderless" *ngFor="let theme of themes" (click)="goToThemeDetails(theme._id)">
-                <div class="global-paragraph-heading global-font global-color-blue">
+                <div class="global-subheading-3 global-font global-color-blue">
                     {{theme.name}} &nbsp;
                     <span class="badge badge-theme" *ngFor="let timeHorizon of theme.timeHorizon; let currentIndex = index">
                         {{timeHorizonValues[theme.timeHorizon[currentIndex]].description}}

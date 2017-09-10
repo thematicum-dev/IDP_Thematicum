@@ -1,5 +1,5 @@
 <div *ngIf="theme">
-    <div class="row global-back-button">
+    <div class="row global-back-button global-font-2 global-color-blue-2">
             <span routerLinkActive="active" [routerLink]="['/home']"> Home </span>
             <!-- backButton() makes sure the previous search results and page number are still available -->
             <span (click)="backButton()"> > Theme Explorer </span>
@@ -8,10 +8,10 @@
     </div>
     <div class="row">
         <div class="text-center">
-            <div class="global-heading">{{theme.name}}</div>
-            <p class="global-tags global-color-grey">
+            <div class="global-heading global-font global-color-light-black">{{theme.name}}</div>
+            <p class="global-tags global-font-2 global-color-grey">
                 By {{theme.creator?.name}}, {{theme.createdAt | date:mediumDate}} <br/>
-                <span class="global-tags global-color-blue-2" #themeCharacteristicsNonEditable *ngIf="!isEditMode && theme.tags">
+                <span class="global-color-blue-2" #themeCharacteristicsNonEditable *ngIf="!isEditMode && theme.tags">
                     {{getTags()}}
                 </span>
             </p>
@@ -46,7 +46,7 @@
     </div>
 
     <div class="row" #themeCharacteristicsNonEditable *ngIf="!isEditMode">
-        <p class="global-paragraph-subheading global-color-grey">{{theme.description}}</p>
+        <p class="global-subheading text-center global-font global-color-grey">{{theme.description}}</p>
     </div>
 
     <app-theme-characteristics-editing *ngIf="isEditMode" [theme]="theme" [themeTags]="theme.tags" (themeEmitter)="onThemeChanged($event)">

@@ -7,22 +7,21 @@ import { FollowService } from '../services/follow.service';
         templateUrl: 'follow.component.html',
         styles: [`
         .follow-this-theme {
-                width: 128px;
+                width: 108px;
                 height: 36px;
-                font-family: DroidSans;
                 font-size: 16px;
-                line-height: 2.25;
+                line-height: 2;
                 text-align: center;
         }
         .follow-button {
-                width: 230px;
-                height: 50px;
+                width: 200px;
+                height: 44px;
                 border: solid 1px #2980b9;                
                 color: #2980b9;
         }
         .unfollow-button {
-                width: 230px;
-                height: 50px;
+                width: 200px;
+                height: 44px;
                 border: solid 1px #ffffff;     
                 background-color: #2980b9;          
                 color: #ffffff;

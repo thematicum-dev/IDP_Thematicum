@@ -1,7 +1,7 @@
 <div class="global-background-bar-outer global-background-light-grey">
     <div class="global-background-bar-inner">
-        <div class="row text-center">
-            <h3>Stock allocation</h3>
+        <div class="row">
+            <h3 class="global-subheading-2 global-font global-color-light-black text-center">Stock allocation</h3>
         </div>
         
         <!-- Allocations -->
@@ -10,34 +10,34 @@
                 <div class="row">
                     <div class="col-xs-5">
                         <h5> 
-                            <span class="global-color-blue-2"> {{allocationModel?.themeStockComposition?.stock?.companyName}} </span>
-                            <span class="global-color-grey"> {{allocationModel?.themeStockComposition?.stock?.country}} </span>
+                            <span class="global-subheading-3 global-color-blue-2 global-font"> {{allocationModel?.themeStockComposition?.stock?.companyName}} </span>
+                            <span class="global-subheading-3 global-color-grey global-font"> {{allocationModel?.themeStockComposition?.stock?.country}} </span>
                             <span *ngIf="allocationModel?.themeStockComposition?.isValidated" class="glyphicon glyphicon-ok color-tick-validated" aria-hidden="true"></span>
                             <span *ngIf="!allocationModel?.themeStockComposition?.isValidated" class="glyphicon glyphicon-ok color-tick-invalidated"
                                 aria-hidden="true"></span>
                         </h5>
-                        <p>Total votes: {{allocationModel.totalCount}}</p>
+                        <p class="global-label global-font-2 global-color-light-black">Total votes: {{allocationModel.totalCount}}</p>
                     </div>
-                    <div class="col-xs-7 text-right" *ngIf="!allocationModel.isAllocationEditable">
+                    <div class="col-xs-7 text-right vertical-padding-4" *ngIf="!allocationModel.isAllocationEditable">
                         <div class="btn-group" *ngIf="isCurrentUserAdmin">
-                            <button type="button" class="btn btn-default dropdown-toggle borderless no-decoration-element global-color-blue" 
+                            <button type="button" class="btn btn-default dropdown-toggle borderless no-decoration-element" 
                                     style="background-color: transparent;" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                     <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>
-                                    <span> Admin </span>
+                                    <span class="global-color-blue global-label global-font-2"> Admin </span>
                             </button>
-                            <ul class="dropdown-menu">
+                            <ul class="dropdown-menu global-font-2">
                                 <li><a (click)="toggleStockCompositionValidation(allocationModel)">{{allocationModel?.themeStockComposition?.isValidated ? 'Invalidate' : 'Validate'}}</a></li>
                                 <li role="separator" class="divider"></li>
                                 <li><a type="button" (click)="modalStockCompositionAdmin.setData(allocationModel); modalStockCompositionAdmin.show();">Delete</a></li>
                             </ul>
                         </div>
                         <div class="btn-group">
-                            <button type="button" class="btn btn-default dropdown-toggle borderless no-decoration-element global-color-blue" 
+                            <button type="button" class="btn btn-default dropdown-toggle borderless no-decoration-element" 
                                     style="background-color: transparent;" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>
-                                <span> Rate Exposure </span>
+                                <span class="global-color-blue global-label global-font-2"> Rate Exposure </span>
                             </button>
-                            <ul class="dropdown-menu">
+                            <ul class="dropdown-menu global-font-2">
                                 <li><a (click)="toggleStockAllocationEditable(allocationModel)">{{allocationModel.userStockAllocation ? 'Edit' : 'Add'}}</a></li>
                                 <li *ngIf="allocationModel.userStockAllocation" role="separator" class="divider"></li>
                                 <li *ngIf="allocationModel.userStockAllocation"><a type="button" (click)="modal.setData(allocationModel.userStockAllocation._id);modal.show();">Delete</a></li>
@@ -61,10 +61,10 @@
                                         style="margin-bottom: 8px;"
                                         (click)="selectExposure(exposureSelect.value)">
                                         <input type="radio" disabled="disabled" #exposureSelect required [value]="exposureIdx">
-                                           <span *ngIf="!allocationModel.isAllocationEditable" class="global-color-white"> {{allocationModel.exposures[exposureIdx].percentage}}% </span>
+                                           <span *ngIf="!allocationModel.isAllocationEditable" class="global-font-2 global-color-white"> {{allocationModel.exposures[exposureIdx].percentage}}% </span>
                                            <span *ngIf="allocationModel.isAllocationEditable" class="global-color-white"> &nbsp; </span>
                                     </label>
-                                    <p class="text-center" 
+                                    <p class="global-label-2 global-font-2 text-center" 
                                         [style.color]="setLabelColor(exposureIdx)">
                                         {{exposures[exposureIdx]}}
                                     </p>
@@ -72,8 +72,8 @@
                             </div>
                         </div>
                         <div class="row text-right" *ngIf="allocationModel.isAllocationEditable">
-                            <button class="btn btn-default no-border-radius" type="button" (click)="clearEditing(allocationModel, exposuresContainer)">Cancel</button>
-                            <button class="btn btn-primary no-border-radius" type="submit" [disabled]="!form.form.valid || !selectedExposure">Save</button>
+                            <button class="btn btn-default no-border-radius global-font-2" type="button" (click)="clearEditing(allocationModel, exposuresContainer)">Cancel</button>
+                            <button class="btn btn-primary no-border-radius global-font-2" type="submit" [disabled]="!form.form.valid || !selectedExposure">Save</button>
                         </div>
                     </form>
                 </div>
@@ -85,7 +85,7 @@
 <!-- New Allocations -->
 <br>
 <div class="row text-center" *ngIf="!showAddOtherStocksButton">
-    <button class="btn btn-md btn-primary no-border-radius" (click)="toggleShowAddOtherStocksButton()">Add Stocks</button>
+    <button class="btn btn-md btn-primary no-border-radius global-font-2" (click)="toggleShowAddOtherStocksButton()">Add Stocks</button>
 </div>
 
 <div *ngIf="showAddOtherStocksButton">
@@ -95,8 +95,8 @@
                 <app-autocomplete-stock-allocation [preFilterStockIds]="allocatedStockIds" #themeStockAllocation></app-autocomplete-stock-allocation>
 
                 <div class="text-right">
-                    <button class="btn btn-default no-border-radius" type="button" (click)="toggleShowAddOtherStocksButton()">Cancel</button>
-                    <button class="btn btn-primary no-border-radius" type="submit" formnovalidate [disabled]="!stockForm.form.valid || !themeStockAllocation.selectedItems || themeStockAllocation.selectedItems.length == 0">Save</button>
+                    <button class="btn btn-default no-border-radius global-font-2" type="button" (click)="toggleShowAddOtherStocksButton()">Cancel</button>
+                    <button class="btn btn-primary no-border-radius global-font-2" type="submit" formnovalidate [disabled]="!stockForm.form.valid || !themeStockAllocation.selectedItems || themeStockAllocation.selectedItems.length == 0">Save</button>
                 </div>
             </form>
         </div>

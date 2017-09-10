@@ -348,25 +348,34 @@ Remove if a better way is found to achieve this.*/
 .global-tags {
   width: 100%;
   height: 44px;
-  font-family: 'Droid Sans';
   font-size: 14px;
   line-height: 1.38;
   text-align: center;
 }
 
-.global-paragraph-heading{
+.global-subheading {
+  width: 100%;
+  height: 108px;
+  font-size: 17px;
+  line-height: 1.5;
+}
+
+.global-subheading-2 {
+  font-size: 36px;
+}
+
+.global-subheading-3 {
   width: 100%;
   height: auto;
   font-size: 20px;
 }
 
-.global-paragraph-subheading {
-  width: 100%;
-  height: 108px;
-  font-family: 'Droid Serif';
-  font-size: 17px;
-  line-height: 1.5;
-  text-align: center;
+.global-label{
+  font-size: 16px;
+}
+
+.global-label-2{
+  font-size: 14px;
 }
 
 .global-paragraph-text {
@@ -381,4 +390,8 @@ Remove if a better way is found to achieve this.*/
   margin-bottom: 30px;
   height: 19px;
   font-size: 14px;
+}
+
+.vertical-padding-4{
+  padding-top: 4px;
 }

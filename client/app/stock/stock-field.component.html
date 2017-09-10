@@ -1,9 +1,9 @@
-<h5 *ngIf="!formCancelled && isCreate"> Sorry, we do not have this company in our database yet. Help us and add it.</h5>
-<h5 *ngIf="companyAddedSuccessfully" class="gloabl-color-green">Company {{currentStock.name}} added successfully.</h5>
-<h5 *ngIf="companyUpdatedSuccessfully" class="gloabl-color-green">Company {{currentStock.name}} updated successfully.</h5>
-<h5 *ngIf="companyDeletedSuccessfully" class="gloabl-color-green">Company deleted successfully.</h5>
+<h5 *ngIf="!formCancelled && isCreate" class="global-font-2"> Sorry, we do not have this company in our database yet. Help us and add it.</h5>
+<h5 *ngIf="companyAddedSuccessfully" class="gloabl-color-green global-font-2">Company {{currentStock.name}} added successfully.</h5>
+<h5 *ngIf="companyUpdatedSuccessfully" class="gloabl-color-green global-font-2">Company {{currentStock.name}} updated successfully.</h5>
+<h5 *ngIf="companyDeletedSuccessfully" class="gloabl-color-green global-font-2">Company deleted successfully.</h5>
 
-<div *ngIf="!formCancelled">
+<div *ngIf="!formCancelled" class="global-font-2">
     <br/>
     <form (ngSubmit)="onSubmit(form)" #form="ngForm">
         <div *ngIf="isUpdate" class="form-group row">
