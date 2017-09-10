@@ -6,14 +6,18 @@ import {AuthService} from "../auth/auth.service";
     templateUrl: 'homepage.component.html'
 })
 export class HomepageComponent implements OnInit  {
+    
     title = "Thematicum";
     constructor(private authService: AuthService) {}
 
     ngOnInit(): void {
-      
     }
 
     isLoggedIn() {
         return this.authService.getStoredToken() != null;
+    }
+
+    getPadding(){
+        return "18%";
     }
 }

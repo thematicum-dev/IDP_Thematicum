@@ -231,20 +231,7 @@ Remove if a better way is found to achieve this.*/
 }
 
 /*Stylesheet for Landing Page*/
-.outer {
-    display: table;
-    position: absolute;
-    height: 80%;
-    width: 75%;
-}
-
-.inner {
-    display: table-cell;
-    vertical-align: middle;
-}
-
 .landing-banner {
-  font-family: 'Droid Serif';
   text-align: center;
   width: 100%;
 }

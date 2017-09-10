@@ -1,10 +1,8 @@
-<div class="outer">
-    <div class="inner">
-        <div class="landing-banner">
-            <div class="banner-font global-color-blue global-font"><strong>them</strong>aticum</div>
-            <div class="banner-font-detail global-font-2">Thematic risk research</div> <br/>
-            <p *ngIf="isLoggedIn()"><a routerLinkActive="active" [routerLink]="['/search']" class="btn btn-primary no-border-radius btn-md global-font-2" role="button">&nbsp; Enter &nbsp;</a></p>
-            <p *ngIf="!isLoggedIn()"><a routerLinkActive="active" [routerLink]="['/signin']" class="btn btn-primary no-border-radius btn-md global-font-2" role="button">&nbsp; Login &nbsp;</a></p>
-        </div>
-    </div>
+<div class="landing-banner global-font" [style.padding-top]="getPadding()">
+    <div class="banner-font global-color-blue global-font"><strong>them</strong>aticum</div>
+    <div class="banner-font-detail global-font-2">Thematic risk research</div> <br/>
+    <p *ngIf="isLoggedIn()"><a routerLinkActive="active" [routerLink]="['/search']" class="btn btn-primary no-border-radius btn-md global-font-2"
+            role="button">&nbsp; Enter &nbsp;</a></p>
+    <p *ngIf="!isLoggedIn()"><a routerLinkActive="active" [routerLink]="['/signin']" class="btn btn-primary no-border-radius btn-md global-font-2"
+            role="button">&nbsp; Login &nbsp;</a></p>
 </div>
