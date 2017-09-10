@@ -5,9 +5,10 @@
         <div class="thematicum-navbar collapse navbar-collapse" id="bs-example-navbar-collapse-1">
             <div class="navbar-header">
 
+                <div class="brand global-font" >
                 <a *ngIf="isLoggedIn()" class="thematicum-navbar-thematicum" routerLinkActive="active" [routerLink]="['/search']"><strong>them</strong>aticum</a>
                 <a *ngIf="!isLoggedIn()" class="thematicum-navbar-thematicum" routerLinkActive="active" [routerLink]="['/home']"><strong>them</strong>aticum</a>
-
+                </div>
                 <ul class="nav navbar-nav navbar-right">
                     <li>
                         <a [ngClass]="{'thematicum-navbar-nav-text': homePage==false}" [ngClass]="{'thematicum-navbar-nav-text-homepage': homePage==true}"

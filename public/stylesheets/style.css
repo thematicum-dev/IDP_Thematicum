@@ -68,12 +68,16 @@ hr {
 }
 
 .thematicum-navbar-thematicum {
-  width: 674px;
-  font-family: DroidSerif;
-  font-size: 30px;
-  line-height: 47px;
-  text-align: center;
+  font-size: 26px;
+  line-height: 52px;
   color: #ffffff;
+}
+
+.brand {
+  position: absolute;
+  left: 50%;
+  margin-left: -75px !important;  /* 50% of your logo width */
+  display: block;
 }
 
 .thematicum-navbar-thematicum:hover, .thematicum-navbar-thematicum:visited, 
