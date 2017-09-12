@@ -8,15 +8,9 @@ const router = Router();
 //auth middleware
 router.use('/', authUtilities.authenticationMiddleware);
 
-
 router.route('/follow')
     .get(userController.getFollowStatus)
     .put(userController.follow)
     .delete(userController.unfollow);
-
-
-//router.route('/activity/:userEmail')
-   // .get(activityController.getActivityByUser)
-    //.delete(activityController.deleteActivityByUser);
 
 export default router;

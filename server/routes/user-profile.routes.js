@@ -13,12 +13,12 @@ router.use('/', authUtilities.authenticationMiddleware);
 router.route('/newsfeed/byUser/:userEmail')
     .get(activityController.getActivityByUser);
 
-    //http://localhost:3000/api/profile/newsfeed/byThemesOfAUser/taimoor.alam3%40gmail.com?from=0&to=10
-    //http://localhost:3000/api/profile/newsfeed/byThemesOfAUser/taimoor.alam3%40gmail.com
+//http://localhost:3000/api/profile/newsfeed/byThemesOfAUser/taimoor.alam3%40gmail.com?from=0&to=10
+//http://localhost:3000/api/profile/newsfeed/byThemesOfAUser/taimoor.alam3%40gmail.com
 router.route('/newsfeed/byThemesOfAUser/:userEmail')
     .get(activityController.getActivityByThemesOfAUser);
 
-    //http://localhost:3000/api/profile/newsfeed/themes/taimoor.alam3%40gmail.com
+//http://localhost:3000/api/profile/newsfeed/themes/taimoor.alam3%40gmail.com
 router.route('/newsfeed/themes/:userEmail')
     .get(activityController.getThemesAUserFollows);
 
