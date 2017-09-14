@@ -49,12 +49,16 @@ export class AuthService implements AuthServiceInterface {
             .catch(this.handleError);
     }
 
-    logout() {        
+    deleteLocalStorage(){
         localStorage.removeItem('token');
         localStorage.removeItem('username');
         localStorage.removeItem('email');
         localStorage.removeItem('datejoined');
         localStorage.removeItem('isAdmin');
+    }
+
+    logout() {        
+        this.deleteLocalStorage();
         this.redirectUrl = null;
         this.router.navigate(['/']);
     }
@@ -105,6 +109,7 @@ export class AuthService implements AuthServiceInterface {
     }
 
     handleError = (error: Response) => {
+        this.deleteLocalStorage();
         this.errorService.handleError(error);
         return Observable.throw(error.json());
     }

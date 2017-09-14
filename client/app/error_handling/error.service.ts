@@ -14,7 +14,6 @@ export class ErrorService {
         let errMsg = errorJson.message ? errorJson.message : 'An error occurred';
 
         if (error.status == 401) {
-            localStorage.clear();
             this.router.navigate(['/signin']);
             this.errorOccurred.emit(new Error([errMsg]));
         } else if (error.status == 500 && errorJson.errors) {
