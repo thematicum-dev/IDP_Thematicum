@@ -37,16 +37,24 @@ export class AuthService implements AuthServiceInterface {
 
         return this.http.post(apiPath, body, {headers: this.contentTypeHeaders})
             .map((response: Response) => {
-		console.log("sigin in successful, redirecting to URL after login");
+                console.log("sigin in successful, redirecting to URL after login");
+                localStorage.setItem('token', response.json().token);
+                localStorage.setItem('username', response.json().username);
+                localStorage.setItem('email', response.json().email);
+                localStorage.setItem('datejoined', response.json().datejoined);
+                localStorage.setItem('isAdmin', response.json().isAdmin);
                 this.redirectToUrlAfterLogin();
                 return response.json();
             })
             .catch(this.handleError);
     }
 
-    logout() {
-	    console.log("logout pressed");
-        localStorage.clear();
+    logout() {        
+        localStorage.removeItem('token');
+        localStorage.removeItem('username');
+        localStorage.removeItem('email');
+        localStorage.removeItem('datejoined');
+        localStorage.removeItem('isAdmin');
         this.redirectUrl = null;
         this.router.navigate(['/']);
     }
@@ -56,15 +64,15 @@ export class AuthService implements AuthServiceInterface {
         if (!token) {
             return Observable.of(false);
         }
-
         const apiPath = this.baseAPI + 'auth/isAuthenticated';
         const authHeaders = new Headers({'Authorization': token});
         return this.http.get(apiPath, {headers: authHeaders})
-            .map((response: Response) => Observable.of(response.status == 200))
-            .catch((error: Response) =>  {
-                this.errorService.handleError(error);
-                return Observable.of(false);
-            });
+            .map((response: Response) => {
+                console.log(response);
+               Observable.of(response.status == 200)
+               return response.status == 200;
+            })
+            .catch(this.handleError);
     }
 
     getLoggedInUser() {
@@ -89,10 +97,10 @@ export class AuthService implements AuthServiceInterface {
 	    console.log("redirectURL == undefined", this.redirectUrl == undefined);
         if (this.redirectUrl) {
             this.router.navigate([this.redirectUrl]);
-	console.log("navigating to this.redirectURL");
+	        console.log("navigating to this.redirectURL");
         } else {
             this.router.navigate(['/home']);
-	console.log("navigating to home");
+	        console.log("navigating to home");
         }
     }
 

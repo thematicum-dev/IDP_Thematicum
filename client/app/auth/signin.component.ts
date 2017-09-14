@@ -22,13 +22,8 @@ export class SigninComponent implements AfterViewInit, OnDestroy {
 
     onSubmit(form: NgForm) {
 		var response = this.captcha.getResponse();
-	this.authService.signin(this.user, response).subscribe(data => {
-		//store auth data in local storage
-		localStorage.setItem('token', data.token);
-		localStorage.setItem('username', data.username);
-		localStorage.setItem('email', data.email);
-		localStorage.setItem('datejoined', data.datejoined);
-		localStorage.setItem('isAdmin', data.isAdmin);
+			this.authService.signin(this.user, response).subscribe(data => {
+			this.captcha.reset();
      	},
 	error => {
 		console.log("got an error");

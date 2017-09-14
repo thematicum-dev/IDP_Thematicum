@@ -75,7 +75,7 @@ export function isAuthenticated(req, res, next) {
             return res.status(200).json(new AppResponse('User is authenticated', null));
         })
         .catch(err => {
-            return next(new AppAuthError(err.name, 401));
+            return res.status(401).json(new AppResponse('User is authenticated', new AppAuthError(err.name, 401)));
         });
 }
 
