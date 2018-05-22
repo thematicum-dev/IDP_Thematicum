@@ -14,6 +14,7 @@ export class SigninComponent implements AfterViewInit, OnDestroy {
 	captcha: CaptchaComponent = new CaptchaComponent('captcha_signin');
     constructor(private authService: AuthService) {}
 
+
     ngAfterViewInit(){
 		
 		this.captcha.render();
@@ -25,8 +26,7 @@ export class SigninComponent implements AfterViewInit, OnDestroy {
 			this.authService.signin(this.user, response).subscribe(data => {
 			this.captcha.reset();
      	},
-	error => {
-		console.log("got an error");
+	err => {
 		form.reset();
 		this.captcha.reset();
 	});

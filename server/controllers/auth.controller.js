@@ -1,4 +1,4 @@
-import {AppError, AppAuthError} from '../utilities/appError';
+import {AppError, AppAuthError, AuthError} from '../utilities/appError';
 import {AppResponse} from '../utilities/appResponse';
 import User from '../models/user';
 import * as authUtilities from '../utilities/authUtilities';
@@ -15,23 +15,25 @@ export function signup(req, res, next) {
 			repo.isAccessCodeValid(req.body.user.accessCode, req.body.user.currentTime)
 				.then(results => {
 					if (!results) {
-						return next(new AppError('Invalid Access Code', 500));
+						return res.status(401).json(new AuthError('Invalid authentication code.','signup'));
+					}
+					else if (req.body.user.user.password.length < 8) {
+						return res.status(500).json(new AuthError('Validation error: password must be no shorter than 8 characters','signup'));
+					} else {
+
+						const user = new User({
+							name: req.body.user.user.name,
+							email: req.body.user.user.email,
+							password: req.body.user.user.password,
+							personalRole: req.body.user.user.personalRole
+						});
+
+						repo.save(user).then(() => {
+							return res.status(201).json(new AppResponse('User created', null))
+						}).catch(err => next(err));
 					}
 
-					if (req.body.user.user.password.length < 8) {
-						return next(new AppError('Validation error: password must be no shorter than 8 characters', 500));
-					}
-
-					const user = new User({
-						name: req.body.user.user.name,
-						email: req.body.user.user.email,
-						password: req.body.user.user.password,
-						personalRole: req.body.user.user.personalRole
-					});
-
-					repo.save(user).then(() => {
-						return res.status(201).json(new AppResponse('User created', null))
-					}).catch(err => next(err));
+					
 				});
 		}
 	});
@@ -46,23 +48,27 @@ export function signin(req, res, next) {
 			repo.getUserByEmail(req.body.user.email)
 				.then(user => {
 					if (!user) {
-						return next(new AppError('Invalid login credentials', 401));
+						return res.status(401).json(new AuthError('Invalid login credentials. Please login with correct username or password.', 'signin'));
 					}
-					if (!user.passwordIsValid(req.body.user.password)) {
-						return next(new AppError('Invalid login credentials', 401));
+					else if (!user.passwordIsValid(req.body.user.password)) {
+						return res.status(401).json(new AuthError('Invalid login credentials. Please login with correct username or password.','signin'));
+
+					} else {
+
+						const token = authUtilities.jwtSign({ user: user });
+						if (!user.isAdmin){
+							user.isAdmin = false;
+						}
+						res.status(200).json({
+							message: 'Successful login',
+							token: token,
+							username: user.name,
+							email:user.email,
+							isAdmin:user.isAdmin,
+							datejoined: user.createdAt
+						});
 					}
-					const token = authUtilities.jwtSign({ user: user });
-					if (!user.isAdmin){
-						user.isAdmin = false;
-					}
-					res.status(200).json({
-						message: 'Successful login',
-						token: token,
-						username: user.name,
-						email:user.email,
-						isAdmin:user.isAdmin,
-						datejoined: user.createdAt
-					});
+					
 				})
 				.catch(err => next(err));
 		}
