@@ -37,16 +37,19 @@ export class FeedComponent implements OnInit {
     displayMaturity: string;
     displayCategories: string;
     displayExposure: string;
+    displayGeography: string;
 
     ngOnInit(): void {
         this.newsfeed.createdAt = new Date(this.newsfeed.createdAt).toLocaleString();
         if (this.newsfeed.userThemeInput != null) {
             var generaltimehorizonArray = ['Short Term ( 1-6 months )', 'Medium Term ( 0.5-3 years )', 'Long Term ( > 3 years )'];
-
             this.displayTimeHorizon = generaltimehorizonArray[this.newsfeed.userThemeInput.timeHorizon];
 
             var maturityArray = ['Upcoming', 'Nascent', 'Accelerating', 'Mature', 'Declining'];
             this.displayMaturity = maturityArray[this.newsfeed.userThemeInput.maturity];
+
+            var geographyArray = ['North America', 'South America', 'Europe', 'Africa', 'Asia', 'Australia'];
+            this.displayGeography = geographyArray[this.newsfeed.userThemeInput.geography];
 
             var categoriesArray = ['Economic, ', 'Technologic, ', 'Environmental, ', 'Political, ', 'Regulatory, ', 'Sociologic, '];
             this.displayCategories = '';

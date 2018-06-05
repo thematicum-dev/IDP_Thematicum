@@ -60,7 +60,14 @@ const schema = new Schema({
         maxlength: 32,
         min: constants.MIN_MATURITY,
         max: constants.MAX_MATURITY
-    }],  
+    }],
+    geography:[{
+        type: Number,
+        minlength: 4,
+        maxlength: 32,
+        min: constants.MIN_GEOGRAPHY,
+        max: constants.MAX_GEOGRAPHY
+    }],
     creator: {
         type: Schema.Types.ObjectId, ref: 'User'
     }}, { timestamps: true }) ;

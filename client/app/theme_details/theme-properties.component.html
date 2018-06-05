@@ -95,6 +95,30 @@
                     </div>
                 </div>
 
+                <div class="form-group row">
+                    <span class="global-subheading-3 global-font">Geography</span>
+
+                    <div class="btn-group btn-group-justified" [attr.data-toggle]="setDataToggleAttribute()">
+                        <div class="btn-group" *ngFor="let geography of themePropertiesData?.properties?.geography; let i = index">
+                            <label class="btn btn-default"
+                                   [style.backgroundColor]="setBackgroundColor(geography?.percentage, themeProperties.geography == i)"
+                                   [style.border] = "setBorder(isEditMode, i)"
+                                   [style.border-color]="setBorderColor(isEditMode, i)"
+                                   [style.borderBottom]="setBottomBorder('geography', i)"
+                                   [class.inactive-element]="!isEditMode"
+                                   style="margin-bottom: 8px; margin-top:14px;"
+                                   (click)="themeProperties.setGeography(i)">
+                                <input type="radio" disabled="disabled" required id="geography" name="geography" [value]="i">
+                                <span *ngIf="!isEditMode" class="global-font-2 global-color-white"> {{geography?.percentage}}% </span>
+                                <span *ngIf="isEditMode" class="global-color-white"> &nbsp; </span>
+                            </label>
+                            <p class="global-label-2 global-font-2 text-center global-color-blue">
+                                {{geographyValues[i].description}}
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
             <div *ngIf="isEditMode" class="text-right">
                 <button class="btn btn-default no-border-radius global-font-2" type="button" (click)="clearEditing(propertiesContainer)">Cancel</button>
                 <button class="btn btn-primary no-border-radius global-font-2" type="submit"

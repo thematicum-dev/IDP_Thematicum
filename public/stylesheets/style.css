@@ -211,6 +211,11 @@ Remove if a better way is found to achieve this.*/
   width: 100%;
 }
 
+.overflow{
+  /*text-overflow: ellipsis;*/
+  white-space: normal;
+}
+
 .full-width{
     width: 100%;
 }
@@ -385,4 +390,8 @@ Remove if a better way is found to achieve this.*/
 
 .vertical-padding-4{
   padding-top: 4px;
+}
+
+.col-half-offset{
+  margin-left:4.166666667%
 }

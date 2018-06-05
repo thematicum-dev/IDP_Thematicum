@@ -30,10 +30,19 @@ export let stockInvestableValues_IM: IMultiSelectOption[] = [
     { name: 'I do not know', id: 3}
 ];
 
+export let geographyValues_IM: IMultiSelectOption[] = [
+    { name: 'North America', id: 0},
+    { name: 'South America', id: 1},
+    { name: 'Europe', id: 2},
+    { name: 'Africa', id: 3},
+    { name: 'Asia', id: 4},
+    { name: 'Australia', id: 5},
+];
+
 export let searchDisabled_IM: IMultiSelectSettings = {
         enableSearch: false,
         checkedStyle: 'checkboxes',
-        buttonClasses: 'btn btn-default btn-block no-border-radius',
+        buttonClasses: 'btn btn-default btn-block overflow no-border-radius',
         dynamicTitleMaxItems: 1,
         displayAllSelectedText: true,
         containerClasses: 'full-width',
@@ -43,7 +52,7 @@ export let searchDisabled_IM: IMultiSelectSettings = {
 export let searchEnabled_IM: IMultiSelectSettings = {
         enableSearch: true,
         checkedStyle: 'checkboxes',
-        buttonClasses: 'btn btn-default btn-block no-border-radius',
+        buttonClasses: 'btn btn-default btn-block overflow no-border-radius',
         dynamicTitleMaxItems: 1,
         displayAllSelectedText: true,
         containerClasses: 'full-width',
@@ -98,4 +107,14 @@ export let stockInvestableOptions_IM: IMultiSelectTexts = {
         searchPlaceholder: 'Search',
         defaultTitle: 'Investable Instruments',
         allSelected: 'All Selected'
+};
+
+export let geographyTextOptions_IM: IMultiSelectTexts = {
+    checkAll: 'Select all',
+    uncheckAll: 'Unselect all',
+    checked: 'item selected',
+    checkedPlural: 'items selected',
+    searchPlaceholder: 'Search',
+    defaultTitle: 'Geography',
+    allSelected: 'All Selected'
 };

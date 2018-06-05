@@ -2,6 +2,7 @@ export class UserThemeInput {
             constructor(
                         public categories?: number[],
                         public maturity?: number,
+                        public geography?: number,
                         public timeHorizon?: 1,
             ){}
 }

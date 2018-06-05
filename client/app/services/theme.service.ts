@@ -76,8 +76,8 @@ export class ThemeService implements ThemeServiceInterface{
         return "?" + ret.join('&');
     }
 
-    searchThemes(searchTerm: string, searchType: number, start: number, categories: number[] = [], maturity: number[] = [], timeHorizon: number[] = [], tags: string[] = []) {        
-        let params = {'searchQuery': searchTerm, 'searchType': searchType, 'start': start, 'categories': categories, 'maturity': maturity, 'timeHorizon': timeHorizon, 'tags': tags};
+    searchThemes(searchTerm: string, searchType: number, start: number, categories: number[] = [], maturity: number[] = [], timeHorizon: number[] = [], geography: number[] = [], tags: string[] = []) {
+        let params = {'searchQuery': searchTerm, 'searchType': searchType, 'start': start, 'categories': categories, 'maturity': maturity, 'timeHorizon': timeHorizon, 'geography': geography, 'tags': tags};
         let searchQuery = this.encodeQueryData(params);
         let apiPath = this.baseAPI + 'themes' + searchQuery;
         
