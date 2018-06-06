@@ -39,10 +39,15 @@ export class SignupComponent implements AfterViewInit{
     }
 
     onSubmit(form: NgForm) {
+
         const signupModel = new SignupModel(this.user, this.registrationAccessCode);
-        this.authService.signup(signupModel, this.captcha.getResponse()).subscribe(data => this.router.navigateByUrl('/signin'), error => {
-		 form.reset();
-		this.captcha.reset();
-	});
+        this.authService.signup(signupModel, this.captcha.getResponse()).subscribe(data => {
+            this.router.navigateByUrl('/signin')
+            this.captcha.reset();
+        },
+        err => {
+            form.reset();
+            this.captcha.reset();
+        	});
     }
 }

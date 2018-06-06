@@ -14,3 +14,10 @@ export class AppAuthError extends AppError {
         super(customError, status);
     }
 }
+
+export class AuthError {
+    constructor(message,feature) {
+        this.message = message;
+        this.feature = feature;
+    }
+}

@@ -9,6 +9,8 @@ import { HomepageComponent } from "./navigation/homepage.component";
 import { AboutComponent } from "./static_pages/about.component";
 import { SignupComponent } from "./auth/signup.component";
 import { SigninComponent } from "./auth/signin.component";
+import {ForgotComponent } from "./auth/forgot.component";
+import {ResetComponent } from "./auth/reset.component";
 import { HttpModule } from "@angular/http";
 import { AuthService } from "./auth/auth.service";
 import { ThemeSearchComponent } from "./theme_search/theme-search.component";
@@ -50,6 +52,8 @@ import { AdminNewsFeed } from "./admin/admin-news-feed.component";
         AboutComponent,
         SignupComponent,
         SigninComponent,
+        ForgotComponent,
+        ResetComponent,
         UserProfileComponent,
         ErrorComponent,
         ThemeSearchComponent,

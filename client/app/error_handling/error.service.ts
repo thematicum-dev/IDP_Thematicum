@@ -13,9 +13,19 @@ export class ErrorService {
         let errorJson = error.json();
         let errMsg = errorJson.message ? errorJson.message : 'An error occurred';
 
-        if (error.status == 401) {
+        console.log(errorJson);
+        if (error.status == 401 && errorJson.feature == 'signin') {
             this.router.navigate(['/signin']);
             this.errorOccurred.emit(new Error([errMsg]));
+        } else if (error.status == 401 && errorJson.feature == 'signup') {
+            this.errorOccurred.emit(new Error([errMsg]));
+
+        }else if (error.status == 401 && errorJson.feature == 'forgot') {
+            this.errorOccurred.emit(new Error([errMsg]));
+
+        }else if (error.status == 401 && errorJson.feature == 'reset') {
+            this.errorOccurred.emit(new Error([errMsg]));
+
         } else if (error.status == 500 && errorJson.errors) {
             //check for validation messages
             this.errorOccurred.emit(this.getValidationError(errorJson.errors));

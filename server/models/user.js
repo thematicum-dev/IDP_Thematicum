@@ -31,7 +31,9 @@ const schema = new Schema({
         default: false,
         required: true
     },
-    createdAt : { type : Date, default: Date.now }
+    createdAt : { type : Date, default: Date.now },
+    resetPasswordToken: String,
+    resetPasswordExpires: Date
 });
 
 schema.pre('save', function(next) {

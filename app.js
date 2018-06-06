@@ -60,6 +60,8 @@ app.use(function (req, res, next) {
     return res.render('index');
 });
 
+
+
 //error handling
 //app.use(function (err, req, res, next) {
     //console.log('Error handling middleware', JSON.stringify(err))

@@ -49,6 +49,43 @@ export class AuthService implements AuthServiceInterface {
             .catch(this.handleError);
     }
 
+    forgot(user: UserModel) {
+        console.log("Forgot Password pressed");
+
+        const body = JSON.stringify({
+            user: user        
+        });
+
+        let apiPath = this.baseAPI + 'auth/forgot';
+
+        return this.http.post(apiPath, body, {headers: this.contentTypeHeaders})
+            .map((response: Response) => {
+                console.log("Reset message being sent to the email.");
+                return response.json();
+            })
+            .catch(this.handleError);
+    }
+
+    reset(user: UserModel, token: String) {
+
+        console.log("Reset Password pressed");
+
+        const body = JSON.stringify({
+            user: user,
+            token: token        
+        });
+
+        let apiPath = this.baseAPI + 'auth/reset';
+
+        return this.http.post(apiPath, body, {headers: this.contentTypeHeaders})
+            .map((response: Response) => {
+                console.log("Reset action being implemented");
+                return response.json();
+            })
+            .catch(this.handleError);
+
+    }
+
     deleteLocalStorage(){
         localStorage.removeItem('token');
         localStorage.removeItem('username');
