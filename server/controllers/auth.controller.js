@@ -4,6 +4,9 @@ import User from '../models/user';
 import * as authUtilities from '../utilities/authUtilities';
 import DataRepository from '../data_access/dataRepository';
 import request from 'request';
+import async from 'async';
+import crypto from 'crypto';
+import nodemailer from 'nodemailer';
 
 const repo = new DataRepository();
 
@@ -83,6 +86,108 @@ export function isAuthenticated(req, res, next) {
         .catch(err => {
             return res.status(401).json(new AppResponse('User is authenticated', new AppAuthError(err.name, 401)));
         });
+}
+
+
+
+
+export function forgot(req,res,next) {
+	console.log("Forgot server activated");
+	async.waterfall([
+
+		function(done) {
+			crypto.randomBytes(20, function(err,buf) {
+				var token = buf.toString('hex');
+				done(err,token);
+			});
+		},
+
+		function(token,done) {
+
+			repo.getUserByEmail(req.body.user.email)
+				.then(user=> {
+
+					if(!user) {
+						return res.status(401).json(new AuthError('The email id does not exist.', 'forgot'));
+					}
+
+					user.resetPasswordToken = token;
+					user.resetPasswordExpires = Date.now() + 3600000;
+
+					user.save(function(err) {
+						done(err,token,user);
+					});
+
+				}).catch(err => next(err));
+		},
+
+		function(token,user,done) {
+
+			 var smtpTransport = nodemailer.createTransport({
+		        service: 'Gmail',
+		        auth: {
+		          user: 'thematicum.dev@gmail.com',
+		          pass: 'Vh9k238BhDZa6$Cb'
+		        }
+		      });
+		      var mailOptions = {
+		        to: user.email,
+		        from: 'passwordreset@thematicum.com',
+		        subject: 'Thematicum Password Reset',
+		        text: 'You are receiving this because you (or someone else) have requested the reset of the password for your account.\n\n' +
+		          'Please click on the following link, or paste this into your browser to complete the process:\n\n' +
+		          'http://' + req.headers.host + '/reset/' + token + '\n\n' +
+		          'If you did not request this, please ignore this email and your password will remain unchanged.\n'
+		      };
+		      smtpTransport.sendMail(mailOptions, function(err) {
+		        done(err, 'done');
+		      });
+
+		      return res.status(401).json(new AuthError('Email has been sent!','forgot'));
+		}
+
+	], function(err) {
+
+		if(err) {
+			return next(err);
+		}
+
+
+	});
+}
+
+export function reset(req,res,next) {
+	
+	async.waterfall([
+	    function(done) {
+	      repo.getUserByPasswordExpiry(req.body.token, { $gt: Date.now() })
+				.then(user=> {
+	        if (!user) {
+	          return res.status(401).json(new AuthError('Password reset token is invalid or expired.', 'reset'));
+	        }
+
+	        user.password = req.body.user.password;
+	        user.resetPasswordToken = undefined;
+	        user.resetPasswordExpires = undefined;
+
+	        user.save(function(err) {
+	            done(err, user);
+	          
+	        });
+	      });
+	    },
+	    function(user, done) {
+	      console.log("Password has been reset!");
+	      return res.status(401).json(new AuthError('Password has been changed!','reset'));
+	    }
+  ], function(err) {
+    
+    	if(err) {
+			return next(err);
+		}
+  });
+
+
 }
 
 export function test(req, res, next) {

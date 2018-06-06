@@ -49,6 +49,17 @@ export default class DataRepository extends BaseRepository {
         });
     }
 
+    getUserByPasswordExpiry(token,expiry) {
+        console.log("expirty vitra yo");
+        return new Promise((resolve, reject) => {
+            User.findOne({resetPasswordToken: token, resetPasswordExpires: expiry}).exec()
+                .then(results => {
+                    resolve(results);
+                })
+                .catch(err => reject(err));
+        });
+    }
+
     getThemeTags() {
         return Theme.find().distinct('tags').exec();
     }

@@ -3,6 +3,8 @@ import {HomepageComponent} from "./navigation/homepage.component";
 import {AboutComponent} from "./static_pages/about.component";
 import {SignupComponent} from "./auth/signup.component";
 import {SigninComponent} from "./auth/signin.component";
+import {ForgotComponent} from "./auth/forgot.component";
+import {ResetComponent} from "./auth/reset.component";
 import {ThemeSearchComponent} from "./theme_search/theme-search.component";
 import {ThemeCreationComponent} from "./theme_creation/theme-creation.component";
 import {ThemeDetailsComponent} from "./theme_details/theme-details.component";
@@ -15,6 +17,8 @@ const APP_ROUTES: Routes = [
     { path: 'about', component: AboutComponent },
     { path: 'signup', component: SignupComponent },
     { path: 'signin', component: SigninComponent },
+    { path: 'forgot', component: ForgotComponent },
+    { path: 'reset/:token', component: ResetComponent },
     { path: 'search', component: ThemeSearchComponent, canActivate: [AuthGuard] },
     { path: 'theme/create', component: ThemeCreationComponent },
     { path: 'theme/:id', component: ThemeDetailsComponent },

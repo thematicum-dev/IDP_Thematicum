@@ -1,0 +1,50 @@
+<div class="container">
+<div class="col-xs-offset-3 col-xs-6">
+    <br /><h2>Reset Password</h2> <br />
+
+    <form (ngSubmit)="onSubmit(form)" #form="ngForm">
+        
+        <div class="form-group row">
+            <label class="col-xs-3 col-form-label" for="password">New Password</label>
+            <div class="col-xs-9">
+                <input
+                        type="password"
+                        id="password"
+                        class="form-control"
+                        [(ngModel)]="user.password"
+                        name="password"
+                        #password="ngModel"
+                        required
+                        minlength="8">
+                <div [hidden]="password.valid || password.pristine" class="data-validation-message">Password is required and with 8 characters minimum</div>
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <label class="col-xs-3 col-form-label" for="password">Reenter Password</label>
+            <div class="col-xs-9">
+                <input
+                        type="password"
+                        id="reenter-password"
+                        class="form-control"
+                        [(ngModel)]="reenterPassword"
+                        name="reenter-password"
+                        required
+                        minlength="8">
+                <div [hidden]="password == undefined || doPasswordsMatch() || reenterPassword.length < 8" class="data-validation-message">Passwords do not match</div>
+            </div>
+        </div>
+
+        
+
+        <div class="text-right">
+            <button class="btn btn-primary" type="submit" [disabled]="!form.form.valid">Update Password</button>
+        </div>
+
+        
+        
+        <app-error>
+        </app-error>
+    </form>
+ </div>
+</div>

@@ -44,6 +44,10 @@
             <button class="btn btn-primary" type="submit" [disabled]="!form.form.valid">Sign in</button>
         </div>
 
+        <div class="text-right">
+            <a routerLinkActive="active" [routerLink]="['/forgot']">Forgot password?</a>
+        </div>
+
         
         
         <app-error>
