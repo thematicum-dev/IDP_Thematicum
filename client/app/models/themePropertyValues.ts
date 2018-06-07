@@ -20,3 +20,12 @@ export let categoryValues = [
     { description: 'Regulatory', value: 4},
     { description: 'Sociologic', value: 5}
 ];
+
+export let geographyValues = [
+    { description: 'North America', value: 0},
+    { description: 'South America', value: 1},
+    { description: 'Europe', value: 2},
+    { description: 'Africa', value: 3},
+    { description: 'Asia', value: 4},
+    { description: 'Australia', value: 5}
+];

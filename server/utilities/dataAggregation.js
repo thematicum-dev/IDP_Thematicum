@@ -60,6 +60,9 @@ export class ThemePropertiesAggregation extends DataAggregation {
             propertyName: 'maturity',
             nrValuesRequired: constants.TOTAL_MATURITY_VALUES
         }, {
+            propertyName: 'geography',
+            nrValuesRequired: constants.TOTAL_GEOGRAPHY_VALUES
+        }, {
             propertyName: 'categories',
             nrValuesRequired: constants.TOTAL_CATEGORY_VALUES
         }];        
@@ -87,6 +90,7 @@ export class ThemePropertiesAggregation extends DataAggregation {
         const themeTypeObject = {
             timeHorizon: themeType.timeHorizon,
             maturity: themeType.maturity,
+            geography: themeType.geography,
             categories: themeType.categories
         };
 

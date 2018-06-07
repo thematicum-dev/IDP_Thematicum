@@ -3,7 +3,7 @@ import {ThemeService} from "../services/theme.service";
 import {ThemePropertiesEditModel} from "../models/themePropertiesEditModel";
 import {ModalComponent} from "./modal.component";
 import {NgForm} from "@angular/forms";
-import {timeHorizonValues, maturityValues, categoryValues} from "../models/themePropertyValues";
+import {timeHorizonValues, maturityValues, categoryValues, geographyValues} from "../models/themePropertyValues";
 import {Observable} from "rxjs";
 
 @Component({
@@ -51,6 +51,7 @@ export class ThemePropertiesComponent implements OnInit {
     timeHorizonValues = timeHorizonValues;
     maturityValues = maturityValues;
     categoryValues = categoryValues;
+    geographyValues = geographyValues;
 
     readonly BLUE_THEME_PROPERTY_COLOR = {r: 41, g: 128, b: 185};
     readonly BORDER_THEME_PROPERTY = 'solid 2px #34495e';

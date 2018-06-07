@@ -5,7 +5,7 @@ import {ThemeService} from "../services/theme.service";
 import {Router} from "@angular/router";
 import {ThemePropertiesEditModel} from "../models/themePropertiesEditModel";
 import {AutoCompleteContainerComponent} from "../autocomplete/autocomplete-container.component";
-import {timeHorizonValues, maturityValues, categoryValues} from "../models/themePropertyValues";
+import {timeHorizonValues, maturityValues, categoryValues, geographyValues} from "../models/themePropertyValues";
 import {Observable} from "rxjs";
 
 @Component({
@@ -23,6 +23,7 @@ export class ThemeCreationComponent implements OnInit{
     timeHorizonValues = timeHorizonValues;
     maturityValues = maturityValues;
     categoryValues = categoryValues;
+    geographyValues = geographyValues;
     maxDescriptionLength: number = 500;
 
     constructor(private themeService: ThemeService, private router: Router) {}

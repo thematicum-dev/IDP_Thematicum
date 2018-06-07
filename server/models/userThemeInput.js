@@ -20,6 +20,12 @@ const schema = new Schema({
         min: constants.MIN_MATURITY,
         max: constants.MAX_MATURITY
     },
+    geography: {
+        type: Number,
+        required: true,
+        min: constants.MIN_GEOGRAPHY,
+        max: constants.MAX_GEOGRAPHY
+    },
     categories: [{
         type: Number,
         required: true,

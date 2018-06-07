@@ -96,11 +96,11 @@ export default class DataRepository extends BaseRepository {
         });
     }
 
-    getThemeByUserThemeQueryPagination(start, limit, searchQuery, categories, maturity, timeHorizon, tags) {
-        let countPromise = this.getThemeByUserThemeQuery(searchQuery, categories, maturity, timeHorizon, tags)
+    getThemeByUserThemeQueryPagination(start, limit, searchQuery, categories, maturity, timeHorizon, geography, tags) {
+        let countPromise = this.getThemeByUserThemeQuery(searchQuery, categories, maturity, timeHorizon, geography, tags)
             .count().exec();
 
-        let resultPromise = this.getThemeByUserThemeQuery(searchQuery, categories, maturity, timeHorizon, tags)
+        let resultPromise = this.getThemeByUserThemeQuery(searchQuery, categories, maturity, timeHorizon, geography, tags)
             .skip(start - 1).limit(limit).exec();
 
         return new Promise((resolve, reject) => {
@@ -112,11 +112,11 @@ export default class DataRepository extends BaseRepository {
         }).catch(err => reject(err));
     }
 
-     getThemeByUserStockQueryPagination(start, limit, stockId, categories, maturity, timeHorizon, tags) {
-        let countPromise = this.getThemeByUserStockQuery(stockId, categories, maturity, timeHorizon, tags)
+     getThemeByUserStockQueryPagination(start, limit, stockId, categories, maturity, timeHorizon, geography, tags) {
+        let countPromise = this.getThemeByUserStockQuery(stockId, categories, maturity, timeHorizon, geography, tags)
             .count().exec();
 
-        let resultPromise = this.getThemeByUserStockQuery(stockId, categories, maturity, timeHorizon, tags)
+        let resultPromise = this.getThemeByUserStockQuery(stockId, categories, maturity, timeHorizon, geography, tags)
             .skip(start - 1).limit(limit).exec();
 
         return new Promise((resolve, reject) => {
@@ -128,7 +128,7 @@ export default class DataRepository extends BaseRepository {
         }).catch(err => reject(err));
     }
 
-    getThemeByUserThemeQuery(searchQuery, categories, maturity, timeHorizon, tags) {
+    getThemeByUserThemeQuery(searchQuery, categories, maturity, timeHorizon, geography, tags) {
         let andQuery = [];
 
         if (searchQuery !== undefined && searchQuery.length > 0)
@@ -143,6 +143,9 @@ export default class DataRepository extends BaseRepository {
         if (timeHorizon !== undefined && timeHorizon.length > 0)
             andQuery.push({ timeHorizon: { "$in": timeHorizon } });
 
+        if (geography !== undefined && geography.length > 0)
+            andQuery.push({ geography: { "$in": geography } });
+
         if (tags !== undefined && tags.length > 0)
             andQuery.push({ tags: { "$in": tags } });
 
@@ -153,7 +156,7 @@ export default class DataRepository extends BaseRepository {
         }
     }
 
-     getThemeByUserStockQuery(stockId, categories, maturity, timeHorizon, tags) {
+     getThemeByUserStockQuery(stockId, categories, maturity, timeHorizon, geography, tags) {
         let andQuery = [];
 
         if (stockId !== undefined && stockId.length > 0)
@@ -167,6 +170,9 @@ export default class DataRepository extends BaseRepository {
 
         if (timeHorizon !== undefined && timeHorizon.length > 0)
             andQuery.push({ timeHorizon: { "$in": timeHorizon } });
+
+         if (geography !== undefined && geography.length > 0)
+             andQuery.push({ geography: { "$in": geography } });
 
         if (tags !== undefined && tags.length > 0)
             andQuery.push({ tags: { "$in": tags } });
@@ -408,7 +414,7 @@ export default class DataRepository extends BaseRepository {
     }
 
     getActivities(){
-        var filter = { _id:0, user:1, theme:1,"userInput.categories":1, "userInput.categoriesValuesChecked":1, "userInput.timeHorizon":1, "userInput.maturity":1, "userInput.categoryValues":1};
+        var filter = { _id:0, user:1, theme:1,"userInput.categories":1, "userInput.categoriesValuesChecked":1, "userInput.timeHorizon":1, "userInput.maturity":1, "userInput.geography":1, "userInput.categoryValues":1};
         return new Promise((resolve, reject) => {
             ActivityLog.find({},filter).sort( { createdAt: -1 } ).exec()
                 .then(results => {

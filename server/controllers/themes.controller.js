@@ -110,14 +110,15 @@ export function list(req, res, next) {
     req.query.maturity = concatenatedNumberStringToArray(req.query.maturity);
     req.query.timeHorizon = concatenatedNumberStringToArray(req.query.timeHorizon);
     req.query.tags = concatenatedStringToArray(req.query.tags);
+    req.query.geography = concatenatedNumberStringToArray(req.query.geography);
 
     if (req.query.searchType == 1) {
-        repo.getThemeByUserThemeQueryPagination(req.query.start, req.query.limit, req.query.searchQuery, req.query.categories, req.query.maturity, req.query.timeHorizon, req.query.tags)
+        repo.getThemeByUserThemeQueryPagination(req.query.start, req.query.limit, req.query.searchQuery, req.query.categories, req.query.maturity, req.query.timeHorizon, req.query.geography, req.query.tags)
             .then(results => {
                 res.status(200).json(new AppResponse('Investment themes retrieved', results));
             }).catch(err => next(err));
     } else if (req.query.searchType == 2) {
-        repo.getThemeByUserStockQueryPagination(req.query.start, req.query.limit, req.query.searchQuery, req.query.categories, req.query.maturity, req.query.timeHorizon, req.query.tags)
+        repo.getThemeByUserStockQueryPagination(req.query.start, req.query.limit, req.query.searchQuery, req.query.categories, req.query.maturity, req.query.timeHorizon, req.query.geography, req.query.tags)
             .then(results => {
                 res.status(200).json(new AppResponse('Investment themes retrieved', results));
             }).catch(err => next(err));
