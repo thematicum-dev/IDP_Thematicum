@@ -6,6 +6,7 @@ import cookieParser from 'cookie-parser';
 import bodyParser from 'body-parser';
 import mongoose from 'mongoose';
 import dotenv from 'dotenv';
+import twitter from 'twitter';
 import * as settings from './server/utilities/settings';
 
 //routes
@@ -18,6 +19,7 @@ import adminRoutes from './server/routes/admin.routes';
 import activityRoutes from './server/routes/activity.routes';
 import userRoutes from './server/routes/user.routes';
 import userProfileRoutes from './server/routes/user-profile.routes';
+import googleTrendRoutes from './server/routes/googleTrend.routes';
 
 dotenv.config({path: "dot.env"});
 const app = express();
@@ -55,6 +57,7 @@ app.use('/api/admin', adminRoutes);
 app.use('/api/activity', activityRoutes);
 app.use('/api/user', userRoutes);
 app.use('/api/profile', userProfileRoutes);
+app.use('/api/googletrend',googleTrendRoutes);
 
 app.use(function (req, res, next) {
     return res.render('index');

@@ -79,7 +79,9 @@ export class ThemeService implements ThemeServiceInterface{
     searchThemes(searchTerm: string, searchType: number, start: number, categories: number[] = [], maturity: number[] = [], timeHorizon: number[] = [], geography: number[] = [], tags: string[] = []) {
         let params = {'searchQuery': searchTerm, 'searchType': searchType, 'start': start, 'categories': categories, 'maturity': maturity, 'timeHorizon': timeHorizon, 'geography': geography, 'tags': tags};
         let searchQuery = this.encodeQueryData(params);
+        console.log(searchQuery);
         let apiPath = this.baseAPI + 'themes' + searchQuery;
+        console.log(apiPath);
         
         return this.http.get(apiPath, {headers: this.headers})
             .map((response: Response) => response.json().obj)

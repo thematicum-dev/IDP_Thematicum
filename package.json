@@ -46,6 +46,7 @@
     "request": "^2.81.0",
     "rxjs": "^5.0.1",
     "serve-favicon": "~2.3.0",
+    "twitter": "^1.7.1",
     "underscore": "^1.8.3",
     "validator": "^6.1.0",
     "zone.js": "^0.8.4"
