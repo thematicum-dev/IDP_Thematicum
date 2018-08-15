@@ -20,6 +20,7 @@ import activityRoutes from './server/routes/activity.routes';
 import userRoutes from './server/routes/user.routes';
 import userProfileRoutes from './server/routes/user-profile.routes';
 import googleTrendRoutes from './server/routes/googleTrend.routes';
+import newsFeedRoutes from './server/routes/newsFeed.routes';
 
 dotenv.config({path: "dot.env"});
 const app = express();
@@ -58,6 +59,7 @@ app.use('/api/activity', activityRoutes);
 app.use('/api/user', userRoutes);
 app.use('/api/profile', userProfileRoutes);
 app.use('/api/googletrend',googleTrendRoutes);
+app.use('/api/newsfeed',newsFeedRoutes);
 
 app.use(function (req, res, next) {
     return res.render('index');

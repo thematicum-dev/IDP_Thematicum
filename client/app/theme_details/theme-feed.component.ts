@@ -29,23 +29,45 @@ export class ThemeFeedComponent implements OnInit {
 
     
     
-    ngOnInit(): void {    
+    ngOnInit(): void {
 
         this.name = this.theme.name;
 
-        var stringModifier = this.theme.name;
+        console.log(this.theme);
+        console.log(this.theme.tags);
 
-        var modifiedString= stringModifier.replace(" ","%20");
+        var tags = this.theme.tags;
 
-        var tempName = "https://trends.google.com:443/trends/embed/explore/TIMESERIES?req=%7B%22comparisonItem%22%3A%5B%7B%22keyword%22%3A%22";
-        var tempName2 = modifiedString;
-        var tempName3 = "%22%2C%22geo%22%3A%22%22%2C%22time%22%3A%22today%201-m%22%7D%5D%2C%22category%22%3A0%2C%22property%22%3A%22%22%7D&tz=-120&eq=date%3Dtoday%25201-m";
 
-        var endName = tempName.concat(tempName2,tempName3);
+        var tempName = "https://trends.google.com:443/trends/embed/explore/TIMESERIES?req=%7B%22comparisonItem%22%3A%5B";
+        var start = "%7B%22keyword%22%3A%22";
+        var next = "%2C";
+        var end = "%22%2C%22geo%22%3A%22%22%2C%22time%22%3A%22today%201-m%22%7D";
 
-        console.log(endName);
 
-        this.modifiedName = endName;
+        tempName = tempName.concat(start,(this.theme.name).replace(" ","%20"),end);
+
+        for(var i=0; i<tags.length; i++) {
+            tempName = tempName.concat(next,start,(tags[i]).replace(" ","%20"),end);
+        }
+        
+        tempName = tempName.concat("%5D%2C%22category%22%3A0%2C%22property%22%3A%22%22%7D&tz=-345&eq=date%3Dtoday%25201-m%26q%3D");
+
+        tempName = tempName.concat((this.theme.name).replace(" ","%2520"));
+
+        for(var i=0; i<tags.length; i++) {
+            tempName = tempName.concat(next,(tags[i]).replace(" ","%2520"));
+        }
+
+        console.log(tempName);
+
+        this.modifiedName = tempName;
+
+
+
+
+
+
     }
 
     trendURL() {
