@@ -42,7 +42,7 @@ export class ThemeFeedComponent implements OnInit {
         var tempName = "https://trends.google.com:443/trends/embed/explore/TIMESERIES?req=%7B%22comparisonItem%22%3A%5B";
         var start = "%7B%22keyword%22%3A%22";
         var next = "%2C";
-        var end = "%22%2C%22geo%22%3A%22%22%2C%22time%22%3A%22today%201-m%22%7D";
+        var end = "%22%2C%22geo%22%3A%22%22%2C%22time%22%3A%22today%205-y%22%7D";
 
 
         tempName = tempName.concat(start,(this.theme.name).replace(" ","%20"),end);
@@ -51,7 +51,7 @@ export class ThemeFeedComponent implements OnInit {
             tempName = tempName.concat(next,start,(tags[i]).replace(" ","%20"),end);
         }
         
-        tempName = tempName.concat("%5D%2C%22category%22%3A0%2C%22property%22%3A%22%22%7D&tz=-345&eq=date%3Dtoday%25201-m%26q%3D");
+        tempName = tempName.concat("%5D%2C%22category%22%3A0%2C%22property%22%3A%22%22%7D&tz=-345&eq=date%3Dtoday%25205-y%26q%3D");
 
         tempName = tempName.concat((this.theme.name).replace(" ","%2520"));
 
