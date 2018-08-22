@@ -9,6 +9,7 @@ import dotenv from 'dotenv';
 import twitter from 'twitter';
 import * as settings from './server/utilities/settings';
 
+
 //routes
 import authRoutes from './server/routes/auth.routes';
 import themeRoutes from './server/routes/theme.routes';
@@ -23,6 +24,8 @@ import googleTrendRoutes from './server/routes/googleTrend.routes';
 import newsFeedRoutes from './server/routes/newsFeed.routes';
 
 dotenv.config({path: "dot.env"});
+
+
 const app = express();
 
 const mongodbPath = settings.getDBConnectionString();
