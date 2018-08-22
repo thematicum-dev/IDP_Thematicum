@@ -3,24 +3,28 @@ import ActivityLog from '../models/activitylog';
 import {AppError} from '../utilities/appError';
 import {AppResponse} from '../utilities/appResponse';
 import DataRepository from '../data_access/dataRepository';
+import NewsAPI from 'newsapi';
 
 const repo = new DataRepository();
+const newsapi = new NewsAPI('f233db147a4543f995774df5d3aa538e');
 
 export function getNews(req, res, next) {
+	
 
-	repo.getThemeById(req.body.id)
-				.then(theme=> {
+					console.log("getnews ma ayo hai");
 
-					if(!theme) {
-						return res.status(401).json(new AuthError('The theme id does not exist.', 'forgot'));
-					}
+					console.log(req.query.name);
 
-					console.log(theme);
+					//find name of the theme
 
+					newsapi.v2.everything({
+						q: req.query.name,
+						language: 'en'
+					}).then(response => {
+						console.log(response);
+						return res.status(200).json(new AppResponse('Theme news retrieved', response));
+					});
 					
-					
-
-				}).catch(err => next(err));
     
     
 }

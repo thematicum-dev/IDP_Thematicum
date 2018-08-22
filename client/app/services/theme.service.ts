@@ -1,5 +1,5 @@
 import {Injectable} from "@angular/core";
-import {Http, Headers, Response} from "@angular/http";
+import {Http, Headers, Response, RequestOptions} from "@angular/http";
 import 'rxjs/Rx';
 import {Observable} from "rxjs";
 import {ThemePropertiesEditModel} from "../models/themePropertiesEditModel";
@@ -168,6 +168,19 @@ export class ThemeService implements ThemeServiceInterface{
         return this.http.put(apiPath, body, { headers: this.headers })
             .map((response: Response) => response.json().obj)
             .catch(this.handleError);
+    }
+
+    getAllNews(theme: Theme) {
+
+        console.log("eta ayo hai");
+        let apiPath = this.baseAPI + 'newsfeed/newsfeed';
+        console.log(apiPath);
+
+        let options = new RequestOptions({ headers: this.headers, params: {name: theme.name} });
+
+        return this.http.get(apiPath,options)
+            .map((response: Response) => response.json().obj)
+            .catch((error => Observable.throw("Error in news service")));
     }
 
     handleError = (error: Response) => {

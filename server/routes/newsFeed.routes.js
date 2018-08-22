@@ -4,7 +4,7 @@ import * as authUtilities from '../utilities/authUtilities';
 
 const router = Router();
 
-router.route('/news')
+router.route('/newsfeed')
     .get(newsFeedController.getNews);
 
 
