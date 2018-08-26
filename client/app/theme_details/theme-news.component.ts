@@ -1,4 +1,4 @@
-import {Component, Input, ElementRef, OnInit, OnChanges, SimpleChanges, ViewChild, AfterViewInit} from '@angular/core';
+import {Component, Input, ElementRef, OnInit, OnChanges, SimpleChanges, ViewChild, Injectable} from '@angular/core';
 import {Theme} from "../models/theme";
 import {ActivatedRoute, Router} from '@angular/router';
 import {ThemeService} from "../services/theme.service";
@@ -12,7 +12,7 @@ import {DomSanitizer, SafeResourceUrl, SafeUrl} from '@angular/platform-browser'
     templateUrl: 'theme-news.component.html',
     styles: [
         `
-        .chart {height: 50%; background: white; overflow:scroll;}
+        .chart {height: 50%; background: white; overflow:scroll;<}
 
         h1,h2,h4,h5,h6 {
           font-family: 'Roboto', sans-serif;
@@ -47,14 +47,13 @@ import {DomSanitizer, SafeResourceUrl, SafeUrl} from '@angular/platform-browser'
           // flex-grow: 1;
           }
 
-        .imageCover {
-          width: 100%;
-        }
+        
 
         #infotainer {
            background: #8AB0AB;
            color: #1A1D1A;
            text-decoration: none;
+           cursor: pointer;
         }
 
         .itemName {
@@ -106,7 +105,9 @@ export class ThemeNewsComponent implements OnInit {
 
     constructor(private route: ActivatedRoute, private router: Router, private themeService: ThemeService, private location: Location, private sanitizer: DomSanitizer) { }
 
-    
+    goToUrl(link): void {
+    window.open(link, "_blank");
+    }
     
     
     ngOnInit(): void {

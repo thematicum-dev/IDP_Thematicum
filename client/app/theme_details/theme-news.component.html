@@ -13,14 +13,14 @@
 
 				    <div class="flexCont">
 				      <div class="article" *ngFor='let item of articles;'>
-				            <a [routerLink]="trendURL(item.url| json)" id="infotainer" target="_blank">
-				           <img class="imageCover" [src]="trendURL(item.urlToImage | json)"  alt="{{articles.title | json}}" />
+				      <div id="infotainer" (click)="goToUrl(item.url)">
 				          <h2 class="itemName">{{item.title | json}}</h2>
 
 				          <h4 class="itemAuthorName">{{item.author | json}}</h4>
 				          <p class="itemDesc">{{item.description | json}}</p>
-				        </a> 				        
+				         				        
 				        <!--         infotainer end -->
+				      </div>
 				      </div>
 				      <!--     end ng-repeat div -->
 				    
