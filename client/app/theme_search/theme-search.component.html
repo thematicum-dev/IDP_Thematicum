@@ -42,16 +42,19 @@
                 <span class="col-xs-2 global-font-2">
                     <ss-multiselect-dropdown name="categories" [options]="categoryOptions" [texts]="categoryTextOptions" [settings]="noSearchDropdownSettings" [(ngModel)]="categoryOptionsModel"></ss-multiselect-dropdown>
                 </span>
-                <span class="col-xs-2 col-half-offset global-font-2">
+                <span class="col-xs-2 global-font-2">
                     <ss-multiselect-dropdown name="timeHorizon" [options]="timeHorizonOptions" [texts]="timeHorizonTextOptions" [settings]="noSearchDropdownSettings" [(ngModel)]="timeHorizonOptionsModel"></ss-multiselect-dropdown>
                 </span>
-                <span class="col-xs-2 col-half-offset global-font-2">
+                <span class="col-xs-2 global-font-2">
                     <ss-multiselect-dropdown name="maturity" [options]="maturityOptions" [texts]="maturityTextOptions" [settings]="noSearchDropdownSettings" [(ngModel)]="maturityOptionsModel"></ss-multiselect-dropdown>
                 </span>
-                <span class="col-xs-2 col-half-offset global-font-2">
+                <span class="col-xs-2 global-font-2">
                     <ss-multiselect-dropdown  name="geography" [options]="geographyOptions" [texts]="geographyTextOptions" [settings]="noSearchDropdownSettings" [(ngModel)]="geographyOptionsModel"></ss-multiselect-dropdown>
                 </span>
-                <span class="col-xs-2 col-half-offset global-font-2">
+                <span class="col-xs-2 global-font-2">
+                    <ss-multiselect-dropdown  name="sectors" [options]="sectorOptions" [texts]="sectorTextOptions" [settings]="noSearchDropdownSettings" [(ngModel)]="sectorOptionsModel"></ss-multiselect-dropdown>
+                </span>
+                <span class="col-xs-2 global-font-2">
                     <ss-multiselect-dropdown  name="tags" [options]="tagOptions" [texts]="tagTextOptions" [settings]="searchDropdownSettings" [(ngModel)]="tagOptionsModel"></ss-multiselect-dropdown>
                 </span>
             </div>
@@ -90,6 +93,9 @@
                     </span> |
                     <span class="badge badge-theme" *ngFor="let geography of theme.geography; let currentIndex = index">
                         {{geographyValues[theme.geography[currentIndex]].description}}
+                    </span>
+                    <span class="badge badge-theme" *ngFor="let sector of theme.sectors; let currentIndex = index">
+                        {{sectorValues[theme.sectors[currentIndex]].description}}
                     </span>
                 </div>
                 <div class="global-paragraph-text global-font-2 global-color-light-black">{{theme.description}}</div>

@@ -39,6 +39,18 @@ export let geographyValues_IM: IMultiSelectOption[] = [
     { name: 'Australia', id: 5},
 ];
 
+export let sectorValues_IM: IMultiSelectOption[] = [
+    { name: 'Energy', id: 0},
+    { name: 'Basic Materials', id: 1},
+    { name: 'Industrials', id: 2},
+    { name: 'Consumer', id: 3},
+    { name: 'Financials', id: 4},
+    { name: 'Healthcare', id: 5},
+    { name: 'Technology', id: 6},
+    { name: 'Telco', id: 7},
+    { name: 'Utilities', id: 8},
+];
+
 export let searchDisabled_IM: IMultiSelectSettings = {
         enableSearch: false,
         checkedStyle: 'checkboxes',
@@ -116,5 +128,15 @@ export let geographyTextOptions_IM: IMultiSelectTexts = {
     checkedPlural: 'items selected',
     searchPlaceholder: 'Search',
     defaultTitle: 'Geography',
+    allSelected: 'All Selected'
+};
+
+export let sectorTextOptions_IM: IMultiSelectTexts = {
+    checkAll: 'Select all',
+    uncheckAll: 'Unselect all',
+    checked: 'item selected',
+    checkedPlural: 'items selected',
+    searchPlaceholder: 'Search',
+    defaultTitle: 'Sectors',
     allSelected: 'All Selected'
 };

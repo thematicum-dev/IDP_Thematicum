@@ -68,6 +68,13 @@ const schema = new Schema({
         min: constants.MIN_GEOGRAPHY,
         max: constants.MAX_GEOGRAPHY
     }],
+    sectors:[{
+        type: Number,
+        minlength: 4,
+        maxlength: 32,
+        min: constants.MIN_SECTORS,
+        max: constants.MAX_SECTORS
+    }],
     creator: {
         type: Schema.Types.ObjectId, ref: 'User'
     }}, { timestamps: true }) ;

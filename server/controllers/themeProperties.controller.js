@@ -26,6 +26,7 @@ export function create(req, res, next) {
         timeHorizon: req.body.timeHorizon,
         maturity: req.body.maturity,
         geography: req.body.geography,
+        sectors: req.body.sectors,
         categories: req.body.categories
     });
 
@@ -49,6 +50,8 @@ export function update(req, res, next) {
         themeProperty.categories = req.body.categories;
     if (req.body.geography != null)
         themeProperty.geography = req.body.geography;
+    if (req.body.sectors != null)
+        themeProperty.sectors = req.body.sectors;
 
     repo.save(themeProperty)
         .then(result => {

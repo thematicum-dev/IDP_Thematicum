@@ -38,6 +38,7 @@ export class FeedComponent implements OnInit {
     displayCategories: string;
     displayExposure: string;
     displayGeography: string;
+    displaySectors: string;
 
     ngOnInit(): void {
         this.newsfeed.createdAt = new Date(this.newsfeed.createdAt).toLocaleString();
@@ -50,6 +51,9 @@ export class FeedComponent implements OnInit {
 
             var geographyArray = ['North America', 'South America', 'Europe', 'Africa', 'Asia', 'Australia'];
             this.displayGeography = geographyArray[this.newsfeed.userThemeInput.geography];
+
+            var sectorArray = ['Energy', 'Basic Materials', 'Industrials', 'Consumer', 'Financials', 'Healthcare', 'Technology', 'Telco', 'Utilities'];
+            this.displaySectors = sectorArray[this.newsfeed.userThemeInput.sectors];
 
             var categoriesArray = ['Economic, ', 'Technologic, ', 'Environmental, ', 'Political, ', 'Regulatory, ', 'Sociologic, '];
             this.displayCategories = '';

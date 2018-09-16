@@ -98,8 +98,20 @@
 
             <div class="col-xs-10">
                 <div class="btn-group btn-group-justified" data-toggle="buttons">
-                    <label class="btn btn-default global-font-2" *ngFor="let geography of geographyValues" (click)="themeProperties.setGeography(geography.value)">
-                        <input type="radio" id="geography" name="geography" [value]="geography.value">{{geography.description}}
+                    <label class="btn btn-default global-font-2" *ngFor="let geography of geographyValues" (click)="themeProperties.toggleCheckedGeography(geography.value)">
+                        <input type="checkbox" id="geography" name="geography" [value]="geography.value">{{geography.description}}
+                    </label>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <label class="col-xs-2 col-form-label global-font-2">Sectors</label>
+
+            <div class="col-xs-10">
+                <div class="btn-group btn-group-justified" data-toggle="buttons">
+                    <label class="btn btn-default global-font-2" *ngFor="let sectors of sectorValues" (click)="themeProperties.toggleCheckedSector(sectors.value)">
+                        <input type="checkbox" id="sectors" name="sectors" [value]="sectors.value">{{sectors.description}}
                     </label>
                 </div>
             </div>

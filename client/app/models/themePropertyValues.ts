@@ -29,3 +29,15 @@ export let geographyValues = [
     { description: 'Asia', value: 4},
     { description: 'Australia', value: 5}
 ];
+
+export let sectorValues = [
+    { description: 'Energy', value: 0},
+    { description: 'Materials', value: 1},
+    { description: 'Industrials', value: 2},
+    { description: 'Consumer', value: 3},
+    { description: 'Financials', value: 4},
+    { description: 'Healthcare', value: 5},
+    { description: 'Technology', value: 6},
+    { description: 'Telco', value: 7},
+    { description: 'Utilities', value: 8},
+];

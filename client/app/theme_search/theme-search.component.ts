@@ -11,9 +11,9 @@ import { PaginationComponent } from '../utilities/pagination/pagination.componen
 import {
     categoryValues_IM, maturityValues_IM, timeHorizonValues_IM, searchDisabled_IM, searchEnabled_IM,
     categoryTextOptions_IM, timeHorizonTextOptions_IM, maturityTextOptions_IM, geographyTextOptions_IM,
-    tagTextOptions_IM, geographyValues_IM
+    tagTextOptions_IM, geographyValues_IM, sectorTextOptions_IM, sectorValues_IM
 } from "../models/IMultiSelectSettings";
-import {timeHorizonValues, maturityValues, categoryValues, geographyValues} from "../models/themePropertyValues";
+import {timeHorizonValues, maturityValues, categoryValues, geographyValues, sectorValues} from "../models/themePropertyValues";
 
 @Component({
     selector: 'app-theme-search',
@@ -33,23 +33,27 @@ export class ThemeSearchComponent implements OnInit {
     maturityValues = maturityValues;
     categoryValues = categoryValues;
     geographyValues = geographyValues;
+    sectorValues = sectorValues;
 
     categoryTextOptions = categoryTextOptions_IM;
     timeHorizonTextOptions = timeHorizonTextOptions_IM;
     maturityTextOptions = maturityTextOptions_IM;
     tagTextOptions = tagTextOptions_IM;
     geographyTextOptions = geographyTextOptions_IM;
+    sectorTextOptions = sectorTextOptions_IM;
 
     categoryOptionsModel: number[] = [];
     timeHorizonOptionsModel: number[] = [];
     maturityOptionsModel: number[] = [];
     tagOptionsModel: string[] = [];
     geographyOptionsModel: number[] = [];
+    sectorOptionsModel: number[] = [];
 
     categoryOptions: IMultiSelectOption[] = categoryValues_IM;
     timeHorizonOptions: IMultiSelectOption[] = timeHorizonValues_IM;
     maturityOptions: IMultiSelectOption[] = maturityValues_IM;
     geographyOptions: IMultiSelectOption[] = geographyValues_IM;
+    sectorOptions: IMultiSelectOption[] = sectorValues_IM;
     tagOptions: IMultiSelectOption[] = [];
 
     noSearchDropdownSettings: IMultiSelectSettings = searchDisabled_IM;
@@ -98,6 +102,7 @@ export class ThemeSearchComponent implements OnInit {
         this.timeHorizonOptionsModel = getParamNumberModel('timeHorizon');
         this.maturityOptionsModel = getParamNumberModel('maturity');
         this.geographyOptionsModel = getParamNumberModel('geography');
+        this.sectorOptionsModel = getParamNumberModel('sectors');
 
         var getParamStringModel = function (param) {
             if (queryParams[param]){
@@ -114,7 +119,7 @@ export class ThemeSearchComponent implements OnInit {
         this.tagOptionsModel = getParamStringModel('tags');
 
         if (!(Object.keys(queryParams).length === 0 && queryParams.constructor === Object))
-            this.searchThemes(this.searchTerm, this.activeSearchType, this.categoryOptionsModel, this.maturityOptionsModel, this.timeHorizonOptionsModel, this.geographyOptionsModel, this.tagOptionsModel);
+            this.searchThemes(this.searchTerm, this.activeSearchType, this.categoryOptionsModel, this.maturityOptionsModel, this.timeHorizonOptionsModel, this.geographyOptionsModel, this.sectorOptionsModel, this.tagOptionsModel);
     }
 
     onSubmit(form: NgForm) {
@@ -130,6 +135,7 @@ export class ThemeSearchComponent implements OnInit {
                 timeHorizon: this.timeHorizonOptionsModel,
                 maturity: this.maturityOptionsModel,
                 geography: this.geographyOptionsModel,
+                sectors: this.sectorOptionsModel,
                 tags: JSON.stringify(this.tagOptionsModel),
                 currentPage: currentPage,
                 searchType: activeSearchType
@@ -146,10 +152,10 @@ export class ThemeSearchComponent implements OnInit {
         this.themes = data[1];
     }
 
-    searchThemes(searchTerm: string, searchType: number, categoryOptionsModel: number[], maturityOptionsModel: number[], timeHorizonOptionsModel: number[], geographyOptionsModel: number[], tagOptionsModel: string[]) {
+    searchThemes(searchTerm: string, searchType: number, categoryOptionsModel: number[], maturityOptionsModel: number[], timeHorizonOptionsModel: number[], geographyOptionsModel: number[], sectorOptionModel: number[], tagOptionsModel: string[]) {
         this.searchPagePaginationComponent.currentPage = this.currentPage; // check this line later. Needed for back button to work properly as this function ends up being called before initialPage is passed to pagionation component
         let start: number = this.searchPagePaginationComponent.nextResultStartsFrom();
-        this.themeService.searchThemes(searchTerm, searchType, start, categoryOptionsModel, maturityOptionsModel, timeHorizonOptionsModel, geographyOptionsModel, tagOptionsModel).subscribe(data => this.updateView(data), error => console.log(error));
+        this.themeService.searchThemes(searchTerm, searchType, start, categoryOptionsModel, maturityOptionsModel, timeHorizonOptionsModel, geographyOptionsModel, sectorOptionModel, tagOptionsModel).subscribe(data => this.updateView(data), error => console.log(error));
     }
 
     updateTagList(tags) {
