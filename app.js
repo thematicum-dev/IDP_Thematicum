@@ -22,6 +22,8 @@ import userRoutes from './server/routes/user.routes';
 import userProfileRoutes from './server/routes/user-profile.routes';
 import googleTrendRoutes from './server/routes/googleTrend.routes';
 import newsFeedRoutes from './server/routes/newsFeed.routes';
+import fundRoutes from './server/routes/fund.routes'
+import fundAllocationRoutes from './server/routes/fundAllocations.routes'
 
 dotenv.config({path: "dot.env"});
 
@@ -31,7 +33,7 @@ const app = express();
 const mongodbPath = settings.getDBConnectionString();
 mongoose.connect(mongodbPath)
     .then(() => console.log('Connected to MongoDb'))
-    .catch(error => console.log('Error connecting to MongoDb'));
+    .catch(error => console.log('Error connecting to MongoDb: ' + error));
 
 // view engine setup
 app.set('views', path.join(__dirname, './server/views'));
@@ -63,6 +65,8 @@ app.use('/api/user', userRoutes);
 app.use('/api/profile', userProfileRoutes);
 app.use('/api/googletrend',googleTrendRoutes);
 app.use('/api/newsfeed',newsFeedRoutes);
+app.use('/api/funds', fundRoutes);
+app.use('/api/fundallocations', fundAllocationRoutes);
 
 app.use(function (req, res, next) {
     return res.render('index');
