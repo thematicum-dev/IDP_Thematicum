@@ -44,6 +44,12 @@ import { AdminStocksManager } from "./admin/admin-stocks-manager.component";
 import { AdminNewsFeed } from "./admin/admin-news-feed.component";
 import { ThemeFeedComponent } from "./theme_details/theme-feed.component";
 import { ThemeNewsComponent } from "./theme_details/theme-news.component";
+import {FundUpdateComponent} from "./fund/fund-update.component";
+import {FundCreateComponent} from "./fund/fund-create.component";
+import {ThemeFundAllocationComponent} from "./theme_details/theme-fund-allocation.component";
+import {AutoCompleteFundSearchComponent} from "./autocomplete/autocomplete-fund-search.component";
+import {AutoCompleteFundAllocationComponent} from "./autocomplete/autocomplete-fund-allocation.component";
+import {FundService} from "./services/fund.service";
 
 @NgModule({
     declarations: [
@@ -70,6 +76,11 @@ import { ThemeNewsComponent } from "./theme_details/theme-news.component";
         AutoCompleteStockSearchComponent,
         StockCreateComponent,
         StockUpdateComponent,
+        ThemeFundAllocationComponent,
+        AutoCompleteFundAllocationComponent,
+        AutoCompleteFundSearchComponent,
+        FundCreateComponent,
+        FundUpdateComponent,
         ModalComponent,
         PaginationComponent,
         FollowComponent,
@@ -84,7 +95,7 @@ import { ThemeNewsComponent } from "./theme_details/theme-news.component";
         ThemeNewsComponent
     ],
     imports: [BrowserModule, routing, FormsModule, ReactiveFormsModule, HttpModule, MultiselectDropdownModule],
-    providers: [AuthService, ErrorService, ThemeService, StockService, AuthGuard],
+    providers: [AuthService, ErrorService, ThemeService, StockService, AuthGuard, FundService],
     bootstrap: [AppComponent]
 })
 export class AppModule {

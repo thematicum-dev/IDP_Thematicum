@@ -33,20 +33,22 @@ export class ThemeCreationComponent implements OnInit{
         this.themeProperties = new ThemePropertiesEditModel();
     }
 
-    onSubmit(form: NgForm, themeTags: AutoCompleteContainerComponent, themeStockAllocation: AutoCompleteContainerComponent) {
+    onSubmit(form: NgForm, themeTags: AutoCompleteContainerComponent, themeStockAllocation: AutoCompleteContainerComponent, themeFundAllocation: AutoCompleteContainerComponent) {
         //update model with data from child components
         this.theme.tags = themeTags.selectedItems;
         this.themeProperties.setCheckedCategories();
         this.themeProperties.setCheckedGeographies();
         this.themeProperties.setCheckedSectors();
         const stockAllocation = themeStockAllocation.selectedItems;
+        const fundAllocation = themeFundAllocation.selectedItems;
 
         this.themeService.createTheme(this.theme).flatMap(theme => {
             this.createdThemeId = theme._id;
             let propertiesObservable = this.themeService.createUserThemeInput(theme._id, this.themeProperties);
             let stockAllocationObservable = this.themeService.createManyStockCompositionsAndAllocations(theme._id, stockAllocation);
+            let fundAllocationObservable = this.themeService.createManyFundCompositionsAndAllocations(theme._id, fundAllocation);
 
-            return Observable.forkJoin([propertiesObservable, stockAllocationObservable]);
+            return Observable.forkJoin([propertiesObservable, stockAllocationObservable, fundAllocationObservable]);
         }).subscribe(this.handleResults, this.handleError)
     }
 

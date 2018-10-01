@@ -113,3 +113,13 @@ export class StockAllocationAggregation extends DataAggregation {
         }];
     }
 }
+
+export class FundAllocationAggregation extends DataAggregation {
+    constructor() {
+        super();
+        this.propertyList = [{
+            propertyName: 'exposure',
+            nrValuesRequired: constants.TOTAL_EXPOSURE_VALUES
+        }];
+    }
+}

@@ -1,0 +1,61 @@
+<div class="form-group row">
+    <label class="col-xs-2 col-form-label global-font-2">Add Fund</label>
+
+    <app-autocomplete [placeholderTerm]="autocompletePlaceholder"
+                      [allowCustomValues]="allowCustomValues"
+                      [allowEnterKey]="allowEnterKey"
+                      [allowDirectClick]="allowDirectClick"
+                      [dataSource]="itemList"
+                      (notifySelectedItem)='selectItem($event)'
+                      (isResultFound)='isResultFound($event)'
+                      (clearErrorStr)="clearErrorStr()"
+                      id="fundsAutocomplete"
+                      #fundsAutocomplete
+                      class="col-xs-8 global-font-2">
+    </app-autocomplete>
+
+    <span class="input-group-btn col-xs-2">
+        <div class="btn-group">
+            <button type="button" class="btn btn-default dropdown-toggle global-font-2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Select Exposure <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu global-font-2">
+                <li *ngFor="let exposure of fundExposures; let i = index;" (click)="onSelectExposure(i, fundsAutocomplete)"><a>{{exposure}}</a></li>
+            </ul>
+        </div>
+    </span>
+
+</div>
+<p *ngIf="error" class="col-xs-offset-2 error-red-front">{{error}}</p>
+
+<br>
+
+<app-fund-create *ngIf="!resultFound" (fundCreated)="fundCreated($event)"></app-fund-create>
+
+<br>
+
+<div class="form-group row" *ngIf="selectedItems && selectedItems.length > 0">
+    <label class="col-xs-2 col-form-label">Allocated Funds</label>
+    <div class="col-xs-6">
+        <div class="panel panel-default">
+            <table class="table">
+                <tbody>
+                <tr *ngFor="let fundAllocation of selectedItems; let fundIdx = index">
+                    <td scope="row"><label>{{fundAllocation.fundName | lowercase}}</label></td>
+
+                    <td>
+                        <select class="form-control"
+                                [(ngModel)]="fundAllocation.exposure"
+                                required>
+                            <option *ngFor="let exposure of fundExposures; let i = index" [ngValue]="i">{{ exposure }}</option>
+                        </select>
+                    </td>
+                    <td>
+                        <button type="button" class="btn btn-link" (click)="deselectItem(fundIdx)">Remove</button>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

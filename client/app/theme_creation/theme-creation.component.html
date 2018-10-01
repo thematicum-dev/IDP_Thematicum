@@ -125,6 +125,14 @@
 
         <app-autocomplete-stock-allocation #themeStockAllocation></app-autocomplete-stock-allocation>
 
+        <!-- Fund Allocation -->
+        <br />
+        <fieldset class="form-group  global-font">
+            <legend>Related thematic investment funds</legend>
+        </fieldset>
+
+        <app-autocomplete-fund-allocation #themeFundAllocation></app-autocomplete-fund-allocation>
+
         <div class="text-right">
             <a routerLinkActive="active" [routerLink]="['/search']" class="btn btn-default no-border-radius global-font-2" role="button">Cancel</a>
             <button class="btn btn-primary no-border-radius global-font-2" type="submit" formnovalidate

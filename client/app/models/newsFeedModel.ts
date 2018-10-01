@@ -16,6 +16,14 @@ export class UserThemeStockAllocation {
             ){}
 }
 
+export class UserThemeFundAllocation {
+    constructor(
+        public exposure?: number,
+        public themeFundComposition?: string,
+        public user?: string
+    ){}
+}
+
 export class NewsFeedModel {
     constructor(
         public name?: string,
