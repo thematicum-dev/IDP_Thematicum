@@ -50,8 +50,8 @@ import {DomSanitizer, SafeResourceUrl, SafeUrl} from '@angular/platform-browser'
         
 
         #infotainer {
-           background: #8AB0AB;
-           color: #1A1D1A;
+           background: #1FE0BA;
+           color: #FFFFFF;
            text-decoration: none;
            cursor: pointer;
         }
@@ -139,6 +139,10 @@ export class ThemeNewsComponent implements OnInit {
     trendURL(data) {
 
         return this.sanitizer.bypassSecurityTrustResourceUrl(data);
+    }
+
+    removeAsterik(data) {
+      return data.replace('"','');
     }
 
 

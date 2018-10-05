@@ -9,6 +9,7 @@ import UserThemeInput from '../models/userThemeInput';
 import ThemeStockComposition from '../models/themeStockComposition';
 import UserThemeStockAllocation from '../models/userThemeStockAllocation';
 import RegistrationAccessCode from '../models/accessCode';
+import Subscription from '../models/subscription';
 import Stock from '../models/stock';
 import { ThemePropertiesAggregation, StockAllocationAggregation } from '../utilities/dataAggregation';
 import constants from '../utilities/constants';
@@ -373,6 +374,17 @@ export default class DataRepository extends BaseRepository {
                 reject(err);
             });
         });
+    }
+
+    addEmailToSubscription(emailID) {
+        
+            console.log("subscription save huna ayo hai");
+            const subscribe = new Subscription({
+            
+                email: emailID
+            });
+
+            return this.save(subscribe);
     }
 
     removeStockTagFromTheme(themeStockCompositionID) {

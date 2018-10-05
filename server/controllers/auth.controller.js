@@ -31,6 +31,12 @@ export function signup(req, res, next) {
 							personalRole: req.body.user.user.personalRole
 						});
 
+
+						if(req.body.user.subscription) {
+							repo.addEmailToSubscription(req.body.user.user.email);
+						}
+						
+
 						repo.save(user).then(() => {
 							return res.status(201).json(new AppResponse('User created', null))
 						}).catch(err => next(err));

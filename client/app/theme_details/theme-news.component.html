@@ -14,9 +14,9 @@
 				    <div class="flexCont">
 				      <div class="article" *ngFor='let item of articles;'>
 				      <div id="infotainer" (click)="goToUrl(item.url)">
-				          <h2 class="itemName">{{item.title | json}}</h2>
+				          <h2 class="itemName">{{(item.title | json).replace('"','').replace('"','')}}</h2>
 
-				          <h4 class="itemAuthorName">{{item.author | json}}</h4>
+				          <h4 class="itemAuthorName">{{(item.author | json).replace('"','').replace('"','')}}}}</h4>
 				          <p class="itemDesc">{{item.description | json}}</p>
 				         				        
 				        <!--         infotainer end -->

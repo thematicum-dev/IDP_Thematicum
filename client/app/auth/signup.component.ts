@@ -17,6 +17,7 @@ export class SignupComponent implements AfterViewInit{
     user: UserModel = new UserModel();
     captcha: CaptchaComponent = new CaptchaComponent('captcha_signup');
     registrationAccessCode: string;
+    subscriptionSelected: boolean = false;
     personalRoles = [
         'Financial professional (buy side)',
         'Financial professional (sell side)',
@@ -40,7 +41,11 @@ export class SignupComponent implements AfterViewInit{
 
     onSubmit(form: NgForm) {
 
-        const signupModel = new SignupModel(this.user, this.registrationAccessCode);
+    	this.subscriptionSelected = form.controls['subscribe'].value;
+
+    	console.log("subscription selected?" + this.subscriptionSelected);
+
+        const signupModel = new SignupModel(this.user, this.registrationAccessCode, this.subscriptionSelected);
         this.authService.signup(signupModel, this.captcha.getResponse()).subscribe(data => {
             this.router.navigateByUrl('/signin')
             this.captcha.reset();
