@@ -40,6 +40,10 @@ const schema = new Schema({
         type: Schema.Types.ObjectId, 
         ref: 'Stock'
     }],
+    fundTags: [{
+        type: Schema.Types.ObjectId,
+        ref: 'Fund'
+    }],
     categories:[{
         type: Number,
         minlength: 4,
