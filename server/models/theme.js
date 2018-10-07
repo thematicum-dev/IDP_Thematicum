@@ -40,6 +40,10 @@ const schema = new Schema({
         type: Schema.Types.ObjectId, 
         ref: 'Stock'
     }],
+    fundTags: [{
+        type: Schema.Types.ObjectId,
+        ref: 'Fund'
+    }],
     categories:[{
         type: Number,
         minlength: 4,
@@ -67,6 +71,13 @@ const schema = new Schema({
         maxlength: 32,
         min: constants.MIN_GEOGRAPHY,
         max: constants.MAX_GEOGRAPHY
+    }],
+    sectors:[{
+        type: Number,
+        minlength: 4,
+        maxlength: 32,
+        min: constants.MIN_SECTORS,
+        max: constants.MAX_SECTORS
     }],
     creator: {
         type: Schema.Types.ObjectId, ref: 'User'

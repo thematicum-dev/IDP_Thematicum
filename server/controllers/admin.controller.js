@@ -53,7 +53,35 @@ export function validateStockComposition(req, res, next){
         repo.validateStockComposition(compositionId, validation).then(result => {
             return res.status(200).json(new AppResponse('Stock Validated to ', result));
         })
-        .catch(err => next(err));
+            .catch(err => next(err));
+    } else {
+        return res.status(400).json(new AppResponse('Access denied ', null));
+    }
+}
+
+export function deleteFundCompositionByAdmin(req, res, next) {
+    let compositionId = req.params.compositionId;
+    let isCurrentLoggedInUserAdmin = res.locals.user.isAdmin == true ? true : false;
+    if (isCurrentLoggedInUserAdmin) {
+        repo.deleteFundCompositionById(compositionId)
+            .then(result => {
+                return res.status(200).json(new AppResponse('Fund Composition Removed', result));
+            })
+            .catch(err => next(err));
+    } else {
+        return res.status(400).json(new AppResponse('Access denied ', null));
+    }
+}
+
+export function validateFundComposition(req, res, next){
+    let compositionId = req.params.compositionId;
+    let validation = req.params.validation == "true";
+    let isCurrentLoggedInUserAdmin = res.locals.user.isAdmin == true ? true : false;
+    if (isCurrentLoggedInUserAdmin) {
+        repo.validateFundComposition(compositionId, validation).then(result => {
+            return res.status(200).json(new AppResponse('Fund Validated to ', result));
+        })
+            .catch(err => next(err));
     } else {
         return res.status(400).json(new AppResponse('Access denied ', null));
     }

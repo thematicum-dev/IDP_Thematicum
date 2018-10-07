@@ -11,7 +11,11 @@ import UserThemeStockAllocation from '../models/userThemeStockAllocation';
 import RegistrationAccessCode from '../models/accessCode';
 import Subscription from '../models/subscription';
 import Stock from '../models/stock';
-import { ThemePropertiesAggregation, StockAllocationAggregation } from '../utilities/dataAggregation';
+import { ThemePropertiesAggregation, StockAllocationAggregation, FundAllocationAggregation } from '../utilities/dataAggregation';
+import ThemeFundComposition from '../models/themeFundComposition';
+import UserThemeFundAllocation from '../models/userThemeFundAllocation';
+import Fund from '../models/fund';
+
 import constants from '../utilities/constants';
 
 export default class DataRepository extends BaseRepository {
@@ -97,11 +101,11 @@ export default class DataRepository extends BaseRepository {
         });
     }
 
-    getThemeByUserThemeQueryPagination(start, limit, searchQuery, categories, maturity, timeHorizon, geography, tags) {
-        let countPromise = this.getThemeByUserThemeQuery(searchQuery, categories, maturity, timeHorizon, geography, tags)
+    getThemeByUserThemeQueryPagination(start, limit, searchQuery, categories, maturity, timeHorizon, geography, sectors, tags) {
+        let countPromise = this.getThemeByUserThemeQuery(searchQuery, categories, maturity, timeHorizon, geography, sectors, tags)
             .count().exec();
 
-        let resultPromise = this.getThemeByUserThemeQuery(searchQuery, categories, maturity, timeHorizon, geography, tags)
+        let resultPromise = this.getThemeByUserThemeQuery(searchQuery, categories, maturity, timeHorizon, geography, sectors, tags)
             .skip(start - 1).limit(limit).exec();
 
         return new Promise((resolve, reject) => {
@@ -113,11 +117,11 @@ export default class DataRepository extends BaseRepository {
         }).catch(err => reject(err));
     }
 
-     getThemeByUserStockQueryPagination(start, limit, stockId, categories, maturity, timeHorizon, geography, tags) {
-        let countPromise = this.getThemeByUserStockQuery(stockId, categories, maturity, timeHorizon, geography, tags)
+     getThemeByUserStockQueryPagination(start, limit, stockId, categories, maturity, timeHorizon, geography, sectors, tags) {
+        let countPromise = this.getThemeByUserStockQuery(stockId, categories, maturity, timeHorizon, geography, sectors, tags)
             .count().exec();
 
-        let resultPromise = this.getThemeByUserStockQuery(stockId, categories, maturity, timeHorizon, geography, tags)
+        let resultPromise = this.getThemeByUserStockQuery(stockId, categories, maturity, timeHorizon, geography, sectors, tags)
             .skip(start - 1).limit(limit).exec();
 
         return new Promise((resolve, reject) => {
@@ -129,7 +133,7 @@ export default class DataRepository extends BaseRepository {
         }).catch(err => reject(err));
     }
 
-    getThemeByUserThemeQuery(searchQuery, categories, maturity, timeHorizon, geography, tags) {
+    getThemeByUserThemeQuery(searchQuery, categories, maturity, timeHorizon, geography, sectors, tags) {
         let andQuery = [];
 
         if (searchQuery !== undefined && searchQuery.length > 0)
@@ -147,6 +151,9 @@ export default class DataRepository extends BaseRepository {
         if (geography !== undefined && geography.length > 0)
             andQuery.push({ geography: { "$in": geography } });
 
+        if (sectors !== undefined && sectors.length > 0)
+            andQuery.push({ sectors: { "$in": sectors } });
+
         if (tags !== undefined && tags.length > 0)
             andQuery.push({ tags: { "$in": tags } });
 
@@ -157,7 +164,7 @@ export default class DataRepository extends BaseRepository {
         }
     }
 
-     getThemeByUserStockQuery(stockId, categories, maturity, timeHorizon, geography, tags) {
+     getThemeByUserStockQuery(stockId, categories, maturity, timeHorizon, geography, sectors, tags) {
         let andQuery = [];
 
         if (stockId !== undefined && stockId.length > 0)
@@ -174,6 +181,9 @@ export default class DataRepository extends BaseRepository {
 
          if (geography !== undefined && geography.length > 0)
              andQuery.push({ geography: { "$in": geography } });
+
+         if (sectors !== undefined && sectors.length > 0)
+             andQuery.push({ sectors: { "$in": sectors } });
 
         if (tags !== undefined && tags.length > 0)
             andQuery.push({ tags: { "$in": tags } });
@@ -234,6 +244,16 @@ export default class DataRepository extends BaseRepository {
         });
     }
 
+    notExistFundAllocationsForThemeFundComposition(compositionId) {
+        return new Promise((resolve, reject) => {
+            UserThemeFundAllocation.find({themeFundComposition: compositionId}).exec()
+                .then(results => {
+                    resolve(!results || results.length == 0);
+                })
+                .catch(err => reject(err));
+        });
+    }
+
     getThemePropertiesByUser(properties, userId) {
         return properties.find(property => property.user == userId);
     }
@@ -244,9 +264,23 @@ export default class DataRepository extends BaseRepository {
             .exec();
     }
 
+    getThemeFundCompositionsByTheme(themeId) {
+        return ThemeFundComposition.find({theme: themeId})
+            .populate('fund', 'fundName foundIsin')
+            .exec();
+    }
+
     getThemeStockCompositionById(id){
         return new Promise((resolve, reject) => {
             ThemeStockComposition.findOne({_id: id}).exec().then(composition =>{
+                resolve(composition)
+            }).catch(err => reject(err));
+        });
+    }
+
+    getThemeFundCompositionById(id){
+        return new Promise((resolve, reject) => {
+            ThemeFundComposition.findOne({_id: id}).exec().then(composition =>{
                 resolve(composition)
             }).catch(err => reject(err));
         });
@@ -260,10 +294,26 @@ export default class DataRepository extends BaseRepository {
         });
     }
 
+    getFundById(id){
+        return new Promise((resolve, reject) => {
+            Fund.findOne({_id: id}).exec().then(fund =>{
+                resolve(fund)
+            }).catch(err => reject(err));
+        });
+    }
+
     nextStockSeqNr(){
         return new Promise((resolve,reject) => {
             Stock.find().sort({_id:-1}).limit(1).exec().then(stock =>{
                 resolve(parseInt(stock[0].seqNr,10)+1);
+            }).catch(err => reject (err));
+        });
+    }
+
+    nextFundSeqNr(){
+        return new Promise((resolve,reject) => {
+            Fund.find().sort({_id:-1}).limit(1).exec().then(fund =>{
+                resolve(parseInt(fund[0].seqNr,10)+1);
             }).catch(err => reject (err));
         });
     }
@@ -286,12 +336,34 @@ export default class DataRepository extends BaseRepository {
         });
     }
 
+    getFundAllocationsByThemeFundComposition(themeFundComposition, currentUserId) {
+        return new Promise((resolve, reject) => {
+            UserThemeFundAllocation.find({themeFundComposition: themeFundComposition._id}).exec()
+                .then(allocations => {
+                    //aggregation
+                    const fundAllocationAggregation = new FundAllocationAggregation();
+                    const aggregation = fundAllocationAggregation.getDataAggregation(allocations);
+                    const totalCount = allocations ? allocations.length : 0;
+
+                    const fundAllocationByCurrentUser = this.getFundAllocationByUser(allocations, currentUserId);
+
+                    const obj = {themeFundComposition: themeFundComposition, exposures: aggregation.exposure, userFundAllocation: fundAllocationByCurrentUser, totalCount: totalCount};
+                    resolve(obj);
+                })
+                .catch(err => reject(err));
+        });
+    }
+
     deleteAllStockAllocationsByCompositionId(compositionId){
         return Promise.all([UserThemeStockAllocation.remove({ themeStockComposition: compositionId }).exec()]); 
     }
 
     deleteStockCompositionById(compositionId){        
         return Promise.all([ThemeStockComposition.remove({_id: compositionId }).exec(), UserThemeStockAllocation.remove({ themeStockComposition: compositionId }).exec()]);
+    }
+
+    deleteFundCompositionById(compositionId){
+        return Promise.all([ThemeFundComposition.remove({_id: compositionId }).exec(), UserThemeFundAllocation.remove({ themeFundComposition: compositionId }).exec()]);
     }
 
     deleteAllStockCompositionsByThemeId(themeId){
@@ -303,11 +375,29 @@ export default class DataRepository extends BaseRepository {
             });
     }
 
+    deleteAllFundCompositionsByThemeId(themeId){
+        const deleteFundsPromise = ThemeFundComposition.find({ theme: themeId }).exec()
+            .then(compositions => {
+                compositions.map(composition => {
+                    return Promise.all([this.remove(composition), UserThemeFundAllocation.remove({ themeFundComposition: composition._id }).exec()]);
+                });
+            });
+    }
+
     deleteAllStockCompositionsByStockId(stockId){
         const deleteStocksPromise = ThemeStockComposition.find({ stock: stockId }).exec()
             .then(compositions => {
                 compositions.map(composition => {
                     return Promise.all([this.remove(composition), UserThemeStockAllocation.remove({ themeStockComposition: composition._id }).exec()]);
+                });
+            });
+    }
+
+    deleteAllFundCompositionsByFundId(fundId){
+        const deleteFundsPromise = ThemeFundComposition.find({ fund: fundId }).exec()
+            .then(compositions => {
+                compositions.map(composition => {
+                    return Promise.all([this.remove(composition), UserThemeFundAllocation.remove({ themeFundComposition: composition._id }).exec()]);
                 });
             });
     }
@@ -328,12 +418,17 @@ export default class DataRepository extends BaseRepository {
         return allocations.find(allocation => allocation.user == userId);
     }
 
+    getFundAllocationByUser(allocations, userId) {
+        return allocations.find(allocation => allocation.user == userId);
+    }
+
     deleteThemeData(theme) {
         const deleteAllStockCompositionsPromise = this.deleteAllStockCompositionsByThemeId(theme.id);
+        const deleteAllFundCompositionsPromise = this.deleteAllFundCompositionsByThemeId(theme.id);
         const deleteAllUserThemeInputsPromise = this.deleteAllUserThemeInputsByThemeId(theme.id);
         const removeAllUserFollowersPromise = this.removeAllUserFollowersByThemeId(theme.id);
         const deleteThemePromise = this.remove(theme); 
-        return Promise.all([deleteAllStockCompositionsPromise, deleteAllUserThemeInputsPromise, removeAllUserFollowersPromise, deleteThemePromise]);
+        return Promise.all([deleteAllStockCompositionsPromise, deleteAllFundCompositionsPromise, deleteAllUserThemeInputsPromise, removeAllUserFollowersPromise, deleteThemePromise]);
     }
 
     createStockCompositionAndAllocation(allocationData, theme, user) {
@@ -362,6 +457,32 @@ export default class DataRepository extends BaseRepository {
         //TODO: add .catch? / error handling
     }
 
+    createFundCompositionAndAllocation(allocationData, theme, user) {
+        let activitylog = new ActivityLog();
+        activitylog.user = user._id;
+        activitylog.theme = theme._id;
+        activitylog.userName = user.name;
+        activitylog.themeName = theme.name;
+        return this.getById(Fund, allocationData.fundId)
+            .then(fund => {
+                activitylog.fund = fund.fundName;
+                this.addFundTagToTheme(theme._id, fund._id)
+                    .then(() => {
+                        return this.createThemeFundComposition(theme, fund, user);
+                    })
+                    .then(themeFundComposition => {
+                        return this.createFundAllocation(themeFundComposition, user, allocationData.exposure)
+                    }).then(userThemeFundAllocation => {
+                    activitylog.userThemeFundAllocation = userThemeFundAllocation;
+                    var followPromise = this.followTheme(activitylog.user, activitylog.theme);
+                    var savePromise = this.save(activitylog);
+                    return Promise.all([followPromise, savePromise]);
+                    //return this.save(activitylog);
+                });
+            })
+        //TODO: add .catch? / error handling
+    }
+
     addStockTagToTheme(themeId, stockId){
         return new Promise((resolve, reject) => {
             this.push(Theme, { _id: themeId }, { "stockTags": stockId })
@@ -377,14 +498,28 @@ export default class DataRepository extends BaseRepository {
     }
 
     addEmailToSubscription(emailID) {
-        
-            console.log("subscription save huna ayo hai");
-            const subscribe = new Subscription({
-            
-                email: emailID
-            });
 
-            return this.save(subscribe);
+        console.log("subscription save huna ayo hai");
+        const subscribe = new Subscription({
+
+            email: emailID
+        });
+t
+        return this.save(subscribe);
+    }
+
+    addFundTagToTheme(themeId, fundId){
+        return new Promise((resolve, reject) => {
+            this.push(Theme, { _id: themeId }, { "fundTags": fundId })
+                .then(() => {
+                    console.log("Fund tag added to theme.");
+                    resolve(true);
+                })
+                .catch(err => {
+                    console.log(err);
+                    reject(err);
+                });
+        });
     }
 
     removeStockTagFromTheme(themeStockCompositionID) {
@@ -405,6 +540,24 @@ export default class DataRepository extends BaseRepository {
         });
     }
 
+    removeFundTagFromTheme(themeFundCompositionID) {
+        var that = this;
+        return new Promise((resolve, reject) => {
+            ThemeFundComposition.findById(themeFundCompositionID).then(function (themeFundComposition) {
+                that.pull(Theme, { _id: themeFundComposition.theme }, { "fundTags": themeFundComposition.fund })
+                    .then(() => {
+                        console.log("Fund tag removed from theme.");
+                        resolve(true);
+                    })
+                    .catch(err => {
+                        console.log(err);
+                        reject(err);
+                    });
+            })
+                .catch(err => reject(err));
+        });
+    }
+
     createThemeStockComposition(theme, stock, user) {
         const themeStockComposition = new ThemeStockComposition({
             theme: theme,
@@ -413,6 +566,16 @@ export default class DataRepository extends BaseRepository {
         });
 
         return this.save(themeStockComposition);
+    }
+
+    createThemeFundComposition(theme, fund, user) {
+        const themeFundComposition = new ThemeFundComposition({
+            theme: theme,
+            fund: fund,
+            addedBy: user
+        });
+
+        return this.save(themeFundComposition);
     }
 
     createStockAllocation(themeStockComposition, user, exposure) {
@@ -425,8 +588,18 @@ export default class DataRepository extends BaseRepository {
         return this.save(stockAllocation);
     }
 
+    createFundAllocation(themeFundComposition, user, exposure) {
+        const fundAllocation = new UserThemeFundAllocation({
+            user: user,
+            themeFundComposition: themeFundComposition,
+            exposure: exposure
+        });
+
+        return this.save(fundAllocation);
+    }
+
     getActivities(){
-        var filter = { _id:0, user:1, theme:1,"userInput.categories":1, "userInput.categoriesValuesChecked":1, "userInput.timeHorizon":1, "userInput.maturity":1, "userInput.geography":1, "userInput.categoryValues":1};
+        var filter = { _id:0, user:1, theme:1,"userInput.categories":1, "userInput.categoriesValuesChecked":1, "userInput.timeHorizon":1, "userInput.maturity":1, "userInput.geography":1, "userInput.sectors":1, "userInput.categoryValues":1};
         return new Promise((resolve, reject) => {
             ActivityLog.find({},filter).sort( { createdAt: -1 } ).exec()
                 .then(results => {
@@ -562,6 +735,29 @@ export default class DataRepository extends BaseRepository {
         });
     }
 
+    storeNewsFeedBasedOnFundAllocation(fundAllocation){
+        let activityToBeLogged = new ActivityLog();
+        activityToBeLogged.user = fundAllocation.user;
+        activityToBeLogged.userThemeFundAllocation = fundAllocation;
+        return this.getUserById(fundAllocation.user).then(user => {
+            activityToBeLogged.userName = user.name;
+            return this.getThemeFundCompositionById(fundAllocation.themeFundComposition);
+        }).then(composition=>{
+            fundAllocation.composition = composition;
+            activityToBeLogged.theme = composition.theme;
+            return this.getThemeById(composition.theme);
+        }).then(theme=>{
+            activityToBeLogged.themeName = theme.name;
+            return this.getFundById(fundAllocation.composition.fund);
+        }).then(fund=>{
+            activityToBeLogged.fund = fund.fundName;
+            var savePromise = this.save(activityToBeLogged);
+            var followPromise = this.followTheme(activityToBeLogged.user, activityToBeLogged.theme);
+            return Promise.all([savePromise, followPromise]);
+            //return this.save(activityToBeLogged);
+        });
+    }
+
 
     storeNewsFeedBasedOnThemeProperties(user, theme, themeProperty){
         let activityToBeLogged = new ActivityLog();
@@ -602,9 +798,25 @@ export default class DataRepository extends BaseRepository {
         });
     }
 
+    validateFundComposition(compositionId, validation){
+        return new Promise ((resolve,reject) => {
+            this.update(ThemeFundComposition, { "_id" : compositionId }, {"isValidated": validation})
+                .then(results => {
+                    resolve(results);
+                })
+                .catch(err => reject(err));
+        });
+    }
+
     deleteStockById(stockId){
         const deleteAllStockCompositionsPromise = this.deleteAllStockCompositionsByStockId(stockId);
         const deleteStock = this.removeById(Stock,stockId);
-        return Promise.all([deleteAllStockCompositionsPromise, deleteStock]);        
+        return Promise.all([deleteAllStockCompositionsPromise, deleteStock]);
+    }
+
+    deleteFundById(fundId){
+        const deleteAllFundCompositionsPromise = this.deleteAllFundCompositionsByFundId(fundId);
+        const deleteFund = this.removeById(Fund,fundId);
+        return Promise.all([deleteAllFundCompositionsPromise, deleteFund]);
     }
 }

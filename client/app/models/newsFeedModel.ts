@@ -3,6 +3,7 @@ export class UserThemeInput {
                         public categories?: number[],
                         public maturity?: number,
                         public geography?: number,
+                        public sectors?: number,
                         public timeHorizon?: 1,
             ){}
 }
@@ -13,6 +14,14 @@ export class UserThemeStockAllocation {
                         public themeStockComposition?: string,
                         public user?: string
             ){}
+}
+
+export class UserThemeFundAllocation {
+    constructor(
+        public exposure?: number,
+        public themeFundComposition?: string,
+        public user?: string
+    ){}
 }
 
 export class NewsFeedModel {

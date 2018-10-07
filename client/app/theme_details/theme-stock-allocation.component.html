@@ -85,7 +85,7 @@
 <!-- New Allocations -->
 <br>
 <div class="row text-center" *ngIf="!showAddOtherStocksButton">
-    <button class="btn btn-md btn-primary no-border-radius global-font-2" (click)="toggleShowAddOtherStocksButton()">Add Stocks</button>
+    <button class="btn btn-md btn-primary no-border-radius global-font-2" (click)="toggleShowAddOtherStocksButton()">Add Firms</button>
 </div>
 
 <div *ngIf="showAddOtherStocksButton">
@@ -121,7 +121,7 @@
 <!-- Delete stockAllocation -->
 <app-modal #modalStockCompositionAdmin>
     <div class="app-modal-header">
-        <h5>Delete Stock Allocation</h5>
+        <h5>Delete Firm Allocation</h5>
     </div>
     <div class="app-modal-body">
         <p>Are you sure you want to delete all votes to this stock allocation?</p>

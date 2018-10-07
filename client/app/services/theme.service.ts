@@ -8,6 +8,7 @@ import {StockAllocationModel} from "../models/stockAllocationModel";
 import {ErrorService} from "../error_handling/error.service";
 import * as Settings from '../utilities/settings';
 import {ThemeServiceInterface} from "./theme-service-interface";
+import {FundAllocationModel} from "../models/fundAllocationModel";
 
 @Injectable()
 export class ThemeService implements ThemeServiceInterface{
@@ -28,6 +29,16 @@ export class ThemeService implements ThemeServiceInterface{
         const stockAllocationBody = {stockAllocation: stockAllocation};
         const body = JSON.stringify(stockAllocationBody);
         let apiPath = this.baseAPI + 'stockallocations/theme/' + themeId;
+
+        return this.http.post(apiPath, body, {headers: this.headers})
+            .map((response: Response) => response.json())
+            .catch(this.handleError);
+    }
+
+    createManyFundCompositionsAndAllocations(themeId: any, fundAllocation: FundAllocationModel[]) {
+        const fundAllocationBody = {fundAllocation: fundAllocation};
+        const body = JSON.stringify(fundAllocationBody);
+        let apiPath = this.baseAPI + 'fundallocations/theme/' + themeId;
 
         return this.http.post(apiPath, body, {headers: this.headers})
             .map((response: Response) => response.json())
@@ -76,8 +87,8 @@ export class ThemeService implements ThemeServiceInterface{
         return "?" + ret.join('&');
     }
 
-    searchThemes(searchTerm: string, searchType: number, start: number, categories: number[] = [], maturity: number[] = [], timeHorizon: number[] = [], geography: number[] = [], tags: string[] = []) {
-        let params = {'searchQuery': searchTerm, 'searchType': searchType, 'start': start, 'categories': categories, 'maturity': maturity, 'timeHorizon': timeHorizon, 'geography': geography, 'tags': tags};
+    searchThemes(searchTerm: string, searchType: number, start: number, categories: number[] = [], maturity: number[] = [], timeHorizon: number[] = [], geography: number[] = [], sectors: number[], tags: string[] = []) {
+        let params = {'searchQuery': searchTerm, 'searchType': searchType, 'start': start, 'categories': categories, 'maturity': maturity, 'timeHorizon': timeHorizon, 'geography': geography, 'tags': tags, 'sectors': sectors};
         let searchQuery = this.encodeQueryData(params);
         console.log(searchQuery);
         let apiPath = this.baseAPI + 'themes' + searchQuery;
@@ -109,6 +120,13 @@ export class ThemeService implements ThemeServiceInterface{
             .catch(this.handleError);
     }
 
+    getThemeFundAllocationDistribution(themeId: string) {
+        let apiPath = this.baseAPI + 'fundallocations/theme/' + themeId;
+        return this.http.get(apiPath, {headers: this.headers})
+            .map((response: Response) => response.json().obj)
+            .catch(this.handleError);
+    }
+
     getAllThemeTags() {
         let apiPath = this.baseAPI + 'themes/tags';
         return this.http.get(apiPath, { headers: this.headers })
@@ -125,6 +143,15 @@ export class ThemeService implements ThemeServiceInterface{
             .catch(this.handleError);
     }
 
+    updateUserFundAllocation(allocationId: string, exposure: number) {
+        let apiPath = this.baseAPI + 'fundallocations/' + allocationId;
+        const body = {exposure: exposure};
+
+        return this.http.put(apiPath, body, {headers: this.headers})
+            .map((response: Response) => response.json().obj)
+            .catch(this.handleError);
+    }
+
     createUserStockAllocation(themeStockCompositionId: string, exposure: number) {
         let apiPath = this.baseAPI + 'stockallocations/themestockcomposition/' + themeStockCompositionId;
         const body = {exposure: exposure};
@@ -134,8 +161,24 @@ export class ThemeService implements ThemeServiceInterface{
             .catch(this.handleError);
     }
 
+    createUserFundAllocation(themeFundCompositionId: string, exposure: number) {
+        let apiPath = this.baseAPI + 'fundallocations/themefundcomposition/' + themeFundCompositionId;
+        const body = {exposure: exposure};
+
+        return this.http.post(apiPath, body, {headers: this.headers})
+            .map((response: Response) => response.json())
+            .catch(this.handleError);
+    }
+
     deleteUserStockAllocation(allocationId: string) {
         let apiPath = this.baseAPI + 'stockallocations/' + allocationId;
+        return this.http.delete(apiPath, {headers: this.headers})
+            .map((response: Response) => response.json())
+            .catch(this.handleError);
+    }
+
+    deleteUserFundAllocation(allocationId: string) {
+        let apiPath = this.baseAPI + 'fundallocations/' + allocationId;
         return this.http.delete(apiPath, {headers: this.headers})
             .map((response: Response) => response.json())
             .catch(this.handleError);
@@ -162,8 +205,23 @@ export class ThemeService implements ThemeServiceInterface{
             .catch(this.handleError);
     }
 
+    deleteUserFundCompositionByAdmin(compositionId: string) {
+        let apiPath = this.baseAPI + 'admin/fundcompositions/' + compositionId;
+        return this.http.delete(apiPath, {headers: this.headers})
+            .map((response: Response) => {console.log(response);response.json();})
+            .catch(this.handleError);
+    }
+
     validateStockCompositionByAdmin(compositionId: string, validation: boolean) {
         let apiPath = this.baseAPI + 'admin/stockcompositions/validate/' + compositionId + '/' + validation;
+        const body = {};
+        return this.http.put(apiPath, body, { headers: this.headers })
+            .map((response: Response) => response.json().obj)
+            .catch(this.handleError);
+    }
+
+    validateFundCompositionByAdmin(compositionId: string, validation: boolean) {
+        let apiPath = this.baseAPI + 'admin/fundcompositions/validate/' + compositionId + '/' + validation;
         const body = {};
         return this.http.put(apiPath, body, { headers: this.headers })
             .map((response: Response) => response.json().obj)

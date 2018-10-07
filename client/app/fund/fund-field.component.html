@@ -1,0 +1,56 @@
+<h5 *ngIf="!formCancelled && isCreate" class="global-font-2"> Sorry, we do not have this fund in our database yet. Help us and add it.</h5>
+<h5 *ngIf="fundAddedSuccessfully" class="gloabl-color-green global-font-2">Fund {{currentFund.name}} added successfully.</h5>
+<h5 *ngIf="fundUpdatedSuccessfully" class="gloabl-color-green global-font-2">Fund {{currentFund.name}} updated successfully.</h5>
+<h5 *ngIf="fundDeletedSuccessfully" class="gloabl-color-green global-font-2">Fund deleted successfully.</h5>
+
+<div *ngIf="!formCancelled" class="global-font-2">
+    <br/>
+    <form (ngSubmit)="onSubmit(form)" #form="ngForm">
+        <div *ngIf="isUpdate" class="form-group row">
+            <div class="col-xs-2">
+                <strong> id </strong>
+            </div>
+            <div class="col-xs-10">
+                <input [disabled]="true" type="text" id="fundId" class="form-control input-list no-border-radius" [(ngModel)]="currentFund._id"
+                       name="fundId" #name="ngModel" placeholder="id" />
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="col-xs-2">
+                <strong> Fund name </strong>
+            </div>
+            <div class="col-xs-10">
+                <input [disabled]="isUpdate" type="text" id="fundName" class="form-control input-list no-border-radius" [(ngModel)]="currentFund.name"
+                       name="fundName" #name="ngModel" placeholder="name" />
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="col-xs-2">
+                <strong> Fund parent </strong>
+            </div>
+            <div class="col-xs-10">
+                <input type="text" id="fundParent" class="form-control input-list no-border-radius" [(ngModel)]="currentFund.parent"
+                       name="fundParent" #name="ngModel" placeholder="parent" />
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="col-xs-2">
+                <strong> Fund ISIN </strong>
+            </div>
+            <div class="col-xs-10">
+                <input type="text" id="fundIsin" class="form-control input-list no-border-radius" [(ngModel)]="currentFund.isin"
+                       name="fundIsin" #name="ngModel" placeholder="isin" />
+            </div>
+        </div>
+        <div class="col-xs-12"> <br/> </div>
+        <div class="form-group row">
+            <div class="text-right">
+                <button *ngIf="isCreate" [disabled]="false" class="btn btn-md btn-default no-border-radius" type="button" (click)="cancelForm()">Cancel</button>
+                <button *ngIf="isCreate" [disabled]="isFormIncomplete()" class="btn btn-md btn-primary no-border-radius" type="submit">Create</button>
+                <button *ngIf="isUpdate" [disabled]="isDeleteFormIncomplete()" class="btn btn-md btn-primary no-border-radius" type="button" (click)="deleteFund()">Delete</button>
+                <button *ngIf="isUpdate" [disabled]="isUpdateFormIncomplete()" class="btn btn-md btn-primary no-border-radius" type="submit">Update</button>
+            </div>
+        </div>
+    </form>
+    <hr />
+</div>

@@ -3,7 +3,7 @@ import {ThemeService} from "../services/theme.service";
 import {ThemePropertiesEditModel} from "../models/themePropertiesEditModel";
 import {ModalComponent} from "./modal.component";
 import {NgForm} from "@angular/forms";
-import {timeHorizonValues, maturityValues, categoryValues, geographyValues} from "../models/themePropertyValues";
+import {timeHorizonValues, maturityValues, categoryValues, geographyValues, sectorValues} from "../models/themePropertyValues";
 import {Observable} from "rxjs";
 
 @Component({
@@ -52,6 +52,7 @@ export class ThemePropertiesComponent implements OnInit {
     maturityValues = maturityValues;
     categoryValues = categoryValues;
     geographyValues = geographyValues;
+    sectorValues = sectorValues;
 
     readonly BLUE_THEME_PROPERTY_COLOR = {r: 41, g: 128, b: 185};
     readonly BORDER_THEME_PROPERTY = 'solid 2px #34495e';
@@ -135,7 +136,7 @@ export class ThemePropertiesComponent implements OnInit {
         if (!this.themePropertiesData.userInputs) {
             return;
         }
-        if (propertyName !== 'categories') {
+        if (propertyName !== 'categories' && propertyName !== 'sectors' && propertyName !== 'geography') {
             return this.themePropertiesData.userInputs[propertyName] == value ? this.BORDER_THEME_PROPERTY : '';
         } else {
             return this.themePropertiesData.userInputs[propertyName].indexOf(value) >= 0 ? this.BORDER_THEME_PROPERTY : '';
@@ -149,6 +150,8 @@ export class ThemePropertiesComponent implements OnInit {
 
     createOrUpdateThemeProperty(form: NgForm) {
         this.themeProperties.setCheckedCategories();
+        this.themeProperties.setCheckedGeographies();
+        this.themeProperties.setCheckedSectors();
         /*if there isn't any existing user input for this theme, create new
          otherwise, update existing
          */

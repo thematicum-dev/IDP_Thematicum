@@ -1,0 +1,13 @@
+<app-autocomplete   [placeholderTerm]="autocompletePlaceholder"
+                    [allowCustomValues]="allowCustomValues"
+                    [allowEnterKey]="allowEnterKey"
+                    [allowDirectClick]="allowDirectClick"
+                    [allowDirectClick]="allowDirectClick"
+                    [dataSource]="itemList"
+                    (notifySelectedItem)='selectItem($event)'
+                    (clearErrorStr)="clearErrorStr()"
+                    id="fundsAutocomplete"
+                    #fundsAutocomplete
+                    class="global-font-2"
+>
+</app-autocomplete>

@@ -63,6 +63,9 @@ export class ThemePropertiesAggregation extends DataAggregation {
             propertyName: 'geography',
             nrValuesRequired: constants.TOTAL_GEOGRAPHY_VALUES
         }, {
+            propertyName: 'sectors',
+            nrValuesRequired: constants.TOTAL_SECTOR_VALUES
+        }, {
             propertyName: 'categories',
             nrValuesRequired: constants.TOTAL_CATEGORY_VALUES
         }];        
@@ -91,6 +94,7 @@ export class ThemePropertiesAggregation extends DataAggregation {
             timeHorizon: themeType.timeHorizon,
             maturity: themeType.maturity,
             geography: themeType.geography,
+            sectors: themeType.sectors,
             categories: themeType.categories
         };
 
@@ -101,6 +105,16 @@ export class ThemePropertiesAggregation extends DataAggregation {
 }
 
 export class StockAllocationAggregation extends DataAggregation {
+    constructor() {
+        super();
+        this.propertyList = [{
+            propertyName: 'exposure',
+            nrValuesRequired: constants.TOTAL_EXPOSURE_VALUES
+        }];
+    }
+}
+
+export class FundAllocationAggregation extends DataAggregation {
     constructor() {
         super();
         this.propertyList = [{
