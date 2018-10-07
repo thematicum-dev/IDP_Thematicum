@@ -7,7 +7,8 @@
             <li><a href="#myvotes" data-toggle="tab">My votes </a></li>
             <li><a href="#profile" data-toggle="tab">My account info</a></li>
             <li *ngIf="isUserAdmin"><a href="#myadminfeed" data-toggle="tab">Admin Data</a></li>
-            <li *ngIf="isUserAdmin"><a href="#stocksManager" data-toggle="tab">Stocks Manager</a></li>
+            <li *ngIf="isUserAdmin"><a href="#stocksManager" data-toggle="tab">Firms Manager</a></li>
+            <li *ngIf="isUserAdmin"><a href="#fundsManager" data-toggle="tab">Funds Manager</a></li>
         </ul>
     </div>
 
@@ -44,9 +45,14 @@
                 <app-admin-news-feed> </app-admin-news-feed>
             </div>
             <div *ngIf="isUserAdmin" class="tab-pane" id="stocksManager">
-                <h2 class="global-font">Stocks Manager</h2>
+                <h2 class="global-font">Firms Manager</h2>
                 <br>
                 <app-admin-stocks-manager> </app-admin-stocks-manager> 
+            </div>
+            <div *ngIf="isUserAdmin" class="tab-pane" id="fundsManager">
+                <h2 class="global-font">Funds Manager</h2>
+                <br>
+                <app-admin-funds-manager> </app-admin-funds-manager>
             </div>
         </div>
     </div>

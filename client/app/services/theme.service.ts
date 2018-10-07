@@ -208,7 +208,7 @@ export class ThemeService implements ThemeServiceInterface{
     deleteUserFundCompositionByAdmin(compositionId: string) {
         let apiPath = this.baseAPI + 'admin/fundcompositions/' + compositionId;
         return this.http.delete(apiPath, {headers: this.headers})
-            .map((response: Response) => response.json())
+            .map((response: Response) => {console.log(response);response.json();})
             .catch(this.handleError);
     }
 

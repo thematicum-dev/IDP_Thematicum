@@ -11,7 +11,7 @@
     </div>
     <br/>
 
-    <form (ngSubmit)="onSubmit(form, themeTags, themeStockAllocation)" #form="ngForm">
+    <form (ngSubmit)="onSubmit(form, themeTags, themeStockAllocation, themeFundAllocation)" #form="ngForm">
         <div class="form-group row">
             <label class="col-xs-2 col-form-label global-font-2" for="themeName">Theme name</label>
             <div class="col-xs-10">
@@ -120,7 +120,7 @@
         <!-- Stock Allocation -->
         <br />
         <fieldset class="form-group  global-font">
-            <legend>Stock Allocation</legend>
+            <legend>Firm Allocation</legend>
         </fieldset>
 
         <app-autocomplete-stock-allocation #themeStockAllocation></app-autocomplete-stock-allocation>

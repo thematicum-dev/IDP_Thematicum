@@ -5,5 +5,5 @@ export class FundModel extends AutocompleteItem {
         public parent: string,
         public _id: string,
         public isin: string,
-    ) { super(name, _id); }
+    ) { super(name, isin,  _id); }
 }

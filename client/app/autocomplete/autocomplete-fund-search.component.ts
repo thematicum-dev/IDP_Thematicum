@@ -18,7 +18,7 @@ export class AutoCompleteFundSearchComponent extends AutoCompleteContainerCompon
     constructor(public dataSource: AutocompleteDatasourceService) {
         super(dataSource,
             Settings.getBaseApi() + 'funds',
-            'search by company name',
+            'search by fund name',
             false, false, false);
     }
 
@@ -32,9 +32,9 @@ export class AutoCompleteFundSearchComponent extends AutoCompleteContainerCompon
 
     initializeAutocompleteData(data: any[]) {
         this.itemList = data.map(item => new FundModel(item.fundName,
-            item.parent,
+            item.fundParent,
             item._id,
-            item.isin));
+            item.fundIsin));
     }
 
     selectItem(item: any) {

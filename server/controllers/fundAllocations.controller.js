@@ -27,11 +27,11 @@ export function create(req, res, next) {
         exposure: req.body.exposure
     });
 
-    // repo.storeNewsFeedBasedOnFundAllocation(fundAllocation).then(results =>{
-    //     return repo.createFundAllocation(req.themeFundComposition, res.locals.user, req.body.exposure);
-    // }).then(results =>{
-    //     res.status(201).json(new AppResponse('Fund allocation created', results))
-    // }).catch(err => next(err));
+    repo.storeNewsFeedBasedOnFundAllocation(fundAllocation).then(results =>{
+        return repo.createFundAllocation(req.themeFundComposition, res.locals.user, req.body.exposure);
+    }).then(results =>{
+        res.status(201).json(new AppResponse('Fund allocation created', results))
+    }).catch(err => next(err));
 }
 
 export function update(req, res, next) {

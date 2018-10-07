@@ -25,6 +25,12 @@ router.route('/stockcompositions/:compositionId')
 router.route('/stockcompositions/validate/:compositionId/:validation')
     .put(adminController.validateStockComposition);
 
+router.route('/fundcompositions/:compositionId')
+    .delete(adminController.deleteFundCompositionByAdmin);
+
+router.route('/fundcompositions/validate/:compositionId/:validation')
+    .put(adminController.validateFundComposition);
+
 router.param('themeId', adminController.themeById);
 router.param('userEmail', activityController.userByEmail);
 
