@@ -231,7 +231,7 @@ export class ThemeStockAllocationComponent implements OnInit {
         console.log('Stock Allocations');
         console.log(data);
         this.stockAllocationData = data;
-        console.log(this.stockAllocationData);
+        console.log("Stock ko data" + this.stockAllocationData);
         //this.stockAllocationData.userInputs.updatedAt = new Date(this.stockAllocationData.userInputs.updatedAt).toLocaleString();
         this.allocatedStockIds = data.map(allocation => allocation.themeStockComposition.stock._id); //set allocated stock Ids
     }
