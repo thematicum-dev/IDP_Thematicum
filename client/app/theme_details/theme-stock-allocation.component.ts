@@ -56,6 +56,7 @@ export class ThemeStockAllocationComponent implements OnInit {
     allocatedStockIds: string[]; //to prefilter stocks available in autocomplete
     showAddOtherStocksButton: boolean = false; //to show/hide "Add Other Stocks" button
     stockAllocationData: ThemeStockCompositionAllocationModel[] = []; //to hold data received from the service
+    checkAllocationData: any;
     selectedExposure: number; //to hold the exposure value edited by the user
     isCurrentUserAdmin: boolean = localStorage.getItem("isAdmin") == "true";
     
@@ -231,7 +232,8 @@ export class ThemeStockAllocationComponent implements OnInit {
         console.log('Stock Allocations');
         console.log(data);
         this.stockAllocationData = data;
-        console.log("Stock ko data" + this.stockAllocationData);
+        this.checkAllocationData = data;
+        console.log("Stock ko data" + this.checkAllocationData);
         //this.stockAllocationData.userInputs.updatedAt = new Date(this.stockAllocationData.userInputs.updatedAt).toLocaleString();
         this.allocatedStockIds = data.map(allocation => allocation.themeStockComposition.stock._id); //set allocated stock Ids
     }

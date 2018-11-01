@@ -6,7 +6,7 @@
                 <p class="global-label global-font-2 global-color-light-black text-center" *ngIf="themePropertiesData">Total votes: {{themePropertiesData.totalCount}}</p>
                
 
-               <p class="global-label global-font-2 global-color-light-black text-center" *ngIf="themePropertiesData">Last vote on: {{themePropertiesData.userInputs.updatedAt || "Not updated"}} </p> 
+               <p class="global-label global-font-2 global-color-light-black text-center" *ngIf="themePropertiesData">Last vote on: {{(themePropertiesData.userInputs.updatedAt) || "Not updated"}} </p> 
      
             </div>
             <div class="text-right" *ngIf="!isEditMode">
