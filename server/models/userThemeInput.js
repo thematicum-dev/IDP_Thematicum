@@ -38,6 +38,6 @@ const schema = new Schema({
         min: constants.MIN_CATEGORY,
         max: constants.MAX_CATEGORY
     }]
-});
+}, { timestamps: true });
 
 export default mongoose.model('UserThemeInput', schema);

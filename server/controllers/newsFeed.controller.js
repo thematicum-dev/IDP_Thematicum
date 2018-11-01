@@ -13,7 +13,7 @@ export function getNews(req, res, next) {
 
 					console.log("getnews ma ayo hai");
 
-					console.log(req.query.name);
+					console.log(req.query.tags);
 
 					//find name of the theme
 
@@ -24,7 +24,7 @@ export function getNews(req, res, next) {
   						sortBy: 'relevancy',
   						pageSize: 21
 					}).then(response => {
-						console.log(response);
+						//console.log(response);
 						return res.status(200).json(new AppResponse('Theme news retrieved', response));
 					});
 					

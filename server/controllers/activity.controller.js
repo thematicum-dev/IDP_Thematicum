@@ -132,3 +132,9 @@ export function userByEmail(req, res, next, userEmail) {
         })
         .catch(err => next(err));
 }
+
+export function sendSubscriptionEmail(req, res, next) {
+    console.log("eta kina aena00");
+    return res.status(400).json(new AppResponse('Access denied ', null));
+}
+

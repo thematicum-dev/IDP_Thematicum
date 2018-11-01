@@ -122,6 +122,7 @@ export class ThemeNewsComponent implements OnInit {
 
         this.name = this.theme.name;
 
+        console.log(this.theme);
         this.themeService.getAllNews(this.theme).subscribe(
             data => {
                 console.log(data);

@@ -6,7 +6,7 @@
             <li><a href="#themes" data-toggle="tab">My themes</a></li>
             <li><a href="#myvotes" data-toggle="tab">My votes </a></li>
             <li><a href="#profile" data-toggle="tab">My account info</a></li>
-            <li *ngIf="isUserAdmin"><a href="#myadminfeed" data-toggle="tab">Admin Data</a></li>
+            <li *ngIf="isUserAdmin"><a href="#myadminfeed" data-toggle="tab">User Manager</a></li>
             <li *ngIf="isUserAdmin"><a href="#stocksManager" data-toggle="tab">Firms Manager</a></li>
             <li *ngIf="isUserAdmin"><a href="#fundsManager" data-toggle="tab">Funds Manager</a></li>
         </ul>
@@ -40,9 +40,14 @@
                 </ul>
             </div>
             <div *ngIf="isUserAdmin" class="tab-pane" id="myadminfeed">
-                <h2 class="global-font">Admin: All Newsfeed</h2>
+                <h2 class="global-font">Admin: User Management</h2>
                 <br>
                 <app-admin-news-feed> </app-admin-news-feed>
+            </div>
+            <div *ngIf="isUserAdmin" class="tab-pane" id="mysubscription">
+                <h2 class="global-font">Admin: Subscription Management</h2>
+                <br>
+                <app-admin-subscription> </app-admin-subscription>
             </div>
             <div *ngIf="isUserAdmin" class="tab-pane" id="stocksManager">
                 <h2 class="global-font">Firms Manager</h2>

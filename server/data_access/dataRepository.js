@@ -54,6 +54,16 @@ export default class DataRepository extends BaseRepository {
         });
     }
 
+    getAllUsers() {
+        return new Promise((resolve, reject) => {
+            this.getAll(User)
+                .then(results => {
+                    resolve(results)
+                })
+                .catch(err => reject(err));
+        })
+    }
+
     getUserByPasswordExpiry(token,expiry) {
         console.log("expirty vitra yo");
         return new Promise((resolve, reject) => {
@@ -356,6 +366,10 @@ export default class DataRepository extends BaseRepository {
 
     deleteAllStockAllocationsByCompositionId(compositionId){
         return Promise.all([UserThemeStockAllocation.remove({ themeStockComposition: compositionId }).exec()]); 
+    }
+
+    deleteUserById(userId) {
+        return Promise.all([User.remove({ _id: userId }).exec()]); 
     }
 
     deleteStockCompositionById(compositionId){        

@@ -1,6 +1,6 @@
 import {UserModel} from "../models/userModel";
 import {Injectable} from "@angular/core";
-import {Http, Headers, Response} from "@angular/http";
+import {Http, Headers, Response, RequestOptions} from "@angular/http";
 import 'rxjs/Rx';
 import {Observable} from "rxjs";
 import {Router} from "@angular/router";
@@ -11,7 +11,6 @@ import * as Settings from '../utilities/settings';
 @Injectable()
 export class UserProfileService {
             baseAPI: string = Settings.getBaseApi();
-            contentTypeHeaders = new Headers({'Content-Type': 'application/json'});
             headers = new Headers({'Content-Type': 'application/json', 'Authorization': localStorage.getItem('token')});
             redirectUrl: string;
             constructor(private http: Http, private router: Router, private errorService: ErrorService, private authService: AuthService) {}
@@ -86,8 +85,32 @@ export class UserProfileService {
                                     .catch((error => Observable.throw("Error in user profie service")));
             }
 
-            copyjson($event){
+            getAllUsers() {
+
+                  let apiPath = this.baseAPI + 'admin/activeusers';
+                        return this.http.get(apiPath , {headers: this.headers})
+                                    .map((response: Response) => response.json())
+                                    .catch((error => Observable.throw("Error in user profie service")));
             }
+
+            removeUserById(userId: string) {
+                  let apiPath = this.baseAPI + 'admin/removeUserById/' + userId;
+                        return this.http.delete(apiPath, {headers: this.headers})
+                                    .map((response: Response) => response.json())
+                                    .catch(this.handleError);
+            }
+
+            sendSubscribersEmail(emailBody: string) {
+                  const body = JSON.stringify({
+                          email: emailBody         
+                    });
+                  console.log(body);
+                  let apiPath = this.baseAPI + 'activity/sendemail';
+                          return this.http.post(apiPath, body, {headers: this.headers})
+                              .map((response: Response) => response.json())
+                              .catch(this.handleError);
+            }     
+
 
             handleError = (error: any) => {
                         this.errorService.handleError(error);

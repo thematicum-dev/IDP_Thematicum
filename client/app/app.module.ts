@@ -43,6 +43,7 @@ import { UserNewsFeed } from "./user_profile/user-newsfeed.component";
 import { AdminStocksManager } from "./admin/admin-stocks-manager.component";
 import { AdminFundsManager } from "./admin/admin-funds-manager.component";
 import { AdminNewsFeed } from "./admin/admin-news-feed.component";
+import { AdminSubscription } from "./admin/admin-subscription.component"
 import { ThemeFeedComponent } from "./theme_details/theme-feed.component";
 import { ThemeNewsComponent } from "./theme_details/theme-news.component";
 import {FundUpdateComponent} from "./fund/fund-update.component";
@@ -51,6 +52,7 @@ import {ThemeFundAllocationComponent} from "./theme_details/theme-fund-allocatio
 import {AutoCompleteFundSearchComponent} from "./autocomplete/autocomplete-fund-search.component";
 import {AutoCompleteFundAllocationComponent} from "./autocomplete/autocomplete-fund-allocation.component";
 import {FundService} from "./services/fund.service";
+import { DataTableModule } from 'angular-4-data-table/src/index';
 
 @NgModule({
     declarations: [
@@ -92,11 +94,12 @@ import {FundService} from "./services/fund.service";
         UserNewsFeed,
         AdminStocksManager,
         AdminNewsFeed,
+        AdminSubscription,
         ThemeFeedComponent,
         ThemeNewsComponent,
         AdminFundsManager
     ],
-    imports: [BrowserModule, routing, FormsModule, ReactiveFormsModule, HttpModule, MultiselectDropdownModule],
+    imports: [BrowserModule, routing, FormsModule, ReactiveFormsModule, HttpModule, MultiselectDropdownModule, DataTableModule],
     providers: [AuthService, ErrorService, ThemeService, StockService, AuthGuard, FundService],
     bootstrap: [AppComponent]
 })

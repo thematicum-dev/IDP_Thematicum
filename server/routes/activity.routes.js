@@ -10,4 +10,7 @@ router.use('/', authUtilities.authenticationMiddleware);
 router.route('/')
     .get(activityController.listAllByTime);
 
+router.route('/sendemail')
+	.post(activityController.sendSubscriptionEmail);
+
 export default router;

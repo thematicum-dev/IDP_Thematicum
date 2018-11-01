@@ -14,6 +14,6 @@ const schema = new Schema({
         min: constants.MIN_EXPOSURE,
         max: constants.MAX_EXPOSURE
     }
-});
+}, { timestamps: true });
 
 export default mongoose.model('UserThemeStockAllocation', schema);

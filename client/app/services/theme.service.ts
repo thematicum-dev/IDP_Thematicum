@@ -9,6 +9,7 @@ import {ErrorService} from "../error_handling/error.service";
 import * as Settings from '../utilities/settings';
 import {ThemeServiceInterface} from "./theme-service-interface";
 import {FundAllocationModel} from "../models/fundAllocationModel";
+import {Router} from "@angular/router";
 
 @Injectable()
 export class ThemeService implements ThemeServiceInterface{
@@ -232,9 +233,9 @@ export class ThemeService implements ThemeServiceInterface{
 
         console.log("eta ayo hai");
         let apiPath = this.baseAPI + 'newsfeed/newsfeed';
-        console.log(apiPath);
+        console.log(theme);
 
-        let options = new RequestOptions({ headers: this.headers, params: {name: theme.name} });
+        let options = new RequestOptions({ headers: this.headers, params: {name: theme.name, tags: theme.tags} });
 
         return this.http.get(apiPath,options)
             .map((response: Response) => response.json().obj)

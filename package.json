@@ -22,6 +22,8 @@
     "@angular/router": "4.0.0",
     "@angular/upgrade": "4.0.0",
     "angular-2-dropdown-multiselect": "^1.2.0",
+    "angular-4-data-table": "^0.4.6",
+    "angular-datatables": "^4.2.0",
     "babel-cli": "^6.23.0",
     "babel-core": "^6.23.1",
     "babel-loader": "^6.3.2",
@@ -32,11 +34,13 @@
     "bower": "^1.7.9",
     "cookie-parser": "~1.4.3",
     "core-js": "^2.4.1",
+    "datatables.net": "^1.10.15",
+    "datatables.net-dt": "^1.10.15",
     "debug": "~2.2.0",
     "dotenv": "^4.0.0",
     "express": "~4.14.0",
     "hbs": "~3.1.0",
-    "jquery": "^3.1.1",
+    "jquery": "^3.2.1",
     "jsonwebtoken": "^7.1.9",
     "mongoose": "^4.6.5",
     "mongoose-unique-validator": "^1.0.2",
@@ -67,6 +71,7 @@
     "tslib": "^1.6.1",
     "typescript": "^2.0.3",
     "webpack": "2.2.1",
-    "webpack-merge": "^0.14.1"
+    "webpack-merge": "^0.14.1",
+    "@types/datatables.net": "^1.10.6"
   }
 }

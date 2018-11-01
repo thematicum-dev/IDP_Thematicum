@@ -1,10 +1,29 @@
-<div>
-    <form>
-        <label>From:</label>
-        <input id="datefrom" #from type="date" max="2020-12-31" min="1990-12-31" value={{defaultFromDateString}}/>
-        <label>To:</label>
-        <input id="dateto" #to type="date" max="2020-12-31" min="1990-12-31" value={{defaultToDateString}}/>
-        <input type="button" (click)="getAdminFeedWithDates()" value="Go" />
-    </form>
+<div style="margin: auto; max-width: 1000px; margin-bottom: 50px;">
+    <data-table id="persons-grid"
+        headerTitle="Users"
+        [items]="items"
+        [itemCount]="itemCount"
+        (reload)="reloadItems($event)"
+
+        [rowTooltip]="rowTooltip"
+        >
+        <data-table-column
+            [property]="'name'"
+            [header]="'Name'"
+            [resizable]="true">
+        </data-table-column>
+        <data-table-column
+            [property]="'email'"
+            [header]="'Email'"
+            [visible]="true">
+        </data-table-column>
+        <data-table-column
+            [header]="'Remove'"
+            [visible]="true"
+            [width]="100">
+            <ng-template #dataTableCell let-item="item">
+                <span class="glyphicon glyphicon-trash" (click)="removeUser(item)"></span>
+            </ng-template>
+        </data-table-column>
+    </data-table>
 </div>
-<p id="paratocopy">{{newsFeedByAdminString}}</p>

@@ -31,6 +31,21 @@ export function deleteThemeByAdmin(req, res, next) {
     }
 }
 
+export function deleteUserByAdmin(req, res, next) {
+    let userId = req.params.userId;
+    let isCurrentLoggedInUserAdmin = res.locals.user.isAdmin == true ? true : false;
+
+    if (isCurrentLoggedInUserAdmin) {
+        repo.deleteUserById(userId)
+            .then(result => {
+                return res.status(200).json(new AppResponse('User Removed', result));
+            })
+            .catch(err => next(err));
+    } else {
+        return res.status(400).json(new AppResponse('Access denied ', null));
+    }
+}
+
 export function deleteStockCompositionByAdmin(req, res, next) {
     let compositionId = req.params.compositionId;
     let isCurrentLoggedInUserAdmin = res.locals.user.isAdmin == true ? true : false;
@@ -95,6 +110,20 @@ export function themeById(req, res, next, id) {
             }
             req.theme = result;
             next();
+        })
+        .catch(err => next(err));
+}
+
+export function listAllUsers(req, res, next) {
+
+    console.log("list ma ayo hai");
+    repo.getAllUsers()
+        .then(result => {
+            if (!result) {
+                return next(new AppError('No users found', 404))
+            }
+
+            return res.status(200).json(new AppResponse('Users retrieved', result));
         })
         .catch(err => next(err));
 }
