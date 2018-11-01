@@ -72,7 +72,7 @@ export class ThemePropertiesComponent implements OnInit {
 
     handleResults = (data: any) => {
         this.themePropertiesData = data;
-        //this.themePropertiesData.userInputs.updatedAt = new Date(this.themePropertiesData.userInputs.updatedAt).toLocaleString();
+        this.themePropertiesData.userInputs.updatedAt = new Date(this.themePropertiesData.userInputs.updatedAt).toLocaleString();
         this.themeProperties.clearProperties();
     }
 
