@@ -62,7 +62,7 @@
     <app-theme-fund-allocation [themeId]="selectedThemeId"></app-theme-fund-allocation>
 
     <!--Trend feed-->
-    <app-theme-feed [themeId]="selectedThemeId" [theme]="theme"></app-theme-feed>
+    <app-theme-feed *ngIf="isWindow" [themeId]="selectedThemeId" [theme]="theme"></app-theme-feed>
 
     <app-theme-news [themeId]="selectedThemeId" [theme]="theme"></app-theme-news>
 </div>

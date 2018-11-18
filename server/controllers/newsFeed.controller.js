@@ -17,8 +17,16 @@ export function getNews(req, res, next) {
 
 					//find name of the theme
 
+					var query = '"'+req.query.name+'"';
+
+					for (var i = 0; i < req.query.tags.length; i++) {
+						query += ' OR ' + '"'+ req.query.tags[i] +'"';
+					}
+
+					console.log(query);
+
 					newsapi.v2.everything({
-						q: '"'+req.query.name+'"',
+						q: query,
 						language: 'en',
 						sources: 'bbc-news,abc-news,al-jazeera-english,bbc-news,bloomberg,cnn,financial-post,financial-times,independent,news24,nbc-news,rt,the-economist,the-new-york-times,the-wall-street-journal,time,the-guardian-uk' ,
   						sortBy: 'relevancy',

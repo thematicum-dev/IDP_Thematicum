@@ -27,6 +27,7 @@ export class ThemeDetailsComponent implements OnInit, OnChanges {
     theme: Theme; //theme retrieved from the service
     selectedThemeId: string; //theme Id retrieved from the url
     isEditMode = false; //to show/hide theme-editing form
+    isWindow = true;
 
     @ViewChild(ModalComponent, FollowComponent)
     public modal: ModalComponent;
@@ -41,6 +42,9 @@ export class ThemeDetailsComponent implements OnInit, OnChanges {
             return;
         }
 
+        if (window.screen.width === 360) { // 768px portrait
+            this.isWindow = false;
+        }
         this.selectedThemeId = this.route.snapshot.params['id'];
         this.themeService.getThemeById(this.selectedThemeId).subscribe(
             data => {
