@@ -12,8 +12,8 @@ declare var trends: any;
     templateUrl: 'theme-feed.component.html',
     styles: [
         `
-        .chart {height: 50%; background: white;}
-        #trends-widget-1 {height: 100%; width: 100%;}
+        .chart {display: block;overflow: auto;}
+        #trends-widget-1 {height: 50%;}
         `],
     providers:[DatePipe]
     
@@ -25,7 +25,9 @@ export class ThemeFeedComponent implements OnInit {
     modifiedName: any;
     @Input() themeId: string;
     @Input() theme: Theme;
-    constructor(private route: ActivatedRoute, private router: Router, private themeService: ThemeService, private location: Location, private sanitizer: DomSanitizer, private datePipe: DatePipe) { }
+    constructor(private route: ActivatedRoute, private router: Router, private themeService: ThemeService, private location: Location, private sanitizer: DomSanitizer, private datePipe: DatePipe) { 
+        
+    }
 
     
     
@@ -88,5 +90,6 @@ export class ThemeFeedComponent implements OnInit {
     transformDate(date) {
         return this.datePipe.transform(date, 'yyyy-MM-dd');
     }
+
 
 }

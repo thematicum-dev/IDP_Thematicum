@@ -7,6 +7,8 @@ import {ModalComponent} from "./modal.component";
 import { FollowComponent } from "./follow.component";
 import {Location} from '@angular/common';
 
+import { DeviceDetectorService } from 'ngx-device-detector';
+
 @Component({
     selector: 'app-theme-details',
     templateUrl: 'theme-details.component.html',
@@ -32,7 +34,7 @@ export class ThemeDetailsComponent implements OnInit, OnChanges {
     @ViewChild(ModalComponent, FollowComponent)
     public modal: ModalComponent;
 
-    constructor(private route: ActivatedRoute, private router: Router, private themeService: ThemeService, private location: Location) { }
+    constructor(private route: ActivatedRoute, private router: Router, private themeService: ThemeService, private location: Location, private deviceService: DeviceDetectorService) { }
 
     @Input('theme')
      isCurrentUserAdmin: boolean = localStorage.getItem("isAdmin") == "true";
@@ -42,9 +44,10 @@ export class ThemeDetailsComponent implements OnInit, OnChanges {
             return;
         }
 
-        if (window.screen.width === 360) { // 768px portrait
+        if (this.deviceService.isMobile() == true) { // 768px portrait
             this.isWindow = false;
         }
+        
         this.selectedThemeId = this.route.snapshot.params['id'];
         this.themeService.getThemeById(this.selectedThemeId).subscribe(
             data => {

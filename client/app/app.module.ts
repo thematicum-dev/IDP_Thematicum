@@ -53,6 +53,7 @@ import {AutoCompleteFundSearchComponent} from "./autocomplete/autocomplete-fund-
 import {AutoCompleteFundAllocationComponent} from "./autocomplete/autocomplete-fund-allocation.component";
 import {FundService} from "./services/fund.service";
 import { DataTableModule } from 'angular-4-data-table/src/index';
+import { DeviceDetectorModule } from 'ngx-device-detector';
 
 @NgModule({
     declarations: [
@@ -99,7 +100,7 @@ import { DataTableModule } from 'angular-4-data-table/src/index';
         ThemeNewsComponent,
         AdminFundsManager
     ],
-    imports: [BrowserModule, routing, FormsModule, ReactiveFormsModule, HttpModule, MultiselectDropdownModule, DataTableModule],
+    imports: [BrowserModule, routing, FormsModule, ReactiveFormsModule, HttpModule, MultiselectDropdownModule, DataTableModule, DeviceDetectorModule.forRoot()],
     providers: [AuthService, ErrorService, ThemeService, StockService, AuthGuard, FundService],
     bootstrap: [AppComponent]
 })
