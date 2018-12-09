@@ -518,8 +518,8 @@ export default class DataRepository extends BaseRepository {
 
             email: emailID
         });
-t
-        return this.save(subscribe);
+
+        this.save(subscribe);
     }
 
     addFundTagToTheme(themeId, fundId){
