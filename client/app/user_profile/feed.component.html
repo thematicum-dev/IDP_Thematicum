@@ -18,9 +18,13 @@
         <div><span>Stock: {{newsfeed.stock}}</span></div>
         <div><span>Exposure: {{displayExposure}}</span></div>
     </div>
+    <div class="indent" *ngIf="newsfeed.userThemeFundAllocation != null">
+        <div><span>Fund: {{newsfeed.fund}}</span></div>
+        <div><span>Exposure: {{displayExposure}}</span></div>
+    </div>
     <div class="time">{{newsfeed.createdAt.toLocaleString()}}</div>
 </div>
 
 <div *ngIf="newsfeed == null">
-    <p>No data availbale</p>
+    <p>No data available</p>
 </div>

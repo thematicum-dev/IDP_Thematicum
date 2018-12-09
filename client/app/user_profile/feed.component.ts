@@ -64,9 +64,15 @@ export class FeedComponent implements OnInit {
             //trimming the last space and commas
             this.displayCategories = this.displayCategories.substring(0, this.displayCategories.length - 2);
         }
+
         if (this.newsfeed.userThemeStockAllocation != null) {
             var exposureArray = ['Strongly Positive', 'Weakly Positive', 'Neutral', 'Weakly Negative', 'Strongly Negative'];
             this.displayExposure = this.newsfeed.userThemeStockAllocation.exposure != null ? exposureArray[this.newsfeed.userThemeStockAllocation.exposure] : '';
+        }
+
+        if (this.newsfeed.userThemeFundAllocation != null) {
+            var exposureArray = ['Strongly Positive', 'Weakly Positive', 'Neutral', 'Weakly Negative', 'Strongly Negative'];
+            this.displayExposure = this.newsfeed.userThemeFundAllocation.exposure != null ? exposureArray[this.newsfeed.userThemeFundAllocation.exposure] : '';
         }
 
     }

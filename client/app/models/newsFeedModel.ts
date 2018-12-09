@@ -34,5 +34,7 @@ export class NewsFeedModel {
         public userThemeInput?: UserThemeInput,
         public createdAt?: string,
         public userThemeStockAllocation?: UserThemeStockAllocation,
+        public fund?: string,
+        public userThemeFundAllocation?: UserThemeFundAllocation,
     ) {}
 }

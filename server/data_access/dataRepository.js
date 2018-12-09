@@ -8,13 +8,13 @@ import {AppError} from '../utilities/appError';
 import UserThemeInput from '../models/userThemeInput';
 import ThemeStockComposition from '../models/themeStockComposition';
 import UserThemeStockAllocation from '../models/userThemeStockAllocation';
+import ThemeFundComposition from '../models/themeFundComposition';
+import UserThemeFundAllocation from '../models/userThemeFundAllocation';
 import RegistrationAccessCode from '../models/accessCode';
 import Subscription from '../models/subscription';
 import Stock from '../models/stock';
-import { ThemePropertiesAggregation, StockAllocationAggregation, FundAllocationAggregation } from '../utilities/dataAggregation';
-import ThemeFundComposition from '../models/themeFundComposition';
-import UserThemeFundAllocation from '../models/userThemeFundAllocation';
 import Fund from '../models/fund';
+import { ThemePropertiesAggregation, StockAllocationAggregation, FundAllocationAggregation } from '../utilities/dataAggregation';
 
 import constants from '../utilities/constants';
 
@@ -692,7 +692,7 @@ t
     }
 
     getNewsFeedByUserWithLimits(user, lowerLimit, upperLimit){
-        var filter = { _id:0, user: 1, userName:1, theme: 1, themeName:1, userThemeInput:1, userThemeStockAllocation: 1, stock: 1, createdAt: 1};
+        var filter = { _id:0, user: 1, userName:1, theme: 1, themeName:1, userThemeInput:1, userThemeStockAllocation: 1, stock: 1, userThemeFundAllocation: 1, fund: 1, createdAt: 1};
         return new Promise((resolve, reject) => {
             ActivityLog.find({user: user}, filter).sort( { createdAt: -1 } ).skip(lowerLimit).limit(upperLimit)
                 .then(results => {
@@ -703,7 +703,7 @@ t
     }
 
     getNewsFeedByThemesAUserFollowsWithLimits(user, lowerLimit, upperLimit){
-        var filter = { _id:0, user: 1,userName:1, theme: 1, themeName:1, userThemeInput:1, userThemeStockAllocation: 1, stock: 1,createdAt: 1};
+        var filter = { _id:0, user: 1,userName:1, theme: 1, themeName:1, userThemeInput:1, userThemeStockAllocation: 1, stock: 1, userThemeFundAllocation: 1, fund: 1, createdAt: 1};
         return new Promise((resolve, reject) => {
             ActivityLog.find({ theme:  {$in: user.follows }}, filter).sort( { createdAt: -1 } ).skip(lowerLimit).limit(upperLimit)
                 .then(results => {
@@ -716,7 +716,7 @@ t
     //whether the user is admin or (probably logged in or not) should be checked in the controller and not here in the repo
     //make sure that the dates are in ISO() format e.g.ISODate("2017-07-04 15:46:11.976Z"),
     getNewsFeedByAdminUserBetweenDatesWithLimits(lowerDateLimit, upperDateLimit, lowerLimit, upperLimit){
-        var filter = { _id:0, user: 1, userName:1, theme:1, themeName:1, userThemeInput:1, userThemeStockAllocation: 1, stock: 1,createdAt: 1};
+        var filter = { _id:0, user: 1, userName:1, theme:1, themeName:1, userThemeInput:1, userThemeStockAllocation: 1, stock: 1, userThemeFundAllocation: 1, fund: 1,createdAt: 1};
         return new Promise((resolve, reject) => {
             ActivityLog.find({ createdAt: { $gte: lowerDateLimit, $lte: upperDateLimit}}, filter).sort( { createdAt: -1 } ).skip(lowerLimit).limit(upperLimit)
                 .then(results => {

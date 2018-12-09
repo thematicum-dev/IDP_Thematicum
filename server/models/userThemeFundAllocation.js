@@ -1,5 +1,5 @@
 /*
-stores all raw user votes for assigned stocks to a theme.
+stores all raw user votes for assigned funds to a theme.
 */
 import mongoose from 'mongoose';
 import constants from '../utilities/constants';
@@ -14,6 +14,6 @@ const schema = new Schema({
         min: constants.MIN_EXPOSURE,
         max: constants.MAX_EXPOSURE
     }
-});
+}, { timestamps: true });
 
 export default mongoose.model('UserThemeFundAllocation', schema);

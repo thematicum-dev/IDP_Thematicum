@@ -7,15 +7,18 @@ import {AppError} from '../utilities/appError';
 import UserThemeInput from '../models/userThemeInput';
 import ThemeStockComposition from '../models/themeStockComposition';
 import UserThemeStockAllocation from '../models/userThemeStockAllocation';
+import ThemeFundComposition from '../models/themeFundComposition';
+import UserThemeFundAllocation from '../models/userThemeFundAllocation';
 import RegistrationAccessCode from '../models/accessCode';
 import Stock from '../models/stock';
+import Fund from '../models/fund';
 import { ThemePropertiesAggregation, StockAllocationAggregation } from '../utilities/dataAggregation';
 
 export default class QueryBuilder {
     constructor() {}
 
     selectModel(model){
-        this.model = model; // e.g. Theme, User, Stock
+        this.model = model; // e.g. Theme, User, Stock, Fund
         return this;
     }
 
