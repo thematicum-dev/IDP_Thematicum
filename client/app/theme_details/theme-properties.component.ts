@@ -46,6 +46,7 @@ export class ThemePropertiesComponent implements OnInit {
     themePropertiesData: any; //to hold data received from the service
     isEditMode: boolean = false; //to indicate display/edit mode
     themeProperties: ThemePropertiesEditModel = new ThemePropertiesEditModel(); //for user editing data
+    lastVote: any;
 
     //property values needed for display
     timeHorizonValues = timeHorizonValues;
@@ -72,7 +73,16 @@ export class ThemePropertiesComponent implements OnInit {
 
     handleResults = (data: any) => {
         this.themePropertiesData = data;
-        this.themePropertiesData.userInputs.updatedAt = new Date(this.themePropertiesData.userInputs.updatedAt).toLocaleString();
+        
+        this.lastVote = "Not voted yet"
+
+        var checkDate = this.themePropertiesData.userInputs.updatedAt
+
+        if(checkDate) {
+            this.lastVote = new Date(checkDate).toLocaleString();
+        }
+       
+        
         this.themeProperties.clearProperties();
     }
 
