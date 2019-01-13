@@ -1,3 +1,4 @@
+
 import {Component, Input, ElementRef, OnInit, OnChanges, SimpleChanges, ViewChild, AfterViewInit} from '@angular/core';
 import {Theme} from "../models/theme";
 import {ActivatedRoute, Router} from '@angular/router';
@@ -10,11 +11,7 @@ declare var trends: any;
 @Component({
     selector: 'app-theme-feed',
     templateUrl: 'theme-feed.component.html',
-    styles: [
-        `
-        .chart {display: block;overflow: auto;}
-        #trends-widget-1 {height: 50%;}
-        `],
+    
     providers:[DatePipe]
     
 
@@ -25,71 +22,91 @@ export class ThemeFeedComponent implements OnInit {
     modifiedName: any;
     @Input() themeId: string;
     @Input() theme: Theme;
+    data: any;
+
+    lineChartData: any = [{ 
+            data: []
+        }];
+
+    lineChartLabels: any = [];
+
     constructor(private route: ActivatedRoute, private router: Router, private themeService: ThemeService, private location: Location, private sanitizer: DomSanitizer, private datePipe: DatePipe) { 
         
     }
 
     
-    
     ngOnInit(): void {
 
-
-        var today = this.transformDate(new Date())
-
-        var now = new Date();
-        now.setFullYear(now.getFullYear() - 5);
-
-        var yesterday = this.transformDate(now);
-
-        console.log(yesterday);
-
-        this.name = this.theme.name;
-
-        console.log(this.theme);
-        console.log(this.theme.tags);
-
-        var tags = this.theme.tags;
+        this.name = this.theme.name
 
 
-        var tempName = "https://trends.google.com:443/trends/embed/explore/TIMESERIES?req=%7B%22comparisonItem%22%3A%5B";
-        var start = "%7B%22keyword%22%3A%22";
-        var next = "%2C";
-        var end = "%22%2C%22geo%22%3A%22%22%2C%22time%22%3A%22"+yesterday+"%20"+today+"%22%7D";
+        this.themeService.getAllTrends(this.theme).subscribe(
+            result => {
+                console.log(result);
+
+                this.data = result;
 
 
-        tempName = tempName.concat(start,(this.theme.name).replace(" ","%20"),end);
+                this.lineChartData = [];
+                for(var i=0; i<result.value.length; i++) {
+                    this.lineChartData.push({data: result.value[i].value, label: result.value[i].trendName});
+                }
+                
 
-        for(var i=0; i<tags.length; i++) {
-            tempName = tempName.concat(next,start,(tags[i]).replace(" ","%20"),end);
-        }
+                this.lineChartLabels = result.timeline;                      
+
+                //display the results nicely
+            },
+            error => console.log('Error: ', error));
         
-        tempName = tempName.concat("%5D%2C%22category%22%3A0%2C%22property%22%3A%22%22%7D&tz=-345&eq=date%3D"+yesterday+"%2520"+today+"%26q%3D");
-
-        tempName = tempName.concat((this.theme.name).replace(" ","%2520"));
-
-        for(var i=0; i<tags.length; i++) {
-            tempName = tempName.concat(next,(tags[i]).replace(" ","%2520"));
-        }
-
-        console.log(tempName);
-
-        this.modifiedName = tempName;
-
-
-
-
-
-
+            
     }
 
-    trendURL() {
+    
+    // lineChart
+  
+  public lineChartOptions:any = {
+    responsive: true
+  };
 
-        return this.sanitizer.bypassSecurityTrustResourceUrl(this.modifiedName);
+  public lineChartColors:Array<any> = [
+    { // grey
+      backgroundColor: 'rgba(148,159,177,0.2)',
+      borderColor: 'rgba(148,159,177,1)',
+      pointBackgroundColor: 'rgba(148,159,177,1)',
+      pointBorderColor: '#fff',
+      pointHoverBackgroundColor: '#fff',
+      pointHoverBorderColor: 'rgba(148,159,177,0.8)'
+    },
+    { // dark grey
+      backgroundColor: 'rgba(77,83,96,0.2)',
+      borderColor: 'rgba(77,83,96,1)',
+      pointBackgroundColor: 'rgba(77,83,96,1)',
+      pointBorderColor: '#fff',
+      pointHoverBackgroundColor: '#fff',
+      pointHoverBorderColor: 'rgba(77,83,96,1)'
+    },
+    { // grey
+      backgroundColor: 'rgba(148,159,177,0.2)',
+      borderColor: 'rgba(148,159,177,1)',
+      pointBackgroundColor: 'rgba(148,159,177,1)',
+      pointBorderColor: '#fff',
+      pointHoverBackgroundColor: '#fff',
+      pointHoverBorderColor: 'rgba(148,159,177,0.8)'
     }
+  ];
 
-    transformDate(date) {
-        return this.datePipe.transform(date, 'yyyy-MM-dd');
-    }
+  public lineChartLegend:boolean = true;
+  public lineChartType:string = 'line';
+ 
+ 
+  // events
+  public chartClicked(e:any):void {
+  }
+ 
+  public chartHovered(e:any):void {
+  }   
+
 
 
 }

@@ -4,6 +4,7 @@ import {AppError} from '../utilities/appError';
 import {AppResponse} from '../utilities/appResponse';
 import DataRepository from '../data_access/dataRepository';
 import NewsAPI from 'newsapi';
+import TrendApi from 'google-trends-api';
 
 const repo = new DataRepository();
 const newsapi = new NewsAPI('f233db147a4543f995774df5d3aa538e');
@@ -19,11 +20,20 @@ export function getNews(req, res, next) {
 
 					var query = '"'+req.query.name+'"';
 
-					for (var i = 0; i < req.query.tags.length; i++) {
-						query += ' OR ' + '"'+ req.query.tags[i] +'"';
+					if(req.query.tags.constructor === Array) {
+
+						for (var i = 0; i < req.query.tags.length; i++) {
+							query += ' OR ' + '"'+ req.query.tags[i] +'"';
+							
+						}
+					} else {
+						
+						query += ' OR ' + '"'+ req.query.tags +'"';
 					}
 
 					console.log(query);
+
+					
 
 					newsapi.v2.everything({
 						q: query,

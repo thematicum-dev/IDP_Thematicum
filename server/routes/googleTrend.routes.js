@@ -5,7 +5,7 @@ import * as authUtilities from '../utilities/authUtilities';
 const router = Router();
 
 router.route('/trends')
-    .get(googleTrendController.getTrend);
+    .get(googleTrendController.getAllTrends);
 
 
 export default router;

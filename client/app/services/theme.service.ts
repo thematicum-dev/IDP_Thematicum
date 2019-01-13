@@ -231,7 +231,6 @@ export class ThemeService implements ThemeServiceInterface{
 
     getAllNews(theme: Theme) {
 
-        console.log("eta ayo hai");
         let apiPath = this.baseAPI + 'newsfeed/newsfeed';
         console.log(theme);
 
@@ -240,6 +239,19 @@ export class ThemeService implements ThemeServiceInterface{
         return this.http.get(apiPath,options)
             .map((response: Response) => response.json().obj)
             .catch((error => Observable.throw("Error in news service")));
+    }
+
+    getAllTrends(theme: Theme) {
+
+        let apiPath = this.baseAPI + 'googletrend/trends';
+        console.log(theme);
+
+        let options = new RequestOptions({ headers: this.headers, params: {name: theme.name, tags: theme.tags} });
+
+        return this.http.get(apiPath,options)
+            .map((response: Response) =>  response.json().obj)
+            .catch((error => Observable.throw("Error in trend service")));
+
     }
 
     handleError = (error: Response) => {
