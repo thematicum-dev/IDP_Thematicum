@@ -24,6 +24,8 @@ export class ThemeFeedComponent implements OnInit {
     @Input() theme: Theme;
     data: any;
 
+    colorCodes = ['rgb(0,0,0)','rgb(255,0,0)','rgb(0,255,0)','rgb(0,0,255)','rgb(255,255,0)','rgb(255,0,255)','rgb(128,0,0)','rgb(128,0,128)','rgb(0,0,128)','rgb(128,128,128)'];
+
     lineChartData: any = [{ 
             data: []
         }];
@@ -51,8 +53,12 @@ export class ThemeFeedComponent implements OnInit {
                 this.lineChartData = [];
                 for(var i=0; i<result.value.length; i++) {
                     this.lineChartData.push({data: result.value[i].value, label: result.value[i].trendName});
-                    var hue = 'rgb(' + (Math.floor(Math.random() * 256)) + ',' + (Math.floor(Math.random() * 256)) + ',' + (Math.floor(Math.random() * 256)) + ')';
-                    this.lineChartColors.push({borderColor: hue, pointBorderColor: '#fff', pointHoverBackgroundColor: '#fff'})
+                    if(i<=9) {
+
+                        this.lineChartColors.push({borderColor: this.colorCodes[i], pointBorderColor: '#fff', pointHoverBackgroundColor: '#fff'})
+                    } else {
+                        this.lineChartColors.push({borderColor: this.colorCodes[9], pointBorderColor: '#fff', pointHoverBackgroundColor: '#fff'})
+                    }
                 }
                 
 
@@ -66,17 +72,27 @@ export class ThemeFeedComponent implements OnInit {
     }
 
     
-    // lineChart
-  
-  public lineChartOptions:any = {
-    responsive: true
-  };
 
 
   public lineChartLegend:boolean = true;
   public lineChartType:string = 'line';
  
- 
+  public lineChartOptions:any = {
+    scales: {
+        xAxes: [{
+            gridLines: {
+                display:false
+            }
+        }],
+        yAxes: [{
+            gridLines: {
+                display:false
+            }   
+        }]
+    },
+    responsive: true
+  };
+
   // events
   public chartClicked(e:any):void {
   }
