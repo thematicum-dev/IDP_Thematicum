@@ -22,6 +22,11 @@ import userRoutes from './server/routes/user.routes';
 import userProfileRoutes from './server/routes/user-profile.routes';
 import googleTrendRoutes from './server/routes/googleTrend.routes';
 import newsFeedRoutes from './server/routes/newsFeed.routes';
+import realtimeNews from './server/routes/googleNews.routes';
+import customSearchScript from './server/routes/googleCustomSearchScript.routes';
+import customSearch from './server/routes/googleCustomSearch.routes';
+import stockPrice from './server/routes/stockPrice.routes';
+import removeObsoleteURLs from './server/routes/removeObsoleteURLs.routes';
 import fundRoutes from './server/routes/fund.routes'
 import fundAllocationRoutes from './server/routes/fundAllocations.routes'
 
@@ -65,11 +70,29 @@ app.use('/api/user', userRoutes);
 app.use('/api/profile', userProfileRoutes);
 app.use('/api/googletrend',googleTrendRoutes);
 app.use('/api/newsfeed',newsFeedRoutes);
+app.use('/api/news', realtimeNews);
+app.use('/api/customsearchscript', customSearchScript);
+app.use('/api/customsearch', customSearch);
+app.use('/api/stockprice', stockPrice);
+app.use('/api/removeobsoleteurls', removeObsoleteURLs);
 app.use('/api/funds', fundRoutes);
 app.use('/api/fundallocations', fundAllocationRoutes);
 
 app.use(function (req, res, next) {
     return res.render('index');
+});
+
+let schedule = require('node-schedule');
+let reportsScript = require('./server/controllers/googleCustomSearchScript.controller');
+
+
+let rule = new schedule.RecurrenceRule();
+rule.hour = 2;
+rule.minute = 0;
+
+schedule.scheduleJob(rule, function(fireDate){
+    console.log('This job was supposed to run at ' + fireDate + ', but actually ran at ' + new Date());
+    reportsScript.updateReports();
 });
 
 

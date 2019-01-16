@@ -4,6 +4,10 @@ import QueryBuilder from './queryBuilder';
 import User from '../models/user';
 import Theme from '../models/theme';
 import ActivityLog from '../models/activitylog';
+import RealtimeNews from '../models/realtimeNews';
+import UserNewsRelevancyVote from '../models/userNewsRelevancyVote';
+import UserReportRelevancyVote from '../models/userReportRelevancyVote';
+import CustomSearch from '../models/customSearchReport';
 import {AppError} from '../utilities/appError';
 import UserThemeInput from '../models/userThemeInput';
 import ThemeStockComposition from '../models/themeStockComposition';
@@ -94,6 +98,21 @@ export default class DataRepository extends BaseRepository {
             })
             .catch(err => reject(err));
         });
+    }
+
+    getAllThemes() {
+        return new Promise((resolve, reject) => {
+            Theme.find({}).exec()
+                .then((res) =>{
+                    if (!res) {
+                        reject("No report found.");
+                    }
+                    resolve(res);
+                })
+                .catch((err) => {
+                    reject(err);
+                })
+        })
     }
 
     // parameter is array of strings
@@ -269,9 +288,13 @@ export default class DataRepository extends BaseRepository {
     }
 
     getThemeStockCompositionsByTheme(themeId) {
-        return ThemeStockComposition.find({theme: themeId})
+        //themeStockComposition : ThemeStockComposition;
+        let stockComposition = ThemeStockComposition.find({theme: themeId})
             .populate('stock', 'companyName country')
             .exec();
+        console.log(stockComposition);
+
+        return stockComposition;
     }
 
     getThemeFundCompositionsByTheme(themeId) {
@@ -338,7 +361,6 @@ export default class DataRepository extends BaseRepository {
                     const totalCount = allocations ? allocations.length : 0;
 
                     const stockAllocationByCurrentUser = this.getStockAllocationByUser(allocations, currentUserId);
-
                     const obj = {themeStockComposition: themeStockComposition, exposures: aggregation.exposure, userStockAllocation: stockAllocationByCurrentUser, totalCount: totalCount};
                     resolve(obj);
                 })
@@ -369,10 +391,10 @@ export default class DataRepository extends BaseRepository {
     }
 
     deleteUserById(userId) {
-        return Promise.all([User.remove({ _id: userId }).exec()]); 
+        return Promise.all([User.remove({ _id: userId }).exec()]);
     }
 
-    deleteStockCompositionById(compositionId){        
+    deleteStockCompositionById(compositionId){
         return Promise.all([ThemeStockComposition.remove({_id: compositionId }).exec(), UserThemeStockAllocation.remove({ themeStockComposition: compositionId }).exec()]);
     }
 
@@ -826,6 +848,332 @@ export default class DataRepository extends BaseRepository {
         const deleteAllStockCompositionsPromise = this.deleteAllStockCompositionsByStockId(stockId);
         const deleteStock = this.removeById(Stock,stockId);
         return Promise.all([deleteAllStockCompositionsPromise, deleteStock]);
+    }
+
+    getRealtimeNewsByThemeIdFor6Months(themeId) {
+        return new Promise ((resolve, reject) => {
+            let d = new Date();
+            d.setMonth(d.getMonth() - 6);
+            RealtimeNews.find({themeId: themeId, publishedAt: {$gte: d}}).exec()
+                .then((res) => {
+
+                    if (!res) {
+                        reject("No news found.");
+                    }
+                    resolve(res);
+                })
+                .catch((err) => {
+                    reject(err);
+                });
+        });
+    }
+
+    getVotedNewsByThemeId(themeId) {
+        return new Promise ((resolve, reject) => {
+            RealtimeNews.find({themeId: themeId, relevancyRanking: { $gt: 0 }}).exec()
+                .then((res) => {
+
+                    // console.log(res);
+
+                    if (!res) {
+                        reject("No news found.");
+                    }
+                    resolve(res);
+                })
+                .catch((err) => {
+                    reject(err);
+                });
+        });
+    }
+
+    getNewsWith0VoteByUrl(url) {
+        return new Promise ((resolve, reject) => {
+            RealtimeNews.find({url: url, relevancyRanking: 0}).exec()
+                .then((res) => {
+
+                    // console.log(res);
+
+                    if (!res) {
+                        reject("No news found.");
+                    }
+                    resolve(res);
+                })
+                .catch((err) => {
+                    reject(err);
+                });
+        });
+    }
+
+    getRealtimeNewsById(newsId) {
+        return new Promise ((resolve, reject) => {
+            RealtimeNews.findById(newsId).exec()
+                .then((res) => {
+
+                    if (!res) {
+                        reject("No news found with this id.");
+                    }
+                    resolve(res);
+                })
+                .catch((err) => {
+                    reject(err);
+                });
+        });
+    }
+
+    increaseNewsRelevancyBy10(newsId) {
+       return new Promise ((resolve, reject) => {
+            RealtimeNews.findById(newsId, function (err, news) {
+                if (err) return handleError(err);
+
+                let newRanking = news.relevancyRanking + 10;
+                news.set({ relevancyRanking: newRanking });
+                news.save(function (err, updatedNews) {
+                    if (err) reject(err);
+                    resolve(updatedNews);
+                })
+            });
+       });
+    }
+
+    setUserRelevancyVote(userId, newsId) {
+        return new Promise((resolve, reject) => {
+            let newsUserComposition = new UserNewsRelevancyVote({user: userId, news: newsId, relevant: true});
+
+            newsUserComposition.save(function (err) {
+                if (err) reject(err);
+
+                resolve(err);
+            })
+        })
+    }
+
+    getUserVotedNews(userId) {
+        return new Promise((resolve, reject) => {
+            UserNewsRelevancyVote.find({user: userId, relevant: true}).exec()
+                .then((res) => {
+                    resolve(res);
+                })
+                .catch((err) => {
+                    reject(err);
+                });
+        });
+    }
+
+    getUserVotedReports(userId) {
+        return new Promise((resolve, reject) => {
+            UserReportRelevancyVote.find({user: userId, relevant: true}).exec()
+                .then((res) => {
+                    resolve(res);
+                })
+                .catch((err) => {
+                    reject(err);
+                });
+        });
+    }
+
+    setTFIDFReportRanking(ranking) {
+        return new Promise((resolve, reject) => {
+            console.log(ranking);
+
+            CustomSearch.findById(ranking.id, function (err, report) {
+
+                // let newRanking = report.relevancyRanking + ranking.measure;
+                report.set({ tfidfRanking: ranking.measure });
+                report.save(function (err, updatedReport) {
+                    console.log("Ranking changed.");
+                    if (err) {
+                        console.log(err);
+                        reject(err);
+                    }
+                    resolve(updatedReport);
+                })
+            });
+        });
+    }
+
+
+    toggleUserRelevancyVoteForNews(userId, newsId) {
+        return new Promise((resolve, reject) => {
+            UserNewsRelevancyVote.find({user: userId, news: newsId}).exec()
+                .then((res) => {
+                    // console.log(res[0]._id);
+                    if (!res.length) {
+                        // Vote does not exist yet
+                        let newsUserComposition = new UserNewsRelevancyVote({user: userId, news: newsId, relevant: true});
+                        newsUserComposition.save(function (err, success) {
+                            console.log("New user composition saved.");
+                            if (err) reject(err);
+                        });
+                        RealtimeNews.findById(newsId, function (err, news) {
+                            let newRanking = news.relevancyRanking + 10;
+                            news.set({ relevancyRanking: newRanking });
+                            news.save(function (err, updatedNews) {
+                                console.log("Ranking increased.");
+                                if (err) {
+                                    console.log(err);
+                                    reject(err);
+                                }
+                                resolve(updatedNews);
+                            })
+                        });
+                    }
+                    else {
+                        // vote exists already
+                        if (res[0].relevant) {
+                            RealtimeNews.findById(newsId, function (err, news) {
+                                //if (err) return handleError(err);
+                                let newRanking = news.relevancyRanking - 10;
+                                news.set({ relevancyRanking: newRanking });
+                                news.save(function (err, updatedNews) {
+                                    console.log("Updated ranking saved.");
+                                    if (err) reject(err);
+                                })
+                            });
+                            UserNewsRelevancyVote.findById(res[0]._id, function (err, vote) {
+                                vote.set({relevant: false});
+                                vote.save(function (err, newVote) {
+                                    resolve(newVote);
+                                });
+                            });
+                        } else {
+                            RealtimeNews.findById(newsId, function (err, news) {
+                                let newRanking = news.relevancyRanking + 10;
+                                news.set({ relevancyRanking: newRanking });
+                                news.save(function (err, updatedNews) {
+                                    if (err) reject(err);
+                                })
+                            });
+
+                            UserNewsRelevancyVote.findById(res[0]._id, function (err, vote) {
+                                vote.set({relevant: true});
+                                vote.save(function (err, newVote) {
+                                    resolve(newVote);
+                                });
+                            });
+                        }
+                    }
+                })
+                .catch((err) => {
+                    console.log("failed");
+                    console.log(err);
+                    reject(err);
+                });
+        })
+    }
+
+
+
+    toggleUserRelevancyVoteForReport(userId, reportId) {
+        return new Promise((resolve, reject) => {
+            UserReportRelevancyVote.find({user: userId, report: reportId}).exec()
+                .then((res) => {
+                    // console.log(res[0]._id);
+                    if (!res.length) {
+                        // Vote does not exist yet
+                        let newsUserComposition = new UserReportRelevancyVote({user: userId, report: reportId, relevant: true});
+                        newsUserComposition.save(function (err, success) {
+                            // console.log("New user composition saved.");
+                            if (err) reject(err);
+                        });
+                        CustomSearch.findById(reportId, function (err, report) {
+                            let newRanking = report.relevancyRanking + 10;
+                            report.set({ relevancyRanking: newRanking });
+                            report.save(function (err, updatedReport) {
+                                console.log("Ranking increased.");
+                                if (err) reject(err);
+                                resolve(updatedReport);
+                            })
+                        });
+                    }
+                    else {
+                        // vote exists already
+                        if (res[0].relevant) {
+                            CustomSearch.findById(reportId, function (err, report) {
+                                let newRanking = report.relevancyRanking - 10;
+                                report.set({ relevancyRanking: newRanking });
+                                report.save(function (err, updatedReport) {
+                                    console.log("Updated ranking saved.");
+                                    if (err) reject(err);
+                                })
+                            });
+                            UserReportRelevancyVote.findById(res[0]._id, function (err, vote) {
+                                vote.set({relevant: false});
+                                vote.save(function (err, newVote) {
+                                    resolve(newVote);
+                                });
+                            });
+                        } else {
+                            CustomSearch.findById(reportId, function (err, report) {
+                                let newRanking = report.relevancyRanking + 10;
+                                report.set({ relevancyRanking: newRanking });
+                                report.save(function (err, updatedReport) {
+                                    if (err) reject(err);
+                                })
+                            });
+
+                            UserReportRelevancyVote.findById(res[0]._id, function (err, vote) {
+                                vote.set({relevant: true});
+                                vote.save(function (err, newVote) {
+                                    resolve(newVote);
+                                });
+                            });
+                        }
+                    }
+                })
+                .catch((err) => {
+                    console.log("failed");
+                    reject(err);
+                });
+        })
+    }
+
+
+    getReportsByThemeId(themeId) {
+        return new Promise ((resolve, reject) => {
+            CustomSearch.find({themeId: themeId}).exec()
+                .then((res) => {
+
+                    if (!res) {
+                        reject("No report found.");
+                    }
+                    resolve(res);
+                })
+                .catch((err) => {
+                    reject(err);
+                });
+        });
+    }
+
+    getReportById(reportId) {
+        return new Promise ((resolve, reject) => {
+            CustomSearch.findById(reportId).exec()
+                .then((res) => {
+
+                    if (!res) {
+                        reject("No report found with this id.");
+                    }
+                    resolve(res);
+                })
+                .catch((err) => {
+                    reject(err);
+                });
+        });
+    }
+
+    getAllReports() {
+        return new Promise((resolve, reject) => {
+            CustomSearch.find({}).exec()
+                .then((res) => {
+                    if (!res) {
+                        reject("No reports found.")
+                    }
+
+                    resolve(res);
+                })
+                .catch((err) => {
+                    reject(err);
+                })
+        });
     }
 
     deleteFundById(fundId){

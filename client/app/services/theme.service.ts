@@ -64,6 +64,28 @@ export class ThemeService implements ThemeServiceInterface{
             .catch(this.handleError);
     }
 
+    markNewsAsRelevant(newsId: String) {
+        const body = "";
+        let apiPath = this.baseAPI + 'news/marknewsrelevant/' + newsId;
+
+        console.log(apiPath);
+
+        return this.http.put(apiPath, null,{headers: this.headers})
+            .map((response: Response) => response.json())
+            .catch(this.handleError);
+    }
+
+    markReportAsRelevant(reportId: String) {
+        const body = "";
+        let apiPath = this.baseAPI + 'customsearch/markreportrelevant/' + reportId;
+
+        console.log(apiPath);
+
+        return this.http.put(apiPath, null,{headers: this.headers})
+            .map((response: Response) => response.json())
+            .catch(this.handleError);
+    }
+
     deleteUserThemeInput(userThemeInputId: string) {
         let apiPath = this.baseAPI + 'themeproperties/' + userThemeInputId;
         return this.http.delete(apiPath, {headers: this.headers})
@@ -217,6 +239,27 @@ export class ThemeService implements ThemeServiceInterface{
         let apiPath = this.baseAPI + 'admin/stockcompositions/validate/' + compositionId + '/' + validation;
         const body = {};
         return this.http.put(apiPath, body, { headers: this.headers })
+            .map((response: Response) => response.json().obj)
+            .catch(this.handleError);
+    }
+
+    getRealtimeNews(themeId: string) {
+        let apiPath = this.baseAPI + 'news/realtimenews/theme/' + themeId;
+        return this.http.get(apiPath, {headers: this.headers})
+            .map((response: Response) => response.json().obj)
+            .catch(this.handleError);
+    }
+
+    getRelevantNews(themeId: string) {
+        let apiPath = this.baseAPI + 'news/relevantnews/theme/' + themeId;
+        return this.http.get(apiPath, {headers: this.headers})
+            .map((response: Response) => response.json().obj)
+            .catch(this.handleError);
+    }
+
+    getReportsByThemeId(themeId: string) {
+        let apiPath = this.baseAPI + 'customsearch/theme/' + themeId;
+        return this.http.get(apiPath, {headers: this.headers})
             .map((response: Response) => response.json().obj)
             .catch(this.handleError);
     }

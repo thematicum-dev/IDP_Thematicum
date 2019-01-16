@@ -59,7 +59,9 @@ export class ThemeStockAllocationComponent implements OnInit {
     checkAllocationData: any;
     selectedExposure: number; //to hold the exposure value edited by the user
     isCurrentUserAdmin: boolean = localStorage.getItem("isAdmin") == "true";
-    
+    averageDailyStockChanges: number;
+    averageMonthlyStockChanges: number;
+
     @ViewChild(ModalComponent)
     public modal: ModalComponent;
 
@@ -233,7 +235,23 @@ export class ThemeStockAllocationComponent implements OnInit {
         console.log(data);
         this.stockAllocationData = data;
         this.allocatedStockIds = data.map(allocation => allocation.themeStockComposition.stock._id); //set allocated stock Ids
-    }
+        this.averageDailyStockChanges = 0;
+        this.averageMonthlyStockChanges = 0;
+        let dailyDenominator = 0;
+        let monthlyDenominator = 0;
+        for (let i=0; i<this.stockAllocationData.length; i++) {
+            if (this.stockAllocationData[i]['themeStockComposition']['stock'].hasOwnProperty('dayClosePriceChangePercentage')) {
+                this.averageDailyStockChanges += this.stockAllocationData[i]['themeStockComposition']['stock']['dayClosePriceChangePercentage'];
+                dailyDenominator++;
+            }
+            if (this.stockAllocationData[i]['themeStockComposition']['stock'].hasOwnProperty('monthlyChangePercentage')) {
+                this.averageMonthlyStockChanges += this.stockAllocationData[i]['themeStockComposition']['stock']['monthlyChangePercentage'];
+                monthlyDenominator++;
+            }
+        }
+        this.averageMonthlyStockChanges = this.averageMonthlyStockChanges / monthlyDenominator;
+        this.averageDailyStockChanges = this.averageDailyStockChanges / dailyDenominator;
+    };
 
     handleError = (error: any) => {
         console.log('Error: ' + error);

@@ -4,7 +4,8 @@ import * as authUtilities from '../utilities/authUtilities';
 
 const router = Router();
 //auth middleware
-router.use('/', authUtilities.authenticationMiddleware);
+// TODO: bring back auth
+//router.use('/', authUtilities.authenticationMiddleware);
 
 router.route('/tags')
     .get(themeController.getTags);

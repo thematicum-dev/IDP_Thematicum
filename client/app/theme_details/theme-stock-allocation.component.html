@@ -1,24 +1,62 @@
 <div class="global-background-bar-outer global-background-light-grey">
     <div class="global-background-bar-inner">
         <div class="row">
-            <h3 class="global-subheading-2 global-font global-color-light-black text-center">Firm allocation</h3>
+            <h3 class="global-subheading-2 global-font global-color-light-black text-center">
+                Firm allocation
+            </h3>
+            <h5 class="global-subheading-3 global-font text-center global-color-light-black">
+                last 1 day:
+                <span  *ngIf="averageDailyStockChanges >= 0" style="color: rgb(39, 174, 96);">
+                    +{{averageDailyStockChanges | number : '1.1-1'}}%
+                </span>
+                <span *ngIf="averageDailyStockChanges < 0" style="color: rgb(192, 57, 43);">
+                    {{averageDailyStockChanges | number : '1.1-1'}}%
+                </span>
+                | last 1 month:
+                <span  *ngIf="averageMonthlyStockChanges >= 0" style="color: rgb(39, 174, 96);">
+                    +{{averageMonthlyStockChanges | number : '1.1-1'}}%
+                </span>
+                <span *ngIf="averageMonthlyStockChanges < 0" style="color: rgb(192, 57, 43);">
+                    {{averageMonthlyStockChanges | number : '1.1-1'}}%
+                </span>
+            </h5>
         </div>
         
         <!-- Allocations -->
         <div *ngIf="stockAllocationData.length > 0">
             <div *ngFor="let allocationModel of stockAllocationData; let idx=index;">
                 <div class="row">
-                    <div class="col-xs-5">
+                    <div class="col-xs-6">
                         <h5> 
                             <span class="global-subheading-3 global-color-blue-2 global-font"> {{allocationModel?.themeStockComposition?.stock?.companyName}} </span>
                             <span class="global-subheading-3 global-color-grey global-font"> {{allocationModel?.themeStockComposition?.stock?.country}} </span>
                             <span *ngIf="allocationModel?.themeStockComposition?.isValidated" class="glyphicon glyphicon-ok color-tick-validated" aria-hidden="true"></span>
                             <span *ngIf="!allocationModel?.themeStockComposition?.isValidated" class="glyphicon glyphicon-ok color-tick-invalidated"
                                 aria-hidden="true"></span>
+                            <div style="width: auto;border:0px;text-align: center;display: inline;" data-toggle="tooltip" data-placement="top" title="Daily stock price change percentage">
+                                <span  *ngIf="allocationModel?.themeStockComposition?.stock?.dayClosePriceChangePercentage >= 0" class="global-subheading-3 global-color-grey global-font" style="color: rgb(39, 174, 96);">
+                                    +{{allocationModel?.themeStockComposition?.stock?.dayClosePriceChangePercentage | number : '1.1-1'}}%
+                                </span>
+                                <span *ngIf="allocationModel?.themeStockComposition?.stock?.dayClosePriceChangePercentage < 0" class="global-subheading-3 global-color-grey global-font" style="color: rgb(192, 57, 43);">
+                                    {{allocationModel?.themeStockComposition?.stock?.dayClosePriceChangePercentage | number : '1.1-1'}}%
+                                </span>
+                            </div>
+                            <span class="global-subheading-3 global-color-grey global-font">
+                                |
+                            </span>
+
+                            <div style="width: auto;border:0px;text-align: center;display: inline;" data-toggle="tooltip" data-placement="top" title="Monthly stock price change percentage">
+                                <span  *ngIf="allocationModel?.themeStockComposition?.stock?.monthlyChangePercentage >= 0" class="global-subheading-3 global-color-grey global-font" style="color: rgb(39, 174, 96);">
+                                    +{{allocationModel?.themeStockComposition?.stock?.monthlyChangePercentage | number : '1.1-1'}}%
+                                </span>
+                                <span *ngIf="allocationModel?.themeStockComposition?.stock?.monthlyChangePercentage < 0" class="global-subheading-3 global-color-grey global-font" style="color: rgb(192, 57, 43);">
+                                    {{allocationModel?.themeStockComposition?.stock?.monthlyChangePercentage | number : '1.1-1'}}%
+                                </span>
+                            </div>
                         </h5>
                         <p class="global-label global-font-2 global-color-light-black">Total votes: {{allocationModel.totalCount}}</p>
                     </div>
-                    <div class="col-xs-7 text-right vertical-padding-4" *ngIf="!allocationModel.isAllocationEditable">
+                    <div class="col-xs-6 text-right vertical-padding-4" *ngIf="!allocationModel.isAllocationEditable">
                         <div class="btn-group" *ngIf="isCurrentUserAdmin">
                             <button type="button" class="btn btn-default dropdown-toggle borderless no-decoration-element" 
                                     style="background-color: transparent;" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">

@@ -1,0 +1,135 @@
+<div class="row" *ngIf="recentNews.length > 0 || relevantNews.length > 0 ">
+    <h3 class="global-subheading-2 global-font global-color-light-black text-center">News</h3>
+</div>
+
+<ul class="nav nav-pills" *ngIf="recentNews.length > 0 || relevantNews.length > 0 ">
+    <li role="presentation" *ngIf="recentNews.length > 0"><button class="btn"  [class.btn-primary]="displayMostRecent" (click)="toggleDisplayTab()">Most recent</button></li>
+    <li role="presentation" *ngIf="relevantNews.length > 0 "><button class="btn"  [class.btn-primary]="!displayMostRecent" (click)="toggleDisplayTab()">Most relevant</button></li>
+</ul>
+
+    <!-- Tab content -->
+
+        <div style="height:500px;overflow: auto" class="container" [class.noDisplay]="!displayMostRecent" *ngIf="recentNews.length > 0">
+            <div *ngFor="let news of recentNews">
+                <div class="row" style="border-bottom: 1px solid lightgray">
+                <div class="col-md-2">
+                    <img *ngIf="((news.urlToImage != '') && (news.urlToImage != null))" src="{{news.urlToImage}}"  class="img-thumbnail" >
+                </div>
+                <div class="col-md-9">
+                    <a href="{{news.url}}">
+                        <span class="global-subheading-3 global-font global-color-light-black">{{news.title}}</span>
+                        <br>
+                        <br>
+                        <span class="global-subheading-3 global-font global-color-light-black" style="font-size: 15px">{{ news.description }}</span>
+                    </a>
+                    <h5>Publish date: {{news.publishedAt | date : 'medium'}}</h5>
+                </div>
+                <div class="col-md-1 pull-right">
+                    <button *ngIf="!news.userVoted" (click)="onUserLike(news._id)" type="button" class="btn btn-default btn-lg borderless" aria-label="Left Align">
+                        <span class="glyphicon glyphicon-star-empty" aria-hidden="true"></span>
+                    </button>
+                    <button *ngIf="news.userVoted" (click)="onUserLike(news._id)" type="button" class="btn btn-default btn-lg borderless" aria-label="Left Align">
+                        <span class="glyphicon glyphicon-star" aria-hidden="true"></span>
+                    </button>
+                </div>
+                </div>
+            </div>
+        </div>
+
+
+<!--<div style="margin: 10px;height: auto;" *ngFor="let news of recentNews">-->
+
+                <!--<div style="clear: both;">-->
+                    <!--<div style="width: 20%;height: auto;float: left;">-->
+                        <!--<img *ngIf="((news.urlToImage != '') && (news.urlToImage != null))" src="{{news.urlToImage}}" style="margin-top: 5px;margin-bottom: 5px;width: 100%">-->
+                    <!--</div>-->
+
+                    <!--<div style="width: 5%;float: right;height: auto;" *ngIf="news.userVoted">-->
+                        <!--<button type="button" class="btn btn-default btn-lg">-->
+                            <!--<span class="glyphicon glyphicon-thumbs-up" aria-hidden="true"></span> Star-->
+                        <!--</button>-->
+                        <!--&lt;!&ndash;<img width="40px" height="40px" src="https://www.shareicon.net/data/128x128/2015/09/09/98136_grid_512x512.png" alt="Mark as relevant" (click)="onUserLike(news._id)" style="margin-top: 10%;cursor: pointer;">&ndash;&gt;-->
+                    <!--</div>-->
+                    <!--<div style="width: 5%;float: right;height: auto;" *ngIf="!news.userVoted">-->
+                        <!--<span class="glyphicon glyphicon-thumbs-up" aria-hidden="true"></span>-->
+                        <!--&lt;!&ndash;<img width="40px" height="40px" src="https://www.shareicon.net/data/128x128/2015/09/09/98123_up_512x512.png" alt="Unmark as relevant" (click)="onUserLike(news._id)" style="margin-top: 10%;cursor: pointer;">&ndash;&gt;-->
+                    <!--</div>-->
+
+                    <!--<div style="width: 75%;height: auto;float: right;">-->
+                        <!--<a href="{{news.url}}">-->
+                            <!--<span class="global-subheading-3 global-font global-color-light-black">{{news.title}}</span>-->
+                            <!--<br>-->
+                            <!--<br>-->
+                            <!--<span class="global-subheading-3 global-font global-color-light-black" style="font-size: 15px">{{ news.description }}</span>-->
+                        <!--</a>-->
+                        <!--<h5>Publish date: {{news.publishedAt | date : 'medium'}}</h5>-->
+                        <!--<br>-->
+
+                    <!--</div>-->
+                <!--</div>-->
+                <!--<div>-->
+                    <!--<hr style="overflow-x: hidden;width: 100%;height: 5px;">-->
+                <!--</div>-->
+
+            <!--</div>-->
+
+<br>
+<br>
+
+<div style="height:500px;overflow: auto" class="container" [class.noDisplay]="displayMostRecent" *ngIf="relevantNews.length > 0">
+
+    <div *ngFor="let news of relevantNews">
+        <div class="row" style="border-bottom: 1px solid lightgray">
+            <div class="col-md-2">
+                <img *ngIf="((news.urlToImage != '') && (news.urlToImage != null))" src="{{news.urlToImage}} "  class="img-thumbnail" >
+            </div>
+            <div class="col-md-9">
+                <a href="{{news.url}}">
+                    <span class="global-subheading-3 global-font global-color-light-black">{{news.title}}</span>
+                    <br>
+                    <br>
+                    <span class="global-subheading-3 global-font global-color-light-black" style="font-size: 15px">{{ news.description }}</span>
+                </a>
+                <h5>Publish date: {{news.publishedAt | date : 'medium'}}</h5>
+            </div>
+            <div class="col-md-1 pull-right">
+                <button *ngIf="!news.userVoted" (click)="onUserLike(news._id)" type="button" class="btn btn-default btn-lg borderless" aria-label="Left Align">
+                    <span class="glyphicon glyphicon-star-empty" aria-hidden="true"></span>
+                </button>
+                <button *ngIf="news.userVoted" (click)="onUserLike(news._id)" type="button" class="btn btn-default btn-lg borderless" aria-label="Left Align">
+                    <span class="glyphicon glyphicon-star" aria-hidden="true"></span>
+                </button>
+            </div>
+        </div>
+    </div>
+    <!--<div style="width: 100%;height:500px;border:1px solid gray;overflow:auto;margin-bottom: 20px">-->
+        <!--<div style="margin: 10px;height: auto;clear: both;" *ngFor="let news of relevantNews">-->
+
+            <!--<div style="width: 20%;height: auto;float: left;">-->
+                <!--<img *ngIf="((news.urlToImage != '') && (news.urlToImage != null))" src="{{news.urlToImage}}" style="margin-top: 5px;margin-bottom: 5px;width: 100%">-->
+            <!--</div>-->
+
+            <!--<div style="width: 5%;float: right;height: auto;" *ngIf="news.userVoted">-->
+                <!--<img width="40px" height="40px" src="https://www.shareicon.net/data/128x128/2015/09/09/98136_grid_512x512.png" alt="Mark as relevant" (click)="onUserLike(news._id)" style="margin-top: 10%;cursor: pointer;">-->
+            <!--</div>-->
+            <!--<div style="width: 5%;float: right;height: auto;" *ngIf="!news.userVoted">-->
+                <!--<img width="40px" height="40px" src="https://www.shareicon.net/data/128x128/2015/09/09/98123_up_512x512.png" alt="Unmark as relevant" (click)="onUserLike(news._id)" style="margin-top: 10%;cursor: pointer;">-->
+            <!--</div>-->
+
+            <!--<div style="width: 75%;height: auto;float: right;">-->
+                <!--<a href="{{news.url}}">-->
+                    <!--<span class="global-subheading-3 global-font global-color-light-black">{{news.title}}</span>-->
+                    <!--<br>-->
+                    <!--<br>-->
+                    <!--<span class="global-subheading-3 global-font global-color-light-black" style="font-size: 15px">{{ news.description }}</span>-->
+                <!--</a>-->
+                <!--<h5>Publish date: {{news.publishedAt | date : 'medium'}}</h5>-->
+            <!--</div>-->
+
+            <!--<hr style="overflow-x: hidden;width: 100%;height: 5px;float: right;">-->
+
+        <!--</div>-->
+
+    <!--</div>-->
+</div>
+
