@@ -84,15 +84,20 @@ app.use(function (req, res, next) {
 
 let schedule = require('node-schedule');
 let reportsScript = require('./server/controllers/googleCustomSearchScript.controller');
+let obsoleteLinkRemoval = require('./server/controllers/removeObsoleteURLs.controller');
 
-
-let rule = new schedule.RecurrenceRule();
-rule.hour = 2;
-rule.minute = 0;
-
-schedule.scheduleJob(rule, function(fireDate){
-    console.log('This job was supposed to run at ' + fireDate + ', but actually ran at ' + new Date());
+let rule1 = new schedule.RecurrenceRule();
+rule1.hour = 4;
+rule1.minute = 0;
+schedule.scheduleJob(rule1, function(){
     reportsScript.updateReports();
+});
+
+let rule2 = new schedule.RecurrenceRule();
+rule2.hour = 1;
+rule2.minute = 0;
+schedule.scheduleJob(rule2, function(){
+    obsoleteLinkRemoval.removeObsoleteURLsFromDB();
 });
 
 

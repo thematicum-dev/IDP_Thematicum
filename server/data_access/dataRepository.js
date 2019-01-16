@@ -1176,6 +1176,37 @@ export default class DataRepository extends BaseRepository {
         });
     }
 
+    removeReportById(id) {
+        return new Promise((resolve, reject) => {
+            CustomSearch.findByIdAndRemove(id).exec()
+                .then(() => resolve())
+                .catch(() => reject());
+        });
+    }
+
+    getAllNews() {
+        return new Promise((resolve, reject) => {
+            RealtimeNews.find({}).exec()
+                .then((res) => {
+                    if (!res) {
+                        reject("No news found.")
+                    }
+                    resolve(res);
+                })
+                .catch((err) => {
+                    reject(err);
+                })
+        });
+    }
+
+    removeNewsById(id) {
+        return new Promise((resolve, reject) => {
+            RealtimeNews.findByIdAndRemove(id).exec()
+                .then(() => resolve())
+                .catch(() => reject());
+        });
+    }
+
     deleteFundById(fundId){
         const deleteAllFundCompositionsPromise = this.deleteAllFundCompositionsByFundId(fundId);
         const deleteFund = this.removeById(Fund,fundId);
