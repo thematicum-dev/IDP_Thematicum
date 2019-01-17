@@ -5,7 +5,7 @@
                 Firm allocation
             </h3>
             <h5 class="global-subheading-3 global-font text-center global-color-light-black">
-                <span data-toggle="tooltip" data-placement="top" title="Average stock price change percentage for 1 day">
+                <span data-toggle="tooltip" data-placement="top" title="Average stock price change for 1 day">
                     last 1 day:
                 </span>
                 <span  *ngIf="averageDailyStockChanges >= 0" style="color: rgb(39, 174, 96);" data-toggle="tooltip" data-placement="top" title="Average stock price change for 1 day">
@@ -15,7 +15,7 @@
                     {{averageDailyStockChanges | number : '1.1-1'}}%
                 </span>
                 |
-                <span data-toggle="tooltip" data-placement="top" title="Average stock price change percentage for 1 month">
+                <span data-toggle="tooltip" data-placement="top" title="Average stock price change for 1 month">
                     last 1 month:
                 </span>
                 <span  *ngIf="averageMonthlyStockChanges >= 0" style="color: rgb(39, 174, 96);" data-toggle="tooltip" data-placement="top" title="Average stock price change for 1 month">
