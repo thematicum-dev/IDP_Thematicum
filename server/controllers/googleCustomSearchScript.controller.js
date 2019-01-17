@@ -1,4 +1,4 @@
-import CustomSearch from "../models/customSearchReport";
+import CustomSearch from "../models/pdfReport";
 import {AppError} from "../utilities/appError";
 import DataRepository from "../data_access/dataRepository";
 import {AppResponse} from "../utilities/appResponse";

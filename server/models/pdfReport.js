@@ -1,39 +1,33 @@
+
 import mongoose from 'mongoose';
 import mongooseUniqueValidator from 'mongoose-unique-validator';
 
 const Schema = mongoose.Schema;
 const schema = new Schema({
-    source: {
-        type: String,
-        required: true,
-    },
-    author: {
-        type: String
-    },
-    // TODO switch to url type
-    url: {
-        type: String,
-        required: true
-        // unique: true
-    },
-    urlToImage: {
-        type: String
-    },
-    publishedAt: {
-        type: Date,
-        required: true
-    },
     title: {
         type: String,
-        required: true,
-        unique: true,
-        uniqueCaseInsensitive: true
+        required: true
     },
-    description: {
+    displayLink: {
+        type: String,
+        required: true,
+    },
+    // TODO switch to url type
+    link: {
+        type: String,
+        required: true,
+        unique: true
+    },
+    snippet: {
         type: String,
         required: true,
     },
     relevancyRanking: {
+        type: Number,
+        required: true,
+        default: 0
+    },
+    tfidfRanking: {
         type: Number,
         required: true,
         default: 0
@@ -47,5 +41,5 @@ const schema = new Schema({
         required:true
     }}, { timestamps: true }) ;
 
-schema.plugin(mongooseUniqueValidator, { message: 'The news already exists' });
-export default mongoose.model('RealtimeNews', schema);
+schema.plugin(mongooseUniqueValidator, { message: 'The report already exists' });
+export default mongoose.model('pdfReport', schema);

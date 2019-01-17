@@ -4,10 +4,10 @@ import QueryBuilder from './queryBuilder';
 import User from '../models/user';
 import Theme from '../models/theme';
 import ActivityLog from '../models/activitylog';
-import RealtimeNews from '../models/realtimeNews';
+import news from '../models/news';
 import UserNewsRelevancyVote from '../models/userNewsRelevancyVote';
 import UserReportRelevancyVote from '../models/userReportRelevancyVote';
-import CustomSearch from '../models/customSearchReport';
+import pdfReport from '../models/pdfReport';
 import {AppError} from '../utilities/appError';
 import UserThemeInput from '../models/userThemeInput';
 import ThemeStockComposition from '../models/themeStockComposition';
@@ -854,7 +854,7 @@ export default class DataRepository extends BaseRepository {
         return new Promise ((resolve, reject) => {
             let d = new Date();
             d.setMonth(d.getMonth() - 6);
-            RealtimeNews.find({themeId: themeId, publishedAt: {$gte: d}}).exec()
+            news.find({themeId: themeId, publishedAt: {$gte: d}}).exec()
                 .then((res) => {
 
                     if (!res) {
@@ -870,7 +870,7 @@ export default class DataRepository extends BaseRepository {
 
     getVotedNewsByThemeId(themeId) {
         return new Promise ((resolve, reject) => {
-            RealtimeNews.find({themeId: themeId, relevancyRanking: { $gt: 0 }}).exec()
+            news.find({themeId: themeId, relevancyRanking: { $gt: 0 }}).exec()
                 .then((res) => {
 
                     // console.log(res);
@@ -888,7 +888,7 @@ export default class DataRepository extends BaseRepository {
 
     getNewsWith0VoteByUrl(url) {
         return new Promise ((resolve, reject) => {
-            RealtimeNews.find({url: url, relevancyRanking: 0}).exec()
+            news.find({url: url, relevancyRanking: 0}).exec()
                 .then((res) => {
 
                     // console.log(res);
@@ -906,7 +906,7 @@ export default class DataRepository extends BaseRepository {
 
     getRealtimeNewsById(newsId) {
         return new Promise ((resolve, reject) => {
-            RealtimeNews.findById(newsId).exec()
+            news.findById(newsId).exec()
                 .then((res) => {
 
                     if (!res) {
@@ -922,7 +922,7 @@ export default class DataRepository extends BaseRepository {
 
     increaseNewsRelevancyBy10(newsId) {
        return new Promise ((resolve, reject) => {
-            RealtimeNews.findById(newsId, function (err, news) {
+            news.findById(newsId, function (err, news) {
                 if (err) return handleError(err);
 
                 let newRanking = news.relevancyRanking + 10;
@@ -975,7 +975,7 @@ export default class DataRepository extends BaseRepository {
         return new Promise((resolve, reject) => {
             console.log(ranking);
 
-            CustomSearch.findById(ranking.id, function (err, report) {
+            pdfReport.findById(ranking.id, function (err, report) {
 
                 // let newRanking = report.relevancyRanking + ranking.measure;
                 report.set({ tfidfRanking: ranking.measure });
@@ -1004,7 +1004,7 @@ export default class DataRepository extends BaseRepository {
                             console.log("New user composition saved.");
                             if (err) reject(err);
                         });
-                        RealtimeNews.findById(newsId, function (err, news) {
+                        news.findById(newsId, function (err, news) {
                             let newRanking = news.relevancyRanking + 10;
                             news.set({ relevancyRanking: newRanking });
                             news.save(function (err, updatedNews) {
@@ -1020,7 +1020,7 @@ export default class DataRepository extends BaseRepository {
                     else {
                         // vote exists already
                         if (res[0].relevant) {
-                            RealtimeNews.findById(newsId, function (err, news) {
+                            news.findById(newsId, function (err, news) {
                                 //if (err) return handleError(err);
                                 let newRanking = news.relevancyRanking - 10;
                                 news.set({ relevancyRanking: newRanking });
@@ -1036,7 +1036,7 @@ export default class DataRepository extends BaseRepository {
                                 });
                             });
                         } else {
-                            RealtimeNews.findById(newsId, function (err, news) {
+                            news.findById(newsId, function (err, news) {
                                 let newRanking = news.relevancyRanking + 10;
                                 news.set({ relevancyRanking: newRanking });
                                 news.save(function (err, updatedNews) {
@@ -1075,7 +1075,7 @@ export default class DataRepository extends BaseRepository {
                             // console.log("New user composition saved.");
                             if (err) reject(err);
                         });
-                        CustomSearch.findById(reportId, function (err, report) {
+                        pdfReport.findById(reportId, function (err, report) {
                             let newRanking = report.relevancyRanking + 10;
                             report.set({ relevancyRanking: newRanking });
                             report.save(function (err, updatedReport) {
@@ -1088,7 +1088,7 @@ export default class DataRepository extends BaseRepository {
                     else {
                         // vote exists already
                         if (res[0].relevant) {
-                            CustomSearch.findById(reportId, function (err, report) {
+                            pdfReport.findById(reportId, function (err, report) {
                                 let newRanking = report.relevancyRanking - 10;
                                 report.set({ relevancyRanking: newRanking });
                                 report.save(function (err, updatedReport) {
@@ -1103,7 +1103,7 @@ export default class DataRepository extends BaseRepository {
                                 });
                             });
                         } else {
-                            CustomSearch.findById(reportId, function (err, report) {
+                            pdfReport.findById(reportId, function (err, report) {
                                 let newRanking = report.relevancyRanking + 10;
                                 report.set({ relevancyRanking: newRanking });
                                 report.save(function (err, updatedReport) {
@@ -1130,7 +1130,7 @@ export default class DataRepository extends BaseRepository {
 
     getReportsByThemeId(themeId) {
         return new Promise ((resolve, reject) => {
-            CustomSearch.find({themeId: themeId}).exec()
+            pdfReport.find({themeId: themeId}).exec()
                 .then((res) => {
 
                     if (!res) {
@@ -1146,7 +1146,7 @@ export default class DataRepository extends BaseRepository {
 
     getReportById(reportId) {
         return new Promise ((resolve, reject) => {
-            CustomSearch.findById(reportId).exec()
+            pdfReport.findById(reportId).exec()
                 .then((res) => {
 
                     if (!res) {
@@ -1162,7 +1162,7 @@ export default class DataRepository extends BaseRepository {
 
     getAllReports() {
         return new Promise((resolve, reject) => {
-            CustomSearch.find({}).exec()
+            pdfReport.find({}).exec()
                 .then((res) => {
                     if (!res) {
                         reject("No reports found.")
@@ -1178,7 +1178,7 @@ export default class DataRepository extends BaseRepository {
 
     removeReportById(id) {
         return new Promise((resolve, reject) => {
-            CustomSearch.findByIdAndRemove(id).exec()
+            pdfReport.findByIdAndRemove(id).exec()
                 .then(() => resolve())
                 .catch(() => reject());
         });
@@ -1186,7 +1186,7 @@ export default class DataRepository extends BaseRepository {
 
     getAllNews() {
         return new Promise((resolve, reject) => {
-            RealtimeNews.find({}).exec()
+            news.find({}).exec()
                 .then((res) => {
                     if (!res) {
                         reject("No news found.")
@@ -1201,7 +1201,7 @@ export default class DataRepository extends BaseRepository {
 
     removeNewsById(id) {
         return new Promise((resolve, reject) => {
-            RealtimeNews.findByIdAndRemove(id).exec()
+            news.findByIdAndRemove(id).exec()
                 .then(() => resolve())
                 .catch(() => reject());
         });

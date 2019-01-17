@@ -3,7 +3,7 @@ import mongoose from "mongoose";
 const Schema = mongoose.Schema;
 const schema = new Schema({
     user: { type: Schema.Types.ObjectId, ref: 'User' },
-    news: { type: Schema.Types.ObjectId, ref: 'RealtimeNews' },
+    news: { type: Schema.Types.ObjectId, ref: 'news' },
     relevant: {
         type: Boolean,
         required: true,

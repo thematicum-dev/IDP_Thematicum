@@ -1,4 +1,4 @@
-import RealtimeNews from '../models/realtimeNews'
+import RealtimeNews from '../models/news'
 import DataRepository from '../data_access/dataRepository'
 import {AppError} from "../utilities/appError";
 import {AppResponse} from "../utilities/appResponse";
@@ -76,7 +76,7 @@ export function getRealtimeNews(req, res, next) {
     //     }
     //     var newsCollection = [];
     //     for (var i=0; i<response.articles.length; i++) {
-    //         var news = new RealtimeNews({
+    //         var news = new news({
     //             title: response.articles[i].title,
     //             description: response.articles[i].description,
     //             source: response.articles[i].source.name,
@@ -105,7 +105,7 @@ export function getRealtimeNews(req, res, next) {
     //     console.log(newsCollection);
     //
     //
-    //     RealtimeNews.collection.insert(newsCollection, { ordered: false }, (err, result) => {
+    //     news.collection.insert(newsCollection, { ordered: false }, (err, result) => {
     //         repo.getRealtimeNewsByThemeIdFor6Months(req.theme._id)
     //             .then((allNews) => {
     //
@@ -255,7 +255,7 @@ export function getRelevantNews(req, res, next) {
     //     var newsCollection = [];
     //     // console.log(response);
     //     for (var i=0; i<response.articles.length; i++) {
-    //         var news = new RealtimeNews({
+    //         var news = new news({
     //             title: response.articles[i].title,
     //             description: response.articles[i].description,
     //             source: response.articles[i].source.name,
@@ -282,7 +282,7 @@ export function getRelevantNews(req, res, next) {
     //
     //     }
     //
-    //     RealtimeNews.collection.insert(newsCollection, { ordered: false }, (err, result) => {
+    //     news.collection.insert(newsCollection, { ordered: false }, (err, result) => {
     //
     //         let allNews = [];
     //         Promise.all(newsCollection.map((entry) => repo.getNewsWith0VoteByUrl(entry.url)))
