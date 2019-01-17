@@ -102,7 +102,7 @@ import { ChartsModule } from 'ng4-charts/ng4-charts';
         AdminSubscription,
         ThemeFeedComponent,
         ThemeNewsComponent,
-        AdminFundsManager,
+        AdminFundsManager
         ThemeNewsComponent,
         ThemeGoogleNewsComponent,
         ThemeGoogleReportsComponent
