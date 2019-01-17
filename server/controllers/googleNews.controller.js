@@ -4,7 +4,7 @@ import {AppError} from "../utilities/appError";
 import {AppResponse} from "../utilities/appResponse";
 
 const NewsAPI = require('newsapi');
-const newsapi = new NewsAPI('297ec094da9e4892b4379b06c0817f80');
+const newsapi = new NewsAPI(process.env.NEWS_API_KEY);
 
 const repo = new DataRepository();
 
@@ -64,74 +64,6 @@ export function getRealtimeNews(req, res, next) {
             console.log(err);
             return res.status(404).json(new AppError('No news found.', ':/'));
         });
-
-    // newsapi.v2.everything({
-    //     q: query,
-    //     language: 'en',
-    //     sortBy: 'publishedAt',
-    //     page: 1
-    // }).then(response => {
-    //     if (response.status !== "ok") {
-    //         return res.status(404).json(new AppError('No news found.', response.message));
-    //     }
-    //     var newsCollection = [];
-    //     for (var i=0; i<response.articles.length; i++) {
-    //         var news = new news({
-    //             title: response.articles[i].title,
-    //             description: response.articles[i].description,
-    //             source: response.articles[i].source.name,
-    //             author: response.articles[i].author,
-    //             url: response.articles[i].url,
-    //             urlToImage: response.articles[i].urlToImage,
-    //             publishedAt: response.articles[i].publishedAt,
-    //             content: response.articles[i].content,
-    //             themeId: req.theme._id
-    //         });
-    //
-    //         let duplicate = false;
-    //         newsCollection.every(function (entry) {
-    //             if (entry.title.toLowerCase() === news.title.toLowerCase()) {
-    //                 duplicate = true;
-    //                 return false;
-    //             } else {
-    //                 return true;
-    //             }
-    //         });
-    //         if (!duplicate) {
-    //             newsCollection.push(news);
-    //         }
-    //     }
-    //
-    //     console.log(newsCollection);
-    //
-    //
-    //     news.collection.insert(newsCollection, { ordered: false }, (err, result) => {
-    //         repo.getRealtimeNewsByThemeIdFor6Months(req.theme._id)
-    //             .then((allNews) => {
-    //
-    //                 allNews.sort(compareByDate);
-    //
-    //                 repo.getUserVotedNews(res.locals.user._id)
-    //                     .then((userVotedNews) => {
-    //                         for (let i = 0, len = allNews.length; i < len; i++) {
-    //                             allNews[i].userVoted = false;
-    //                             for (let k = 0, len2 = userVotedNews.length; k < len2; k++) {
-    //                                 if (allNews[i]._id.equals(userVotedNews[k].news)) {
-    //                                     allNews[i].userVoted = true;
-    //                                 }
-    //                             }
-    //                         }
-    //                         return res.status(200).json(new AppResponse('News fetched.', allNews));
-    //                     })
-    //                     .catch(() => {
-    //                         return res.status(200).json(new AppResponse('News fetched.', allNews));
-    //                     });
-    //             })
-    //             .catch(() => {
-    //                 return res.status(404).json(new AppError('No news found.', ':/'));
-    //             });
-    //     });
-    // });
 }
 
 
@@ -228,104 +160,6 @@ export function getRelevantNews(req, res, next) {
             console.log(err);
             return res.status(404).json(new AppError('No news found.', ':/'));
         });
-
-
-
-    // let query = '';
-    // if (req.theme.tags.length >= 1) {
-    //     query = req.theme.tags[0];
-    //     for (let i = 1; i < req.theme.tags.length; i++) {
-    //         query = query + ' OR ' + req.theme.tags[i];
-    //     }
-    //
-    //     query = req.theme.name + ' AND (' + query + ')';
-    // } else {
-    //     query = req.theme.name;
-    // }
-    //
-    // newsapi.v2.everything({
-    //     q: query,
-    //     language: 'en',
-    //     sortBy: 'relevancy',
-    //     page: 1
-    // }).then(response => {
-    //     if (response.status !== "ok") {
-    //         return res.status(404).json(new AppError('No news found.', response.message));
-    //     }
-    //     var newsCollection = [];
-    //     // console.log(response);
-    //     for (var i=0; i<response.articles.length; i++) {
-    //         var news = new news({
-    //             title: response.articles[i].title,
-    //             description: response.articles[i].description,
-    //             source: response.articles[i].source.name,
-    //             author: response.articles[i].author,
-    //             url: response.articles[i].url,
-    //             urlToImage: response.articles[i].urlToImage,
-    //             publishedAt: response.articles[i].publishedAt,
-    //             content: response.articles[i].content,
-    //             themeId: req.theme._id
-    //         });
-    //
-    //         let duplicate = false;
-    //         newsCollection.every(function (entry) {
-    //             if (entry.title.toLowerCase() === news.title.toLowerCase()) {
-    //                 duplicate = true;
-    //                 return false;
-    //             } else {
-    //                 return true;
-    //             }
-    //         });
-    //         if (!duplicate) {
-    //             newsCollection.push(news);
-    //         }
-    //
-    //     }
-    //
-    //     news.collection.insert(newsCollection, { ordered: false }, (err, result) => {
-    //
-    //         let allNews = [];
-    //         Promise.all(newsCollection.map((entry) => repo.getNewsWith0VoteByUrl(entry.url)))
-    //             .then((r) => {
-    //
-    //                 for (let i=0; i<r.length; i++) {
-    //                     if (r[i].length !== 0) {
-    //                         allNews.push(r[i][0]);
-    //                     }
-    //                 }
-    //
-    //                 repo.getVotedNewsByThemeId(req.theme._id)
-    //                     .then((allVotedNews) => {
-    //
-    //                         allNews = allNews.concat(allVotedNews);
-    //                         console.log(allNews.length);
-    //                         // console.log(allNews);
-    //                         allNews.sort(compareByRelevancy);
-    //
-    //                         repo.getUserVotedNews(res.locals.user._id)
-    //                             .then((userVotedNews) => {
-    //                                 for (let i = 0, len = allNews.length; i < len; i++) {
-    //                                     allNews[i].userVoted = false;
-    //                                     for (let k = 0, len2 = userVotedNews.length; k < len2; k++) {
-    //                                         if (allNews[i]._id.equals(userVotedNews[k].news)) {
-    //                                             allNews[i].userVoted = true;
-    //                                         }
-    //                                     }
-    //                                 }
-    //                                 return res.status(200).json(new AppResponse('News fetched.', allNews));
-    //                             })
-    //                             .catch(() => {
-    //                                 return res.status(200).json(new AppResponse('News fetched.', allNews));
-    //                             });
-    //
-    //                     })
-    //                     .catch(() => {
-    //                         return res.status(404).json(new AppError('No news found.', ':/'));
-    //                     });
-    //             });
-    //             });
-    //
-    // });
 
 }
 

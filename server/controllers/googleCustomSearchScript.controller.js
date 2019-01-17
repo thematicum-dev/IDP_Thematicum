@@ -14,32 +14,18 @@ const setTimeoutPromise = util.promisify(setTimeout);
 
 export function getCustomSearchResults(req, res,next) {
 
-    // repo.getAllThemes()
-    //     .then((themes) => Promise.all(themes.map((theme) => {
-    //         tags[theme._id] = theme.tags;
-    //         getReports(theme);
-    //     })))
-    //     .then((themesIds) => Promise.all(themesIds.map((themeId) => repo.getReportsByThemeId(themeId))))
-    //     .then((reportsSortedByRelevancy) => Promise.all(reportsSortedByRelevancy.map((reportSetPerTheme) => getRanking(reportSetPerTheme))))
-    //     .then((allRankings) => console.log(allRankings))
-    //     .then(res.status(200).json(new AppResponse('done')));
 
     repo.getAllThemes()
         // .then((themes) => getReports(themes[0]))
         .then((themes) => Promise.all(themes.map((theme) => getReports(theme))))
         // .then((themes) => themes.reduce((previous, current) => previous.then(getReports(current)), Promise.resolve()))
-        .then((rankings) => console.log('BASHI :' + rankings))
+        .then((rankings) => console.log(rankings))
         .then(() => res.status(200).json(new AppResponse('done')))
         .catch((err) => {
             console.log(err);
             res.status(200).json(new AppResponse('done with error.'));
         })
 
-
-        // .then((themesIds) => Promise.all(themesIds.map((themeId) => repo.getReportsByThemeId(themeId))))
-        // .then((reportsSortedByRelevancy) => Promise.all(reportsSortedByRelevancy.map((reportSetPerTheme) => getRanking(reportSetPerTheme))))
-        // .then((allRankings) => console.log(allRankings))
-        // .then(res.status(200).json(new AppResponse('done')));
 }
 
 
@@ -69,9 +55,9 @@ function getReports(theme) {
         }
 
         customsearch.cse.list({
-            cx: '017974062169775363904:fstfck3bwbe',
+            cx: process.env.GOOGLE_CUSTOM_SEARCH_CX,
             q: theme.name,
-            auth: 'AIzaSyC0gHkjzeUJz4jFAl0ywjt_cKMg80IoPn0',
+            auth: process.env.GOOGLE_CUSTOM_SEARCH_AUTH,
             fileType: 'pdf',
             orTerms: orTerms
         })
