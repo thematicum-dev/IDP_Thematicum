@@ -1,4 +1,4 @@
-export class RealtimeNewsModel {
+export class NewsModel {
     constructor(
         public _id?: string,
         public author?: string,

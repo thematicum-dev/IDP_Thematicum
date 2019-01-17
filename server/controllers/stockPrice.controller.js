@@ -3,22 +3,6 @@ import DataRepository from "../data_access/dataRepository";
 const axios = require('axios');
 const repo = new DataRepository();
 
-const url = 'https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=MSFT&apikey=RUTCOEGKP43O8FHP';
-const apiKey = 'RUTCOEGKP43O8FHP';
-
-export function getStockPrices(req, res, next) {
-
-    axios.request({url: url, method: 'get', responseType: 'json'})
-        .then(response => {
-            console.log(response.data['Time Series (Daily)']['2018-10-05']);
-            return res.status(200).json(response.data['Time Series (Daily)']['2018-10-05']);
-        })
-        .catch(err => {
-            return res.status(200).json({"yaxshi":"olacey"});
-        })
-
-    // RUTCOEGKP43O8FHP
-}
 
 export function stockPrice(results) {
 

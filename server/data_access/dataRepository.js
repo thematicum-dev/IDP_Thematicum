@@ -850,7 +850,7 @@ export default class DataRepository extends BaseRepository {
         return Promise.all([deleteAllStockCompositionsPromise, deleteStock]);
     }
 
-    getRealtimeNewsByThemeIdFor6Months(themeId) {
+    getNewsByThemeIdFor6Months(themeId) {
         return new Promise ((resolve, reject) => {
             let d = new Date();
             d.setMonth(d.getMonth() - 6);
@@ -904,7 +904,7 @@ export default class DataRepository extends BaseRepository {
         });
     }
 
-    getRealtimeNewsById(newsId) {
+    getNewsById(newsId) {
         return new Promise ((resolve, reject) => {
             news.findById(newsId).exec()
                 .then((res) => {
@@ -918,33 +918,6 @@ export default class DataRepository extends BaseRepository {
                     reject(err);
                 });
         });
-    }
-
-    increaseNewsRelevancyBy10(newsId) {
-       return new Promise ((resolve, reject) => {
-            news.findById(newsId, function (err, news) {
-                if (err) return handleError(err);
-
-                let newRanking = news.relevancyRanking + 10;
-                news.set({ relevancyRanking: newRanking });
-                news.save(function (err, updatedNews) {
-                    if (err) reject(err);
-                    resolve(updatedNews);
-                })
-            });
-       });
-    }
-
-    setUserRelevancyVote(userId, newsId) {
-        return new Promise((resolve, reject) => {
-            let newsUserComposition = new UserNewsRelevancyVote({user: userId, news: newsId, relevant: true});
-
-            newsUserComposition.save(function (err) {
-                if (err) reject(err);
-
-                resolve(err);
-            })
-        })
     }
 
     getUserVotedNews(userId) {

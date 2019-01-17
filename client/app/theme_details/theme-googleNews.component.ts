@@ -1,11 +1,6 @@
-import {Component, Input, ElementRef, OnInit, OnChanges, SimpleChanges, ViewChild, AfterViewInit} from '@angular/core';
-import {Theme} from "../models/theme";
-import {ActivatedRoute, Router} from '@angular/router';
+import {Component, Input, OnInit} from '@angular/core';
 import {ThemeService} from "../services/theme.service";
-import {Location} from '@angular/common';
-import {DomSanitizer} from '@angular/platform-browser';
-import {Observable} from "rxjs";
-import {RealtimeNewsModel} from "../models/realtimeNewsModel";
+import {NewsModel} from "../models/newsModel";
 
 declare var trends: any;
 
@@ -70,8 +65,8 @@ export class ThemeGoogleNewsComponent implements OnInit {
 
     constructor(private themeService : ThemeService) {}
 
-    recentNews = new Array<RealtimeNewsModel>();
-    relevantNews = new Array<RealtimeNewsModel>();
+    recentNews = new Array<NewsModel>();
+    relevantNews = new Array<NewsModel>();
 
     displayMostRecent: boolean = true;
 
@@ -79,40 +74,13 @@ export class ThemeGoogleNewsComponent implements OnInit {
 
         this.loadRecentNews();
         this.loadRelevantNews();
-
-        // this.themeService.getRealtimeNews(this.themeId).subscribe((data) => {
-        //
-        //     for (let entry of data) {
-        //         let newsdata = new RealtimeNewsModel(entry["_id"], entry["author"], entry["description"], entry["url"],
-        //             entry["urlToImage"], entry["title"], entry["source"], entry["publishedAt"], entry["relevancyRanking"],
-        //             entry["userVoted"]);
-        //         this.recentNews.push(newsdata);
-        //     }
-        //
-        //     console.log(this.recentNews);
-        // });
-        //
-        // this.themeService.getRelevantNews(this.themeId).subscribe((data) => {
-        //
-        //     for (let entry of data) {
-        //         let newsdata = new RealtimeNewsModel(entry["_id"], entry["author"], entry["description"], entry["url"],
-        //             entry["urlToImage"], entry["title"], entry["source"], entry["publishedAt"], entry["relevancyRanking"],
-        //             entry["userVoted"]);
-        //         this.relevantNews.push(newsdata);
-        //     }
-        //
-        //     console.log(this.relevantNews);
-        // });
-
-
-        // document.getElementById("defaultOpen").click();
     }
 
     loadRecentNews() {
-        this.recentNews = new Array<RealtimeNewsModel>();
         this.themeService.getRealtimeNews(this.themeId).subscribe((data) => {
+            this.recentNews = new Array<NewsModel>();
             for (let entry of data) {
-                let newsdata = new RealtimeNewsModel(entry["_id"], entry["author"], entry["description"], entry["url"],
+                let newsdata = new NewsModel(entry["_id"], entry["author"], entry["description"], entry["url"],
                     entry["urlToImage"], entry["title"], entry["source"], entry["publishedAt"], entry["relevancyRanking"],
                     entry["userVoted"]);
                 this.recentNews.push(newsdata);
@@ -123,10 +91,10 @@ export class ThemeGoogleNewsComponent implements OnInit {
     }
 
     loadRelevantNews() {
-        this.relevantNews = new Array<RealtimeNewsModel>();
         this.themeService.getRelevantNews(this.themeId).subscribe((data) => {
+            this.relevantNews = new Array<NewsModel>();
             for (let entry of data) {
-                let newsdata = new RealtimeNewsModel(entry["_id"], entry["author"], entry["description"], entry["url"],
+                let newsdata = new NewsModel(entry["_id"], entry["author"], entry["description"], entry["url"],
                     entry["urlToImage"], entry["title"], entry["source"], entry["publishedAt"], entry["relevancyRanking"],
                     entry["userVoted"]);
                 this.relevantNews.push(newsdata);

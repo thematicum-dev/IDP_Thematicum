@@ -39,7 +39,7 @@ export function getRealtimeNews(req, res, next) {
             }
 
         })
-        .then(() => repo.getRealtimeNewsByThemeIdFor6Months(req.theme._id))
+        .then(() => repo.getNewsByThemeIdFor6Months(req.theme._id))
         .then((allNews) => {
 
             allNews.sort(compareByDate);
@@ -237,7 +237,7 @@ export function markNewsAsRelevant(req, res, next) {
 
 export function newsById(req, res, next, id) {
 
-    repo.getRealtimeNewsById(id)
+    repo.getNewsById(id)
         .then(result => {
             if (!result) {
 

@@ -5,12 +5,9 @@ import {AppError} from "../utilities/appError";
 const repo = new DataRepository();
 const crawler = require('crawler-request');
 var natural = require('natural');
-const axios = require('axios');
 
 export function getCustomSearchResults(req, res, next) {
 
-    // console.log("IN CUSTOM SEARCH");
-    // console.log(repo.getReportsByThemeId(req.params.theme));
     repo.getReportsByThemeId(req.params.theme).then(response => {
 
         response.sort(compareByRelevancy);
@@ -32,7 +29,6 @@ export function getCustomSearchResults(req, res, next) {
                 return res.status(200).json(new AppResponse('News fetched.', response));
             });
 
-        // return res.status(200).json(new AppResponse('News fetched.', response));
     }).catch(err => {
         return res.status(404).json(new AppError('No news found.', ':/'));
     });
@@ -107,26 +103,11 @@ export function getRanking(req, res, next) {
 function getDocument(url) {
     return new Promise((resolve, reject) =>{
 
-        // axios.request({url: url, method: 'GET', responseType: 'blob'})
-        //     .then((response) => {
-        //     console.log(response.data);
-        //     const content = response.headers['content-type'];
-        //     download(response.data, file.file_name, content);
-        //
-        //
-        //     resolve(response.data);
-        //     });
-
-
         console.log('sending request to '+ url);
         crawler(url)
             .then(function(response){
                 console.log('got response from ' + url);
                 // handle response
-                // console.log(response.text.split('.').length);
-                // console.log((response.text.toLowerCase().match(/industrial automation/g) || []).length);
-                // console.log((response.text.toLowerCase().match(/automation/g) || []).length);
-                // console.log((response.text.toLowerCase().match(/artificial intelligence/g) || []).length);
                 if (response.status === 200) {
                     resolve(response.text)
                 } else {

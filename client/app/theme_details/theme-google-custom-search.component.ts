@@ -1,10 +1,5 @@
-import {Component, Input, ElementRef, OnInit, OnChanges, SimpleChanges, ViewChild, AfterViewInit} from '@angular/core';
-import {Theme} from "../models/theme";
-import {ActivatedRoute, Router} from '@angular/router';
+import {Component, Input, OnInit} from '@angular/core';
 import {ThemeService} from "../services/theme.service";
-import {Location} from '@angular/common';
-import {DomSanitizer} from '@angular/platform-browser';
-import {Observable} from "rxjs";
 import {GoogleCustomSearchModel} from "../models/googleCustomSearchModel";
 
 @Component({
@@ -42,21 +37,19 @@ export class ThemeGoogleReportsComponent implements OnInit {
     }
 
     loadReports() {
-        this.reportsSortedByRelevancy = new Array<GoogleCustomSearchModel>();
-        this.reportsSortedByDate = new Array<GoogleCustomSearchModel>();
         this.themeService.getReportsByThemeId(this.themeId).subscribe((data) => {
 
             console.log("Reports");
             console.log(data);
+            this.reportsSortedByRelevancy = new Array<GoogleCustomSearchModel>();
             for (let entry of data) {
                 let report = new GoogleCustomSearchModel(entry["_id"], entry["snippet"], entry["link"], entry["title"],
                     entry["displayLink"], entry['relevancyRanking'], entry['userVoted']);
                 this.reportsSortedByRelevancy.push(report);
             }
+            this.reportsSortedByDate = new Array<GoogleCustomSearchModel>();
             this.reportsSortedByDate = Object.assign([], this.reportsSortedByRelevancy);
             this.reportsSortedByDate.sort(this.compareByDate);
-
-            // console.log(this.reportsSortedByRelevancy);
         });
     }
 

@@ -1,8 +1,8 @@
 import Router from 'express';
 
-import * as googleNews from '../controllers/googleNews.controller';
+import * as googleNews from '../controllers/news';
 import * as themeController from "../controllers/themes.controller";
-import * as realtimeNewsController from "../controllers/googleNews.controller"
+import * as realtimeNewsController from "../controllers/news"
 import * as authUtilities from "../utilities/authUtilities";
 const router = Router();
 
