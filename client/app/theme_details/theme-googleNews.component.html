@@ -3,8 +3,8 @@
 </div>
 
 <ul class="nav nav-pills" *ngIf="recentNews.length > 0 || relevantNews.length > 0 ">
-    <li role="presentation" *ngIf="recentNews.length > 0"><button class="btn"  [class.btn-primary]="displayMostRecent" (click)="toggleDisplayTab()">Most recent</button></li>
-    <li role="presentation" *ngIf="relevantNews.length > 0 "><button class="btn"  [class.btn-primary]="!displayMostRecent" (click)="toggleDisplayTab()">Most relevant</button></li>
+    <li role="presentation" *ngIf="recentNews.length > 0 && relevantNews.length > 0"><button class="btn"  [class.btn-primary]="displayMostRecent" (click)="toggleDisplayTab()">Most recent</button></li>
+    <li role="presentation" *ngIf="recentNews.length > 0 && relevantNews.length > 0"><button class="btn"  [class.btn-primary]="!displayMostRecent" (click)="toggleDisplayTab()">Most relevant</button></li>
 </ul>
 
     <!-- Tab content -->
