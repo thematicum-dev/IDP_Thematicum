@@ -13,8 +13,9 @@ const schema = new Schema({
     // TODO switch to url type
     url: {
         type: String,
-        required: true
-        // unique: true
+        required: true,
+        unique: true,
+        uniqueCaseInsensitive: true
     },
     urlToImage: {
         type: String
