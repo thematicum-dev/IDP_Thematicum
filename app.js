@@ -72,7 +72,6 @@ app.use('/api/newsfeed',newsFeedRoutes);
 app.use('/api/news', realtimeNews);
 app.use('/api/customsearchscript', customSearchScript);
 app.use('/api/customsearch', customSearch);
-app.use('/api/stockprice', stockPrice);
 app.use('/api/removeobsoleteurls', removeObsoleteURLs);
 app.use('/api/funds', fundRoutes);
 app.use('/api/fundallocations', fundAllocationRoutes);
