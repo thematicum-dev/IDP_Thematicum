@@ -46,9 +46,6 @@ import { AdminNewsFeed } from "./admin/admin-news-feed.component";
 import { AdminSubscription } from "./admin/admin-subscription.component"
 import { ThemeFeedComponent } from "./theme_details/theme-feed.component";
 import { ThemeNewsComponent } from "./theme_details/theme-news.component";
-import { ThemeGoogleNewsComponent } from "./theme_details/theme-googleNews.component";
-import { ThemeGoogleReportsComponent } from "./theme_details/theme-google-custom-search.component";
-
 import {FundUpdateComponent} from "./fund/fund-update.component";
 import {FundCreateComponent} from "./fund/fund-create.component";
 import {ThemeFundAllocationComponent} from "./theme_details/theme-fund-allocation.component";
@@ -103,9 +100,6 @@ import { ChartsModule } from 'ng4-charts/ng4-charts';
         ThemeFeedComponent,
         ThemeNewsComponent,
         AdminFundsManager
-        ThemeNewsComponent,
-        ThemeGoogleNewsComponent,
-        ThemeGoogleReportsComponent
     ],
     imports: [BrowserModule, routing, FormsModule, ReactiveFormsModule, HttpModule, MultiselectDropdownModule, DataTableModule, DeviceDetectorModule.forRoot(), ChartsModule],
     providers: [AuthService, ErrorService, ThemeService, StockService, AuthGuard, FundService],
