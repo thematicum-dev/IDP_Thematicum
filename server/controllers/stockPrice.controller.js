@@ -3,7 +3,6 @@ import DataRepository from "../data_access/dataRepository";
 const axios = require('axios');
 const repo = new DataRepository();
 
-
 export function stockPrice(results) {
 
     return new Promise((resolve, reject) => {

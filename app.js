@@ -25,7 +25,6 @@ import newsFeedRoutes from './server/routes/newsFeed.routes';
 import realtimeNews from './server/routes/googleNews.routes';
 import customSearchScript from './server/routes/googleCustomSearchScript.routes';
 import customSearch from './server/routes/googleCustomSearch.routes';
-import stockPrice from './server/routes/stockPrice.routes';
 import removeObsoleteURLs from './server/routes/removeObsoleteURLs.routes';
 import fundRoutes from './server/routes/fund.routes'
 import fundAllocationRoutes from './server/routes/fundAllocations.routes'

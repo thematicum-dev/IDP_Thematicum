@@ -1,10 +1,5 @@
-import {Component, Input, ElementRef, OnInit, OnChanges, SimpleChanges, ViewChild, AfterViewInit} from '@angular/core';
-import {Theme} from "../models/theme";
-import {ActivatedRoute, Router} from '@angular/router';
+import {Component, Input, OnInit} from '@angular/core';
 import {ThemeService} from "../services/theme.service";
-import {Location} from '@angular/common';
-import {DomSanitizer} from '@angular/platform-browser';
-import {Observable} from "rxjs";
 import {GoogleCustomSearchModel} from "../models/googleCustomSearchModel";
 
 @Component({
@@ -55,6 +50,8 @@ export class ThemeGoogleReportsComponent implements OnInit {
             this.reportsSortedByDate = new Array<GoogleCustomSearchModel>();
             this.reportsSortedByDate = Object.assign([], this.reportsSortedByRelevancy);
             this.reportsSortedByDate.sort(this.compareByDate);
+
+            // console.log(this.reportsSortedByRelevancy);
         });
     }
 
