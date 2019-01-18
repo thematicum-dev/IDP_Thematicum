@@ -38,7 +38,6 @@ export function updateReports() {
         .then(() => res.status(200).json(new AppResponse('done')))
         .catch((err) => {
             console.log(err);
-            res.status(200).json(new AppResponse('done with error.'));
         })
 }
 

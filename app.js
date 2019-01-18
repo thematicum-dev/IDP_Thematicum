@@ -10,6 +10,9 @@ import twitter from 'twitter';
 import * as settings from './server/utilities/settings';
 
 
+const axios = require('axios');
+
+
 //routes
 import authRoutes from './server/routes/auth.routes';
 import themeRoutes from './server/routes/theme.routes';
@@ -100,6 +103,30 @@ schedule.scheduleJob(rule2, function(){
     obsoleteLinkRemoval.removeObsoleteURLsFromDB();
 });
 
+let encodedScriptURL = encodeURI('https://thematicum.herokuapp.com/api/customsearchscript');
+let customSearchTriggerJobDeletionEndpoint = 'https://api.atrigger.com/v1/tasks/delete?key=' + process.env.ATRIGGER_API_KEY + '&secret=' + process.env.ATRIGGER_API_SECRET +'&tag_type=reportscript&timeSlice=1day&first=2019-01-18T10%3A45%3A01Z&count=-1&url=' + encodedScriptURL;
+let customSearchTriggerJobCreationEndpoint = 'https://api.atrigger.com/v1/tasks/create?key=' + process.env.ATRIGGER_API_KEY + '&secret=' + process.env.ATRIGGER_API_SECRET +'&tag_type=reportscript';
+
+
+
+// console.log(endpoint);
+
+axios.request({url: customSearchTriggerJobDeletionEndpoint, method: 'get', responseType: 'json'})
+    .then(() => {
+        axios.request({url: customSearchTriggerJobCreationEndpoint, method: 'get', responseType: 'json'})
+            .then(() => {
+                console.log("Report update job created.");
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+    })
+    .catch((err) => {
+        console.log(err);
+    });
+
+
+let encodedRemovalURL = encodeURI('https://thematicum.herokuapp.com/api/removeobsoleteurls');
 
 
 //error handling
