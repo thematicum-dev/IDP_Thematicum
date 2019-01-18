@@ -116,7 +116,7 @@ console.log('Encoded date: ', scriptExecutionTime);
 // let encodedScriptURL = encodeURI('https://thematicum.herokuapp.com/api/customsearchscript');
 let scriptURL = 'https://thematicum.herokuapp.com/api/customsearchscript';
 let customSearchTriggerJobDeletionEndpoint = 'https://api.atrigger.com/v1/tasks/delete?key=' + process.env.ATRIGGER_API_KEY + '&secret=' + process.env.ATRIGGER_API_SECRET +'&tag_type=reportscript';
-let customSearchTriggerJobCreationEndpoint = 'https://api.atrigger.com/v1/tasks/create?key=' + process.env.ATRIGGER_API_KEY + '&secret=' + process.env.ATRIGGER_API_SECRET +'&tag_type=reportscript&retries=0&timeSlice=1day&first=' + scriptExecutionTime + '&count=-1&url=' + scriptURL;
+let customSearchTriggerJobCreationEndpoint = 'https://api.atrigger.com/v1/tasks/create?key=' + process.env.ATRIGGER_API_KEY + '&secret=' + process.env.ATRIGGER_API_SECRET +'&tag_type=reportscript&retries=0&timeSlice=1day&first=' + scriptExecutionTime.toISOString() + '&count=-1&url=' + scriptURL;
 
 
 
