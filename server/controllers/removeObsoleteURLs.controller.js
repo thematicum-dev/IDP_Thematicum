@@ -40,7 +40,6 @@ export function removeObsoleteURLs(req, res, next) {
 
     repo.getAllNews()
         .then((news) => {
-            console.log(news);
             for (let i=0; i<news.length; i++) {
                 urlExists(news[i]['url'], undefined, 'GET', 300000)
                     .then(function(response){
@@ -96,7 +95,6 @@ export function removeObsoleteURLsFromDB() {
 
     repo.getAllNews()
         .then((news) => {
-            console.log(news);
             for (let i=0; i<news.length; i++) {
                 urlExists(news[i]['url'], undefined, 'GET', 300000)
                     .then(function(response){
