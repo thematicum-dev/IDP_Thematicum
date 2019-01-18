@@ -80,13 +80,15 @@ app.use(function (req, res, next) {
     return res.render('index');
 });
 
+console.log("Date: ", new Date());
+
 let schedule = require('node-schedule');
 let reportsScript = require('./server/controllers/googleCustomSearchScript.controller');
 let obsoleteLinkRemoval = require('./server/controllers/removeObsoleteURLs.controller');
 
 let rule1 = new schedule.RecurrenceRule();
-rule1.hour = 4;
-rule1.minute = 0;
+rule1.hour = 7;
+rule1.minute = 28;
 schedule.scheduleJob(rule1, function(){
     reportsScript.updateReports();
 });
