@@ -103,9 +103,13 @@ schedule.scheduleJob(rule2, function(){
     obsoleteLinkRemoval.removeObsoleteURLsFromDB();
 });
 
+
+let scriptExecutionTime = new Date();
+scriptExecutionTime.setHours(4, 0);
+scriptExecutionTime = encodeURI(scriptExecutionTime);
 let encodedScriptURL = encodeURI('https://thematicum.herokuapp.com/api/customsearchscript');
 let customSearchTriggerJobDeletionEndpoint = 'https://api.atrigger.com/v1/tasks/delete?key=' + process.env.ATRIGGER_API_KEY + '&secret=' + process.env.ATRIGGER_API_SECRET +'&tag_type=reportscript';
-let customSearchTriggerJobCreationEndpoint = 'https://api.atrigger.com/v1/tasks/create?key=' + process.env.ATRIGGER_API_KEY + '&secret=' + process.env.ATRIGGER_API_SECRET +'&tag_type=reportscript&retries=0&timeSlice=1day&first=2019-01-18T10%3A50%3A01Z&count=-1&url=' + encodedScriptURL;
+let customSearchTriggerJobCreationEndpoint = 'https://api.atrigger.com/v1/tasks/create?key=' + process.env.ATRIGGER_API_KEY + '&secret=' + process.env.ATRIGGER_API_SECRET +'&tag_type=reportscript&retries=0&timeSlice=1day&first=' + scriptExecutionTime + '&count=-1&url=' + encodedScriptURL;
 
 
 
