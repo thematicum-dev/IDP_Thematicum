@@ -25,7 +25,6 @@ export function getCustomSearchResults(req, res,next) {
             console.log(err);
             res.status(200).json(new AppResponse('done with error.'));
         })
-
 }
 
 
