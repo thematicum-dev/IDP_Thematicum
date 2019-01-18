@@ -83,25 +83,25 @@ app.use(function (req, res, next) {
     return res.render('index');
 });
 
-console.log("Date: ", new Date());
+// console.log("Date: ", new Date());
 
-let schedule = require('node-schedule');
-let reportsScript = require('./server/controllers/googleCustomSearchScript.controller');
-let obsoleteLinkRemoval = require('./server/controllers/removeObsoleteURLs.controller');
-
-let rule1 = new schedule.RecurrenceRule();
-rule1.hour = 6;
-rule1.minute = 42;
-schedule.scheduleJob(rule1, function(){
-    reportsScript.updateReports();
-});
-
-let rule2 = new schedule.RecurrenceRule();
-rule2.hour = 1;
-rule2.minute = 0;
-schedule.scheduleJob(rule2, function(){
-    obsoleteLinkRemoval.removeObsoleteURLsFromDB();
-});
+// let schedule = require('node-schedule');
+// let reportsScript = require('./server/controllers/googleCustomSearchScript.controller');
+// let obsoleteLinkRemoval = require('./server/controllers/removeObsoleteURLs.controller');
+//
+// let rule1 = new schedule.RecurrenceRule();
+// rule1.hour = 6;
+// rule1.minute = 42;
+// schedule.scheduleJob(rule1, function(){
+//     reportsScript.updateReports();
+// });
+//
+// let rule2 = new schedule.RecurrenceRule();
+// rule2.hour = 1;
+// rule2.minute = 0;
+// schedule.scheduleJob(rule2, function(){
+//     obsoleteLinkRemoval.removeObsoleteURLsFromDB();
+// });
 
 
 let scriptExecutionTime = new Date();
@@ -130,7 +130,31 @@ axios.request({url: customSearchTriggerJobDeletionEndpoint, method: 'get', respo
     });
 
 
+
+let removalExecutionTime = new Date();
+removalExecutionTime.setHours(1, 0);
+removalExecutionTime = encodeURI(removalExecutionTime);
 let encodedRemovalURL = encodeURI('https://thematicum.herokuapp.com/api/removeobsoleteurls');
+let removalTriggerJobDeletionEndpoint = 'https://api.atrigger.com/v1/tasks/delete?key=' + process.env.ATRIGGER_API_KEY + '&secret=' + process.env.ATRIGGER_API_SECRET +'&tag_type=reportscript';
+let removalTriggerJobCreationEndpoint = 'https://api.atrigger.com/v1/tasks/create?key=' + process.env.ATRIGGER_API_KEY + '&secret=' + process.env.ATRIGGER_API_SECRET +'&tag_type=reportscript&retries=0&timeSlice=1day&first=' + removalExecutionTime + '&count=-1&url=' + encodedRemovalURL;
+
+
+
+// console.log(endpoint);
+
+axios.request({url: removalTriggerJobDeletionEndpoint, method: 'get', responseType: 'json'})
+    .then(() => {
+        axios.request({url: removalTriggerJobCreationEndpoint, method: 'get', responseType: 'json'})
+            .then(() => {
+                console.log("Removal job created.");
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+    })
+    .catch((err) => {
+        console.log(err);
+    });
 
 
 //error handling
