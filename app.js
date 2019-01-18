@@ -87,8 +87,8 @@ let reportsScript = require('./server/controllers/googleCustomSearchScript.contr
 let obsoleteLinkRemoval = require('./server/controllers/removeObsoleteURLs.controller');
 
 let rule1 = new schedule.RecurrenceRule();
-rule1.hour = 7;
-rule1.minute = 28;
+rule1.hour = 6;
+rule1.minute = 42;
 schedule.scheduleJob(rule1, function(){
     reportsScript.updateReports();
 });
