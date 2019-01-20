@@ -63,7 +63,7 @@ export  function getAllTrends(req, res, next) {
 		    		o.value[index++] = resultArray[i].value[j]
 		    	}
 		    }
-
+		    resultArray = [];
 		    return res.status(200).json(new AppResponse('Theme trend retrieved', o));
 		}, function(err) {
 		    console.log(err);
