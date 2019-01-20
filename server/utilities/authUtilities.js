@@ -3,8 +3,6 @@ import {AppAuthError} from './appError';
 
 const expiration = {expiresIn: 7200}; //token expires in 7200 sec (2 hr)
 const jwtSecret = process.env.JWT_SECRET || 'secret';
-console.log(jwtSecret);
-//const jwtSecret = 'xxx' || 'secret';
 
 function jwtVerifyReq(req, res, next) {
     jwtVerify(req.headers['authorization'])
@@ -14,8 +12,7 @@ function jwtVerifyReq(req, res, next) {
             //TODO: check if user exists in the db?
             next();
         })
-        .catch(err => {console.log(err); next(new AppAuthError(err.name, 401))});
-
+        .catch(err => next(new AppAuthError(err.name, 401)));
 }
 
 function jwtVerify(token) {
