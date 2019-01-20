@@ -40,13 +40,14 @@ export class ThemeGoogleReportsComponent implements OnInit {
         this.themeService.getReportsByThemeId(this.themeId).subscribe((data) => {
 
             console.log("Reports");
-            console.log(data);
+
             this.reportsSortedByRelevancy = new Array<GoogleCustomSearchModel>();
             for (let entry of data) {
                 let report = new GoogleCustomSearchModel(entry["_id"], entry["snippet"], entry["link"], entry["title"],
                     entry["displayLink"], entry['relevancyRanking'], entry['userUpVoted']);
                 this.reportsSortedByRelevancy.push(report);
             }
+            console.log(this.reportsSortedByRelevancy);
             this.reportsSortedByDate = new Array<GoogleCustomSearchModel>();
             this.reportsSortedByDate = Object.assign([], this.reportsSortedByRelevancy);
             this.reportsSortedByDate.sort(this.compareByDate);
