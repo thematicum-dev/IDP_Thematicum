@@ -100,6 +100,21 @@ export default class DataRepository extends BaseRepository {
         });
     }
 
+    getAllThemes() {
+        return new Promise((resolve, reject) => {
+            Theme.find({}).exec()
+                .then((res) =>{
+                    if (!res) {
+                        reject("No report found.");
+                    }
+                    resolve(res);
+                })
+                .catch((err) => {
+                    reject(err);
+                })
+        })
+    }
+
     // parameter is array of strings
     getThemeByTags(tags){
         return new Promise((resolve,reject) => {
@@ -273,9 +288,13 @@ export default class DataRepository extends BaseRepository {
     }
 
     getThemeStockCompositionsByTheme(themeId) {
-        return ThemeStockComposition.find({theme: themeId})
+        //themeStockComposition : ThemeStockComposition;
+        let stockComposition = ThemeStockComposition.find({theme: themeId})
             .populate('stock', 'companyName country')
             .exec();
+        console.log(stockComposition);
+
+        return stockComposition;
     }
 
     getThemeFundCompositionsByTheme(themeId) {
@@ -342,7 +361,6 @@ export default class DataRepository extends BaseRepository {
                     const totalCount = allocations ? allocations.length : 0;
 
                     const stockAllocationByCurrentUser = this.getStockAllocationByUser(allocations, currentUserId);
-
                     const obj = {themeStockComposition: themeStockComposition, exposures: aggregation.exposure, userStockAllocation: stockAllocationByCurrentUser, totalCount: totalCount};
                     resolve(obj);
                 })

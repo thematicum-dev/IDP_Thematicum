@@ -127,9 +127,11 @@ export function list(req, res, next) {
 }
 
 export function themeById(req, res, next, id) {
+
     repo.getThemeById(id)
         .then(result => {
             if (!result) {
+
                 return next(new AppError('No theme found for the given Id', 404))
             }
 
@@ -137,7 +139,9 @@ export function themeById(req, res, next, id) {
             req.isCurrentUserCreator = isCurrentUserThemeCreator(result, res);
             next();
         })
-        .catch(err => next(err));
+        .catch(err => {
+            next(err);
+        });
 }
 
 

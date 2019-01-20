@@ -254,6 +254,27 @@ export class ThemeService implements ThemeServiceInterface{
             .catch(this.handleError);
     }
 
+    getRealtimeNews(themeId: string) {
+        let apiPath = this.baseAPI + 'news/realtimenews/theme/' + themeId;
+        return this.http.get(apiPath, {headers: this.headers})
+            .map((response: Response) => response.json().obj)
+            .catch(this.handleError);
+    }
+
+    getRelevantNews(themeId: string) {
+        let apiPath = this.baseAPI + 'news/relevantnews/theme/' + themeId;
+        return this.http.get(apiPath, {headers: this.headers})
+            .map((response: Response) => response.json().obj)
+            .catch(this.handleError);
+    }
+
+    getReportsByThemeId(themeId: string) {
+        let apiPath = this.baseAPI + 'customsearch/theme/' + themeId;
+        return this.http.get(apiPath, {headers: this.headers})
+            .map((response: Response) => response.json().obj)
+            .catch(this.handleError);
+    }
+
     validateFundCompositionByAdmin(compositionId: string, validation: boolean) {
         let apiPath = this.baseAPI + 'admin/fundcompositions/validate/' + compositionId + '/' + validation;
         const body = {};

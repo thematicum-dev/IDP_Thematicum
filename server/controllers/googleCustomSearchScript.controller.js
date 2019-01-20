@@ -152,11 +152,11 @@ export function getRanking(reportsSet, tags) {
 }
 
 function getDocument(report) {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve, reject) =>{
 
-        console.log('sending request to ' + report['link']);
+        console.log('sending request to '+ report['link']);
         crawler(report['link'])
-            .then(function (response) {
+            .then(function(response){
                 console.log('got response from ' + report['link']);
                 if (response.status === 200) {
                     let result = {};
@@ -168,9 +168,16 @@ function getDocument(report) {
                     resolve('');
                 }
             })
-            .catch((err) => {
+            .catch( (err) => {
                 console.log(err);
                 resolve('');
             });
+
+        setTimeoutPromise(60000).then(() => {
+            // value === 'foobar' (passing values is optional)
+            // This is executed after about 40 milliseconds.
+            resolve('');
+        });
+
     });
 }

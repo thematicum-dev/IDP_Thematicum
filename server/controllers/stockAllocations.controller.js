@@ -3,7 +3,9 @@ import UserThemeStockAllocation from '../models/userThemeStockAllocation';
 import {AppError} from '../utilities/appError';
 import {AppResponse} from '../utilities/appResponse';
 import DataRepository from '../data_access/dataRepository';
+//import StockPriceController from './stockPrice.controller';
 import ActivityLog from '../models/activitylog';
+import {stockPrice} from "./stockPrice.controller";
 
 const repo = new DataRepository();
 
@@ -49,6 +51,7 @@ export function update(req, res, next) {
 
 export function listByTheme(req, res, next) {
     repo.getThemeStockCompositionsByTheme(req.theme._id)
+        .then(results => stockPrice(results))
         .then(results => Promise.all(results.map(composition => repo.getStockAllocationsByThemeStockComposition(composition, res.locals.user._id))))
         .then(results => {
             return res.status(200).json(new AppResponse('Stock allocation data retrieved', results));

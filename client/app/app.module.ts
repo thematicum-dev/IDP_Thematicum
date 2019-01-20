@@ -48,6 +48,7 @@ import { ThemeFeedComponent } from "./theme_details/theme-feed.component";
 import { ThemeNewsComponent } from "./theme_details/theme-news.component";
 import { ThemeGoogleNewsComponent } from "./theme_details/theme-googleNews.component";
 import { ThemeGoogleReportsComponent } from "./theme_details/theme-google-custom-search.component";
+
 import {FundUpdateComponent} from "./fund/fund-update.component";
 import {FundCreateComponent} from "./fund/fund-create.component";
 import {ThemeFundAllocationComponent} from "./theme_details/theme-fund-allocation.component";

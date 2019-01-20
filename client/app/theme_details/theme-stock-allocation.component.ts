@@ -262,8 +262,7 @@ export class ThemeStockAllocationComponent implements OnInit {
         this.averageDailyStockChanges = this.averageDailyStockChanges / dailyDenominator;
     };
 
-
     handleError = (error: any) => {
         console.log('Error: ' + error);
-    };
+    }
 }
