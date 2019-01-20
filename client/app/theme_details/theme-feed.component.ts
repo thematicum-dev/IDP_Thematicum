@@ -24,7 +24,8 @@ export class ThemeFeedComponent implements OnInit {
     @Input() theme: Theme;
     data: any;
 
-    colorCodes = ['rgb(0,0,0)','rgb(255,0,0)','rgb(0,255,0)','rgb(0,0,255)','rgb(255,255,0)','rgb(255,0,255)','rgb(128,0,0)','rgb(128,0,128)','rgb(0,0,128)','rgb(128,128,128)'];
+    // colorCodes = ['rgb(0,0,0)','rgb(255,0,0)','rgb(0,255,0)','rgb(0,0,255)','rgb(255,255,0)','rgb(255,0,255)','rgb(128,0,0)','rgb(128,0,128)','rgb(0,0,128)','rgb(128,128,128)'];
+    colorCodes = ['rgb(39,174,96)','rgb(26,188,156)','rgb(41,128,185)','rgb(155,89,182)','rgb(192,57,43)'];
 
     lineChartData: any = [{ 
             data: []
