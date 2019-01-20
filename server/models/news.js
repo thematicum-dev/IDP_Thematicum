@@ -39,7 +39,11 @@ const schema = new Schema({
         required: true,
         default: 0
     },
-    userVoted: {
+    userUpVoted: {
+        type: Boolean,
+        required: false
+    },
+    userDownVoted: {
         type: Boolean,
         required: false
     },

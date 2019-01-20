@@ -82,7 +82,7 @@ export class ThemeGoogleNewsComponent implements OnInit {
             for (let entry of data) {
                 let newsdata = new NewsModel(entry["_id"], entry["author"], entry["description"], entry["url"],
                     entry["urlToImage"], entry["title"], entry["source"], entry["publishedAt"], entry["relevancyRanking"],
-                    entry["userVoted"]);
+                    entry["userUpVoted"], entry["userDownVoted"]);
                 this.recentNews.push(newsdata);
             }
 
@@ -96,7 +96,7 @@ export class ThemeGoogleNewsComponent implements OnInit {
             for (let entry of data) {
                 let newsdata = new NewsModel(entry["_id"], entry["author"], entry["description"], entry["url"],
                     entry["urlToImage"], entry["title"], entry["source"], entry["publishedAt"], entry["relevancyRanking"],
-                    entry["userVoted"]);
+                    entry["userUpVoted"], entry["userDownVoted"]);
                 this.relevantNews.push(newsdata);
             }
 
@@ -104,9 +104,19 @@ export class ThemeGoogleNewsComponent implements OnInit {
         });
     }
 
-    onUserLike(newsId) {
+    onUserUpVote(newsId) {
         console.log(newsId);
-        this.themeService.markNewsAsRelevant(newsId).subscribe();
+        this.themeService.performNewsUpVote(newsId).subscribe();
+
+
+        let _this = this;
+        window.setTimeout(function() {_this.loadRecentNews(); _this.loadRelevantNews()}, 500);
+    }
+
+
+    onUserDownVote(newsId) {
+        console.log(newsId);
+        this.themeService.performNewsDownVote(newsId).subscribe();
 
 
         let _this = this;

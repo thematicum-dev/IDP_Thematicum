@@ -21,10 +21,10 @@
                 <h5>Source: {{report.source}}</h5>
             </div>
             <div class="col-md-1 pull-right">
-                <button *ngIf="!report.userVoted" (click)="onUserLike(report._id)" type="button" class="btn btn-default btn-lg borderless" aria-label="Left Align">
+                <button *ngIf="!report.userUpVoted" (click)="onUserLike(report._id)" type="button" class="btn btn-default btn-lg borderless" aria-label="Left Align">
                     <span class="glyphicon glyphicon-star-empty" aria-hidden="true"></span>
                 </button>
-                <button *ngIf="report.userVoted" (click)="onUserLike(report._id)" type="button" class="btn btn-default btn-lg borderless" aria-label="Left Align">
+                <button *ngIf="report.userUpVoted" (click)="onUserLike(report._id)" type="button" class="btn btn-default btn-lg borderless" aria-label="Left Align">
                     <span class="glyphicon glyphicon-star" aria-hidden="true"></span>
                 </button>
             </div>
@@ -46,10 +46,10 @@
                 <h5>Source: {{report.source}}</h5>
             </div>
             <div class="col-md-1 pull-right">
-                <button *ngIf="!report.userVoted" (click)="onUserLike(report._id)" type="button" class="btn btn-default btn-lg borderless" aria-label="Left Align">
+                <button *ngIf="!report.userUpVoted" (click)="onUserLike(report._id)" type="button" class="btn btn-default btn-lg borderless" aria-label="Left Align">
                     <span class="glyphicon glyphicon-star-empty" aria-hidden="true"></span>
                 </button>
-                <button *ngIf="report.userVoted" (click)="onUserLike(report._id)" type="button" class="btn btn-default btn-lg borderless" aria-label="Left Align">
+                <button *ngIf="report.userUpVoted" (click)="onUserLike(report._id)" type="button" class="btn btn-default btn-lg borderless" aria-label="Left Align">
                     <span class="glyphicon glyphicon-star" aria-hidden="true"></span>
                 </button>
             </div>

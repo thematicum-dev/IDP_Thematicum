@@ -922,7 +922,7 @@ export default class DataRepository extends BaseRepository {
 
     getUserVotedNews(userId) {
         return new Promise((resolve, reject) => {
-            UserNewsRelevancyVote.find({user: userId, relevant: true}).exec()
+            UserNewsRelevancyVote.find({user: userId, $or: [{upvoted: true}, {downvoted: true}] }).exec()
                 .then((res) => {
                     resolve(res);
                 })
@@ -934,7 +934,7 @@ export default class DataRepository extends BaseRepository {
 
     getUserVotedReports(userId) {
         return new Promise((resolve, reject) => {
-            UserReportRelevancyVote.find({user: userId, relevant: true}).exec()
+            UserReportRelevancyVote.find({user: userId, upvoted: true}).exec()
                 .then((res) => {
                     resolve(res);
                 })
@@ -965,14 +965,13 @@ export default class DataRepository extends BaseRepository {
     }
 
 
-    toggleUserRelevancyVoteForNews(userId, newsId) {
+    toggleUserUpVoteForNews(userId, newsId) {
         return new Promise((resolve, reject) => {
             UserNewsRelevancyVote.find({user: userId, news: newsId}).exec()
                 .then((res) => {
-                    // console.log(res[0]._id);
                     if (!res.length) {
                         // Vote does not exist yet
-                        let newsUserComposition = new UserNewsRelevancyVote({user: userId, news: newsId, relevant: true});
+                        let newsUserComposition = new UserNewsRelevancyVote({user: userId, news: newsId, upvoted: true});
                         newsUserComposition.save(function (err, success) {
                             console.log("New user composition saved.");
                             if (err) reject(err);
@@ -992,7 +991,7 @@ export default class DataRepository extends BaseRepository {
                     }
                     else {
                         // vote exists already
-                        if (res[0].relevant) {
+                        if (res[0].upvoted) {
                             news.findById(newsId, function (err, news) {
                                 //if (err) return handleError(err);
                                 let newRanking = news.relevancyRanking - 10;
@@ -1003,26 +1002,137 @@ export default class DataRepository extends BaseRepository {
                                 })
                             });
                             UserNewsRelevancyVote.findById(res[0]._id, function (err, vote) {
-                                vote.set({relevant: false});
+                                vote.set({upvoted: false});
                                 vote.save(function (err, newVote) {
                                     resolve(newVote);
                                 });
                             });
                         } else {
+                            if (res[0].downvoted) {
+                                this.toggleUserDownVoteForNews(userId, newsId)
+                                    .then(() => {
+                                        news.findById(newsId, function (err, news) {
+                                            let newRanking = news.relevancyRanking + 10;
+                                            news.set({ relevancyRanking: newRanking });
+                                            news.save(function (err, updatedNews) {
+                                                if (err) reject(err);
+                                            })
+                                        });
+
+                                        UserNewsRelevancyVote.findById(res[0]._id, function (err, vote) {
+                                            vote.set({upvoted: true});
+                                            vote.save(function (err, newVote) {
+                                                resolve(newVote);
+                                            });
+                                        });
+                                    });
+                            } else {
+                                news.findById(newsId, function (err, news) {
+                                    let newRanking = news.relevancyRanking + 10;
+                                    news.set({ relevancyRanking: newRanking });
+                                    news.save(function (err, updatedNews) {
+                                        if (err) reject(err);
+                                    })
+                                });
+
+                                UserNewsRelevancyVote.findById(res[0]._id, function (err, vote) {
+                                    vote.set({upvoted: true});
+                                    vote.save(function (err, newVote) {
+                                        resolve(newVote);
+                                    });
+                                });
+                            }
+
+                        }
+                    }
+                })
+                .catch((err) => {
+                    console.log("failed");
+                    console.log(err);
+                    reject(err);
+                });
+        })
+    }
+
+
+    toggleUserDownVoteForNews(userId, newsId) {
+        return new Promise((resolve, reject) => {
+            UserNewsRelevancyVote.find({user: userId, news: newsId}).exec()
+                .then((res) => {
+                    if (!res.length) {
+                        // Vote does not exist yet
+                        let newsUserComposition = new UserNewsRelevancyVote({user: userId, news: newsId, downvoted: true});
+                        newsUserComposition.save(function (err, success) {
+                            console.log("New user composition saved.");
+                            if (err) reject(err);
+                        });
+                        news.findById(newsId, function (err, news) {
+                            let newRanking = news.relevancyRanking - 10;
+                            news.set({ relevancyRanking: newRanking });
+                            news.save(function (err, updatedNews) {
+                                console.log("Ranking increased.");
+                                if (err) {
+                                    console.log(err);
+                                    reject(err);
+                                }
+                                resolve(updatedNews);
+                            })
+                        });
+                    }
+                    else {
+                        // vote exists already
+                        if (res[0].downvoted) {
                             news.findById(newsId, function (err, news) {
+                                //if (err) return handleError(err);
                                 let newRanking = news.relevancyRanking + 10;
                                 news.set({ relevancyRanking: newRanking });
                                 news.save(function (err, updatedNews) {
+                                    console.log("Updated ranking saved.");
                                     if (err) reject(err);
                                 })
                             });
-
                             UserNewsRelevancyVote.findById(res[0]._id, function (err, vote) {
-                                vote.set({relevant: true});
+                                vote.set({downvoted: false});
                                 vote.save(function (err, newVote) {
                                     resolve(newVote);
                                 });
                             });
+                        } else {
+                            if (res[0].upvoted) {
+                                this.toggleUserUpVoteForNews(userId, newsId)
+                                    .then(() => {
+                                        news.findById(newsId, function (err, news) {
+                                            let newRanking = news.relevancyRanking - 10;
+                                            news.set({ relevancyRanking: newRanking });
+                                            news.save(function (err, updatedNews) {
+                                                if (err) reject(err);
+                                            })
+                                        });
+
+                                        UserNewsRelevancyVote.findById(res[0]._id, function (err, vote) {
+                                            vote.set({downvoted: true});
+                                            vote.save(function (err, newVote) {
+                                                resolve(newVote);
+                                            });
+                                        });
+                                    })
+                            } else {
+                                news.findById(newsId, function (err, news) {
+                                    let newRanking = news.relevancyRanking - 10;
+                                    news.set({ relevancyRanking: newRanking });
+                                    news.save(function (err, updatedNews) {
+                                        if (err) reject(err);
+                                    })
+                                });
+
+                                UserNewsRelevancyVote.findById(res[0]._id, function (err, vote) {
+                                    vote.set({downvoted: true});
+                                    vote.save(function (err, newVote) {
+                                        resolve(newVote);
+                                    });
+                                });
+                            }
+
                         }
                     }
                 })
@@ -1043,7 +1153,7 @@ export default class DataRepository extends BaseRepository {
                     // console.log(res[0]._id);
                     if (!res.length) {
                         // Vote does not exist yet
-                        let newsUserComposition = new UserReportRelevancyVote({user: userId, report: reportId, relevant: true});
+                        let newsUserComposition = new UserReportRelevancyVote({user: userId, report: reportId, upvoted: true});
                         newsUserComposition.save(function (err, success) {
                             // console.log("New user composition saved.");
                             if (err) reject(err);
@@ -1060,7 +1170,7 @@ export default class DataRepository extends BaseRepository {
                     }
                     else {
                         // vote exists already
-                        if (res[0].relevant) {
+                        if (res[0].upvoted) {
                             pdfReport.findById(reportId, function (err, report) {
                                 let newRanking = report.relevancyRanking - 10;
                                 report.set({ relevancyRanking: newRanking });
@@ -1070,7 +1180,7 @@ export default class DataRepository extends BaseRepository {
                                 })
                             });
                             UserReportRelevancyVote.findById(res[0]._id, function (err, vote) {
-                                vote.set({relevant: false});
+                                vote.set({upvoted: false});
                                 vote.save(function (err, newVote) {
                                     resolve(newVote);
                                 });
@@ -1085,7 +1195,7 @@ export default class DataRepository extends BaseRepository {
                             });
 
                             UserReportRelevancyVote.findById(res[0]._id, function (err, vote) {
-                                vote.set({relevant: true});
+                                vote.set({upvoted: true});
                                 vote.save(function (err, newVote) {
                                     resolve(newVote);
                                 });

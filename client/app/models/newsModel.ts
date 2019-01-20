@@ -9,6 +9,7 @@ export class NewsModel {
         public source?: string,
         public publishedAt?: Date,
         public relevancyRanking?: number,
-        public userVoted?: boolean
+        public userUpVoted?: boolean,
+        public userDownVoted?: boolean
     ) {}
 }

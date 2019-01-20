@@ -46,11 +46,16 @@ export function getRealtimeNews(req, res, next) {
 
             repo.getUserVotedNews(res.locals.user._id)
                 .then((userVotedNews) => {
+
                     for (let i = 0, len = allNews.length; i < len; i++) {
-                        allNews[i].userVoted = false;
+                        allNews[i].userUpVoted = false;
+                        allNews[i].userDownVoted = false;
                         for (let k = 0, len2 = userVotedNews.length; k < len2; k++) {
-                            if (allNews[i]._id.equals(userVotedNews[k].news)) {
-                                allNews[i].userVoted = true;
+                            if (userVotedNews[k].upvoted === true && allNews[i]._id.equals(userVotedNews[k].news)) {
+                                allNews[i].userUpVoted = true;
+                            }
+                            if (userVotedNews[k].downvoted === true && allNews[i]._id.equals(userVotedNews[k].news)) {
+                                allNews[i].userDownVoted = true;
                             }
                         }
                     }
@@ -137,10 +142,14 @@ export function getRelevantNews(req, res, next) {
                             repo.getUserVotedNews(res.locals.user._id)
                                 .then((userVotedNews) => {
                                     for (let i = 0, len = allNews.length; i < len; i++) {
-                                        allNews[i].userVoted = false;
+                                        allNews[i].userUpVoted = false;
+                                        allNews[i].userDownVoted = false;
                                         for (let k = 0, len2 = userVotedNews.length; k < len2; k++) {
-                                            if (allNews[i]._id.equals(userVotedNews[k].news)) {
-                                                allNews[i].userVoted = true;
+                                            if (userVotedNews[k].upvoted === true && allNews[i]._id.equals(userVotedNews[k].news)) {
+                                                allNews[i].userUpVoted = true;
+                                            }
+                                            if (userVotedNews[k].downvoted === true && allNews[i]._id.equals(userVotedNews[k].news)) {
+                                                allNews[i].userDownVoted = true;
                                             }
                                         }
                                     }
@@ -221,9 +230,8 @@ function saveCollection(collection) {
     })
 }
 
-export function markNewsAsRelevant(req, res, next) {
-
-    repo.toggleUserRelevancyVoteForNews(res.locals.user._id, req.news._id)
+export function performNewsUpVote(req, res, next) {
+    repo.toggleUserUpVoteForNews(res.locals.user._id, req.news._id)
         .then(() => {
             // return res.status(200).json(allNews);
             return res.status(200).json(new AppResponse('Updated.'));
@@ -231,12 +239,20 @@ export function markNewsAsRelevant(req, res, next) {
         .catch(() => {
             return res.status(404).json(new AppError('Update failed.', ':/'));
         });
+}
 
-
+export function performNewsDownVote(req, res, next) {
+    repo.toggleUserDownVoteForNews(res.locals.user._id, req.news._id)
+        .then(() => {
+            // return res.status(200).json(allNews);
+            return res.status(200).json(new AppResponse('Updated.'));
+        })
+        .catch(() => {
+            return res.status(404).json(new AppError('Update failed.', ':/'));
+        });
 }
 
 export function newsById(req, res, next, id) {
-
     repo.getNewsById(id)
         .then(result => {
             if (!result) {

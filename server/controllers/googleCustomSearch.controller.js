@@ -15,11 +15,11 @@ export function getCustomSearchResults(req, res, next) {
         repo.getUserVotedReports(res.locals.user._id)
             .then((userVotedReports) => {
                 for (let i = 0, len = response.length; i < len; i++) {
-                    response[i].userVoted = false;
+                    response[i].userUpVoted = false;
 
                     for (let k = 0, len2 = userVotedReports.length; k < len2; k++) {
                         if (response[i]._id.equals(userVotedReports[k].report)) {
-                            response[i].userVoted = true;
+                            response[i].userUpVoted = true;
                         }
                     }
                 }

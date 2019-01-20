@@ -4,7 +4,12 @@ const Schema = mongoose.Schema;
 const schema = new Schema({
     user: { type: Schema.Types.ObjectId, ref: 'User' },
     news: { type: Schema.Types.ObjectId, ref: 'news' },
-    relevant: {
+    upvoted: {
+        type: Boolean,
+        required: true,
+        default: false
+    },
+    downvoted: {
         type: Boolean,
         required: true,
         default: false

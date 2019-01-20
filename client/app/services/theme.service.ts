@@ -64,9 +64,20 @@ export class ThemeService implements ThemeServiceInterface{
             .catch(this.handleError);
     }
 
-    markNewsAsRelevant(newsId: String) {
+    performNewsUpVote(newsId: String) {
         const body = "";
-        let apiPath = this.baseAPI + 'news/marknewsrelevant/' + newsId;
+        let apiPath = this.baseAPI + 'news/performnewsupvote/' + newsId;
+
+        console.log(apiPath);
+
+        return this.http.put(apiPath, null,{headers: this.headers})
+            .map((response: Response) => response.json())
+            .catch(this.handleError);
+    }
+
+    performNewsDownVote(newsId: String) {
+        const body = "";
+        let apiPath = this.baseAPI + 'news/performnewsdownvote/' + newsId;
 
         console.log(apiPath);
 
