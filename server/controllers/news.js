@@ -4,7 +4,7 @@ import {AppError} from "../utilities/appError";
 import {AppResponse} from "../utilities/appResponse";
 
 const NewsAPI = require('newsapi');
-const newsapi = new NewsAPI(process.env.NEWS_API_KEY);
+const newsapi = new NewsAPI('297ec094da9e4892b4379b06c0817f80');
 
 const repo = new DataRepository();
 

@@ -240,12 +240,21 @@ export class ThemeStockAllocationComponent implements OnInit {
         let dailyDenominator = 0;
         let monthlyDenominator = 0;
         for (let i=0; i<this.stockAllocationData.length; i++) {
+            // calculate weight of the stock
+            let weight = 0;
+            if (this.stockAllocationData[i].hasOwnProperty('exposures')) {
+                weight = weight + this.stockAllocationData[i]['exposures'][0]['percentage']/100.0;
+                weight = weight + this.stockAllocationData[i]['exposures'][1]['percentage']*0.5/100.0;
+                weight = weight + this.stockAllocationData[i]['exposures'][3]['percentage']*(-0.5)/100.0;
+                weight = weight + this.stockAllocationData[i]['exposures'][4]['percentage']*(-1.0)/100.0;
+            }
+            console.log(weight);
             if (this.stockAllocationData[i]['themeStockComposition']['stock'].hasOwnProperty('dayClosePriceChangePercentage')) {
-                this.averageDailyStockChanges += this.stockAllocationData[i]['themeStockComposition']['stock']['dayClosePriceChangePercentage'];
+                this.averageDailyStockChanges += this.stockAllocationData[i]['themeStockComposition']['stock']['dayClosePriceChangePercentage'] * weight;
                 dailyDenominator++;
             }
             if (this.stockAllocationData[i]['themeStockComposition']['stock'].hasOwnProperty('monthlyChangePercentage')) {
-                this.averageMonthlyStockChanges += this.stockAllocationData[i]['themeStockComposition']['stock']['monthlyChangePercentage'];
+                this.averageMonthlyStockChanges += this.stockAllocationData[i]['themeStockComposition']['stock']['monthlyChangePercentage'] * weight;
                 monthlyDenominator++;
             }
         }

@@ -38,7 +38,8 @@ export class StockCreateComponent implements OnInit{
     isFormIncomplete(){
         if( this.isDefined(this.currentStock.name) && 
             this.isDefined(this.currentStock.businessDescription) && 
-            this.isDefined(this.currentStock.website) && 
+            this.isDefined(this.currentStock.alias) &&
+            this.isDefined(this.currentStock.website) &&
             this.isDefined(this.currentStock.country) && 
             this.isDefined(this.currentStock.investableInstrument)) {
                 return false;

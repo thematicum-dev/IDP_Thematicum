@@ -22,6 +22,7 @@ export function create(req, res, next) {
         const stock = new Stock({
             seqNr: seqNr,
             companyName: req.body.name.toUpperCase(),
+            ticker: req.body.alias.toUpperCase(),
             country: req.body.country.toUpperCase(),
             website: req.body.website.toLowerCase(),
             addedBy: res.locals.user,
@@ -41,6 +42,7 @@ export function update(req, res, next) {
         const stock = new Stock({
             _id: req.body._id,
             companyName: req.body.name.toUpperCase(),
+            ticker: req.body.alias.toUpperCase(),
             country: req.body.country.toUpperCase(),
             website: req.body.website.toLowerCase(),
             addedBy: res.locals.user,
