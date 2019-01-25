@@ -86,9 +86,20 @@ export class ThemeService implements ThemeServiceInterface{
             .catch(this.handleError);
     }
 
-    markReportAsRelevant(reportId: String) {
+    performReportUpVote(reportId: String) {
         const body = "";
-        let apiPath = this.baseAPI + 'customsearch/markreportrelevant/' + reportId;
+        let apiPath = this.baseAPI + 'customsearch/performreportupvote/' + reportId;
+
+        console.log(apiPath);
+
+        return this.http.put(apiPath, null,{headers: this.headers})
+            .map((response: Response) => response.json())
+            .catch(this.handleError);
+    }
+
+    performReportDownVote(reportId: String) {
+        const body = "";
+        let apiPath = this.baseAPI + 'customsearch/performreportdownvote/' + reportId;
 
         console.log(apiPath);
 

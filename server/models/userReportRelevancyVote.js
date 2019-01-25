@@ -8,6 +8,11 @@ const schema = new Schema({
         type: Boolean,
         required: true,
         default: false
+    },
+    downvoted: {
+        type: Boolean,
+        required: true,
+        default: false
     }
 });
 

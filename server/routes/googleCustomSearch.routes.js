@@ -18,8 +18,11 @@ router.route('/theme/:theme')
 router.route('/getranking')
     .get(customSearch.getRanking);
 
-router.route('/markreportrelevant/:reportId')
-    .put(customSearch.markReportAsRelevant);
+router.route('/performreportupvote/:reportId')
+    .put(customSearch.performReportUpVote);
+
+router.route('/performreportdownvote/:reportId')
+    .put(customSearch.performReportDownVote);
 
 router.param('theme', themeController.themeById);
 router.param('reportId', customSearch.reportById);

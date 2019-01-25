@@ -44,7 +44,7 @@ export class ThemeGoogleReportsComponent implements OnInit {
             this.reportsSortedByRelevancy = new Array<GoogleCustomSearchModel>();
             for (let entry of data) {
                 let report = new GoogleCustomSearchModel(entry["_id"], entry["snippet"], entry["link"], entry["title"],
-                    entry["displayLink"], entry['relevancyRanking'], entry['userUpVoted']);
+                    entry["displayLink"], entry['relevancyRanking'], entry['userUpVoted'], entry['userDownVoted']);
                 this.reportsSortedByRelevancy.push(report);
             }
             console.log(this.reportsSortedByRelevancy);
@@ -56,9 +56,17 @@ export class ThemeGoogleReportsComponent implements OnInit {
         });
     }
 
-    onUserLike(reportId) {
+    onUserUpVote(reportId) {
         console.log(reportId);
-        this.themeService.markReportAsRelevant(reportId).subscribe();
+        this.themeService.performReportUpVote(reportId).subscribe();
+
+        let _this = this;
+        window.setTimeout(function() {_this.loadReports()}, 500);
+    }
+
+    onUserDownVote(reportId) {
+        console.log(reportId);
+        this.themeService.performReportDownVote(reportId).subscribe();
 
         let _this = this;
         window.setTimeout(function() {_this.loadReports()}, 500);

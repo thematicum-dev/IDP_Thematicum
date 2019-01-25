@@ -934,7 +934,7 @@ export default class DataRepository extends BaseRepository {
 
     getUserVotedReports(userId) {
         return new Promise((resolve, reject) => {
-            UserReportRelevancyVote.find({user: userId, upvoted: true}).exec()
+            UserReportRelevancyVote.find({user: userId, $or: [{upvoted: true}, {downvoted: true}] }).exec()
                 .then((res) => {
                     resolve(res);
                 })
@@ -1144,18 +1144,14 @@ export default class DataRepository extends BaseRepository {
         })
     }
 
-
-
-    toggleUserRelevancyVoteForReport(userId, reportId) {
+    toggleUserUpVoteForReport(userId, reportId) {
         return new Promise((resolve, reject) => {
             UserReportRelevancyVote.find({user: userId, report: reportId}).exec()
                 .then((res) => {
-                    // console.log(res[0]._id);
                     if (!res.length) {
                         // Vote does not exist yet
                         let newsUserComposition = new UserReportRelevancyVote({user: userId, report: reportId, upvoted: true});
                         newsUserComposition.save(function (err, success) {
-                            // console.log("New user composition saved.");
                             if (err) reject(err);
                         });
                         pdfReport.findById(reportId, function (err, report) {
@@ -1186,20 +1182,127 @@ export default class DataRepository extends BaseRepository {
                                 });
                             });
                         } else {
+                            if (res[0].downvoted) {
+                                this.toggleUserDownVoteForReport(userId, reportId)
+                                    .then(() => {
+                                        pdfReport.findById(reportId, function (err, report) {
+                                            let newRanking = report.relevancyRanking + 10;
+                                            report.set({ relevancyRanking: newRanking });
+                                            report.save(function (err, updatedReport) {
+                                                if (err) reject(err);
+                                            })
+                                        });
+
+                                        UserReportRelevancyVote.findById(res[0]._id, function (err, vote) {
+                                            vote.set({upvoted: true});
+                                            vote.save(function (err, newVote) {
+                                                resolve(newVote);
+                                            });
+                                        });
+                                    });
+                            } else {
+                                pdfReport.findById(reportId, function (err, report) {
+                                    let newRanking = report.relevancyRanking + 10;
+                                    report.set({ relevancyRanking: newRanking });
+                                    report.save(function (err, updatedReport) {
+                                        if (err) reject(err);
+                                    })
+                                });
+
+                                UserReportRelevancyVote.findById(res[0]._id, function (err, vote) {
+                                    vote.set({upvoted: true});
+                                    vote.save(function (err, newVote) {
+                                        resolve(newVote);
+                                    });
+                                });
+                            }
+
+                        }
+                    }
+                })
+                .catch((err) => {
+                    console.log("failed");
+                    reject(err);
+                });
+        })
+    }
+
+
+    toggleUserDownVoteForReport(userId, reportId) {
+        return new Promise((resolve, reject) => {
+            UserReportRelevancyVote.find({user: userId, report: reportId}).exec()
+                .then((res) => {
+                    if (!res.length) {
+                        // Vote does not exist yet
+                        let newsUserComposition = new UserReportRelevancyVote({user: userId, report: reportId, downvoted: true});
+                        newsUserComposition.save(function (err, success) {
+                            if (err) reject(err);
+                        });
+                        pdfReport.findById(reportId, function (err, report) {
+                            let newRanking = report.relevancyRanking - 10;
+                            report.set({ relevancyRanking: newRanking });
+                            report.save(function (err, updatedReport) {
+                                console.log("Ranking increased.");
+                                if (err) reject(err);
+                                resolve(updatedReport);
+                            })
+                        });
+                    }
+                    else {
+                        // vote exists already
+                        if (res[0].downvoted) {
                             pdfReport.findById(reportId, function (err, report) {
                                 let newRanking = report.relevancyRanking + 10;
                                 report.set({ relevancyRanking: newRanking });
                                 report.save(function (err, updatedReport) {
+                                    console.log("Updated ranking saved.");
                                     if (err) reject(err);
                                 })
                             });
-
                             UserReportRelevancyVote.findById(res[0]._id, function (err, vote) {
-                                vote.set({upvoted: true});
+                                vote.set({downvoted: false});
                                 vote.save(function (err, newVote) {
                                     resolve(newVote);
                                 });
                             });
+                        } else {
+
+                            if (res[0].upvoted) {
+                                this.toggleUserUpVoteForReport(userId, reportId)
+                                    .then(() => {
+                                        pdfReport.findById(reportId, function (err, report) {
+                                            let newRanking = report.relevancyRanking - 10;
+                                            report.set({ relevancyRanking: newRanking });
+                                            report.save(function (err, updatedReport) {
+                                                if (err) reject(err);
+                                            })
+                                        });
+
+                                        UserReportRelevancyVote.findById(res[0]._id, function (err, vote) {
+                                            vote.set({downvoted: true});
+                                            vote.save(function (err, newVote) {
+                                                resolve(newVote);
+                                            });
+                                        });
+                                    })
+                            }
+                            else {
+                                pdfReport.findById(reportId, function (err, report) {
+                                    let newRanking = report.relevancyRanking - 10;
+                                    report.set({ relevancyRanking: newRanking });
+                                    report.save(function (err, updatedReport) {
+                                        if (err) reject(err);
+                                    })
+                                });
+
+                                UserReportRelevancyVote.findById(res[0]._id, function (err, vote) {
+                                    vote.set({downvoted: true});
+                                    vote.save(function (err, newVote) {
+                                        resolve(newVote);
+                                    });
+                                });
+                            }
+
                         }
                     }
                 })

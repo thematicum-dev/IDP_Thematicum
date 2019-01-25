@@ -36,6 +36,10 @@ const schema = new Schema({
         type: Boolean,
         required: false
     },
+    userDownVoted: {
+        type: Boolean,
+        required: false
+    },
     themeId: {
         type: String,
         required:true

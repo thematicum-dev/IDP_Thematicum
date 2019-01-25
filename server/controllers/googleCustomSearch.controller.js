@@ -16,10 +16,14 @@ export function getCustomSearchResults(req, res, next) {
             .then((userVotedReports) => {
                 for (let i = 0, len = response.length; i < len; i++) {
                     response[i].userUpVoted = false;
+                    response[i].userDownVoted = false;
 
                     for (let k = 0, len2 = userVotedReports.length; k < len2; k++) {
-                        if (response[i]._id.equals(userVotedReports[k].report)) {
+                        if (userVotedReports[k].upvoted === true && response[i]._id.equals(userVotedReports[k].report)) {
                             response[i].userUpVoted = true;
+                        }
+                        if (userVotedReports[k].downvoted === true && response[i]._id.equals(userVotedReports[k].report)) {
+                            response[i].userDownVoted = true;
                         }
                     }
                 }
@@ -36,8 +40,19 @@ export function getCustomSearchResults(req, res, next) {
 
 
 
-export function markReportAsRelevant(req, res, next) {
-    repo.toggleUserRelevancyVoteForReport(res.locals.user._id, req.news._id)
+export function performReportUpVote(req, res, next) {
+    repo.toggleUserUpVoteForReport(res.locals.user._id, req.news._id)
+        .then(() => {
+            // return res.status(200).json(allNews);
+            return res.status(200).json(new AppResponse('Updated.'));
+        })
+        .catch(() => {
+            return res.status(404).json(new AppError('Update failed.', ':/'));
+        });
+}
+
+export function performReportDownVote(req, res, next) {
+    repo.toggleUserDownVoteForReport(res.locals.user._id, req.news._id)
         .then(() => {
             // return res.status(200).json(allNews);
             return res.status(200).json(new AppResponse('Updated.'));

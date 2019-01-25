@@ -6,6 +6,7 @@ export class GoogleCustomSearchModel {
         public title?: string,
         public source?: string,
         public relevancyRanking?: number,
-        public userUpVoted?: boolean
+        public userUpVoted?: boolean,
+        public userDownVoted?: boolean
     ) {}
 }
