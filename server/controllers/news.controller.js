@@ -126,7 +126,6 @@ export function getRelevantNews(req, res, next) {
                     repo.getVotedNewsByThemeId(req.theme._id)
                         .then((allVotedNews) => {
 
-
                             // use only 10% of news from the db
                             let subsetVotedNews = [];
                             allVotedNews.sort(compareByRelevancy);

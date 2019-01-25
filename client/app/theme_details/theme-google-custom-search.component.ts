@@ -85,5 +85,4 @@ export class ThemeGoogleReportsComponent implements OnInit {
     toggleDisplayTab() {
         this.displayMostRecent = !this.displayMostRecent;
     }
-
 }
