@@ -16,7 +16,7 @@
                     <img *ngIf="((news.urlToImage != '') && (news.urlToImage != null))" src="{{news.urlToImage}}"  class="img-thumbnail" >
                 </div>
                 <div class="col-md-9">
-                    <a (click)="goToLink(news.url)">
+                    <a (click)="goToLink(news.url)" >
                         <span class="global-subheading-3 global-font global-color-light-black">{{news.title}}</span>
                         <br>
                         <br>
