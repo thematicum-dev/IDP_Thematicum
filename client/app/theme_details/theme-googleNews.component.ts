@@ -128,7 +128,7 @@ export class ThemeGoogleNewsComponent implements OnInit {
     }
 
     goToLink(url: string){
-        window.open(url, "blank");
+        window.open(url, "_blank");
     }
 
 }
