@@ -127,4 +127,8 @@ export class ThemeGoogleNewsComponent implements OnInit {
         this.displayMostRecent = !this.displayMostRecent;
     }
 
+    goToLink(url: string){
+        window.open(url, "_blank");
+    }
+
 }

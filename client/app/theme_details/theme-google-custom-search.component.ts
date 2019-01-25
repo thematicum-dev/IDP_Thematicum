@@ -85,4 +85,8 @@ export class ThemeGoogleReportsComponent implements OnInit {
     toggleDisplayTab() {
         this.displayMostRecent = !this.displayMostRecent;
     }
+
+    goToLink(url: string){
+        window.open(url, "_blank");
+    }
 }

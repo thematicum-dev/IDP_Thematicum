@@ -16,7 +16,7 @@
                     <img *ngIf="((news.urlToImage != '') && (news.urlToImage != null))" src="{{news.urlToImage}}"  class="img-thumbnail" >
                 </div>
                 <div class="col-md-9">
-                    <a href="{{news.url}}" target="_blank">
+                    <a href="{{news.url}}" (click)="goToLink(news.url)">
                         <span class="global-subheading-3 global-font global-color-light-black">{{news.title}}</span>
                         <br>
                         <br>
@@ -53,7 +53,7 @@
                 <img *ngIf="((news.urlToImage != '') && (news.urlToImage != null))" src="{{news.urlToImage}} "  class="img-thumbnail" >
             </div>
             <div class="col-md-9">
-                <a href="{{news.url}}" target="_blank">
+                <a href="{{news.url}}" target="_blank" (click)="goToLink(news.url)">
                     <span class="global-subheading-3 global-font global-color-light-black">{{news.title}}</span>
                     <br>
                     <br>
