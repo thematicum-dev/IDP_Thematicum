@@ -886,9 +886,9 @@ export default class DataRepository extends BaseRepository {
         });
     }
 
-    getNewsWith0VoteByUrl(url) {
+    getNewsByUrl(url) {
         return new Promise ((resolve, reject) => {
-            news.find({url: url, relevancyRanking: 0}).exec()
+            news.find({url: url}).exec()
                 .then((res) => {
 
                     // console.log(res);

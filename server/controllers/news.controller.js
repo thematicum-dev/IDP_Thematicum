@@ -74,11 +74,7 @@ export function getRealtimeNews(req, res, next) {
 
 
 
-
-
-
 export function getRelevantNews(req, res, next) {
-
 
     let query = '';
 
@@ -115,7 +111,7 @@ export function getRelevantNews(req, res, next) {
         })
         .then(() => {
             let allNews = [];
-            Promise.all(news.map((entry) => repo.getNewsWith0VoteByUrl(entry.url)))
+            Promise.all(news.map((entry) => repo.getNewsByUrl(entry.url)))
                 .then((r) => {
 
                     for (let i=0; i<r.length; i++) {
@@ -128,16 +124,30 @@ export function getRelevantNews(req, res, next) {
                         .then((allVotedNews) => {
 
                             // use only 10% of news from the db
-                            let subsetVotedNews = [];
+                            // let subsetVotedNews = [];
                             allVotedNews.sort(compareByRelevancy);
                             for (let j=0; j < allVotedNews.length/10.0; j++) {
-                                subsetVotedNews.push(allVotedNews[j]);
+
+                                let duplicate = false;
+                                allNews.every(function (entry) {
+                                    if (entry.title.toLowerCase() === allVotedNews[j].title.toLowerCase()) {
+                                        duplicate = true;
+                                        return false;
+                                    } else {
+                                        return true;
+                                    }
+                                });
+                                if (!duplicate) {
+                                    allNews.push(allVotedNews[j]);
+                                }
+
+                                // subsetVotedNews.push(allVotedNews[j]);
                             }
 
-                            allNews = allNews.concat(subsetVotedNews);
-                            console.log(allNews.length);
-                            // console.log(allNews);
-                            allNews.sort(compareByRelevancy);
+                            // allNews = allNews.concat(subsetVotedNews);
+                            // console.log(allNews.length);
+                            // allNews.sort(compareByRelevancy);
+                            allNews.sort(compareByDate);
 
                             repo.getUserVotedNews(res.locals.user._id)
                                 .then((userVotedNews) => {
