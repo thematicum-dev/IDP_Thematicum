@@ -64,6 +64,50 @@ export class ThemeService implements ThemeServiceInterface{
             .catch(this.handleError);
     }
 
+    performNewsUpVote(newsId: String) {
+        const body = "";
+        let apiPath = this.baseAPI + 'news/performnewsupvote/' + newsId;
+
+        console.log(apiPath);
+
+        return this.http.put(apiPath, null,{headers: this.headers})
+            .map((response: Response) => response.json())
+            .catch(this.handleError);
+    }
+
+    performNewsDownVote(newsId: String) {
+        const body = "";
+        let apiPath = this.baseAPI + 'news/performnewsdownvote/' + newsId;
+
+        console.log(apiPath);
+
+        return this.http.put(apiPath, null,{headers: this.headers})
+            .map((response: Response) => response.json())
+            .catch(this.handleError);
+    }
+
+    performReportUpVote(reportId: String) {
+        const body = "";
+        let apiPath = this.baseAPI + 'customsearch/performreportupvote/' + reportId;
+
+        console.log(apiPath);
+
+        return this.http.put(apiPath, null,{headers: this.headers})
+            .map((response: Response) => response.json())
+            .catch(this.handleError);
+    }
+
+    performReportDownVote(reportId: String) {
+        const body = "";
+        let apiPath = this.baseAPI + 'customsearch/performreportdownvote/' + reportId;
+
+        console.log(apiPath);
+
+        return this.http.put(apiPath, null,{headers: this.headers})
+            .map((response: Response) => response.json())
+            .catch(this.handleError);
+    }
+
     deleteUserThemeInput(userThemeInputId: string) {
         let apiPath = this.baseAPI + 'themeproperties/' + userThemeInputId;
         return this.http.delete(apiPath, {headers: this.headers})
@@ -217,6 +261,27 @@ export class ThemeService implements ThemeServiceInterface{
         let apiPath = this.baseAPI + 'admin/stockcompositions/validate/' + compositionId + '/' + validation;
         const body = {};
         return this.http.put(apiPath, body, { headers: this.headers })
+            .map((response: Response) => response.json().obj)
+            .catch(this.handleError);
+    }
+
+    getRealtimeNews(themeId: string) {
+        let apiPath = this.baseAPI + 'news/realtimenews/theme/' + themeId;
+        return this.http.get(apiPath, {headers: this.headers})
+            .map((response: Response) => response.json().obj)
+            .catch(this.handleError);
+    }
+
+    getRelevantNews(themeId: string) {
+        let apiPath = this.baseAPI + 'news/relevantnews/theme/' + themeId;
+        return this.http.get(apiPath, {headers: this.headers})
+            .map((response: Response) => response.json().obj)
+            .catch(this.handleError);
+    }
+
+    getReportsByThemeId(themeId: string) {
+        let apiPath = this.baseAPI + 'customsearch/theme/' + themeId;
+        return this.http.get(apiPath, {headers: this.headers})
             .map((response: Response) => response.json().obj)
             .catch(this.handleError);
     }

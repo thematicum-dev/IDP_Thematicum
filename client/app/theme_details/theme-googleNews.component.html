@@ -1,0 +1,80 @@
+<div class="row" *ngIf="recentNews.length > 0 || relevantNews.length > 0 ">
+    <h3 class="global-subheading-2 global-font global-color-light-black text-center">News</h3>
+</div>
+
+<ul class="nav nav-pills" *ngIf="recentNews.length > 0 || relevantNews.length > 0 ">
+    <li role="presentation" *ngIf="recentNews.length > 0 && relevantNews.length > 0"><button class="btn"  [class.btn-primary]="displayMostRecent" (click)="toggleDisplayTab()">Most recent</button></li>
+    <li role="presentation" *ngIf="recentNews.length > 0 && relevantNews.length > 0"><button class="btn"  [class.btn-primary]="!displayMostRecent" (click)="toggleDisplayTab()">Most relevant</button></li>
+</ul>
+
+    <!-- Tab content -->
+
+        <div style="height:500px;overflow: auto" class="container" [class.noDisplay]="!displayMostRecent" *ngIf="recentNews.length > 0">
+            <div *ngFor="let news of recentNews">
+                <div class="row" style="border-bottom: 1px solid lightgray">
+                <div class="col-md-2">
+                    <img *ngIf="((news.urlToImage != '') && (news.urlToImage != null))" src="{{news.urlToImage}}"  class="img-thumbnail" >
+                </div>
+                <div class="col-md-9">
+                    <a (click)="goToLink(news.url)" >
+                        <span class="global-subheading-3 global-font global-color-light-black">{{news.title}}</span>
+                        <br>
+                        <br>
+                        <span class="global-subheading-3 global-font global-color-light-black" style="font-size: 15px">{{ news.description }}</span>
+                    </a>
+                    <h5>Publish date: {{news.publishedAt | date : 'medium'}}</h5>
+                </div>
+                <div class="col-md-1 pull-right">
+                    <div style="margin: 10px;">
+                        <button (click)="onUserUpVote(news._id)" type="button" class="btn btn-default btn-lg borderless" aria-label="Left Align">
+                            <span class="glyphicon glyphicon glyphicon-thumbs-up" aria-hidden="true" [ngStyle]="{'color': news.userUpVoted? 'rgb(39, 174, 96)' : 'gray'}"></span>
+                        </button>
+                    </div>
+
+                    <div style="margin: 10px;">
+                        <button (click)="onUserDownVote(news._id)" type="button" class="btn btn-default btn-lg borderless" aria-label="Left Align">
+                            <span class="glyphicon glyphicon glyphicon-thumbs-down" aria-hidden="true" [ngStyle]="{'color': news.userDownVoted? 'rgb(192, 57, 43)' : 'gray'}"></span>
+                        </button>
+                    </div>
+
+
+                </div>
+                </div>
+            </div>
+        </div>
+
+<br>
+<br>
+
+<div style="height:500px;overflow: auto" class="container" [class.noDisplay]="displayMostRecent" *ngIf="relevantNews.length > 0">
+    <div *ngFor="let news of relevantNews">
+        <div class="row" style="border-bottom: 1px solid lightgray">
+            <div class="col-md-2">
+                <img *ngIf="((news.urlToImage != '') && (news.urlToImage != null))" src="{{news.urlToImage}} "  class="img-thumbnail" >
+            </div>
+            <div class="col-md-9">
+                <a target="_blank" (click)="goToLink(news.url)">
+                    <span class="global-subheading-3 global-font global-color-light-black">{{news.title}}</span>
+                    <br>
+                    <br>
+                    <span class="global-subheading-3 global-font global-color-light-black" style="font-size: 15px">{{ news.description }}</span>
+                </a>
+                <h5>Publish date: {{news.publishedAt | date : 'medium'}}</h5>
+            </div>
+            <div class="col-md-1 pull-right">
+                <div style="margin: 10px;">
+                    <button (click)="onUserUpVote(news._id)" type="button" class="btn btn-default btn-lg borderless" aria-label="Left Align">
+                        <span class="glyphicon glyphicon glyphicon-thumbs-up" aria-hidden="true" [ngStyle]="{'color': news.userUpVoted? 'rgb(39, 174, 96)' : 'gray'}"></span>
+                    </button>
+                </div>
+
+                <div style="margin: 10px;">
+                    <button (click)="onUserDownVote(news._id)" type="button" class="btn btn-default btn-lg borderless" aria-label="Left Align">
+                        <span class="glyphicon glyphicon glyphicon-thumbs-down" aria-hidden="true" [ngStyle]="{'color': news.userDownVoted? 'rgb(192, 57, 43)' : 'gray'}"></span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

@@ -59,7 +59,9 @@ export class ThemeStockAllocationComponent implements OnInit {
     checkAllocationData: any;
     selectedExposure: number; //to hold the exposure value edited by the user
     isCurrentUserAdmin: boolean = localStorage.getItem("isAdmin") == "true";
-    
+    averageDailyStockChanges: number;
+    averageMonthlyStockChanges: number;
+
     @ViewChild(ModalComponent)
     public modal: ModalComponent;
 
@@ -233,7 +235,32 @@ export class ThemeStockAllocationComponent implements OnInit {
         console.log(data);
         this.stockAllocationData = data;
         this.allocatedStockIds = data.map(allocation => allocation.themeStockComposition.stock._id); //set allocated stock Ids
-    }
+        this.averageDailyStockChanges = 0;
+        this.averageMonthlyStockChanges = 0;
+        let dailyDenominator = 0;
+        let monthlyDenominator = 0;
+        for (let i=0; i<this.stockAllocationData.length; i++) {
+            // calculate weight of the stock
+            let weight = 0;
+            if (this.stockAllocationData[i].hasOwnProperty('exposures')) {
+                weight = weight + this.stockAllocationData[i]['exposures'][0]['percentage']/100.0;
+                weight = weight + this.stockAllocationData[i]['exposures'][1]['percentage']*0.5/100.0;
+                weight = weight + this.stockAllocationData[i]['exposures'][3]['percentage']*(-0.5)/100.0;
+                weight = weight + this.stockAllocationData[i]['exposures'][4]['percentage']*(-1.0)/100.0;
+            }
+            console.log(weight);
+            if (this.stockAllocationData[i]['themeStockComposition']['stock'].hasOwnProperty('dayClosePriceChangePercentage')) {
+                this.averageDailyStockChanges += this.stockAllocationData[i]['themeStockComposition']['stock']['dayClosePriceChangePercentage'] * weight;
+                dailyDenominator++;
+            }
+            if (this.stockAllocationData[i]['themeStockComposition']['stock'].hasOwnProperty('monthlyChangePercentage')) {
+                this.averageMonthlyStockChanges += this.stockAllocationData[i]['themeStockComposition']['stock']['monthlyChangePercentage'] * weight;
+                monthlyDenominator++;
+            }
+        }
+        this.averageMonthlyStockChanges = this.averageMonthlyStockChanges / monthlyDenominator;
+        this.averageDailyStockChanges = this.averageDailyStockChanges / dailyDenominator;
+    };
 
     handleError = (error: any) => {
         console.log('Error: ' + error);

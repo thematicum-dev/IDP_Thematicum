@@ -10,6 +10,9 @@ import twitter from 'twitter';
 import * as settings from './server/utilities/settings';
 
 
+const axios = require('axios');
+
+
 //routes
 import authRoutes from './server/routes/auth.routes';
 import themeRoutes from './server/routes/theme.routes';
@@ -22,6 +25,10 @@ import userRoutes from './server/routes/user.routes';
 import userProfileRoutes from './server/routes/user-profile.routes';
 import googleTrendRoutes from './server/routes/googleTrend.routes';
 import newsFeedRoutes from './server/routes/newsFeed.routes';
+import realtimeNews from './server/routes/googleNews.routes';
+import customSearchScript from './server/routes/googleCustomSearchScript.routes';
+import customSearch from './server/routes/googleCustomSearch.routes';
+import removeObsoleteURLs from './server/routes/removeObsoleteURLs.routes';
 import fundRoutes from './server/routes/fund.routes'
 import fundAllocationRoutes from './server/routes/fundAllocations.routes'
 
@@ -66,6 +73,10 @@ app.use('/api/user', userRoutes);
 app.use('/api/profile', userProfileRoutes);
 app.use('/api/googletrend',googleTrendRoutes);
 app.use('/api/newsfeed',newsFeedRoutes);
+app.use('/api/news', realtimeNews);
+app.use('/api/customsearchscript', customSearchScript);
+app.use('/api/customsearch', customSearch);
+app.use('/api/removeobsoleteurls', removeObsoleteURLs);
 app.use('/api/funds', fundRoutes);
 app.use('/api/fundallocations', fundAllocationRoutes);
 
@@ -73,6 +84,74 @@ app.use(function (req, res, next) {
     return res.render('index');
 });
 
+// console.log("Date: ", new Date());
+
+// let schedule = require('node-schedule');
+// let reportsScript = require('./server/controllers/googleCustomSearchScript.controller');
+// let obsoleteLinkRemoval = require('./server/controllers/removeObsoleteURLs.controller');
+//
+// let rule1 = new schedule.RecurrenceRule();
+// rule1.hour = 6;
+// rule1.minute = 42;
+// schedule.scheduleJob(rule1, function(){
+//     reportsScript.updateReports();
+// });
+//
+// let rule2 = new schedule.RecurrenceRule();
+// rule2.hour = 1;
+// rule2.minute = 0;
+// schedule.scheduleJob(rule2, function(){
+//     obsoleteLinkRemoval.removeObsoleteURLsFromDB();
+// });
+
+
+let scriptExecutionTime = new Date();
+scriptExecutionTime.setHours(4, 0);
+if (scriptExecutionTime < new Date()) {
+    scriptExecutionTime.setDate(scriptExecutionTime.getDate() + 1);
+}
+let scriptURL = 'https://thematicum.herokuapp.com/api/customsearchscript';
+let customSearchTriggerJobDeletionEndpoint = 'https://api.atrigger.com/v1/tasks/delete?key=' + process.env.ATRIGGER_API_KEY + '&secret=' + process.env.ATRIGGER_API_SECRET +'&tag_type=reportscript';
+let customSearchTriggerJobCreationEndpoint = 'https://api.atrigger.com/v1/tasks/create?key=' + process.env.ATRIGGER_API_KEY + '&secret=' + process.env.ATRIGGER_API_SECRET +'&tag_type=reportscript&retries=0&timeSlice=1day&first=' + scriptExecutionTime.toISOString() + '&count=-1&url=' + scriptURL;
+
+axios.request({url: customSearchTriggerJobDeletionEndpoint, method: 'get', responseType: 'json'})
+    .then(() => {
+        axios.request({url: customSearchTriggerJobCreationEndpoint, method: 'get', responseType: 'json'})
+            .then(() => {
+                console.log("Report update job created.");
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+    })
+    .catch((err) => {
+        console.log(err);
+    });
+
+
+
+let removalExecutionTime = new Date();
+removalExecutionTime.setHours(1, 0);
+if (removalExecutionTime < new Date()) {
+    removalExecutionTime.setDate(removalExecutionTime.getDate() + 1);
+}
+let removalURL = 'https://thematicum.herokuapp.com/api/removeobsoleteurls';
+let removalTriggerJobDeletionEndpoint = 'https://api.atrigger.com/v1/tasks/delete?key=' + process.env.ATRIGGER_API_KEY + '&secret=' + process.env.ATRIGGER_API_SECRET +'&tag_type=removalscript';
+let removalTriggerJobCreationEndpoint = 'https://api.atrigger.com/v1/tasks/create?key=' + process.env.ATRIGGER_API_KEY + '&secret=' + process.env.ATRIGGER_API_SECRET +'&tag_type=removalscript&retries=0&timeSlice=1day&first=' + removalExecutionTime.toISOString() + '&count=-1&url=' + removalURL;
+
+axios.request({url: removalTriggerJobDeletionEndpoint, method: 'get', responseType: 'json'})
+    .then(() => {
+        axios.request({url: removalTriggerJobCreationEndpoint, method: 'get', responseType: 'json'})
+            .then(() => {
+                console.log("Removal job created.");
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+    })
+    .catch((err) => {
+        console.log(err);
+    });
 
 
 //error handling

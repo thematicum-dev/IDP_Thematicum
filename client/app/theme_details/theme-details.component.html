@@ -64,7 +64,12 @@
     <!--Trend feed-->
     <app-theme-feed [themeId]="selectedThemeId" [theme]="theme"></app-theme-feed>
 
-    <app-theme-news [themeId]="selectedThemeId" [theme]="theme"></app-theme-news>
+    <!--News-->
+    <app-googleNews [themeId]="selectedThemeId"></app-googleNews>
+
+    <!--Reports-->
+    <app-google-reports [themeId]="selectedThemeId"></app-google-reports>
+
 </div>
 <app-error></app-error>
 
@@ -81,3 +86,4 @@
         <button type="button" class="btn btn-primary" (click)="deleteTheme(modal)">Delete</button>
     </div>
 </app-modal>
+

@@ -4,6 +4,10 @@ import QueryBuilder from './queryBuilder';
 import User from '../models/user';
 import Theme from '../models/theme';
 import ActivityLog from '../models/activitylog';
+import news from '../models/news';
+import UserNewsRelevancyVote from '../models/userNewsRelevancyVote';
+import UserReportRelevancyVote from '../models/userReportRelevancyVote';
+import pdfReport from '../models/pdfReport';
 import {AppError} from '../utilities/appError';
 import UserThemeInput from '../models/userThemeInput';
 import ThemeStockComposition from '../models/themeStockComposition';
@@ -94,6 +98,21 @@ export default class DataRepository extends BaseRepository {
             })
             .catch(err => reject(err));
         });
+    }
+
+    getAllThemes() {
+        return new Promise((resolve, reject) => {
+            Theme.find({}).exec()
+                .then((res) =>{
+                    if (!res) {
+                        reject("No report found.");
+                    }
+                    resolve(res);
+                })
+                .catch((err) => {
+                    reject(err);
+                })
+        })
     }
 
     // parameter is array of strings
@@ -369,10 +388,10 @@ export default class DataRepository extends BaseRepository {
     }
 
     deleteUserById(userId) {
-        return Promise.all([User.remove({ _id: userId }).exec()]); 
+        return Promise.all([User.remove({ _id: userId }).exec()]);
     }
 
-    deleteStockCompositionById(compositionId){        
+    deleteStockCompositionById(compositionId){
         return Promise.all([ThemeStockComposition.remove({_id: compositionId }).exec(), UserThemeStockAllocation.remove({ themeStockComposition: compositionId }).exec()]);
     }
 
@@ -826,6 +845,549 @@ export default class DataRepository extends BaseRepository {
         const deleteAllStockCompositionsPromise = this.deleteAllStockCompositionsByStockId(stockId);
         const deleteStock = this.removeById(Stock,stockId);
         return Promise.all([deleteAllStockCompositionsPromise, deleteStock]);
+    }
+
+    getNewsByThemeIdFor6Months(themeId) {
+        return new Promise ((resolve, reject) => {
+            let d = new Date();
+            d.setMonth(d.getMonth() - 6);
+            news.find({themeId: themeId, publishedAt: {$gte: d}}).exec()
+                .then((res) => {
+
+                    if (!res) {
+                        reject("No news found.");
+                    }
+                    resolve(res);
+                })
+                .catch((err) => {
+                    reject(err);
+                });
+        });
+    }
+
+    getVotedNewsByThemeId(themeId) {
+        return new Promise ((resolve, reject) => {
+            news.find({themeId: themeId, relevancyRanking: { $gt: 0 }}).exec()
+                .then((res) => {
+
+                    // console.log(res);
+
+                    if (!res) {
+                        reject("No news found.");
+                    }
+                    resolve(res);
+                })
+                .catch((err) => {
+                    reject(err);
+                });
+        });
+    }
+
+    getNewsByUrl(url) {
+        return new Promise ((resolve, reject) => {
+            news.find({url: url}).exec()
+                .then((res) => {
+
+                    // console.log(res);
+
+                    if (!res) {
+                        reject("No news found.");
+                    }
+                    resolve(res);
+                })
+                .catch((err) => {
+                    reject(err);
+                });
+        });
+    }
+
+    getNewsById(newsId) {
+        return new Promise ((resolve, reject) => {
+            news.findById(newsId).exec()
+                .then((res) => {
+
+                    if (!res) {
+                        reject("No news found with this id.");
+                    }
+                    resolve(res);
+                })
+                .catch((err) => {
+                    reject(err);
+                });
+        });
+    }
+
+    getUserVotedNews(userId) {
+        return new Promise((resolve, reject) => {
+            UserNewsRelevancyVote.find({user: userId, $or: [{upvoted: true}, {downvoted: true}] }).exec()
+                .then((res) => {
+                    resolve(res);
+                })
+                .catch((err) => {
+                    reject(err);
+                });
+        });
+    }
+
+    getUserVotedReports(userId) {
+        return new Promise((resolve, reject) => {
+            UserReportRelevancyVote.find({user: userId, $or: [{upvoted: true}, {downvoted: true}] }).exec()
+                .then((res) => {
+                    resolve(res);
+                })
+                .catch((err) => {
+                    reject(err);
+                });
+        });
+    }
+
+    setTFIDFReportRanking(ranking) {
+        return new Promise((resolve, reject) => {
+            console.log(ranking);
+
+            pdfReport.findById(ranking.id, function (err, report) {
+
+                // let newRanking = report.relevancyRanking + ranking.measure;
+                report.set({ tfidfRanking: ranking.measure });
+                report.save(function (err, updatedReport) {
+                    console.log("Ranking changed.");
+                    if (err) {
+                        console.log(err);
+                        reject(err);
+                    }
+                    resolve(updatedReport);
+                })
+            });
+        });
+    }
+
+
+    toggleUserUpVoteForNews(userId, newsId) {
+        return new Promise((resolve, reject) => {
+            UserNewsRelevancyVote.find({user: userId, news: newsId}).exec()
+                .then((res) => {
+                    if (!res.length) {
+                        // Vote does not exist yet
+                        let newsUserComposition = new UserNewsRelevancyVote({user: userId, news: newsId, upvoted: true});
+                        newsUserComposition.save(function (err, success) {
+                            console.log("New user composition saved.");
+                            if (err) reject(err);
+                        });
+                        news.findById(newsId, function (err, news) {
+                            let newRanking = news.relevancyRanking + 10;
+                            news.set({ relevancyRanking: newRanking });
+                            news.save(function (err, updatedNews) {
+                                console.log("Ranking increased.");
+                                if (err) {
+                                    console.log(err);
+                                    reject(err);
+                                }
+                                resolve(updatedNews);
+                            })
+                        });
+                    }
+                    else {
+                        // vote exists already
+                        if (res[0].upvoted) {
+                            news.findById(newsId, function (err, news) {
+                                //if (err) return handleError(err);
+                                let newRanking = news.relevancyRanking - 10;
+                                news.set({ relevancyRanking: newRanking });
+                                news.save(function (err, updatedNews) {
+                                    console.log("Updated ranking saved.");
+                                    if (err) reject(err);
+                                })
+                            });
+                            UserNewsRelevancyVote.findById(res[0]._id, function (err, vote) {
+                                vote.set({upvoted: false});
+                                vote.save(function (err, newVote) {
+                                    resolve(newVote);
+                                });
+                            });
+                        } else {
+                            if (res[0].downvoted) {
+                                this.toggleUserDownVoteForNews(userId, newsId)
+                                    .then(() => {
+                                        news.findById(newsId, function (err, news) {
+                                            let newRanking = news.relevancyRanking + 10;
+                                            news.set({ relevancyRanking: newRanking });
+                                            news.save(function (err, updatedNews) {
+                                                if (err) reject(err);
+                                            })
+                                        });
+
+                                        UserNewsRelevancyVote.findById(res[0]._id, function (err, vote) {
+                                            vote.set({upvoted: true});
+                                            vote.save(function (err, newVote) {
+                                                resolve(newVote);
+                                            });
+                                        });
+                                    });
+                            } else {
+                                news.findById(newsId, function (err, news) {
+                                    let newRanking = news.relevancyRanking + 10;
+                                    news.set({ relevancyRanking: newRanking });
+                                    news.save(function (err, updatedNews) {
+                                        if (err) reject(err);
+                                    })
+                                });
+
+                                UserNewsRelevancyVote.findById(res[0]._id, function (err, vote) {
+                                    vote.set({upvoted: true});
+                                    vote.save(function (err, newVote) {
+                                        resolve(newVote);
+                                    });
+                                });
+                            }
+
+                        }
+                    }
+                })
+                .catch((err) => {
+                    console.log("failed");
+                    console.log(err);
+                    reject(err);
+                });
+        })
+    }
+
+
+    toggleUserDownVoteForNews(userId, newsId) {
+        return new Promise((resolve, reject) => {
+            UserNewsRelevancyVote.find({user: userId, news: newsId}).exec()
+                .then((res) => {
+                    if (!res.length) {
+                        // Vote does not exist yet
+                        let newsUserComposition = new UserNewsRelevancyVote({user: userId, news: newsId, downvoted: true});
+                        newsUserComposition.save(function (err, success) {
+                            console.log("New user composition saved.");
+                            if (err) reject(err);
+                        });
+                        news.findById(newsId, function (err, news) {
+                            let newRanking = news.relevancyRanking - 10;
+                            news.set({ relevancyRanking: newRanking });
+                            news.save(function (err, updatedNews) {
+                                console.log("Ranking increased.");
+                                if (err) {
+                                    console.log(err);
+                                    reject(err);
+                                }
+                                resolve(updatedNews);
+                            })
+                        });
+                    }
+                    else {
+                        // vote exists already
+                        if (res[0].downvoted) {
+                            news.findById(newsId, function (err, news) {
+                                //if (err) return handleError(err);
+                                let newRanking = news.relevancyRanking + 10;
+                                news.set({ relevancyRanking: newRanking });
+                                news.save(function (err, updatedNews) {
+                                    console.log("Updated ranking saved.");
+                                    if (err) reject(err);
+                                })
+                            });
+                            UserNewsRelevancyVote.findById(res[0]._id, function (err, vote) {
+                                vote.set({downvoted: false});
+                                vote.save(function (err, newVote) {
+                                    resolve(newVote);
+                                });
+                            });
+                        } else {
+                            if (res[0].upvoted) {
+                                this.toggleUserUpVoteForNews(userId, newsId)
+                                    .then(() => {
+                                        news.findById(newsId, function (err, news) {
+                                            let newRanking = news.relevancyRanking - 10;
+                                            news.set({ relevancyRanking: newRanking });
+                                            news.save(function (err, updatedNews) {
+                                                if (err) reject(err);
+                                            })
+                                        });
+
+                                        UserNewsRelevancyVote.findById(res[0]._id, function (err, vote) {
+                                            vote.set({downvoted: true});
+                                            vote.save(function (err, newVote) {
+                                                resolve(newVote);
+                                            });
+                                        });
+                                    })
+                            } else {
+                                news.findById(newsId, function (err, news) {
+                                    let newRanking = news.relevancyRanking - 10;
+                                    news.set({ relevancyRanking: newRanking });
+                                    news.save(function (err, updatedNews) {
+                                        if (err) reject(err);
+                                    })
+                                });
+
+                                UserNewsRelevancyVote.findById(res[0]._id, function (err, vote) {
+                                    vote.set({downvoted: true});
+                                    vote.save(function (err, newVote) {
+                                        resolve(newVote);
+                                    });
+                                });
+                            }
+
+                        }
+                    }
+                })
+                .catch((err) => {
+                    console.log("failed");
+                    console.log(err);
+                    reject(err);
+                });
+        })
+    }
+
+    toggleUserUpVoteForReport(userId, reportId) {
+        return new Promise((resolve, reject) => {
+            UserReportRelevancyVote.find({user: userId, report: reportId}).exec()
+                .then((res) => {
+                    if (!res.length) {
+                        // Vote does not exist yet
+                        let newsUserComposition = new UserReportRelevancyVote({user: userId, report: reportId, upvoted: true});
+                        newsUserComposition.save(function (err, success) {
+                            if (err) reject(err);
+                        });
+                        pdfReport.findById(reportId, function (err, report) {
+                            let newRanking = report.relevancyRanking + 10;
+                            report.set({ relevancyRanking: newRanking });
+                            report.save(function (err, updatedReport) {
+                                console.log("Ranking increased.");
+                                if (err) reject(err);
+                                resolve(updatedReport);
+                            })
+                        });
+                    }
+                    else {
+                        // vote exists already
+                        if (res[0].upvoted) {
+                            pdfReport.findById(reportId, function (err, report) {
+                                let newRanking = report.relevancyRanking - 10;
+                                report.set({ relevancyRanking: newRanking });
+                                report.save(function (err, updatedReport) {
+                                    console.log("Updated ranking saved.");
+                                    if (err) reject(err);
+                                })
+                            });
+                            UserReportRelevancyVote.findById(res[0]._id, function (err, vote) {
+                                vote.set({upvoted: false});
+                                vote.save(function (err, newVote) {
+                                    resolve(newVote);
+                                });
+                            });
+                        } else {
+                            if (res[0].downvoted) {
+                                this.toggleUserDownVoteForReport(userId, reportId)
+                                    .then(() => {
+                                        pdfReport.findById(reportId, function (err, report) {
+                                            let newRanking = report.relevancyRanking + 10;
+                                            report.set({ relevancyRanking: newRanking });
+                                            report.save(function (err, updatedReport) {
+                                                if (err) reject(err);
+                                            })
+                                        });
+
+                                        UserReportRelevancyVote.findById(res[0]._id, function (err, vote) {
+                                            vote.set({upvoted: true});
+                                            vote.save(function (err, newVote) {
+                                                resolve(newVote);
+                                            });
+                                        });
+                                    });
+                            } else {
+                                pdfReport.findById(reportId, function (err, report) {
+                                    let newRanking = report.relevancyRanking + 10;
+                                    report.set({ relevancyRanking: newRanking });
+                                    report.save(function (err, updatedReport) {
+                                        if (err) reject(err);
+                                    })
+                                });
+
+                                UserReportRelevancyVote.findById(res[0]._id, function (err, vote) {
+                                    vote.set({upvoted: true});
+                                    vote.save(function (err, newVote) {
+                                        resolve(newVote);
+                                    });
+                                });
+                            }
+
+                        }
+                    }
+                })
+                .catch((err) => {
+                    console.log("failed");
+                    reject(err);
+                });
+        })
+    }
+
+
+    toggleUserDownVoteForReport(userId, reportId) {
+        return new Promise((resolve, reject) => {
+            UserReportRelevancyVote.find({user: userId, report: reportId}).exec()
+                .then((res) => {
+                    if (!res.length) {
+                        // Vote does not exist yet
+                        let newsUserComposition = new UserReportRelevancyVote({user: userId, report: reportId, downvoted: true});
+                        newsUserComposition.save(function (err, success) {
+                            if (err) reject(err);
+                        });
+                        pdfReport.findById(reportId, function (err, report) {
+                            let newRanking = report.relevancyRanking - 10;
+                            report.set({ relevancyRanking: newRanking });
+                            report.save(function (err, updatedReport) {
+                                console.log("Ranking increased.");
+                                if (err) reject(err);
+                                resolve(updatedReport);
+                            })
+                        });
+                    }
+                    else {
+                        // vote exists already
+                        if (res[0].downvoted) {
+                            pdfReport.findById(reportId, function (err, report) {
+                                let newRanking = report.relevancyRanking + 10;
+                                report.set({ relevancyRanking: newRanking });
+                                report.save(function (err, updatedReport) {
+                                    console.log("Updated ranking saved.");
+                                    if (err) reject(err);
+                                })
+                            });
+                            UserReportRelevancyVote.findById(res[0]._id, function (err, vote) {
+                                vote.set({downvoted: false});
+                                vote.save(function (err, newVote) {
+                                    resolve(newVote);
+                                });
+                            });
+                        } else {
+
+                            if (res[0].upvoted) {
+                                this.toggleUserUpVoteForReport(userId, reportId)
+                                    .then(() => {
+                                        pdfReport.findById(reportId, function (err, report) {
+                                            let newRanking = report.relevancyRanking - 10;
+                                            report.set({ relevancyRanking: newRanking });
+                                            report.save(function (err, updatedReport) {
+                                                if (err) reject(err);
+                                            })
+                                        });
+
+                                        UserReportRelevancyVote.findById(res[0]._id, function (err, vote) {
+                                            vote.set({downvoted: true});
+                                            vote.save(function (err, newVote) {
+                                                resolve(newVote);
+                                            });
+                                        });
+                                    })
+                            }
+                            else {
+                                pdfReport.findById(reportId, function (err, report) {
+                                    let newRanking = report.relevancyRanking - 10;
+                                    report.set({ relevancyRanking: newRanking });
+                                    report.save(function (err, updatedReport) {
+                                        if (err) reject(err);
+                                    })
+                                });
+
+                                UserReportRelevancyVote.findById(res[0]._id, function (err, vote) {
+                                    vote.set({downvoted: true});
+                                    vote.save(function (err, newVote) {
+                                        resolve(newVote);
+                                    });
+                                });
+                            }
+
+                        }
+                    }
+                })
+                .catch((err) => {
+                    console.log("failed");
+                    reject(err);
+                });
+        })
+    }
+
+
+    getReportsByThemeId(themeId) {
+        return new Promise ((resolve, reject) => {
+            pdfReport.find({themeId: themeId}).exec()
+                .then((res) => {
+
+                    if (!res) {
+                        reject("No report found.");
+                    }
+                    resolve(res);
+                })
+                .catch((err) => {
+                    reject(err);
+                });
+        });
+    }
+
+    getReportById(reportId) {
+        return new Promise ((resolve, reject) => {
+            pdfReport.findById(reportId).exec()
+                .then((res) => {
+
+                    if (!res) {
+                        reject("No report found with this id.");
+                    }
+                    resolve(res);
+                })
+                .catch((err) => {
+                    reject(err);
+                });
+        });
+    }
+
+    getAllReports() {
+        return new Promise((resolve, reject) => {
+            pdfReport.find({}).exec()
+                .then((res) => {
+                    if (!res) {
+                        reject("No reports found.")
+                    }
+
+                    resolve(res);
+                })
+                .catch((err) => {
+                    reject(err);
+                })
+        });
+    }
+
+    removeReportById(id) {
+        return new Promise((resolve, reject) => {
+            pdfReport.findByIdAndRemove(id).exec()
+                .then(() => resolve())
+                .catch(() => reject());
+        });
+    }
+
+    getAllNews() {
+        return new Promise((resolve, reject) => {
+            news.find({}).exec()
+                .then((res) => {
+                    if (!res) {
+                        reject("No news found.")
+                    }
+                    resolve(res);
+                })
+                .catch((err) => {
+                    reject(err);
+                })
+        });
+    }
+
+    removeNewsById(id) {
+        return new Promise((resolve, reject) => {
+            news.findByIdAndRemove(id).exec()
+                .then(() => resolve())
+                .catch(() => reject());
+        });
     }
 
     deleteFundById(fundId){
