@@ -1006,23 +1006,20 @@ export default class DataRepository extends BaseRepository {
                             });
                         } else {
                             if (res[0].downvoted) {
-                                this.toggleUserDownVoteForNews(userId, newsId)
-                                    .then(() => {
-                                        news.findById(newsId, function (err, news) {
-                                            let newRanking = news.relevancyRanking + 10;
-                                            news.set({ relevancyRanking: newRanking });
-                                            news.save(function (err, updatedNews) {
-                                                if (err) reject(err);
-                                            })
-                                        });
+                                news.findById(newsId, function (err, news) {
+                                    let newRanking = news.relevancyRanking + 20;
+                                    news.set({ relevancyRanking: newRanking });
+                                    news.save(function (err, updatedNews) {
+                                        if (err) reject(err);
+                                    })
+                                });
 
-                                        UserNewsRelevancyVote.findById(res[0]._id, function (err, vote) {
-                                            vote.set({upvoted: true});
-                                            vote.save(function (err, newVote) {
-                                                resolve(newVote);
-                                            });
-                                        });
+                                UserNewsRelevancyVote.findById(res[0]._id, function (err, vote) {
+                                    vote.set({upvoted: true, downvoted: false});
+                                    vote.save(function (err, newVote) {
+                                        resolve(newVote);
                                     });
+                                });
                             } else {
                                 news.findById(newsId, function (err, news) {
                                     let newRanking = news.relevancyRanking + 10;
@@ -1033,7 +1030,7 @@ export default class DataRepository extends BaseRepository {
                                 });
 
                                 UserNewsRelevancyVote.findById(res[0]._id, function (err, vote) {
-                                    vote.set({upvoted: true});
+                                    vote.set({upvoted: true, downvoted: false});
                                     vote.save(function (err, newVote) {
                                         resolve(newVote);
                                     });
@@ -1096,23 +1093,20 @@ export default class DataRepository extends BaseRepository {
                             });
                         } else {
                             if (res[0].upvoted) {
-                                this.toggleUserUpVoteForNews(userId, newsId)
-                                    .then(() => {
-                                        news.findById(newsId, function (err, news) {
-                                            let newRanking = news.relevancyRanking - 10;
-                                            news.set({ relevancyRanking: newRanking });
-                                            news.save(function (err, updatedNews) {
-                                                if (err) reject(err);
-                                            })
-                                        });
-
-                                        UserNewsRelevancyVote.findById(res[0]._id, function (err, vote) {
-                                            vote.set({downvoted: true});
-                                            vote.save(function (err, newVote) {
-                                                resolve(newVote);
-                                            });
-                                        });
+                                news.findById(newsId, function (err, news) {
+                                    let newRanking = news.relevancyRanking - 20;
+                                    news.set({ relevancyRanking: newRanking });
+                                    news.save(function (err, updatedNews) {
+                                        if (err) reject(err);
                                     })
+                                });
+
+                                UserNewsRelevancyVote.findById(res[0]._id, function (err, vote) {
+                                    vote.set({downvoted: true, upvoted: false});
+                                    vote.save(function (err, newVote) {
+                                        resolve(newVote);
+                                    });
+                                });
                             } else {
                                 news.findById(newsId, function (err, news) {
                                     let newRanking = news.relevancyRanking - 10;
@@ -1123,7 +1117,7 @@ export default class DataRepository extends BaseRepository {
                                 });
 
                                 UserNewsRelevancyVote.findById(res[0]._id, function (err, vote) {
-                                    vote.set({downvoted: true});
+                                    vote.set({downvoted: true, upvoted: false});
                                     vote.save(function (err, newVote) {
                                         resolve(newVote);
                                     });
@@ -1180,23 +1174,20 @@ export default class DataRepository extends BaseRepository {
                             });
                         } else {
                             if (res[0].downvoted) {
-                                this.toggleUserDownVoteForReport(userId, reportId)
-                                    .then(() => {
-                                        pdfReport.findById(reportId, function (err, report) {
-                                            let newRanking = report.relevancyRanking + 10;
-                                            report.set({ relevancyRanking: newRanking });
-                                            report.save(function (err, updatedReport) {
-                                                if (err) reject(err);
-                                            })
-                                        });
+                                pdfReport.findById(reportId, function (err, report) {
+                                    let newRanking = report.relevancyRanking + 20;
+                                    report.set({ relevancyRanking: newRanking });
+                                    report.save(function (err, updatedReport) {
+                                        if (err) reject(err);
+                                    })
+                                });
 
-                                        UserReportRelevancyVote.findById(res[0]._id, function (err, vote) {
-                                            vote.set({upvoted: true});
-                                            vote.save(function (err, newVote) {
-                                                resolve(newVote);
-                                            });
-                                        });
+                                UserReportRelevancyVote.findById(res[0]._id, function (err, vote) {
+                                    vote.set({upvoted: true, downvoted: false});
+                                    vote.save(function (err, newVote) {
+                                        resolve(newVote);
                                     });
+                                });
                             } else {
                                 pdfReport.findById(reportId, function (err, report) {
                                     let newRanking = report.relevancyRanking + 10;
@@ -1207,7 +1198,7 @@ export default class DataRepository extends BaseRepository {
                                 });
 
                                 UserReportRelevancyVote.findById(res[0]._id, function (err, vote) {
-                                    vote.set({upvoted: true});
+                                    vote.set({upvoted: true, downvoted: false});
                                     vote.save(function (err, newVote) {
                                         resolve(newVote);
                                     });
@@ -1265,23 +1256,20 @@ export default class DataRepository extends BaseRepository {
                         } else {
 
                             if (res[0].upvoted) {
-                                this.toggleUserUpVoteForReport(userId, reportId)
-                                    .then(() => {
-                                        pdfReport.findById(reportId, function (err, report) {
-                                            let newRanking = report.relevancyRanking - 10;
-                                            report.set({ relevancyRanking: newRanking });
-                                            report.save(function (err, updatedReport) {
-                                                if (err) reject(err);
-                                            })
-                                        });
-
-                                        UserReportRelevancyVote.findById(res[0]._id, function (err, vote) {
-                                            vote.set({downvoted: true});
-                                            vote.save(function (err, newVote) {
-                                                resolve(newVote);
-                                            });
-                                        });
+                                pdfReport.findById(reportId, function (err, report) {
+                                    let newRanking = report.relevancyRanking - 20;
+                                    report.set({ relevancyRanking: newRanking });
+                                    report.save(function (err, updatedReport) {
+                                        if (err) reject(err);
                                     })
+                                });
+
+                                UserReportRelevancyVote.findById(res[0]._id, function (err, vote) {
+                                    vote.set({downvoted: true, upvoted: false});
+                                    vote.save(function (err, newVote) {
+                                        resolve(newVote);
+                                    });
+                                });
                             }
                             else {
                                 pdfReport.findById(reportId, function (err, report) {
@@ -1293,7 +1281,7 @@ export default class DataRepository extends BaseRepository {
                                 });
 
                                 UserReportRelevancyVote.findById(res[0]._id, function (err, vote) {
-                                    vote.set({downvoted: true});
+                                    vote.set({downvoted: true, upvoted: false});
                                     vote.save(function (err, newVote) {
                                         resolve(newVote);
                                     });
