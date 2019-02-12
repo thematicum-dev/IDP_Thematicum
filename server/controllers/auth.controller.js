@@ -133,7 +133,7 @@ export function forgot(req,res,next) {
 		        service: 'Gmail',
 		        auth: {
 		          user: 'thematicum.dev@gmail.com',
-		          pass: 'Vh9k238BhDZa6$Cb'
+		          pass: '!@$Mm15f19vnvq49l!$'
 		        }
 		      });
 		      var mailOptions = {
