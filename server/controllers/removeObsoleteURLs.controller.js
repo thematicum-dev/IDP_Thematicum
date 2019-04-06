@@ -36,29 +36,26 @@ export function removeObsoleteURLs(req, res, next) {
                         })
                 }
             }
-        })
-        .then(() => {
-            repo.getAllNews()
-                .then((news) => {
-                    for (let i=0; i<news.length; i++) {
-                        urlExists(news[i]['url'], undefined, 'GET', 300000)
-                            .then(function(response){
-                                if (response) {
-                                    console.log("Url exists", response.href);
-                                } else {
-                                    console.log("Url does not exists!", response.href);
-                                    console.log(news[i]['url']);
-                                    repo.removeNewsById(news[i]['_id']);
-                                }
-                            })
-                            .catch((err) => {
-                                console.log(err);
-                            })
-                    }
-                });
         });
 
-
+    repo.getAllNews()
+        .then((news) => {
+            for (let i=0; i<news.length; i++) {
+                urlExists(news[i]['url'], undefined, 'GET', 300000)
+                    .then(function(response){
+                        if (response) {
+                            console.log("Url exists", response.href);
+                        } else {
+                            console.log("Url does not exists!", response.href);
+                            console.log(news[i]['url']);
+                            repo.removeNewsById(news[i]['_id']);
+                        }
+                    })
+                    .catch((err) => {
+                        console.log(err);
+                    })
+            }
+        });
 
     return res.status(200).json(new AppResponse("OK"));
 
