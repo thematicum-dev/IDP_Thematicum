@@ -93,7 +93,7 @@ export function getRelevantNews(req, res, next) {
         .then((newsCollection) => {
             if (newsCollection.length === 0) {
                 console.log("No news received from API. Sending second request.");
-                getNews(req.theme.name, 'publishedAt', req.theme._id)
+                getNews(req.theme.name, 'relevancy', req.theme._id)
                     .then((newResults) => {
                         if (newResults.length > 0) {
                             news = newResults;
@@ -123,7 +123,6 @@ export function getRelevantNews(req, res, next) {
                         .then((allVotedNews) => {
 
                             // use only 10% of news from the db
-                            // let subsetVotedNews = [];
                             allVotedNews.sort(compareByRelevancy);
                             for (let j=0; j < allVotedNews.length/10.0; j++) {
 
@@ -139,13 +138,7 @@ export function getRelevantNews(req, res, next) {
                                 if (!duplicate) {
                                     allNews.push(allVotedNews[j]);
                                 }
-
-                                // subsetVotedNews.push(allVotedNews[j]);
                             }
-
-                            // allNews = allNews.concat(subsetVotedNews);
-                            // console.log(allNews.length);
-                            // allNews.sort(compareByRelevancy);
                             allNews.sort(compareByDate);
 
                             repo.getUserVotedNews(res.locals.user._id)
@@ -192,7 +185,6 @@ function getNews(query, sortBy, themeId) {
         }).then(response => {
 
             if (response.status !== "ok") {
-                // return res.status(404).json(new AppError('No news found.', response.message));
                 resolve([]);
             }
 
@@ -242,7 +234,6 @@ function saveCollection(collection) {
 export function performNewsUpVote(req, res, next) {
     repo.toggleUserUpVoteForNews(res.locals.user._id, req.news._id)
         .then(() => {
-            // return res.status(200).json(allNews);
             return res.status(200).json(new AppResponse('Updated.'));
         })
         .catch(() => {
@@ -253,7 +244,6 @@ export function performNewsUpVote(req, res, next) {
 export function performNewsDownVote(req, res, next) {
     repo.toggleUserDownVoteForNews(res.locals.user._id, req.news._id)
         .then(() => {
-            // return res.status(200).json(allNews);
             return res.status(200).json(new AppResponse('Updated.'));
         })
         .catch(() => {
@@ -270,7 +260,6 @@ export function newsById(req, res, next, id) {
             }
 
             req.news = result;
-            // req.isCurrentUserCreator = isCurrentUserThemeCreator(result, res);
             next();
         })
         .catch(err => {

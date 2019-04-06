@@ -84,26 +84,6 @@ app.use(function (req, res, next) {
     return res.render('index');
 });
 
-// console.log("Date: ", new Date());
-
-// let schedule = require('node-schedule');
-// let reportsScript = require('./server/controllers/googleCustomSearchScript.controller');
-// let obsoleteLinkRemoval = require('./server/controllers/removeObsoleteURLs.controller');
-//
-// let rule1 = new schedule.RecurrenceRule();
-// rule1.hour = 6;
-// rule1.minute = 42;
-// schedule.scheduleJob(rule1, function(){
-//     reportsScript.updateReports();
-// });
-//
-// let rule2 = new schedule.RecurrenceRule();
-// rule2.hour = 1;
-// rule2.minute = 0;
-// schedule.scheduleJob(rule2, function(){
-//     obsoleteLinkRemoval.removeObsoleteURLsFromDB();
-// });
-
 
 let scriptExecutionTime = new Date();
 scriptExecutionTime.setHours(4, 0);
@@ -154,10 +134,5 @@ axios.request({url: removalTriggerJobDeletionEndpoint, method: 'get', responseTy
     });
 
 
-//error handling
-//app.use(function (err, req, res, next) {
-    //console.log('Error handling middleware', JSON.stringify(err))
-    //return res.status(err.status || 500).json(err);
-//});
 
 export default app;
