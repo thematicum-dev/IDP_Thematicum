@@ -8,6 +8,9 @@
     "build": "del-cli public/js/app && webpack --config webpack.config.dev.js --progress --profile --watch",
     "build:prod": "del-cli public/js/app && webpack --config webpack.config.prod.js --progress --profile --bail && del-cli 'public/js/app/**/*.js' 'public/js/app/**/*.js.map' '!public/js/app/bundle.js' '!public/js/app/*.chunk.js' 'assets/app/**/*.shim.ts'"
   },
+  "engines": {
+    "node": "10.8.0"
+  },
   "dependencies": {
     "@angular/animations": "4.0.0",
     "@angular/common": "4.0.0",
