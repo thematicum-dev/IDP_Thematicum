@@ -39,7 +39,7 @@ export function removeObsoleteURLs(req, res, next) {
 
 function checkNews(news) {
     return new Promise((resolve, reject) => {
-        urlExists(news['url'], undefined, 'GET', 30000)
+            urlExists(news['url'], undefined, 'GET', 30000)
             .then(function(response){
                 if (response) {
                     console.log("Url exists", response.href);

@@ -14,17 +14,23 @@ const setTimeoutPromise = util.promisify(setTimeout);
 
 export function getCustomSearchResults(req, res,next) {
 
-
     repo.getAllThemes()
         // .then((themes) => getReports(themes[0]))
-        .then((themes) => Promise.all(themes.map((theme) => getReports(theme))))
+        .then((themes) => {
+            if (themes.length > 0) {
+                var promise = getReports(themes[0]);
+                for (var i = 1; i < themes.length; i++)
+                    promise = promise.then(getReports(themes[i]));
+            }
+        });
+        // .then((themes) => Promise.all(themes.map((theme) => getReports(theme))))
         // .then((themes) => themes.reduce((previous, current) => previous.then(getReports(current)), Promise.resolve()))
-        .then((rankings) => console.log(rankings))
-        .then(() => res.status(200).json(new AppResponse('done')))
-        .catch((err) => {
-            console.log(err);
-            res.status(200).json(new AppResponse('done with error.'));
-        })
+        // .then((rankings) => console.log(rankings))
+        // .catch((err) => {
+        //     console.log(err);
+        // });
+    
+    return res.status(200).json(new AppResponse('ok'));
 }
 
 
