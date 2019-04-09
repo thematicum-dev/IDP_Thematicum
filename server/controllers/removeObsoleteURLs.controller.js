@@ -11,9 +11,25 @@ let urlExists = require('url-exists-deep');
 export function removeObsoleteURLs(req, res, next) {
 
     repo.getAllReports()
-        .then((reports) => reports.reduce((previous, current) => previous.then(checkReport(current)), Promise.resolve()))
-        .then(() => repo.getAllNews())
-        .then((news) => news.reduce((previous, current) => previous.then(checkNews(current)), Promise.resolve()));
+        .then((reports) => {
+            if (reports.length > 0) {
+                var promise = checkReport(reports[0]);
+                for (var i = 1; i < reports.length; i++)
+                    promise = promise.then(reports[i]);
+            }
+        });
+
+    repo.getAllNews()
+        .then((news) => {
+            if (news.length > 0) {
+                var promise2 = checkNews(news[0]);
+                for (var j = 1; j < news.length; j++)
+                    promise2 = promise2.then(news[j]);
+            }
+        });
+        // .then((reports) => reports.reduce((previous, current) => previous.then(checkReport(current)), Promise.resolve()))
+        // .then(() => repo.getAllNews())
+        // .then((news) => news.reduce((previous, current) => previous.then(checkNews(current)), Promise.resolve()));
 
     return res.status(200).json(new AppResponse("OK"));
 }
