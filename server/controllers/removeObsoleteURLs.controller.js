@@ -12,21 +12,24 @@ export function removeObsoleteURLs(req, res, next) {
 
     repo.getAllReports()
         .then((reports) => {
+            
             if (reports.length > 0) {
                 var promise = checkReport(reports[0]);
                 for (var i = 1; i < reports.length; i++)
                     promise = promise.then(checkReport(reports[i]));
             }
+
+            promise.then(repo.getAllNews()
+                .then((news) => {
+                    if (news.length > 0) {
+                        var promise2 = checkNews(news[0]);
+                        for (var j = 1; j < news.length; j++)
+                            promise2 = promise2.then(checkNews(news[j]));
+                    }
+                }));
         });
 
-    repo.getAllNews()
-        .then((news) => {
-            if (news.length > 0) {
-                var promise2 = checkNews(news[0]);
-                for (var j = 1; j < news.length; j++)
-                    promise2 = promise2.then(checkNews(news[j]));
-            }
-        });
+
         // .then((reports) => reports.reduce((previous, current) => previous.then(checkReport(current)), Promise.resolve()))
         // .then(() => repo.getAllNews())
         // .then((news) => news.reduce((previous, current) => previous.then(checkNews(current)), Promise.resolve()));
