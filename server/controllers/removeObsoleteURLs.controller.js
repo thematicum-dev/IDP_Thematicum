@@ -39,7 +39,7 @@ export function removeObsoleteURLs(req, res, next) {
 
 function checkNews(news) {
     return new Promise((resolve, reject) => {
-        setTimeout(urlExists(news['url'], undefined, 'GET', 300000)
+        urlExists(news['url'], undefined, 'GET', 30000)
             .then(function(response){
                 if (response) {
                     console.log("Url exists", response.href);
@@ -53,7 +53,7 @@ function checkNews(news) {
             .catch((err) => {
                 console.log(err);
                 resolve();
-            }), 1000);
+            });
 
     });
 
@@ -68,7 +68,7 @@ function checkReport(report) {
         if (report['_id'].getTimestamp() < d) {
             repo.removeReportById(report['_id']);
         } else {
-            urlExists(report['link'], undefined, 'GET', 300000)
+            urlExists(report['link'], undefined, 'GET', 30000)
                 .then(function(response){
                     if (response) {
                         console.log("Url exists", response.href);
