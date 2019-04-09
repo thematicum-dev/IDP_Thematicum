@@ -5,7 +5,6 @@
   "scripts": {
     "start": "babel-node ./bin/www --inspect",
     "dev": "nodemon ./bin/www --config nodemon.json --exec babel-node --inspect --loglevel verbose",
-//    "build": "del-cli public/js/app && webpack --config webpack.config.dev.js --progress --profile --watch",
     "build:prod": "del-cli public/js/app && webpack --config webpack.config.prod.js --progress --profile --bail && del-cli 'public/js/app/**/*.js' 'public/js/app/**/*.js.map' '!public/js/app/bundle.js' '!public/js/app/*.chunk.js' 'assets/app/**/*.shim.ts'"
   },
   "engines": {
