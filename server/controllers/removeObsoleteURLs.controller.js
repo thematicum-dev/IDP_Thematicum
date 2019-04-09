@@ -15,7 +15,7 @@ export function removeObsoleteURLs(req, res, next) {
             if (reports.length > 0) {
                 var promise = checkReport(reports[0]);
                 for (var i = 1; i < reports.length; i++)
-                    promise = promise.then(reports[i]);
+                    promise = promise.then(checkReport(reports[i]));
             }
         });
 
@@ -24,7 +24,7 @@ export function removeObsoleteURLs(req, res, next) {
             if (news.length > 0) {
                 var promise2 = checkNews(news[0]);
                 for (var j = 1; j < news.length; j++)
-                    promise2 = promise2.then(news[j]);
+                    promise2 = promise2.then(checkNews(news[j]));
             }
         });
         // .then((reports) => reports.reduce((previous, current) => previous.then(checkReport(current)), Promise.resolve()))
