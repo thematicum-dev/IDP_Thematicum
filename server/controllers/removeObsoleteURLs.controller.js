@@ -19,43 +19,54 @@ export function removeObsoleteURLs(req, res, next) {
 }
 
 function checkNews(news) {
-    urlExists(news['url'], undefined, 'GET', 300000)
-        .then(function(response){
-            if (response) {
-                console.log("Url exists", response.href);
-            } else {
-                console.log("Url does not exists!", response.href);
-                console.log(news['url']);
-                repo.removeNewsById(news['_id']);
-            }
-        })
-        .catch((err) => {
-            console.log(err);
-        })
-}
-
-function checkReport(report) {
-    let d = new Date();
-    d.setMonth(d.getMonth() - 12);
-
-    // check if DB entry was created more than 12 months ago
-    if (report['_id'].getTimestamp() < d) {
-        repo.removeReportById(report['_id']);
-    } else {
-        urlExists(report['link'], undefined, 'GET', 300000)
+    return new Promise((resolve, reject) => {
+        urlExists(news['url'], undefined, 'GET', 300000)
             .then(function(response){
                 if (response) {
                     console.log("Url exists", response.href);
                 } else {
-                    console.log("Url does not exists!");
-                    console.log(response);
-                    repo.removeReportById(report['_id']);
+                    console.log("Url does not exists!", response.href);
+                    console.log(news['url']);
+                    repo.removeNewsById(news['_id']);
                 }
+                resolve();
             })
             .catch((err) => {
                 console.log(err);
+                resolve();
             })
-    }
+    });
+
+}
+
+function checkReport(report) {
+    return new Promise((resolve, reject) => {
+        let d = new Date();
+        d.setMonth(d.getMonth() - 12);
+
+        // check if DB entry was created more than 12 months ago
+        if (report['_id'].getTimestamp() < d) {
+            repo.removeReportById(report['_id']);
+        } else {
+            urlExists(report['link'], undefined, 'GET', 300000)
+                .then(function(response){
+                    if (response) {
+                        console.log("Url exists", response.href);
+                        resolve();
+                    } else {
+                        console.log("Url does not exists!");
+                        console.log(response);
+                        repo.removeReportById(report['_id']);
+                        resolve();
+                    }
+                })
+                .catch((err) => {
+                    console.log(err);
+                    resolve();
+                })
+        }
+    });
+
 }
 
 
