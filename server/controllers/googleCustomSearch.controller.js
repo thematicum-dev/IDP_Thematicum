@@ -43,7 +43,6 @@ export function getCustomSearchResults(req, res, next) {
 export function performReportUpVote(req, res, next) {
     repo.toggleUserUpVoteForReport(res.locals.user._id, req.news._id)
         .then(() => {
-            // return res.status(200).json(allNews);
             return res.status(200).json(new AppResponse('Updated.'));
         })
         .catch(() => {
@@ -54,7 +53,6 @@ export function performReportUpVote(req, res, next) {
 export function performReportDownVote(req, res, next) {
     repo.toggleUserDownVoteForReport(res.locals.user._id, req.news._id)
         .then(() => {
-            // return res.status(200).json(allNews);
             return res.status(200).json(new AppResponse('Updated.'));
         })
         .catch(() => {

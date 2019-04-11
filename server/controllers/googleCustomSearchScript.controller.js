@@ -15,7 +15,6 @@ const setTimeoutPromise = util.promisify(setTimeout);
 export function getCustomSearchResults(req, res,next) {
 
     repo.getAllThemes()
-        // .then((themes) => getReports(themes[0]))
         .then((themes) => {
             if (themes.length > 0) {
                 var promise = getReports(themes[0]);
@@ -23,22 +22,15 @@ export function getCustomSearchResults(req, res,next) {
                     promise = promise.then(getReports(themes[i]));
             }
         });
-        // .then((themes) => Promise.all(themes.map((theme) => getReports(theme))))
-        // .then((themes) => themes.reduce((previous, current) => previous.then(getReports(current)), Promise.resolve()))
-        // .then((rankings) => console.log(rankings))
-        // .catch((err) => {
-        //     console.log(err);
-        // });
-    
+
+
     return res.status(200).json(new AppResponse('ok'));
 }
 
 
 export function updateReports() {
     repo.getAllThemes()
-    // .then((themes) => getReports(themes[0]))
         .then((themes) => Promise.all(themes.map((theme) => getReports(theme))))
-        // .then((themes) => themes.reduce((previous, current) => previous.then(getReports(current)), Promise.resolve()))
         .then((rankings) => console.log('BASHI :' + rankings))
         .then(() => res.status(200).json(new AppResponse('done')))
         .catch((err) => {
@@ -105,8 +97,6 @@ export function getRanking(reportsSet, tags) {
 
     var TfIdf = natural.TfIdf;
     var tfidf = new TfIdf();
-
-    // let urls = reportsSet.map(report => report['link']);
 
     let terms = '';
     for (let i = 0; i < tags.length; i++) {
@@ -180,8 +170,6 @@ function getDocument(report) {
             });
 
         setTimeoutPromise(60000).then(() => {
-            // value === 'foobar' (passing values is optional)
-            // This is executed after about 40 milliseconds.
             resolve('');
         });
 

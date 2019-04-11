@@ -30,10 +30,6 @@ export function removeObsoleteURLs(req, res, next) {
         });
 
 
-        // .then((reports) => reports.reduce((previous, current) => previous.then(checkReport(current)), Promise.resolve()))
-        // .then(() => repo.getAllNews())
-        // .then((news) => news.reduce((previous, current) => previous.then(checkNews(current)), Promise.resolve()));
-
     return res.status(200).json(new AppResponse("OK"));
 }
 
