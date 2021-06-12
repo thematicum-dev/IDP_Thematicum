@@ -39,7 +39,7 @@ const app = express();
 
 const mongodbPath = settings.getDBConnectionString();
 console.log(mongodbPath)
-mongoose.connect(mongodbPath)
+mongoose.connect(mongodbPath, {useNewUrlParser: true, useUnifiedTopology: true})
     .then(() => console.log('Connected to MongoDb'))
     .catch(error => console.log('Error connecting to MongoDb: ' + error));
 

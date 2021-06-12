@@ -13,7 +13,7 @@ const schema = new Schema({
         validate: [validator.isAlphanumeric, 'Invalid access code syntax']
     },
     validFrom: { type: Number, required: true, default: new Date().getTime() },
-    validUntil: { type: Number, required: true, default: new Date(2017, 4, 1).getTime() }
+    validUntil: { type: Number, required: true, default: new Date(2025, 4, 1).getTime() }
 });
 
 //validUntil: "2017-04-30T22:00:00.000Z"
