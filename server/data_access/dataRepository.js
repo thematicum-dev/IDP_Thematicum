@@ -334,7 +334,12 @@ export default class DataRepository extends BaseRepository {
     nextStockSeqNr(){
         return new Promise((resolve,reject) => {
             Stock.find().sort({_id:-1}).limit(1).exec().then(stock =>{
-                resolve(parseInt(stock[0].seqNr,10)+1);
+                if (stock[0] != null) {
+                    resolve(parseInt(stock[0].seqNr,10)+1);
+                } else {
+                    resolve(1);
+                }
+
             }).catch(err => reject (err));
         });
     }
@@ -342,7 +347,12 @@ export default class DataRepository extends BaseRepository {
     nextFundSeqNr(){
         return new Promise((resolve,reject) => {
             Fund.find().sort({_id:-1}).limit(1).exec().then(fund =>{
-                resolve(parseInt(fund[0].seqNr,10)+1);
+                if (fund[0] != null) {
+                    resolve(parseInt(fund[0].seqNr,10)+1);
+                } else {
+                    resolve(1);
+                }
+
             }).catch(err => reject (err));
         });
     }
