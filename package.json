@@ -39,7 +39,7 @@
     "cookie-parser": "^1.4.5",
     "core-js": "^2.6.12",
     "crawler-request": "^1.2.2",
-    "datatables.net": "^1.10.25",
+    "datatables.net": "^1.11.3",
     "datatables.net-dt": "^1.10.25",
     "debug": "~2.2.0",
     "dotenv": "^4.0.0",
