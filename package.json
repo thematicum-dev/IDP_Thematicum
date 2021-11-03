@@ -68,7 +68,7 @@
     "twitter": "^1.7.1",
     "underscore": "^1.13.1",
     "url-exists-deep": "^1.1.1",
-    "validator": "^6.1.0",
+    "validator": "^13.7.0",
     "zone.js": "^0.8.29"
   },
   "devDependencies": {
